@@ -1,0 +1,39 @@
+openapi: 3.0.3
+info:
+  title: Msw Api
+  description: Msw Api
+  version: 1.0.0
+servers:
+  - url: 'https://localhost:8080/'
+paths:
+  /sample/current/{stationId}:
+    get:
+      summary: Get current Flow and Temperature of a specific Station
+      operationId: getCurrentSample
+      parameters:
+        - name: stationId
+          description: The id of the station to get the sample from.
+          in: path
+          schema:
+            type: integer
+          required: true
+      tags:
+        - currentSample
+      responses:
+        '200':
+          description: Returns the last measured Sample from the station.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sample'
+
+components:
+  schemas:
+    Sample:
+      type: object
+      properties:
+        temperature:
+          type: number
+          format: double
+        flow:
+          type: integer
