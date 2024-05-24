@@ -5,6 +5,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.5"
 	id("org.flywaydb.flyway") version "9.7.0"
 	id("org.openapi.generator") version "7.5.0"
+	id ("nu.studer.jooq") version "9.0"
 }
 
 group = "com.aa"
@@ -32,6 +33,8 @@ dependencies {
 
 	compileOnly("io.swagger.core.v3:swagger-annotations:2.2.21")
 	compileOnly("jakarta.validation:jakarta.validation-api:3.1.0")
+
+	jooqGenerator("org.postgresql:postgresql:42.7.3")
 }
 
 tasks.withType<Test> {
@@ -43,8 +46,15 @@ java.sourceSets["main"].java {
 	srcDir(generatedApiDir)
 }
 
+val generatedJooqDir = "src/generated/jooq"
+java.sourceSets["main"].java {
+	srcDir(generatedJooqDir)
+}
+
+val gradlePostgresHost = "localhost:7010"
+
 flyway {
-	url = "jdbc:postgresql://localhost:7010/gradlecodegen"
+	url = "jdbc:postgresql://$gradlePostgresHost/gradlecodegen"
 	user = "gradle"
 	password = "password"
 	locations = listOf("filesystem:" + project.rootDir + "/src/main/resources/db/migration").toTypedArray()
@@ -66,6 +76,42 @@ openApiGenerate {
 	)
 }
 
+jooq {
+	edition = nu.studer.gradle.jooq.JooqEdition.OSS  // default (can be omitted)
+
+	configurations {
+		create("main") {  // name of the jOOQ configuration
+			jooqConfiguration.apply {
+				logging = org.jooq.meta.jaxb.Logging.WARN
+				jdbc.apply {
+					driver = "org.postgresql.Driver"
+					url = "jdbc:postgresql://$gradlePostgresHost/gradlecodegen"
+					user = "gradle"
+					password = "password"
+				}
+				generator.apply {
+					name = "org.jooq.codegen.DefaultGenerator"
+					database.apply {
+						name = "org.jooq.meta.postgres.PostgresDatabase"
+						inputSchema = "public"
+					}
+					target.apply {
+						packageName = "com.aa.msw.gen.jooq"
+						directory = "$projectDir/$generatedJooqDir"
+					}
+					generate.apply {
+						isDeprecated = false
+						isRecords = true
+						isFluentSetters = true
+						isPojos = false
+						isDaos = false
+					}
+				}
+			}
+		}
+	}
+}
+
 tasks.openApiGenerate {
 	doLast {
 		// OpenAPI generator generates other files, we don't need
@@ -78,8 +124,21 @@ tasks.openApiGenerate {
 	}
 }
 
+tasks.compileJava.configure{
+	dependsOn(tasks.openApiGenerate)
+}
+
+tasks.openApiGenerate.configure{
+	dependsOn("generateJooq")
+}
+
+tasks.named("generateJooq").configure{
+	dependsOn("flywayMigrate")
+}// JooqGenerator cleansOut the generated dir, so buildAllApi has to build after jooq has.
+
 idea {
 	module {
 		generatedSourceDirs.add(file(generatedApiDir))
+		generatedSourceDirs.add(file(generatedJooqDir))
 	}
 }
