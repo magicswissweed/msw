@@ -1,5 +1,6 @@
 package com.aa.msw.database.repository;
 
+import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.helpers.id.SampleId;
 import com.aa.msw.database.repository.dao.SampleDao;
 import com.aa.msw.gen.jooq.tables.SampleTable;
@@ -57,10 +58,12 @@ public class SampleRepository extends AbstractRepository<SampleId, Sample, Sampl
 	}
 
 	@Override
-	public Sample getSomeSample (int stationId) { // TODO: get latest sample from station
+	public Sample getCurrentSample (int stationId) throws NoDataAvailableException {
 		return dsl.selectFrom(TABLE)
 				.where(TABLE.STATIONID.eq(stationId))
-				.fetch(this::mapRecord)
-				.get(0);
+				.orderBy(TABLE.TIMESTAMP.desc())
+				.limit(1)
+				.fetchOptional(this::mapRecord)
+				.orElseThrow(() -> new NoDataAvailableException("No current sample found for station " + stationId));
 	}
 }

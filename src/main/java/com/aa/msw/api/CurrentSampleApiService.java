@@ -1,5 +1,6 @@
 package com.aa.msw.api;
 
+import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.repository.dao.SampleDao;
 import com.aa.msw.model.Sample;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,7 @@ public class CurrentSampleApiService {
 		this.sampleDao = sampleDao;
 	}
 
-	public Sample getCurrentSample (Integer stationId) {
-		// TODO: get latest sample from station instead of random value
-		return sampleDao.getSomeSample(stationId);
+	public Sample getCurrentSample (Integer stationId) throws NoDataAvailableException {
+		return sampleDao.getCurrentSample(stationId);
 	}
 }
