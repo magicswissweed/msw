@@ -1,4 +1,4 @@
-package com.aa.msw.api.dto;
+package com.aa.msw.gen.api;
 
 import java.net.URI;
 import java.util.Objects;
@@ -18,7 +18,7 @@ import jakarta.annotation.Generated;
  * Sample
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-24T11:09:05.410866300+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-24T11:50:06.450005700+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class Sample {
 
   private Double temperature;

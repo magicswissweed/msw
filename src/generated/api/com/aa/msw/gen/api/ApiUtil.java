@@ -1,4 +1,4 @@
-package com.aa.msw.api.dto;
+package com.aa.msw.gen.api;
 
 import org.springframework.web.context.request.NativeWebRequest;
 

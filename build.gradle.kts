@@ -64,8 +64,8 @@ openApiGenerate {
 	generatorName = "spring"
 	inputSpec = "$projectDir/src/main/resources/api/mswApi.yaml"
 	outputDir = "$projectDir/$generatedApiDir"
-	apiPackage = "com.aa.msw.api.dto"
-	modelPackage = "com.aa.msw.api.dto"
+	apiPackage = "com.aa.msw.gen.api"
+	modelPackage = "com.aa.msw.gen.api"
 
 	// See https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/spring.md for all options
 	configOptions = mapOf(

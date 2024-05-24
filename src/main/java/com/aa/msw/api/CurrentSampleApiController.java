@@ -1,7 +1,7 @@
 package com.aa.msw.api;
 
-import com.aa.msw.api.dto.CurrentSampleApi;
-import com.aa.msw.api.dto.Sample;
+import com.aa.msw.gen.api.CurrentSampleApi;
+import com.aa.msw.gen.api.Sample;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
