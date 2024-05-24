@@ -37,10 +37,25 @@ public class SampleTableRecord extends UpdatableRecordImpl<SampleTableRecord> {
     }
 
     /**
+     * Setter for <code>public.sample_table.stationid</code>.
+     */
+    public SampleTableRecord setStationid(Integer value) {
+        set(1, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.sample_table.stationid</code>.
+     */
+    public Integer getStationid() {
+        return (Integer) get(1);
+    }
+
+    /**
      * Setter for <code>public.sample_table.timestamp</code>.
      */
     public SampleTableRecord setTimestamp(OffsetDateTime value) {
-        set(1, value);
+        set(2, value);
         return this;
     }
 
@@ -48,14 +63,14 @@ public class SampleTableRecord extends UpdatableRecordImpl<SampleTableRecord> {
      * Getter for <code>public.sample_table.timestamp</code>.
      */
     public OffsetDateTime getTimestamp() {
-        return (OffsetDateTime) get(1);
+        return (OffsetDateTime) get(2);
     }
 
     /**
      * Setter for <code>public.sample_table.temperature</code>.
      */
     public SampleTableRecord setTemperature(Float value) {
-        set(2, value);
+        set(3, value);
         return this;
     }
 
@@ -63,14 +78,14 @@ public class SampleTableRecord extends UpdatableRecordImpl<SampleTableRecord> {
      * Getter for <code>public.sample_table.temperature</code>.
      */
     public Float getTemperature() {
-        return (Float) get(2);
+        return (Float) get(3);
     }
 
     /**
      * Setter for <code>public.sample_table.flow</code>.
      */
     public SampleTableRecord setFlow(Integer value) {
-        set(3, value);
+        set(4, value);
         return this;
     }
 
@@ -78,7 +93,7 @@ public class SampleTableRecord extends UpdatableRecordImpl<SampleTableRecord> {
      * Getter for <code>public.sample_table.flow</code>.
      */
     public Integer getFlow() {
-        return (Integer) get(3);
+        return (Integer) get(4);
     }
 
     // -------------------------------------------------------------------------
@@ -104,10 +119,11 @@ public class SampleTableRecord extends UpdatableRecordImpl<SampleTableRecord> {
     /**
      * Create a detached, initialised SampleTableRecord
      */
-    public SampleTableRecord(UUID id, OffsetDateTime timestamp, Float temperature, Integer flow) {
+    public SampleTableRecord(UUID id, Integer stationid, OffsetDateTime timestamp, Float temperature, Integer flow) {
         super(SampleTable.SAMPLE_TABLE);
 
         setId(id);
+        setStationid(stationid);
         setTimestamp(timestamp);
         setTemperature(temperature);
         setFlow(flow);
@@ -122,6 +138,7 @@ public class SampleTableRecord extends UpdatableRecordImpl<SampleTableRecord> {
 
         if (value != null) {
             setId(value.getId());
+            setStationid(value.getStationid());
             setTimestamp(value.getTimestamp());
             setTemperature(value.getTemperature());
             setFlow(value.getFlow());

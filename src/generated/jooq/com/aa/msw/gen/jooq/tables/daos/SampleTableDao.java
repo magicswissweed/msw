@@ -71,6 +71,21 @@ public class SampleTableDao extends DAOImpl<SampleTableRecord, com.aa.msw.gen.jo
     }
 
     /**
+     * Fetch records that have <code>stationid BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<com.aa.msw.gen.jooq.tables.pojos.SampleTable> fetchRangeOfStationid(Integer lowerInclusive, Integer upperInclusive) {
+        return fetchRange(SampleTable.SAMPLE_TABLE.STATIONID, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>stationid IN (values)</code>
+     */
+    public List<com.aa.msw.gen.jooq.tables.pojos.SampleTable> fetchByStationid(Integer... values) {
+        return fetch(SampleTable.SAMPLE_TABLE.STATIONID, values);
+    }
+
+    /**
      * Fetch records that have <code>timestamp BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */

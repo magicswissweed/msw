@@ -57,6 +57,11 @@ public class SampleTable extends TableImpl<SampleTableRecord> {
     public final TableField<SampleTableRecord, UUID> ID = createField(DSL.name("id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
+     * The column <code>public.sample_table.stationid</code>.
+     */
+    public final TableField<SampleTableRecord, Integer> STATIONID = createField(DSL.name("stationid"), SQLDataType.INTEGER.nullable(false), this, "");
+
+    /**
      * The column <code>public.sample_table.timestamp</code>.
      */
     public final TableField<SampleTableRecord, OffsetDateTime> TIMESTAMP = createField(DSL.name("timestamp"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");

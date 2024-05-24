@@ -18,6 +18,7 @@ public class SampleTable implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private UUID id;
+    private Integer stationid;
     private OffsetDateTime timestamp;
     private Float temperature;
     private Integer flow;
@@ -26,6 +27,7 @@ public class SampleTable implements Serializable {
 
     public SampleTable(SampleTable value) {
         this.id = value.id;
+        this.stationid = value.stationid;
         this.timestamp = value.timestamp;
         this.temperature = value.temperature;
         this.flow = value.flow;
@@ -33,11 +35,13 @@ public class SampleTable implements Serializable {
 
     public SampleTable(
         UUID id,
+        Integer stationid,
         OffsetDateTime timestamp,
         Float temperature,
         Integer flow
     ) {
         this.id = id;
+        this.stationid = stationid;
         this.timestamp = timestamp;
         this.temperature = temperature;
         this.flow = flow;
@@ -55,6 +59,21 @@ public class SampleTable implements Serializable {
      */
     public SampleTable setId(UUID id) {
         this.id = id;
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.sample_table.stationid</code>.
+     */
+    public Integer getStationid() {
+        return this.stationid;
+    }
+
+    /**
+     * Setter for <code>public.sample_table.stationid</code>.
+     */
+    public SampleTable setStationid(Integer stationid) {
+        this.stationid = stationid;
         return this;
     }
 
@@ -118,6 +137,12 @@ public class SampleTable implements Serializable {
         }
         else if (!this.id.equals(other.id))
             return false;
+        if (this.stationid == null) {
+            if (other.stationid != null)
+                return false;
+        }
+        else if (!this.stationid.equals(other.stationid))
+            return false;
         if (this.timestamp == null) {
             if (other.timestamp != null)
                 return false;
@@ -144,6 +169,7 @@ public class SampleTable implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.stationid == null) ? 0 : this.stationid.hashCode());
         result = prime * result + ((this.timestamp == null) ? 0 : this.timestamp.hashCode());
         result = prime * result + ((this.temperature == null) ? 0 : this.temperature.hashCode());
         result = prime * result + ((this.flow == null) ? 0 : this.flow.hashCode());
@@ -155,6 +181,7 @@ public class SampleTable implements Serializable {
         StringBuilder sb = new StringBuilder("SampleTable (");
 
         sb.append(id);
+        sb.append(", ").append(stationid);
         sb.append(", ").append(timestamp);
         sb.append(", ").append(temperature);
         sb.append(", ").append(flow);

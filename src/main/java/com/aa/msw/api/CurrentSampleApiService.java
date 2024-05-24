@@ -15,6 +15,6 @@ public class CurrentSampleApiService {
 
 	public Sample getCurrentSample (Integer stationId) {
 		// TODO: get latest sample from station instead of random value
-		return sampleDao.getSomeSample();
+		return sampleDao.getSomeSample(stationId);
 	}
 }

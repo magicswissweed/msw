@@ -6,7 +6,13 @@ import lombok.Getter;
 
 import java.time.OffsetDateTime;
 
-public record Sample(SampleId sampleId, @Getter OffsetDateTime timestamp, @Getter double temperature, @Getter int flow) implements HasId<SampleId> {
+public record Sample(
+		SampleId sampleId,
+		@Getter int stationId,
+		@Getter OffsetDateTime timestamp,
+		@Getter double temperature,
+		@Getter int flow)
+		implements HasId<SampleId> {
 	@Override
 	public SampleId getId () {
 		return sampleId;

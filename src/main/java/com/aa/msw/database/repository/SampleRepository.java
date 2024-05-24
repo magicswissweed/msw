@@ -7,7 +7,6 @@ import com.aa.msw.gen.jooq.tables.daos.SampleTableDao;
 import com.aa.msw.gen.jooq.tables.records.SampleTableRecord;
 import com.aa.msw.model.Sample;
 import org.jooq.DSLContext;
-import org.jooq.impl.DSL;
 import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormat;
@@ -30,6 +29,7 @@ public class SampleRepository extends AbstractRepository<SampleId, Sample, Sampl
 
 		return new Sample(
 				new SampleId(record.getId()),
+				record.getStationid(),
 				record.getTimestamp(),
 				roundedTemp,
 				record.getFlow());
@@ -39,6 +39,7 @@ public class SampleRepository extends AbstractRepository<SampleId, Sample, Sampl
 	protected SampleTableRecord mapDomain (Sample sample) {
 		return new SampleTableRecord(
 				sample.getId().getId(),
+				sample.getStationId(),
 				sample.getTimestamp(),
 				(float) sample.getTemperature(),
 				sample.getFlow());
@@ -48,6 +49,7 @@ public class SampleRepository extends AbstractRepository<SampleId, Sample, Sampl
 	protected Sample mapEntity (com.aa.msw.gen.jooq.tables.pojos.SampleTable sampleTable) {
 		return new Sample(
 				new SampleId(sampleTable.getId()),
+				sampleTable.getStationid(),
 				sampleTable.getTimestamp(),
 				sampleTable.getTemperature(),
 				sampleTable.getFlow()
@@ -55,9 +57,9 @@ public class SampleRepository extends AbstractRepository<SampleId, Sample, Sampl
 	}
 
 	@Override
-	public Sample getSomeSample () {
+	public Sample getSomeSample (int stationId) { // TODO: get latest sample from station
 		return dsl.selectFrom(TABLE)
-				.where(DSL.noCondition())
+				.where(TABLE.STATIONID.eq(stationId))
 				.fetch(this::mapRecord)
 				.get(0);
 	}
