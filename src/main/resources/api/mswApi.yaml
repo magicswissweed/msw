@@ -25,13 +25,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Sample'
+                $ref: '#/components/schemas/ApiSample'
 
 components:
   schemas:
-    Sample:
+    ApiSample:
       type: object
       properties:
+        timestamp:
+          type: string
+          format: date-time
         temperature:
           type: number
           format: double

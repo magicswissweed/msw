@@ -1,5 +1,6 @@
 package com.aa.msw.api;
 
+import com.aa.msw.gen.api.ApiSample;
 import com.aa.msw.gen.api.CurrentSampleApi;
 import com.aa.msw.model.Sample;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,11 @@ public class CurrentSampleApiController implements CurrentSampleApi {
 	}
 
 	@Override
-	public ResponseEntity<com.aa.msw.gen.api.Sample> getCurrentSample (Integer stationId) {
+	public ResponseEntity<ApiSample> getCurrentSample (Integer stationId) {
 		Sample sample = currentSampleApiService.getCurrentSample(stationId);
 
-		return ResponseEntity.ok(new com.aa.msw.gen.api.Sample()
+		return ResponseEntity.ok(new ApiSample()
+				.timestamp(sample.getTimestamp())
 				.temperature(sample.getTemperature())
 				.flow(sample.flow()));
 	}

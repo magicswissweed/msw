@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import java.time.OffsetDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -15,17 +17,40 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * Sample
+ * ApiSample
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-24T11:50:06.450005700+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
-public class Sample {
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-24T19:43:57.833443800+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+public class ApiSample {
+
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private OffsetDateTime timestamp;
 
   private Double temperature;
 
   private Integer flow;
 
-  public Sample temperature(Double temperature) {
+  public ApiSample timestamp(OffsetDateTime timestamp) {
+    this.timestamp = timestamp;
+    return this;
+  }
+
+  /**
+   * Get timestamp
+   * @return timestamp
+  */
+  @Valid 
+  @Schema(name = "timestamp", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("timestamp")
+  public OffsetDateTime getTimestamp() {
+    return timestamp;
+  }
+
+  public void setTimestamp(OffsetDateTime timestamp) {
+    this.timestamp = timestamp;
+  }
+
+  public ApiSample temperature(Double temperature) {
     this.temperature = temperature;
     return this;
   }
@@ -45,7 +70,7 @@ public class Sample {
     this.temperature = temperature;
   }
 
-  public Sample flow(Integer flow) {
+  public ApiSample flow(Integer flow) {
     this.flow = flow;
     return this;
   }
@@ -73,20 +98,22 @@ public class Sample {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Sample sample = (Sample) o;
-    return Objects.equals(this.temperature, sample.temperature) &&
-        Objects.equals(this.flow, sample.flow);
+    ApiSample apiSample = (ApiSample) o;
+    return Objects.equals(this.timestamp, apiSample.timestamp) &&
+        Objects.equals(this.temperature, apiSample.temperature) &&
+        Objects.equals(this.flow, apiSample.flow);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(temperature, flow);
+    return Objects.hash(timestamp, temperature, flow);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Sample {\n");
+    sb.append("class ApiSample {\n");
+    sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("    temperature: ").append(toIndentedString(temperature)).append("\n");
     sb.append("    flow: ").append(toIndentedString(flow)).append("\n");
     sb.append("}");

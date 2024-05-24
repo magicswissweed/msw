@@ -5,7 +5,7 @@
  */
 package com.aa.msw.gen.api;
 
-import com.aa.msw.gen.api.Sample;
+import com.aa.msw.gen.api.ApiSample;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-24T11:50:06.450005700+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-24T19:43:57.833443800+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
 @Tag(name = "currentSample", description = "the currentSample API")
 public interface CurrentSampleApi {
@@ -53,7 +53,7 @@ public interface CurrentSampleApi {
         tags = { "currentSample" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Returns the last measured Sample from the station.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = Sample.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiSample.class))
             })
         }
     )
@@ -63,13 +63,13 @@ public interface CurrentSampleApi {
         produces = { "application/json" }
     )
     
-    default ResponseEntity<Sample> getCurrentSample(
+    default ResponseEntity<ApiSample> getCurrentSample(
         @Parameter(name = "stationId", description = "The id of the station to get the sample from.", required = true, in = ParameterIn.PATH) @PathVariable("stationId") Integer stationId
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"temperature\" : 0.8008281904610115, \"flow\" : 6 }";
+                    String exampleString = "{ \"temperature\" : 0.8008281904610115, \"flow\" : 6, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
