@@ -33,6 +33,9 @@ dependencies {
 
 	compileOnly("io.swagger.core.v3:swagger-annotations:2.2.21")
 	compileOnly("jakarta.validation:jakarta.validation-api:3.1.0")
+	compileOnly("org.projectlombok:lombok:1.18.32")
+
+	annotationProcessor("org.projectlombok:lombok:1.18.32")
 
 	jooqGenerator("org.postgresql:postgresql:42.7.3")
 }
@@ -104,7 +107,7 @@ jooq {
 						isRecords = true
 						isFluentSetters = true
 						isPojos = false
-						isDaos = false
+						isDaos = true
 					}
 				}
 			}
@@ -122,14 +125,6 @@ tasks.openApiGenerate {
 				"$projectDir/$generatedApiDir/README.md"
 		)
 	}
-}
-
-tasks.compileJava.configure{
-	dependsOn(tasks.openApiGenerate)
-}
-
-tasks.openApiGenerate.configure{
-	dependsOn("generateJooq")
 }
 
 tasks.named("generateJooq").configure{

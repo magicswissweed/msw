@@ -113,4 +113,19 @@ public class SampleTableRecord extends UpdatableRecordImpl<SampleTableRecord> {
         setFlow(flow);
         resetChangedOnNotNull();
     }
+
+    /**
+     * Create a detached, initialised SampleTableRecord
+     */
+    public SampleTableRecord(com.aa.msw.gen.jooq.tables.pojos.SampleTable value) {
+        super(SampleTable.SAMPLE_TABLE);
+
+        if (value != null) {
+            setId(value.getId());
+            setTimestamp(value.getTimestamp());
+            setTemperature(value.getTemperature());
+            setFlow(value.getFlow());
+            resetChangedOnNotNull();
+        }
+    }
 }
