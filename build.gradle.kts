@@ -1,5 +1,6 @@
 plugins {
 	java
+	id("idea")
 	id("org.springframework.boot") version "3.3.0"
 	id("io.spring.dependency-management") version "1.1.5"
 	id("org.flywaydb.flyway") version "9.7.0"
@@ -37,6 +38,11 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
+val generatedApiDir = "src/generated/api"
+java.sourceSets["main"].java {
+	srcDir(generatedApiDir)
+}
+
 flyway {
 	url = "jdbc:postgresql://localhost:7010/gradlecodegen"
 	user = "gradle"
@@ -46,8 +52,8 @@ flyway {
 
 openApiGenerate {
 	generatorName = "spring"
-	inputSpec = "${projectDir}/src/main/resources/api/mswApi.yaml"
-	outputDir = "${projectDir}/generated-src"
+	inputSpec = "$projectDir/src/main/resources/api/mswApi.yaml"
+	outputDir = "$projectDir/$generatedApiDir"
 	apiPackage = "com.aa.msw.api.dto"
 	modelPackage = "com.aa.msw.api.dto"
 
@@ -64,18 +70,16 @@ tasks.openApiGenerate {
 	doLast {
 		// OpenAPI generator generates other files, we don't need
 		delete(
-				"$projectDir/generated-src/.openapi-generator",
-				"$projectDir/generated-src/.openapi-generator-ignore",
-				"$projectDir/generated-src/pom.xml",
-				"$projectDir/generated-src/README.md"
+				"$projectDir/$generatedApiDir/.openapi-generator",
+				"$projectDir/$generatedApiDir/.openapi-generator-ignore",
+				"$projectDir/$generatedApiDir/pom.xml",
+				"$projectDir/$generatedApiDir/README.md"
 		)
 	}
 }
 
-sourceSets {
-	main {
-		java {
-			srcDir(tasks.openApiGenerate)
-		}
+idea {
+	module {
+		generatedSourceDirs.add(file(generatedApiDir))
 	}
 }
