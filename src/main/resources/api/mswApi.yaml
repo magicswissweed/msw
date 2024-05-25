@@ -27,6 +27,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiSample'
 
+  /forecast/{stationId}:
+    get:
+      summary: Get Forecast for specific Station
+      operationId: getForecast
+      parameters:
+        - name: stationId
+          description: The id of the station to get the sample from.
+          in: path
+          schema:
+            type: integer
+          required: true
+      tags:
+        - forecast
+      responses:
+        '200':
+          description: Returns the forecast for the station.
+          content:
+            application/json:
+              schema:
+#                $ref: '#/components/schemas/ApiSample' TODO: use schema
+                type: string
+
 components:
   schemas:
     ApiSample:

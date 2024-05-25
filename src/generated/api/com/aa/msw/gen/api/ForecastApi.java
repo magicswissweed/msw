@@ -5,7 +5,6 @@
  */
 package com.aa.msw.gen.api;
 
-import com.aa.msw.gen.api.ApiSample;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,47 +33,38 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-26T00:34:12.593222700+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
-@Tag(name = "currentSample", description = "the currentSample API")
-public interface CurrentSampleApi {
+@Tag(name = "forecast", description = "the forecast API")
+public interface ForecastApi {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
     }
 
     /**
-     * GET /sample/current/{stationId} : Get current Flow and Temperature of a specific Station
+     * GET /forecast/{stationId} : Get Forecast for specific Station
      *
      * @param stationId The id of the station to get the sample from. (required)
-     * @return Returns the last measured Sample from the station. (status code 200)
+     * @return Returns the forecast for the station. (status code 200)
      */
     @Operation(
-        operationId = "getCurrentSample",
-        summary = "Get current Flow and Temperature of a specific Station",
-        tags = { "currentSample" },
+        operationId = "getForecast",
+        summary = "Get Forecast for specific Station",
+        tags = { "forecast" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Returns the last measured Sample from the station.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiSample.class))
+            @ApiResponse(responseCode = "200", description = "Returns the forecast for the station.", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
             })
         }
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/sample/current/{stationId}",
+        value = "/forecast/{stationId}",
         produces = { "application/json" }
     )
     
-    default ResponseEntity<ApiSample> getCurrentSample(
+    default ResponseEntity<String> getForecast(
         @Parameter(name = "stationId", description = "The id of the station to get the sample from.", required = true, in = ParameterIn.PATH) @PathVariable("stationId") Integer stationId
     ) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"temperature\" : 0.8008281904610115, \"flow\" : 6, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

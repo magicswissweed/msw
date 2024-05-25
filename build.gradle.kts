@@ -24,6 +24,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-jooq")
 	implementation("org.flywaydb:flyway-core:9.8.2")
 	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
 	runtimeOnly("org.postgresql:postgresql")
 

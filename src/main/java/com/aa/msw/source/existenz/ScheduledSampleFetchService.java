@@ -4,6 +4,7 @@ import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.helpers.id.SampleId;
 import com.aa.msw.database.repository.dao.SampleDao;
 import com.aa.msw.model.Sample;
+import com.aa.msw.source.AbstractFetchService;
 import com.aa.msw.source.existenz.exception.IncorrectDataReceivedException;
 import com.aa.msw.source.existenz.model.ExistenzResponse;
 import com.aa.msw.source.existenz.model.ExistenzSample;
@@ -12,11 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -26,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ScheduledSampleFetchService {
+public class ScheduledSampleFetchService extends AbstractFetchService {
 	private static final List<Integer> STATION_IDS = List.of(2018, 2243);
 	private final String existenzUrl;
 
@@ -93,18 +90,7 @@ public class ScheduledSampleFetchService {
 	}
 
 	private ExistenzResponse fetchData () throws IOException, URISyntaxException {
-		HttpURLConnection conn = (HttpURLConnection) new URI(existenzUrl).toURL().openConnection();
-		conn.setRequestMethod("GET");
-		conn.setRequestProperty("Accept", "application/json");
-//		conn.setRequestProperty("Authorization", authHeaderValue);
-		if (conn.getResponseCode() != 200) {
-			throw new RuntimeException("Failed : HTTP Error code : "
-					+ conn.getResponseCode());
-		}
-		InputStreamReader in = new InputStreamReader(conn.getInputStream());
-		BufferedReader br = new BufferedReader(in);
-		String response = br.readLine();
-
+		String response = fetchAsString(existenzUrl);
 		ObjectMapper objectMapper = new ObjectMapper();
 		return objectMapper.readValue(response, new TypeReference<>() {});
 	}

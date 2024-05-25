@@ -1,4 +1,4 @@
-package com.aa.msw.api;
+package com.aa.msw.api.current;
 
 import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.repository.dao.SampleDao;
