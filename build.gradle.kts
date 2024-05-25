@@ -105,8 +105,9 @@ jooq {
 					generate.apply {
 						isDeprecated = false
 						isRecords = true
+						isImmutablePojos = true
 						isFluentSetters = true
-						isPojos = false
+						isRelations = true
 						isDaos = true
 					}
 				}

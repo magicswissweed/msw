@@ -16,18 +16,16 @@ public class FlywaySchemaHistory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer installedRank;
-    private String version;
-    private String description;
-    private String type;
-    private String script;
-    private Integer checksum;
-    private String installedBy;
-    private LocalDateTime installedOn;
-    private Integer executionTime;
-    private Boolean success;
-
-    public FlywaySchemaHistory() {}
+    private final Integer installedRank;
+    private final String version;
+    private final String description;
+    private final String type;
+    private final String script;
+    private final Integer checksum;
+    private final String installedBy;
+    private final LocalDateTime installedOn;
+    private final Integer executionTime;
+    private final Boolean success;
 
     public FlywaySchemaHistory(FlywaySchemaHistory value) {
         this.installedRank = value.installedRank;
@@ -74,26 +72,10 @@ public class FlywaySchemaHistory implements Serializable {
     }
 
     /**
-     * Setter for <code>public.flyway_schema_history.installed_rank</code>.
-     */
-    public FlywaySchemaHistory setInstalledRank(Integer installedRank) {
-        this.installedRank = installedRank;
-        return this;
-    }
-
-    /**
      * Getter for <code>public.flyway_schema_history.version</code>.
      */
     public String getVersion() {
         return this.version;
-    }
-
-    /**
-     * Setter for <code>public.flyway_schema_history.version</code>.
-     */
-    public FlywaySchemaHistory setVersion(String version) {
-        this.version = version;
-        return this;
     }
 
     /**
@@ -104,26 +86,10 @@ public class FlywaySchemaHistory implements Serializable {
     }
 
     /**
-     * Setter for <code>public.flyway_schema_history.description</code>.
-     */
-    public FlywaySchemaHistory setDescription(String description) {
-        this.description = description;
-        return this;
-    }
-
-    /**
      * Getter for <code>public.flyway_schema_history.type</code>.
      */
     public String getType() {
         return this.type;
-    }
-
-    /**
-     * Setter for <code>public.flyway_schema_history.type</code>.
-     */
-    public FlywaySchemaHistory setType(String type) {
-        this.type = type;
-        return this;
     }
 
     /**
@@ -134,26 +100,10 @@ public class FlywaySchemaHistory implements Serializable {
     }
 
     /**
-     * Setter for <code>public.flyway_schema_history.script</code>.
-     */
-    public FlywaySchemaHistory setScript(String script) {
-        this.script = script;
-        return this;
-    }
-
-    /**
      * Getter for <code>public.flyway_schema_history.checksum</code>.
      */
     public Integer getChecksum() {
         return this.checksum;
-    }
-
-    /**
-     * Setter for <code>public.flyway_schema_history.checksum</code>.
-     */
-    public FlywaySchemaHistory setChecksum(Integer checksum) {
-        this.checksum = checksum;
-        return this;
     }
 
     /**
@@ -164,26 +114,10 @@ public class FlywaySchemaHistory implements Serializable {
     }
 
     /**
-     * Setter for <code>public.flyway_schema_history.installed_by</code>.
-     */
-    public FlywaySchemaHistory setInstalledBy(String installedBy) {
-        this.installedBy = installedBy;
-        return this;
-    }
-
-    /**
      * Getter for <code>public.flyway_schema_history.installed_on</code>.
      */
     public LocalDateTime getInstalledOn() {
         return this.installedOn;
-    }
-
-    /**
-     * Setter for <code>public.flyway_schema_history.installed_on</code>.
-     */
-    public FlywaySchemaHistory setInstalledOn(LocalDateTime installedOn) {
-        this.installedOn = installedOn;
-        return this;
     }
 
     /**
@@ -194,26 +128,10 @@ public class FlywaySchemaHistory implements Serializable {
     }
 
     /**
-     * Setter for <code>public.flyway_schema_history.execution_time</code>.
-     */
-    public FlywaySchemaHistory setExecutionTime(Integer executionTime) {
-        this.executionTime = executionTime;
-        return this;
-    }
-
-    /**
      * Getter for <code>public.flyway_schema_history.success</code>.
      */
     public Boolean getSuccess() {
         return this.success;
-    }
-
-    /**
-     * Setter for <code>public.flyway_schema_history.success</code>.
-     */
-    public FlywaySchemaHistory setSuccess(Boolean success) {
-        this.success = success;
-        return this;
     }
 
     @Override

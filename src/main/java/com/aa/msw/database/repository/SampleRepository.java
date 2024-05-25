@@ -38,12 +38,13 @@ public class SampleRepository extends AbstractRepository<SampleId, Sample, Sampl
 
 	@Override
 	protected SampleTableRecord mapDomain (Sample sample) {
-		return new SampleTableRecord(
-				sample.getId().getId(),
-				sample.getStationId(),
-				sample.getTimestamp(),
-				(float) sample.getTemperature(),
-				sample.getFlow());
+		final SampleTableRecord record = dsl.newRecord(table);
+		record.setId(sample.sampleId().getId());
+		record.setStationid(sample.getStationId());
+		record.setTimestamp(sample.getTimestamp());
+		record.setTemperature((float) sample.getTemperature());
+		record.setFlow(sample.getFlow());
+		return record;
 	}
 
 	@Override

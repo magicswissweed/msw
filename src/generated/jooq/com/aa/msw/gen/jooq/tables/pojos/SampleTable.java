@@ -17,13 +17,11 @@ public class SampleTable implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private UUID id;
-    private Integer stationid;
-    private OffsetDateTime timestamp;
-    private Float temperature;
-    private Integer flow;
-
-    public SampleTable() {}
+    private final UUID id;
+    private final Integer stationid;
+    private final OffsetDateTime timestamp;
+    private final Float temperature;
+    private final Integer flow;
 
     public SampleTable(SampleTable value) {
         this.id = value.id;
@@ -55,26 +53,10 @@ public class SampleTable implements Serializable {
     }
 
     /**
-     * Setter for <code>public.sample_table.id</code>.
-     */
-    public SampleTable setId(UUID id) {
-        this.id = id;
-        return this;
-    }
-
-    /**
      * Getter for <code>public.sample_table.stationid</code>.
      */
     public Integer getStationid() {
         return this.stationid;
-    }
-
-    /**
-     * Setter for <code>public.sample_table.stationid</code>.
-     */
-    public SampleTable setStationid(Integer stationid) {
-        this.stationid = stationid;
-        return this;
     }
 
     /**
@@ -85,14 +67,6 @@ public class SampleTable implements Serializable {
     }
 
     /**
-     * Setter for <code>public.sample_table.timestamp</code>.
-     */
-    public SampleTable setTimestamp(OffsetDateTime timestamp) {
-        this.timestamp = timestamp;
-        return this;
-    }
-
-    /**
      * Getter for <code>public.sample_table.temperature</code>.
      */
     public Float getTemperature() {
@@ -100,26 +74,10 @@ public class SampleTable implements Serializable {
     }
 
     /**
-     * Setter for <code>public.sample_table.temperature</code>.
-     */
-    public SampleTable setTemperature(Float temperature) {
-        this.temperature = temperature;
-        return this;
-    }
-
-    /**
      * Getter for <code>public.sample_table.flow</code>.
      */
     public Integer getFlow() {
         return this.flow;
-    }
-
-    /**
-     * Setter for <code>public.sample_table.flow</code>.
-     */
-    public SampleTable setFlow(Integer flow) {
-        this.flow = flow;
-        return this;
     }
 
     @Override
