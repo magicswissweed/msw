@@ -23,19 +23,28 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduledSampleFetchService {
 	private static final List<Integer> STATION_IDS = List.of(2018, 2243);
-	private static final String existenzUrl = "https://api.existenz.ch/apiv1/hydro/latest?locations=2018%2C2243&parameters=flow%2C%20temperature&app=MagicSwissWeed&version=0.2.0"; // Replace with your API URL
+	private final String existenzUrl;
 
 	private final SampleDao sampleDao;
 
 	public ScheduledSampleFetchService(SampleDao sampleDao) {
 		this.sampleDao = sampleDao;
+		existenzUrl = getExistenzUrl();
 	}
 
-	@Scheduled(fixedRate = 30 * 1000) // 30 seconds in milliseconds
+	private static String getExistenzUrl () {
+		String locationsString = STATION_IDS.stream()
+				.map(Object::toString)
+				.collect(Collectors.joining("%2C"));
+		return "https://api.existenz.ch/apiv1/hydro/latest?locations=" + locationsString + "&parameters=flow%2C%20temperature&app=MagicSwissWeed&version=0.2.0";
+	}
+
+	@Scheduled(fixedRate = 5 * 60 * 1000) // 5 minutes in milliseconds
 	public void fetchDataAndPrint() throws IOException, URISyntaxException {
 		List<ExistenzSample> existenzSamples = fetchData().payload();
 		List<Sample> samples = new ArrayList<>();
@@ -83,7 +92,7 @@ public class ScheduledSampleFetchService {
 				flow);
 	}
 
-	private static ExistenzResponse fetchData () throws IOException, URISyntaxException {
+	private ExistenzResponse fetchData () throws IOException, URISyntaxException {
 		HttpURLConnection conn = (HttpURLConnection) new URI(existenzUrl).toURL().openConnection();
 		conn.setRequestMethod("GET");
 		conn.setRequestProperty("Accept", "application/json");
