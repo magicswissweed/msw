@@ -1,0 +1,4 @@
+###
+# @name Get Forecast
+#
+GET {{base-path}}/forecast/{{stationId}}

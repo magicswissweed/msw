@@ -2,8 +2,3 @@
 # @name Get Current Sample
 #
 GET {{base-path}}/sample/current/{{stationId}}
-
-###
-# @name Get Forecast
-#
-GET {{base-path}}/forecast/{{stationId}}

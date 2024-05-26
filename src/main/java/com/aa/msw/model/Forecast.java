@@ -1,0 +1,24 @@
+package com.aa.msw.model;
+
+import com.aa.msw.database.helpers.id.ForecastId;
+import com.aa.msw.database.helpers.id.HasId;
+import lombok.Getter;
+
+import java.time.OffsetDateTime;
+import java.util.Map;
+
+public record Forecast (
+		ForecastId forecastId,
+		@Getter int stationId,
+		@Getter OffsetDateTime timestamp,
+		@Getter Map<OffsetDateTime, Double> measuredData,
+		@Getter Map<OffsetDateTime, Double> median,
+		@Getter Map<OffsetDateTime, Double> twentyFiveToSeventyFivePercentile,
+		@Getter Map<OffsetDateTime, Double> max,
+		@Getter Map<OffsetDateTime, Double> min)
+		implements HasId<ForecastId> {
+	@Override
+	public ForecastId getId () {
+		return forecastId;
+	}
+}

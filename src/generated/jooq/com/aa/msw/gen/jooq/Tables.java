@@ -5,6 +5,7 @@ package com.aa.msw.gen.jooq;
 
 
 import com.aa.msw.gen.jooq.tables.FlywaySchemaHistory;
+import com.aa.msw.gen.jooq.tables.ForecastTable;
 import com.aa.msw.gen.jooq.tables.SampleTable;
 
 
@@ -18,6 +19,11 @@ public class Tables {
      * The table <code>public.flyway_schema_history</code>.
      */
     public static final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
+
+    /**
+     * The table <code>public.forecast_table</code>.
+     */
+    public static final ForecastTable FORECAST_TABLE = ForecastTable.FORECAST_TABLE;
 
     /**
      * The table <code>public.sample_table</code>.

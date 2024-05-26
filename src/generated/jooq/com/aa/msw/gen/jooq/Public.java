@@ -5,6 +5,7 @@ package com.aa.msw.gen.jooq;
 
 
 import com.aa.msw.gen.jooq.tables.FlywaySchemaHistory;
+import com.aa.msw.gen.jooq.tables.ForecastTable;
 import com.aa.msw.gen.jooq.tables.SampleTable;
 
 import java.util.Arrays;
@@ -34,6 +35,11 @@ public class Public extends SchemaImpl {
     public final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
 
     /**
+     * The table <code>public.forecast_table</code>.
+     */
+    public final ForecastTable FORECAST_TABLE = ForecastTable.FORECAST_TABLE;
+
+    /**
      * The table <code>public.sample_table</code>.
      */
     public final SampleTable SAMPLE_TABLE = SampleTable.SAMPLE_TABLE;
@@ -55,6 +61,7 @@ public class Public extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.asList(
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
+            ForecastTable.FORECAST_TABLE,
             SampleTable.SAMPLE_TABLE
         );
     }
