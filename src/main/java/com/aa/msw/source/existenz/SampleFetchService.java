@@ -1,8 +1,6 @@
 package com.aa.msw.source.existenz;
 
-import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.helpers.id.SampleId;
-import com.aa.msw.database.repository.dao.SampleDao;
 import com.aa.msw.model.Sample;
 import com.aa.msw.source.AbstractFetchService;
 import com.aa.msw.source.existenz.exception.IncorrectDataReceivedException;
@@ -10,7 +8,6 @@ import com.aa.msw.source.existenz.model.ExistenzResponse;
 import com.aa.msw.source.existenz.model.ExistenzSample;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,41 +20,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ScheduledSampleFetchService extends AbstractFetchService {
-	private static final List<Integer> STATION_IDS = List.of(2018, 2243);
-	private final String existenzUrl;
+public class SampleFetchService extends AbstractFetchService {
 
-	private final SampleDao sampleDao;
-
-	public ScheduledSampleFetchService(SampleDao sampleDao) {
-		this.sampleDao = sampleDao;
-		existenzUrl = getExistenzUrl();
-	}
-
-	private static String getExistenzUrl () {
-		String locationsString = STATION_IDS.stream()
-				.map(Object::toString)
-				.collect(Collectors.joining("%2C"));
-		return "https://api.existenz.ch/apiv1/hydro/latest?locations=" + locationsString + "&parameters=flow%2C%20temperature&app=MagicSwissWeed&version=0.2.0";
-	}
-
-	@Scheduled(fixedRate = 5 * 60 * 1000) // 5 minutes in milliseconds
-	public void fetchDataAndPrint() throws IOException, URISyntaxException {
-		List<ExistenzSample> existenzSamples = fetchData().payload();
+	public List<Sample> fetchSamples (List<Integer> stationIds) throws IOException, URISyntaxException {
+		String fetchUrl = getExistenzUrl(stationIds);
+		List<ExistenzSample> existenzSamples = fetchData(fetchUrl).payload();
 		List<Sample> samples = new ArrayList<>();
-		for(Integer stationId : STATION_IDS) {
+		for(Integer stationId : stationIds) {
 			samples.add(extractSampleForStationId(existenzSamples, stationId));
 		}
 
-		for(Sample sample : samples) {
-			persistIfNotExists(sample);
-		}
+		return samples;
 	}
 
-	private void persistIfNotExists (Sample sample) throws NoDataAvailableException {
-		if (!sampleDao.getCurrentSample(sample.getStationId()).timestamp().equals(sample.getTimestamp())) {
-			sampleDao.persist(sample);
-		}
+	private static String getExistenzUrl (List<Integer> stationIds) {
+		String locationsString = stationIds.stream()
+				.map(Object::toString)
+				.collect(Collectors.joining("%2C"));
+		return "https://api.existenz.ch/apiv1/hydro/latest?locations=" + locationsString + "&parameters=flow%2C%20temperature&app=MagicSwissWeed&version=0.2.0";
 	}
 
 	private static Sample extractSampleForStationId (List<ExistenzSample> samples, Integer stationId) throws IncorrectDataReceivedException {
@@ -89,8 +69,8 @@ public class ScheduledSampleFetchService extends AbstractFetchService {
 				flow);
 	}
 
-	private ExistenzResponse fetchData () throws IOException, URISyntaxException {
-		String response = fetchAsString(existenzUrl);
+	private ExistenzResponse fetchData (String url) throws IOException, URISyntaxException {
+		String response = fetchAsString(url);
 		ObjectMapper objectMapper = new ObjectMapper();
 		return objectMapper.readValue(response, new TypeReference<>() {});
 	}

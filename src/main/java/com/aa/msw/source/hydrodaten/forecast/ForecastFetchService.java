@@ -9,11 +9,21 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ForecastFetchService extends AbstractFetchService {
 	final static String FETCH_URL_PREFIX = "https://www.hydrodaten.admin.ch/plots/q_forecast/";
 	final static String FETCH_URL_SUFFIX = "_q_forecast_de.json";
+
+	public List<Forecast> fetchForecasts (List<Integer> stationIds) throws IOException, URISyntaxException {
+		List<Forecast> forecasts = new ArrayList<>();
+		for (int stationId : stationIds) {
+			forecasts.add(fetchForecast(stationId));
+		}
+		return forecasts;
+	}
 
 	public Forecast fetchForecast (int stationId) throws IOException, URISyntaxException {
 		String response = fetchAsString(FETCH_URL_PREFIX + stationId + FETCH_URL_SUFFIX);
