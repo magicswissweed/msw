@@ -17,20 +17,18 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * ApiSample
+ * ApiForecastLineEntry
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-26T22:47:00.494278100+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
-public class ApiSample {
+public class ApiForecastLineEntry {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime timestamp;
 
-  private Double temperature;
+  private Double flow;
 
-  private Integer flow;
-
-  public ApiSample timestamp(OffsetDateTime timestamp) {
+  public ApiForecastLineEntry timestamp(OffsetDateTime timestamp) {
     this.timestamp = timestamp;
     return this;
   }
@@ -50,27 +48,7 @@ public class ApiSample {
     this.timestamp = timestamp;
   }
 
-  public ApiSample temperature(Double temperature) {
-    this.temperature = temperature;
-    return this;
-  }
-
-  /**
-   * Get temperature
-   * @return temperature
-  */
-  
-  @Schema(name = "temperature", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("temperature")
-  public Double getTemperature() {
-    return temperature;
-  }
-
-  public void setTemperature(Double temperature) {
-    this.temperature = temperature;
-  }
-
-  public ApiSample flow(Integer flow) {
+  public ApiForecastLineEntry flow(Double flow) {
     this.flow = flow;
     return this;
   }
@@ -82,11 +60,11 @@ public class ApiSample {
   
   @Schema(name = "flow", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("flow")
-  public Integer getFlow() {
+  public Double getFlow() {
     return flow;
   }
 
-  public void setFlow(Integer flow) {
+  public void setFlow(Double flow) {
     this.flow = flow;
   }
 
@@ -98,23 +76,21 @@ public class ApiSample {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ApiSample apiSample = (ApiSample) o;
-    return Objects.equals(this.timestamp, apiSample.timestamp) &&
-        Objects.equals(this.temperature, apiSample.temperature) &&
-        Objects.equals(this.flow, apiSample.flow);
+    ApiForecastLineEntry apiForecastLineEntry = (ApiForecastLineEntry) o;
+    return Objects.equals(this.timestamp, apiForecastLineEntry.timestamp) &&
+        Objects.equals(this.flow, apiForecastLineEntry.flow);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestamp, temperature, flow);
+    return Objects.hash(timestamp, flow);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ApiSample {\n");
+    sb.append("class ApiForecastLineEntry {\n");
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
-    sb.append("    temperature: ").append(toIndentedString(temperature)).append("\n");
     sb.append("    flow: ").append(toIndentedString(flow)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -5,6 +5,7 @@
  */
 package com.aa.msw.gen.api;
 
+import com.aa.msw.gen.api.ApiForecast;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +32,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-26T00:34:12.593222700+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-26T22:47:00.494278100+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
 @Tag(name = "forecast", description = "the forecast API")
 public interface ForecastApi {
@@ -52,7 +53,7 @@ public interface ForecastApi {
         tags = { "forecast" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Returns the forecast for the station.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ApiForecast.class))
             })
         }
     )
@@ -62,9 +63,18 @@ public interface ForecastApi {
         produces = { "application/json" }
     )
     
-    default ResponseEntity<String> getForecast(
+    default ResponseEntity<ApiForecast> getForecast(
         @Parameter(name = "stationId", description = "The id of the station to get the sample from.", required = true, in = ParameterIn.PATH) @PathVariable("stationId") Integer stationId
     ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"min\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"median\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"max\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"twentyFiveToSeventyFivePercentile\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"measuredData\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

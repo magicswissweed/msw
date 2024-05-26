@@ -46,8 +46,7 @@ paths:
           content:
             application/json:
               schema:
-#                $ref: '#/components/schemas/ApiSample' TODO: use schema
-                type: string
+                $ref: '#/components/schemas/ApiForecast'
 
 components:
   schemas:
@@ -62,3 +61,39 @@ components:
           format: double
         flow:
           type: integer
+    ApiForecast:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        measuredData:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiForecastLineEntry'
+        median:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiForecastLineEntry'
+        twentyFiveToSeventyFivePercentile:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiForecastLineEntry'
+        max:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiForecastLineEntry'
+        min:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiForecastLineEntry'
+
+    ApiForecastLineEntry:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        flow:
+          type: number
+          format: double
