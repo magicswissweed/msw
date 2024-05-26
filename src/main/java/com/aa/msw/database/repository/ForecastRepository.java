@@ -8,7 +8,9 @@ import com.aa.msw.gen.jooq.tables.daos.ForecastTableDao;
 import com.aa.msw.gen.jooq.tables.records.ForecastTableRecord;
 import com.aa.msw.model.Forecast;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.jooq.DSLContext;
 import org.jooq.JSONB;
 import org.springframework.stereotype.Component;
@@ -116,7 +118,9 @@ public class ForecastRepository extends AbstractRepository<ForecastId, Forecast,
 	}
 
 	private static Map<OffsetDateTime, Double> jsonbToMap (JSONB data) throws JsonProcessingException {
-		return new ObjectMapper().readValue(data.data(), Map.class);
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		return objectMapper.readValue(data.data(), new TypeReference<>() {});
 	}
 
 	@Override
