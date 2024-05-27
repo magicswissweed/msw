@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import './MswFooter.scss'
 
 export class MswFooter extends Component {
     render() {

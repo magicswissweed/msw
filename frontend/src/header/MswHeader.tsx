@@ -1,3 +1,4 @@
+import './MswHeader.scss'
 import {Component} from 'react';
 
 export class MswHeader extends Component {

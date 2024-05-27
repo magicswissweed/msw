@@ -1,0 +1,26 @@
+.App-header {
+  font-size: 4vmin;
+  color: #000000;
+}
+
+.title > h1 {
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.title {
+  font-family: Arial, sans-serif;
+  background-image: url(../../public/ripples-snip.jpg);
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+h1 {
+  margin-block-end: 0;
+}
+
+p {
+  font-size: 92%;
+  margin-block-start: 0;
+}
