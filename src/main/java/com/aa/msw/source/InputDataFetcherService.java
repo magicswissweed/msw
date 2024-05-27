@@ -36,12 +36,12 @@ public class InputDataFetcherService {
 		fetchAndWriteForecasts();
 	}
 
-	private void fetchAndWriteSamples () throws IOException, URISyntaxException {
+	public void fetchAndWriteSamples () throws IOException, URISyntaxException {
 		List<Sample> samples = sampleFetchService.fetchSamples(STATION_IDS);
 		sampleDao.persistSamplesIfNotExist(samples);
 	}
 
-	private void fetchAndWriteForecasts () throws IOException, URISyntaxException {
+	public void fetchAndWriteForecasts () throws IOException, URISyntaxException {
 		List<Forecast> forecasts = forecastFetchService.fetchForecasts(STATION_IDS);
 		forecastDao.persistForecastsIfNotExist(forecasts);
 	}
