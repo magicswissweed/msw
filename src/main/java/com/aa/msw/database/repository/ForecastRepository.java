@@ -14,8 +14,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.jooq.DSLContext;
 import org.jooq.JSONB;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -131,5 +133,25 @@ public class ForecastRepository extends AbstractRepository<ForecastId, Forecast,
 				.limit(1)
 				.fetchOptional(this::mapRecord)
 				.orElseThrow(() -> new NoDataAvailableException("No current Forecast found for station " + stationId));
+	}
+
+	@Override
+	@Transactional
+	public void persistForecastsIfNotExist (List<Forecast> forecasts) {
+		for(Forecast forecast : forecasts) {
+			persistForecastIfNotExists(forecast);
+		}
+	}
+
+	@Override
+	@Transactional
+	public void persistForecastIfNotExists (Forecast forecast) {
+		try {
+			if (!getCurrentForecast(forecast.getStationId()).getTimestamp().equals(forecast.getTimestamp())) {
+				persist(forecast);
+			}
+		} catch (NoDataAvailableException e) {
+			persist(forecast);
+		}
 	}
 }

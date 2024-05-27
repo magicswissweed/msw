@@ -1,6 +1,5 @@
 package com.aa.msw.source;
 
-import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.repository.dao.ForecastDao;
 import com.aa.msw.database.repository.dao.SampleDao;
 import com.aa.msw.model.Forecast;
@@ -39,35 +38,11 @@ public class InputDataFetcherService {
 
 	private void fetchAndWriteSamples () throws IOException, URISyntaxException {
 		List<Sample> samples = sampleFetchService.fetchSamples(STATION_IDS);
-		for(Sample sample : samples) {
-			persistSampleIfNotExists(sample);
-		}
+		sampleDao.persistSamplesIfNotExist(samples);
 	}
 
 	private void fetchAndWriteForecasts () throws IOException, URISyntaxException {
 		List<Forecast> forecasts = forecastFetchService.fetchForecasts(STATION_IDS);
-		for(Forecast forecast : forecasts) {
-			persistForecastIfNotExists(forecast);
-		}
-	}
-
-	private void persistSampleIfNotExists (Sample sample) {
-		try {
-			if (!sampleDao.getCurrentSample(sample.getStationId()).timestamp().equals(sample.getTimestamp())) {
-				sampleDao.persist(sample);
-			}
-		} catch (NoDataAvailableException e) {
-			sampleDao.persist(sample);
-		}
-	}
-
-	private void persistForecastIfNotExists (Forecast forecast) {
-		try {
-			if (!forecastDao.getCurrentForecast(forecast.getStationId()).getTimestamp().equals(forecast.getTimestamp())) {
-				forecastDao.persist(forecast);
-			}
-		} catch (NoDataAvailableException e) {
-			forecastDao.persist(forecast);
-		}
+		forecastDao.persistForecastsIfNotExist(forecasts);
 	}
 }

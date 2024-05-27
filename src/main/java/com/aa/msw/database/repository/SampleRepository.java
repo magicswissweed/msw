@@ -9,8 +9,10 @@ import com.aa.msw.gen.jooq.tables.records.SampleTableRecord;
 import com.aa.msw.model.Sample;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 
 @Component
@@ -66,5 +68,25 @@ public class SampleRepository extends AbstractRepository<SampleId, Sample, Sampl
 				.limit(1)
 				.fetchOptional(this::mapRecord)
 				.orElseThrow(() -> new NoDataAvailableException("No current sample found for station " + stationId));
+	}
+
+	@Override
+	@Transactional
+	public void persistSamplesIfNotExist (List<Sample> samples) {
+		for(Sample sample : samples) {
+			persistSampleIfNotExists(sample);
+		}
+	}
+
+	@Override
+	@Transactional
+	public void persistSampleIfNotExists (Sample sample) {
+		try {
+			if (!getCurrentSample(sample.getStationId()).timestamp().equals(sample.getTimestamp())) {
+				persist(sample);
+			}
+		} catch (NoDataAvailableException e) {
+			persist(sample);
+		}
 	}
 }
