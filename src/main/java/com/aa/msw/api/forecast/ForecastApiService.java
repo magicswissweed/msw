@@ -23,8 +23,7 @@ public class ForecastApiService {
 
 
 	public ApiForecast getCurrentForecast (Integer stationId) throws NoDataAvailableException {
-		Forecast forecast = forecastDao.getCurrentForecast(stationId);
-		return mapForecast(forecast);
+		return mapForecast(forecastDao.getCurrentForecast(stationId));
 	}
 
 	private static ApiForecast mapForecast (Forecast forecast) {
