@@ -1,0 +1,20 @@
+@import "../ReactiveMixins";
+
+.Footer {
+  padding: 1.25rem 1.875rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  color: white;
+
+  // TODO: background-color is only for demo of mixins
+  background-color: blue;
+
+  @include small {
+    background-color: red;
+  }
+
+  @include medium {
+    background-color: orange;
+  }
+}

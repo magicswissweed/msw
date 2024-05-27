@@ -1,0 +1,17 @@
+$screen-medium-min: 720px;
+$screen-large-min: 1000px;
+
+$screen-small-max: $screen-medium-min - 1;
+$screen-medium-max: $screen-large-min - 1;
+
+@mixin small {
+  @media screen and (max-width: $screen-small-max) {
+    @content;
+  }
+}
+
+@mixin medium {
+  @media screen and (min-width: $screen-medium-min) and (max-width: $screen-medium-max) {
+    @content;
+  }
+}
