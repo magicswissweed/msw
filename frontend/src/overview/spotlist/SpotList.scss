@@ -1,0 +1,53 @@
+@import "../../ReactiveMixins";
+
+.tableHeader {
+  flex: 1;
+  display: flex;
+}
+
+.tableHeaderCol{
+  flex: 1;
+}
+
+.tableHeaderContainer {
+  padding: 0 10px;
+  margin: 0 10px;
+  display: flex;
+}
+
+.spotsContainer {
+  width: 700px;
+  margin: auto;
+}
+
+.doubleCol {
+  flex: 2;
+}
+
+.spotsContainer > h2 {
+  text-decoration: underline;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.collapsibleIcon {
+  margin: 0 10px;
+  flex: 0.03;
+}
+
+.collapsibleIcon>img {
+  width: 100%;
+  cursor: pointer;
+}
+
+@include small {
+  .hiddenOnMobile {
+    display: none;
+  }
+
+  .spotsContainer {
+    width: auto;
+  }
+}

@@ -2,30 +2,28 @@ import "./MswOverviewPage.scss";
 import React, {Component} from "react";
 import {MswHeader} from '../header/MswHeader';
 import {MswFooter} from '../footer/MswFooter';
-import {CurrentSampleApi, ForecastApi} from '../gen/msw-api-ts';
+import {SpotList} from './spotlist/SpotList'
 
 export class MswOverviewPage extends Component {
 
   render() {
-      return (
-        <div className="App">
-          <MswHeader/>
-            <button onClick={this.getCurrentSample}>Get Current Sample</button>
-            <button onClick={this.getForecast}>Get Forecast</button>
-          <MswFooter/>
-        </div>
-    );
-  }
-  private getCurrentSample() {
-    new CurrentSampleApi().getCurrentSample({"stationId": 2018}).subscribe(response => {
-      console.log("flow: " + response.flow)
-      console.log("temp: " + response.temperature)
-    })
-  }
+    let riverSurfLocations: Array<Number> = [2018, 2243];
+    let bungeeSurfLocations: Array<Number> = [2135, 2152];
 
-  private getForecast () {
-    new ForecastApi().getForecast({"stationId": 2018}).subscribe((response => {
-        console.log(response.timestamp);
-    }));
-  };
+    // TODO: replace locations with something useful
+    return <>
+      <div className="App">
+        <MswHeader/>
+        <div className="surfspots">
+          <div className="riversurf">
+            <SpotList title="Riversurf" locations={riverSurfLocations}/>
+          </div>
+          <div className="bungeesurf">
+            <SpotList title="Bungeesurf" locations={bungeeSurfLocations}/>
+          </div>
+        </div>
+        <MswFooter/>
+      </div>
+    </>;
+  }
 }

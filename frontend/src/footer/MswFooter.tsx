@@ -8,18 +8,15 @@ export class MswFooter extends Component {
                 <div className="Footer">
                     <div className="Footer_item">
                         Source:{" "}
-                        <a className="Link" href="https://www.hydrodaten.admin.ch">
+                        <a href="https://www.hydrodaten.admin.ch">
                             BAFU
                         </a>
                     </div>
-                    <div className="Footer_item wide">
+                    <div className="Footer_item">
                         © 2023 Academic Surf Club Switzerland
                     </div>
                     <div className="Footer_item">
-                        <a
-                            className="Link"
-                            href="https://github.com/nkueng/MagicSwissWeed/issues"
-                        >
+                        <a href="https://github.com/nkueng/MagicSwissWeed/issues">
                             Feedback
                         </a>
                     </div>
