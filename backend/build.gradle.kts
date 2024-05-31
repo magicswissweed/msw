@@ -1,3 +1,5 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
 plugins {
     java
     id("idea")
@@ -64,7 +66,9 @@ flyway {
     locations = listOf("filesystem:" + project.rootDir + "/src/main/resources/db/migration").toTypedArray()
 }
 
-openApiGenerate {
+tasks.register<GenerateTask>("openApiGenerateSpring") {
+    group = "Msw OpenApi"
+
     generatorName = "spring"
     inputSpec = "$projectDir/src/main/resources/api/mswApi.yaml"
     outputDir = "$projectDir/$generatedApiDir"
@@ -77,6 +81,29 @@ openApiGenerate {
             "useJakartaEe" to "true",
             "sourceFolder" to "", // With the default main/src/java in generated-src, the package name does not match
             "useTags" to "true"
+    )
+
+    doLast {
+        // OpenAPI generator generates other files, we don't need
+        delete(
+                "$projectDir/$generatedApiDir/.openapi-generator",
+                "$projectDir/$generatedApiDir/.openapi-generator-ignore",
+                "$projectDir/$generatedApiDir/pom.xml",
+                "$projectDir/$generatedApiDir/README.md"
+        )
+    }
+}
+
+tasks.register<GenerateTask>("openApiGenerateReact") {
+    group = "Msw OpenApi"
+
+    generatorName = "typescript-rxjs"
+    inputSpec = "$projectDir/src/main/resources/api/mswApi.yaml"
+    outputDir = "$projectDir/../frontend/src/gen/msw-api-ts"
+
+    configOptions = mapOf(
+            "npmName" to "msw-api-ts",
+            "supportsES6" to "true",
     )
 }
 

@@ -1,24 +1,30 @@
 package com.aa.msw.gen.api;
 
+import java.net.URI;
 import java.util.Objects;
-
+import com.aa.msw.gen.api.ApiForecastLineEntry;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.openapitools.jackson.nullable.JsonNullable;
+import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
+import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
  * ApiForecast
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-26T22:47:00.494278100+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-31T11:47:05.569330600+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiForecast {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
