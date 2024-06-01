@@ -1,7 +1,8 @@
 import './Spot.scss'
-import {Component} from 'react';
+import React, {Component} from 'react';
 import {ApiSpotInformation} from '../../../gen/msw-api-ts';
 import {SpotList} from '../SpotList';
+import {MswMeasurement} from './measurement/MswMeasurement';
 
 interface SpotProps {
   location: ApiSpotInformation
@@ -35,8 +36,8 @@ export class Spot extends Component<{ location: ApiSpotInformation }> {
         <a href={link} target="_blank" rel="noreferrer">
           {location.name}
         </a>
-        {/*TODO measurement and forecast*/}
-        {/*{measurement}*/}
+        {/*TODO forecast*/}
+        <MswMeasurement location={location}/>
         {/*{forecast}*/}
       </div>
       {SpotList.getCollapsibleIcon(!location.forecast)}

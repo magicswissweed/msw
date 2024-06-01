@@ -13,7 +13,7 @@ export class MswFooter extends Component {
                         </a>
                     </div>
                     <div className="Footer_item">
-                        © 2023 Academic Surf Club Switzerland
+                        © 2024 Academic Surf Club Switzerland
                     </div>
                     <div className="Footer_item">
                         <a href="https://github.com/nkueng/MagicSwissWeed/issues">

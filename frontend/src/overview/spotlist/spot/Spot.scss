@@ -45,6 +45,14 @@ summary::-webkit-details-marker {
   height: 130px;
 }
 
+.spotname a {
+  flex: 1;
+  text-decoration: none;
+  color: #000000;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .spotContainer {
   flex: 1;
   display: flex;
