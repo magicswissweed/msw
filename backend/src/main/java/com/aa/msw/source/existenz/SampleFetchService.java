@@ -17,12 +17,13 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class SampleFetchService extends AbstractFetchService {
 
-	public List<Sample> fetchSamples (List<Integer> stationIds) throws IOException, URISyntaxException {
+	public List<Sample> fetchSamples (Set<Integer> stationIds) throws IOException, URISyntaxException {
 		String fetchUrl = getExistenzUrl(stationIds);
 		List<ExistenzSample> existenzSamples = fetchData(fetchUrl).payload();
 		List<Sample> samples = new ArrayList<>();
@@ -33,7 +34,7 @@ public class SampleFetchService extends AbstractFetchService {
 		return samples;
 	}
 
-	private static String getExistenzUrl (List<Integer> stationIds) {
+	private static String getExistenzUrl (Set<Integer> stationIds) {
 		String locationsString = stationIds.stream()
 				.map(Object::toString)
 				.collect(Collectors.joining("%2C"));

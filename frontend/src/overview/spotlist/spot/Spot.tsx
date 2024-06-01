@@ -1,13 +1,15 @@
 import './Spot.scss'
 import {Component} from 'react';
+import {ApiSpotInformation} from '../../../gen/msw-api-ts';
+import {SpotList} from '../SpotList';
 
 interface SpotProps {
-  location: number
+  location: ApiSpotInformation
 }
 
-export class Spot extends Component<{ location: Number }> {
+export class Spot extends Component<{ location: ApiSpotInformation }> {
 
-  private readonly location: number;
+  private readonly location: ApiSpotInformation;
 
   constructor(props: SpotProps) {
     super(props);
@@ -16,7 +18,38 @@ export class Spot extends Component<{ location: Number }> {
 
   render() {
     return <>
-      <p>{this.location}</p>
+      <details key={this.props.location.name} className="spot">
+        <summary className="spotname">
+          {this.getSpotSummaryContent(this.props.location)}
+        </summary>
+        {this.getCollapsibleContent(this.props.location)}
+      </details>
+    </>;
+  }
+
+  private getSpotSummaryContent(location: ApiSpotInformation) {
+    let link = "https://www.hydrodaten.admin.ch/de/seen-und-fluesse/stationen-und-daten/" + location.stationId;
+
+    return <>
+      <div className="spotContainer">
+        <a href={link} target="_blank" rel="noreferrer">
+          {location.name}
+        </a>
+        {/*TODO measurement and forecast*/}
+        {/*{measurement}*/}
+        {/*{forecast}*/}
+      </div>
+      {SpotList.getCollapsibleIcon(!location.forecast)}
+    </>
+  }
+
+  private getCollapsibleContent(location: ApiSpotInformation) {
+    return <>
+      <div className="collapsibleContent hiddenOnMobile">
+        <h2>Forecast</h2>
+        TODO: Big Forecast
+        {/*<MswForecastGraph location={location} forecastData={forecastData} flowAndTempData={flowAndTempData} />*/}
+      </div>
     </>;
   }
 }

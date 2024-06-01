@@ -1,5 +1,6 @@
 package com.aa.msw.source;
 
+import com.aa.msw.config.Spot;
 import com.aa.msw.database.repository.dao.ForecastDao;
 import com.aa.msw.database.repository.dao.SampleDao;
 import com.aa.msw.model.Forecast;
@@ -11,11 +12,16 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.aa.msw.config.SpotListConfiguration.ALL_SPOTS;
 
 @Service
 public class InputDataFetcherService {
-	private static final List<Integer> STATION_IDS = List.of(2018, 2243);
+	private final Set<Integer> stationIds;
 
 	private final SampleFetchService sampleFetchService;
 	private final ForecastFetchService forecastFetchService;
@@ -24,6 +30,11 @@ public class InputDataFetcherService {
 	private final ForecastDao forecastDao;
 
 	public InputDataFetcherService (SampleFetchService sampleFetchService, ForecastFetchService forecastFetchService, SampleDao sampleDao, ForecastDao forecastDao) {
+		final Set<Spot> spots = new HashSet<>();
+		spots.addAll(ALL_SPOTS.riverSurfSpots());
+		spots.addAll(ALL_SPOTS.bungeeSurfSpots());
+		stationIds = spots.stream().map(Spot::stationId).collect(Collectors.toSet());
+
 		this.sampleFetchService = sampleFetchService;
 		this.forecastFetchService = forecastFetchService;
 		this.sampleDao = sampleDao;
@@ -37,12 +48,12 @@ public class InputDataFetcherService {
 	}
 
 	public void fetchAndWriteSamples () throws IOException, URISyntaxException {
-		List<Sample> samples = sampleFetchService.fetchSamples(STATION_IDS);
+		List<Sample> samples = sampleFetchService.fetchSamples(stationIds);
 		sampleDao.persistSamplesIfNotExist(samples);
 	}
 
 	public void fetchAndWriteForecasts () throws IOException, URISyntaxException {
-		List<Forecast> forecasts = forecastFetchService.fetchForecasts(STATION_IDS);
+		List<Forecast> forecasts = forecastFetchService.fetchForecasts(stationIds);
 		forecastDao.persistForecastsIfNotExist(forecasts);
 	}
 }

@@ -2,15 +2,16 @@ import './SpotList.scss';
 import React, {Component} from 'react';
 import arrow_down from "../../assets/arrow_down.png";
 import {Spot} from './spot/Spot';
+import {ApiSpotInformation} from '../../gen/msw-api-ts';
 
 interface SpotListProps {
   title: string,
   locations: any
 }
 
-export class SpotList extends Component<{ title: string, locations: Array<Number> }> {
+export class SpotList extends Component<{ title: string, locations: Array<ApiSpotInformation> }> {
   private readonly title: string;
-  private readonly locations: Array<Number> = new Array<Number>();
+  private readonly locations: Array<ApiSpotInformation> = new Array<ApiSpotInformation>();
 
   constructor(props: SpotListProps) {
     super(props);
@@ -25,7 +26,7 @@ export class SpotList extends Component<{ title: string, locations: Array<Number
         <div className="tableHeaderCol doubleCol">Forecast</div>
       </div>
       {/* only to have the same columns as in the spots */}
-      {this.getCollapsibleIcon(true)}
+      {SpotList.getCollapsibleIcon(true)}
     </div>;
 
     this.locations.forEach((location) => console.log(location));
@@ -41,7 +42,7 @@ export class SpotList extends Component<{ title: string, locations: Array<Number
     </>;
   }
 
-  private getCollapsibleIcon(isHidden: Boolean) {
+  public static getCollapsibleIcon(isHidden: Boolean) {
     let className = "collapsibleIcon hiddenOnMobile";
     if(isHidden) {
       className += " hide";

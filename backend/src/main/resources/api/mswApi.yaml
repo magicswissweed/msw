@@ -47,9 +47,51 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiForecast'
+  /spots:
+    get:
+      summary: Get SpotInformation-List including Current Sample and Forecast.
+      operationId: getSpots
+      parameters:
+        - name: includeAll
+          description: Whether to include all Spots.
+          in: query
+          schema:
+            type: boolean
+          required: false
+      tags:
+        - spots
+      responses:
+        '200':
+          description: Returns a List with Data for the Spots.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSpotInformationList'
 
 components:
   schemas:
+    ApiSpotInformationList:
+      type: object
+      properties:
+        riverSurfSpots:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiSpotInformation'
+        bungeeSurfSpots:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiSpotInformation'
+    ApiSpotInformation:
+      type: object
+      properties:
+        name:
+          type: string
+        stationId:
+          type: integer
+        currentSample:
+          $ref: '#/components/schemas/ApiSample'
+        forecast:
+          $ref: '#/components/schemas/ApiForecast'
     ApiSample:
       type: object
       properties:

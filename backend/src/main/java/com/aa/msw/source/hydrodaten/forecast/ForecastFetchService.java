@@ -17,13 +17,14 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class ForecastFetchService extends AbstractFetchService {
 	final static String FETCH_URL_PREFIX = "https://www.hydrodaten.admin.ch/plots/q_forecast/";
 	final static String FETCH_URL_SUFFIX = "_q_forecast_de.json";
 
-	public List<Forecast> fetchForecasts (List<Integer> stationIds) throws IOException, URISyntaxException {
+	public List<Forecast> fetchForecasts (Set<Integer> stationIds) throws IOException, URISyntaxException {
 		List<Forecast> forecasts = new ArrayList<>();
 		for (int stationId : stationIds) {
 			forecasts.add(fetchForecast(stationId));

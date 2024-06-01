@@ -3,26 +3,48 @@ import React, {Component} from "react";
 import {MswHeader} from '../header/MswHeader';
 import {MswFooter} from '../footer/MswFooter';
 import {SpotList} from './spotlist/SpotList'
+import {ApiSpotInformationList, SpotsApi} from '../gen/msw-api-ts';
+import {MswLoader} from '../loader/MswLoader';
 
-export class MswOverviewPage extends Component {
+interface MswOverviewPageState {
+  data: ApiSpotInformationList | null
+}
+
+export class MswOverviewPage extends Component<any, any> {
+  state: MswOverviewPageState = {
+    data: null,
+  };
+
+  componentDidMount() {
+    // TODO: toggle includeAll
+    new SpotsApi().getSpots({includeAll: false}).subscribe((res) => {
+      if(res && res.riverSurfSpots && res.bungeeSurfSpots) {
+        this.setState({data: res});
+      }
+    });
+  }
 
   render() {
-    let riverSurfLocations: Array<Number> = [2018, 2243];
-    let bungeeSurfLocations: Array<Number> = [2135, 2152];
+    const state: MswOverviewPageState = this.state;
 
-    // TODO: replace locations with something useful
     return <>
       <div className="App">
         <MswHeader/>
-        <div className="surfspots">
-          <div className="riversurf">
-            <SpotList title="Riversurf" locations={riverSurfLocations}/>
-          </div>
-          <div className="bungeesurf">
-            <SpotList title="Bungeesurf" locations={bungeeSurfLocations}/>
-          </div>
-        </div>
+        {state.data ? this.getContent(state.data) : <MswLoader />}
         <MswFooter/>
+      </div>
+    </>;
+  }
+
+  private getContent(data: ApiSpotInformationList) {
+    return <>
+      <div className="surfspots">
+        <div className="riversurf">
+          <SpotList title="Riversurf" locations={data.riverSurfSpots!}/>
+        </div>
+        <div className="bungeesurf">
+          <SpotList title="Bungeesurf" locations={data.bungeeSurfSpots!}/>
+        </div>
       </div>
     </>;
   }

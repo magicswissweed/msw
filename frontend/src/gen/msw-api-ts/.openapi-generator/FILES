@@ -3,11 +3,14 @@
 README.md
 apis/CurrentSampleApi.ts
 apis/ForecastApi.ts
+apis/SpotsApi.ts
 apis/index.ts
 index.ts
 models/ApiForecast.ts
 models/ApiForecastLineEntry.ts
 models/ApiSample.ts
+models/ApiSpotInformation.ts
+models/ApiSpotInformationList.ts
 models/index.ts
 package.json
 runtime.ts
