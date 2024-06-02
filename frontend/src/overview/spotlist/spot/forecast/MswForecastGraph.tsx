@@ -28,6 +28,13 @@ const DATA_KEY_75_PERCENTILE = "seventyFivePercentile";
 const DATA_KEY_MINIMUM = "minimum";
 const DATA_KEY_MAXIMUM = "maximum";
 
+const LINE_NAME_MEASURED = "Gemessen";
+let LINE_NAME_MEDIAN = "Median";
+const LINE_NAME_25_PERCENTILE = "25. Perzentil";
+const LINE_NAME_75_PERCENTILE = "75. Perzentil";
+const LINE_NAME_MAX = "Maximum";
+const LINE_NAME_MIN = "Minimum";
+
 type NormalizedDataItem = { datetime: Date, [lineName: string]: unknown; };
 
 export class MswForecastGraph extends Component<MswForecastGraphProps> {
@@ -106,32 +113,33 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
                 dataKey={DATA_KEY_25_PERCENTILE}
                 stroke="orange"
                 dot={false}
-                name="25. Perzentil"/>
+                name={LINE_NAME_25_PERCENTILE}/>
           <Line type="monotone"
                 dataKey={DATA_KEY_75_PERCENTILE}
                 stroke="orange"
                 dot={false}
-                name="75. Perzentil"/>
+                name={LINE_NAME_75_PERCENTILE}/>
           <Line type="monotone"
                 dataKey={DATA_KEY_MEDIAN}
                 stroke="blue"
                 dot={false}
-                name="Median"/>
+                name={LINE_NAME_MEDIAN}
+                activeDot={{ stroke: 'blue', strokeWidth: 1, r: 4 }}/>
           <Line type="monotone"
                 dataKey={DATA_KEY_MEASURED}
                 stroke="green"
                 dot={false}
-                name="Gemessen"/>
+                name={LINE_NAME_MEASURED}/>
           <Line type="monotone"
                 dataKey={DATA_KEY_MINIMUM}
                 stroke="pink"
                 dot={false}
-                name="Minimum"/>
+                name={LINE_NAME_MIN}/>
           <Line type="monotone"
                 dataKey={DATA_KEY_MAXIMUM}
                 stroke="pink"
                 dot={false}
-                name="Maximum"/>
+                name={LINE_NAME_MAX}/>
           <CartesianGrid/>
           <XAxis
             type="number"
@@ -180,8 +188,8 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
   private getLegend() {
     return <Legend
       payload={[
-        {type: "line", value: "Gemessen", color: "green"},
-        {type: "line", value: "Median", color: "blue"},
+        {type: "line", value: LINE_NAME_MEASURED, color: "green"},
+        {type: "line", value: LINE_NAME_MEDIAN, color: "blue"},
         {type: "line", value: "25.-75. Perzentil", color: "orange"},
         {type: "line", value: "Min / Max", color: "pink"},
       ]}
