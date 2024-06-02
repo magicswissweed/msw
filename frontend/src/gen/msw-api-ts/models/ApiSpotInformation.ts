@@ -32,6 +32,16 @@ export interface ApiSpotInformation {
      */
     stationId?: number;
     /**
+     * @type {number}
+     * @memberof ApiSpotInformation
+     */
+    minFlow?: number;
+    /**
+     * @type {number}
+     * @memberof ApiSpotInformation
+     */
+    maxFlow?: number;
+    /**
      * @type {ApiSample}
      * @memberof ApiSpotInformation
      */

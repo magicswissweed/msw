@@ -3,12 +3,14 @@ import React, {Component} from 'react';
 import {ApiSpotInformation} from '../../../gen/msw-api-ts';
 import {SpotList} from '../SpotList';
 import {MswMeasurement} from './measurement/MswMeasurement';
+import {MswMiniForecast} from './miniForecast/MswMiniForecast';
+import {MswForecastGraph} from './forecast/MswForecastGraph';
 
 interface SpotProps {
   location: ApiSpotInformation
 }
 
-export class Spot extends Component<{ location: ApiSpotInformation }> {
+export class Spot extends Component<SpotProps> {
 
   private readonly location: ApiSpotInformation;
 
@@ -36,9 +38,8 @@ export class Spot extends Component<{ location: ApiSpotInformation }> {
         <a href={link} target="_blank" rel="noreferrer">
           {location.name}
         </a>
-        {/*TODO forecast*/}
         <MswMeasurement location={location}/>
-        {/*{forecast}*/}
+        <MswMiniForecast location={location}/>
       </div>
       {SpotList.getCollapsibleIcon(!location.forecast)}
     </>
@@ -48,8 +49,8 @@ export class Spot extends Component<{ location: ApiSpotInformation }> {
     return <>
       <div className="collapsibleContent hiddenOnMobile">
         <h2>Forecast</h2>
-        TODO: Big Forecast
-        {/*<MswForecastGraph location={location} forecastData={forecastData} flowAndTempData={flowAndTempData} />*/}
+        {/* TODO: looks buggy that I have to add isMobile here */}
+        <MswForecastGraph location={location} isMini={false} isMobile={false} />
       </div>
     </>;
   }

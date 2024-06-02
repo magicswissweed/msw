@@ -31,7 +31,8 @@ public class ForecastApiService {
 		apiForecast.setTimestamp(forecast.getTimestamp());
 		apiForecast.setMeasuredData(mapApiForecastLine(forecast.getMeasuredData()));
 		apiForecast.setMedian(mapApiForecastLine(forecast.getMedian()));
-		apiForecast.setTwentyFiveToSeventyFivePercentile(mapApiForecastLine(forecast.getTwentyFiveToSeventyFivePercentile()));
+		apiForecast.setTwentyFivePercentile(mapApiForecastLine(forecast.getTwentyFivePercentile()));
+		apiForecast.setSeventyFivePercentile(mapApiForecastLine(forecast.getSeventyFivePercentile()));
 		apiForecast.setMin(mapApiForecastLine(forecast.getMin()));
 		apiForecast.setMax(mapApiForecastLine(forecast.getMax()));
 		return apiForecast;

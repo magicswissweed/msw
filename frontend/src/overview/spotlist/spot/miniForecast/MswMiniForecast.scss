@@ -1,0 +1,25 @@
+@import "../../../../ReactiveMixins";
+
+.miniGraph {
+  flex: 1;
+  width: 100%;
+}
+
+.forecastContainer {
+  font-size: 20px;
+  flex: 2;
+  align-items: center;
+  display: flex;
+  column-gap: 5px;
+  width: 100%;
+}
+
+.hiddenOnDesktop {
+  display: none;
+}
+
+@include small {
+  .hiddenOnMobile {
+    display: none;
+  }
+}

@@ -83,27 +83,10 @@ public class ForecastTableRecord extends UpdatableRecordImpl<ForecastTableRecord
     }
 
     /**
-     * Setter for
-     * <code>public.forecast_table.twentyfivetoseventyfivepercentile</code>.
-     */
-    public ForecastTableRecord setTwentyfivetoseventyfivepercentile(JSONB value) {
-        set(4, value);
-        return this;
-    }
-
-    /**
-     * Getter for
-     * <code>public.forecast_table.twentyfivetoseventyfivepercentile</code>.
-     */
-    public JSONB getTwentyfivetoseventyfivepercentile() {
-        return (JSONB) get(4);
-    }
-
-    /**
      * Setter for <code>public.forecast_table.max</code>.
      */
     public ForecastTableRecord setMax(JSONB value) {
-        set(5, value);
+        set(4, value);
         return this;
     }
 
@@ -111,14 +94,14 @@ public class ForecastTableRecord extends UpdatableRecordImpl<ForecastTableRecord
      * Getter for <code>public.forecast_table.max</code>.
      */
     public JSONB getMax() {
-        return (JSONB) get(5);
+        return (JSONB) get(4);
     }
 
     /**
      * Setter for <code>public.forecast_table.min</code>.
      */
     public ForecastTableRecord setMin(JSONB value) {
-        set(6, value);
+        set(5, value);
         return this;
     }
 
@@ -126,14 +109,14 @@ public class ForecastTableRecord extends UpdatableRecordImpl<ForecastTableRecord
      * Getter for <code>public.forecast_table.min</code>.
      */
     public JSONB getMin() {
-        return (JSONB) get(6);
+        return (JSONB) get(5);
     }
 
     /**
      * Setter for <code>public.forecast_table.timestamp</code>.
      */
     public ForecastTableRecord setTimestamp(OffsetDateTime value) {
-        set(7, value);
+        set(6, value);
         return this;
     }
 
@@ -141,7 +124,37 @@ public class ForecastTableRecord extends UpdatableRecordImpl<ForecastTableRecord
      * Getter for <code>public.forecast_table.timestamp</code>.
      */
     public OffsetDateTime getTimestamp() {
-        return (OffsetDateTime) get(7);
+        return (OffsetDateTime) get(6);
+    }
+
+    /**
+     * Setter for <code>public.forecast_table.twentyfivepercentile</code>.
+     */
+    public ForecastTableRecord setTwentyfivepercentile(JSONB value) {
+        set(7, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.forecast_table.twentyfivepercentile</code>.
+     */
+    public JSONB getTwentyfivepercentile() {
+        return (JSONB) get(7);
+    }
+
+    /**
+     * Setter for <code>public.forecast_table.seventyfivepercentile</code>.
+     */
+    public ForecastTableRecord setSeventyfivepercentile(JSONB value) {
+        set(8, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.forecast_table.seventyfivepercentile</code>.
+     */
+    public JSONB getSeventyfivepercentile() {
+        return (JSONB) get(8);
     }
 
     // -------------------------------------------------------------------------
@@ -167,17 +180,18 @@ public class ForecastTableRecord extends UpdatableRecordImpl<ForecastTableRecord
     /**
      * Create a detached, initialised ForecastTableRecord
      */
-    public ForecastTableRecord(UUID id, Integer stationid, JSONB measureddata, JSONB median, JSONB twentyfivetoseventyfivepercentile, JSONB max, JSONB min, OffsetDateTime timestamp) {
+    public ForecastTableRecord(UUID id, Integer stationid, JSONB measureddata, JSONB median, JSONB max, JSONB min, OffsetDateTime timestamp, JSONB twentyfivepercentile, JSONB seventyfivepercentile) {
         super(ForecastTable.FORECAST_TABLE);
 
         setId(id);
         setStationid(stationid);
         setMeasureddata(measureddata);
         setMedian(median);
-        setTwentyfivetoseventyfivepercentile(twentyfivetoseventyfivepercentile);
         setMax(max);
         setMin(min);
         setTimestamp(timestamp);
+        setTwentyfivepercentile(twentyfivepercentile);
+        setSeventyfivepercentile(seventyfivepercentile);
         resetChangedOnNotNull();
     }
 
@@ -192,10 +206,11 @@ public class ForecastTableRecord extends UpdatableRecordImpl<ForecastTableRecord
             setStationid(value.getStationid());
             setMeasureddata(value.getMeasureddata());
             setMedian(value.getMedian());
-            setTwentyfivetoseventyfivepercentile(value.getTwentyfivetoseventyfivepercentile());
             setMax(value.getMax());
             setMin(value.getMin());
             setTimestamp(value.getTimestamp());
+            setTwentyfivepercentile(value.getTwentyfivepercentile());
+            setSeventyfivepercentile(value.getSeventyfivepercentile());
             resetChangedOnNotNull();
         }
     }

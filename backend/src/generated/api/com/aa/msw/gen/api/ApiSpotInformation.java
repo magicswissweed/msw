@@ -20,12 +20,16 @@ import jakarta.annotation.Generated;
  * ApiSpotInformation
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-01T16:19:38.790291200+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-02T11:56:19.779926100+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiSpotInformation {
 
   private String name;
 
   private Integer stationId;
+
+  private Integer minFlow;
+
+  private Integer maxFlow;
 
   private ApiSample currentSample;
 
@@ -69,6 +73,46 @@ public class ApiSpotInformation {
 
   public void setStationId(Integer stationId) {
     this.stationId = stationId;
+  }
+
+  public ApiSpotInformation minFlow(Integer minFlow) {
+    this.minFlow = minFlow;
+    return this;
+  }
+
+  /**
+   * Get minFlow
+   * @return minFlow
+  */
+  
+  @Schema(name = "minFlow", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("minFlow")
+  public Integer getMinFlow() {
+    return minFlow;
+  }
+
+  public void setMinFlow(Integer minFlow) {
+    this.minFlow = minFlow;
+  }
+
+  public ApiSpotInformation maxFlow(Integer maxFlow) {
+    this.maxFlow = maxFlow;
+    return this;
+  }
+
+  /**
+   * Get maxFlow
+   * @return maxFlow
+  */
+  
+  @Schema(name = "maxFlow", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("maxFlow")
+  public Integer getMaxFlow() {
+    return maxFlow;
+  }
+
+  public void setMaxFlow(Integer maxFlow) {
+    this.maxFlow = maxFlow;
   }
 
   public ApiSpotInformation currentSample(ApiSample currentSample) {
@@ -122,13 +166,15 @@ public class ApiSpotInformation {
     ApiSpotInformation apiSpotInformation = (ApiSpotInformation) o;
     return Objects.equals(this.name, apiSpotInformation.name) &&
         Objects.equals(this.stationId, apiSpotInformation.stationId) &&
+        Objects.equals(this.minFlow, apiSpotInformation.minFlow) &&
+        Objects.equals(this.maxFlow, apiSpotInformation.maxFlow) &&
         Objects.equals(this.currentSample, apiSpotInformation.currentSample) &&
         Objects.equals(this.forecast, apiSpotInformation.forecast);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, stationId, currentSample, forecast);
+    return Objects.hash(name, stationId, minFlow, maxFlow, currentSample, forecast);
   }
 
   @Override
@@ -137,6 +183,8 @@ public class ApiSpotInformation {
     sb.append("class ApiSpotInformation {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    stationId: ").append(toIndentedString(stationId)).append("\n");
+    sb.append("    minFlow: ").append(toIndentedString(minFlow)).append("\n");
+    sb.append("    maxFlow: ").append(toIndentedString(maxFlow)).append("\n");
     sb.append("    currentSample: ").append(toIndentedString(currentSample)).append("\n");
     sb.append("    forecast: ").append(toIndentedString(forecast)).append("\n");
     sb.append("}");

@@ -41,6 +41,8 @@ public class SpotsApiService {
 		for (Spot spot : spots) {
 			spotInformationList.add(new ApiSpotInformation()
 							.name(spot.name())
+							.minFlow(spot.minFlow())
+							.maxFlow(spot.maxFlow())
 							.stationId(spot.stationId())
 							.currentSample(currentSampleApiService.getCurrentSample(spot.stationId()))
 							.forecast(forecastApiService.getCurrentForecast(spot.stationId()))

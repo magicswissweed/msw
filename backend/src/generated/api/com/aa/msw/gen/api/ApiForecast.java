@@ -24,7 +24,7 @@ import jakarta.annotation.Generated;
  * ApiForecast
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-01T16:19:38.790291200+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-02T11:56:19.779926100+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiForecast {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -37,7 +37,10 @@ public class ApiForecast {
   private List<@Valid ApiForecastLineEntry> median = new ArrayList<>();
 
   @Valid
-  private List<@Valid ApiForecastLineEntry> twentyFiveToSeventyFivePercentile = new ArrayList<>();
+  private List<@Valid ApiForecastLineEntry> twentyFivePercentile = new ArrayList<>();
+
+  @Valid
+  private List<@Valid ApiForecastLineEntry> seventyFivePercentile = new ArrayList<>();
 
   @Valid
   private List<@Valid ApiForecastLineEntry> max = new ArrayList<>();
@@ -121,32 +124,60 @@ public class ApiForecast {
     this.median = median;
   }
 
-  public ApiForecast twentyFiveToSeventyFivePercentile(List<@Valid ApiForecastLineEntry> twentyFiveToSeventyFivePercentile) {
-    this.twentyFiveToSeventyFivePercentile = twentyFiveToSeventyFivePercentile;
+  public ApiForecast twentyFivePercentile(List<@Valid ApiForecastLineEntry> twentyFivePercentile) {
+    this.twentyFivePercentile = twentyFivePercentile;
     return this;
   }
 
-  public ApiForecast addTwentyFiveToSeventyFivePercentileItem(ApiForecastLineEntry twentyFiveToSeventyFivePercentileItem) {
-    if (this.twentyFiveToSeventyFivePercentile == null) {
-      this.twentyFiveToSeventyFivePercentile = new ArrayList<>();
+  public ApiForecast addTwentyFivePercentileItem(ApiForecastLineEntry twentyFivePercentileItem) {
+    if (this.twentyFivePercentile == null) {
+      this.twentyFivePercentile = new ArrayList<>();
     }
-    this.twentyFiveToSeventyFivePercentile.add(twentyFiveToSeventyFivePercentileItem);
+    this.twentyFivePercentile.add(twentyFivePercentileItem);
     return this;
   }
 
   /**
-   * Get twentyFiveToSeventyFivePercentile
-   * @return twentyFiveToSeventyFivePercentile
+   * Get twentyFivePercentile
+   * @return twentyFivePercentile
   */
   @Valid 
-  @Schema(name = "twentyFiveToSeventyFivePercentile", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("twentyFiveToSeventyFivePercentile")
-  public List<@Valid ApiForecastLineEntry> getTwentyFiveToSeventyFivePercentile() {
-    return twentyFiveToSeventyFivePercentile;
+  @Schema(name = "twentyFivePercentile", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("twentyFivePercentile")
+  public List<@Valid ApiForecastLineEntry> getTwentyFivePercentile() {
+    return twentyFivePercentile;
   }
 
-  public void setTwentyFiveToSeventyFivePercentile(List<@Valid ApiForecastLineEntry> twentyFiveToSeventyFivePercentile) {
-    this.twentyFiveToSeventyFivePercentile = twentyFiveToSeventyFivePercentile;
+  public void setTwentyFivePercentile(List<@Valid ApiForecastLineEntry> twentyFivePercentile) {
+    this.twentyFivePercentile = twentyFivePercentile;
+  }
+
+  public ApiForecast seventyFivePercentile(List<@Valid ApiForecastLineEntry> seventyFivePercentile) {
+    this.seventyFivePercentile = seventyFivePercentile;
+    return this;
+  }
+
+  public ApiForecast addSeventyFivePercentileItem(ApiForecastLineEntry seventyFivePercentileItem) {
+    if (this.seventyFivePercentile == null) {
+      this.seventyFivePercentile = new ArrayList<>();
+    }
+    this.seventyFivePercentile.add(seventyFivePercentileItem);
+    return this;
+  }
+
+  /**
+   * Get seventyFivePercentile
+   * @return seventyFivePercentile
+  */
+  @Valid 
+  @Schema(name = "seventyFivePercentile", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("seventyFivePercentile")
+  public List<@Valid ApiForecastLineEntry> getSeventyFivePercentile() {
+    return seventyFivePercentile;
+  }
+
+  public void setSeventyFivePercentile(List<@Valid ApiForecastLineEntry> seventyFivePercentile) {
+    this.seventyFivePercentile = seventyFivePercentile;
   }
 
   public ApiForecast max(List<@Valid ApiForecastLineEntry> max) {
@@ -217,14 +248,15 @@ public class ApiForecast {
     return Objects.equals(this.timestamp, apiForecast.timestamp) &&
         Objects.equals(this.measuredData, apiForecast.measuredData) &&
         Objects.equals(this.median, apiForecast.median) &&
-        Objects.equals(this.twentyFiveToSeventyFivePercentile, apiForecast.twentyFiveToSeventyFivePercentile) &&
+        Objects.equals(this.twentyFivePercentile, apiForecast.twentyFivePercentile) &&
+        Objects.equals(this.seventyFivePercentile, apiForecast.seventyFivePercentile) &&
         Objects.equals(this.max, apiForecast.max) &&
         Objects.equals(this.min, apiForecast.min);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestamp, measuredData, median, twentyFiveToSeventyFivePercentile, max, min);
+    return Objects.hash(timestamp, measuredData, median, twentyFivePercentile, seventyFivePercentile, max, min);
   }
 
   @Override
@@ -234,7 +266,8 @@ public class ApiForecast {
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("    measuredData: ").append(toIndentedString(measuredData)).append("\n");
     sb.append("    median: ").append(toIndentedString(median)).append("\n");
-    sb.append("    twentyFiveToSeventyFivePercentile: ").append(toIndentedString(twentyFiveToSeventyFivePercentile)).append("\n");
+    sb.append("    twentyFivePercentile: ").append(toIndentedString(twentyFivePercentile)).append("\n");
+    sb.append("    seventyFivePercentile: ").append(toIndentedString(seventyFivePercentile)).append("\n");
     sb.append("    max: ").append(toIndentedString(max)).append("\n");
     sb.append("    min: ").append(toIndentedString(min)).append("\n");
     sb.append("}");

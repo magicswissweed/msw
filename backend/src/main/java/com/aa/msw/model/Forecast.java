@@ -13,7 +13,8 @@ public record Forecast (
 		@Getter OffsetDateTime timestamp,
 		@Getter Map<OffsetDateTime, Double> measuredData,
 		@Getter Map<OffsetDateTime, Double> median,
-		@Getter Map<OffsetDateTime, Double> twentyFiveToSeventyFivePercentile,
+		@Getter Map<OffsetDateTime, Double> twentyFivePercentile,
+		@Getter Map<OffsetDateTime, Double> seventyFivePercentile,
 		@Getter Map<OffsetDateTime, Double> max,
 		@Getter Map<OffsetDateTime, Double> min)
 		implements HasId<ForecastId> {

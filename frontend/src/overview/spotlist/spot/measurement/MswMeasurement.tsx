@@ -6,7 +6,7 @@ interface MeasurementsProps {
   location: ApiSpotInformation
 }
 
-export class MswMeasurement extends Component<{ location: ApiSpotInformation }> {
+export class MswMeasurement extends Component<MeasurementsProps> {
 
   private readonly location: ApiSpotInformation;
 

@@ -23,20 +23,22 @@ public class ForecastTable implements Serializable {
     private final Integer stationid;
     private final JSONB measureddata;
     private final JSONB median;
-    private final JSONB twentyfivetoseventyfivepercentile;
     private final JSONB max;
     private final JSONB min;
     private final OffsetDateTime timestamp;
+    private final JSONB twentyfivepercentile;
+    private final JSONB seventyfivepercentile;
 
     public ForecastTable(ForecastTable value) {
         this.id = value.id;
         this.stationid = value.stationid;
         this.measureddata = value.measureddata;
         this.median = value.median;
-        this.twentyfivetoseventyfivepercentile = value.twentyfivetoseventyfivepercentile;
         this.max = value.max;
         this.min = value.min;
         this.timestamp = value.timestamp;
+        this.twentyfivepercentile = value.twentyfivepercentile;
+        this.seventyfivepercentile = value.seventyfivepercentile;
     }
 
     public ForecastTable(
@@ -44,19 +46,21 @@ public class ForecastTable implements Serializable {
         Integer stationid,
         JSONB measureddata,
         JSONB median,
-        JSONB twentyfivetoseventyfivepercentile,
         JSONB max,
         JSONB min,
-        OffsetDateTime timestamp
+        OffsetDateTime timestamp,
+        JSONB twentyfivepercentile,
+        JSONB seventyfivepercentile
     ) {
         this.id = id;
         this.stationid = stationid;
         this.measureddata = measureddata;
         this.median = median;
-        this.twentyfivetoseventyfivepercentile = twentyfivetoseventyfivepercentile;
         this.max = max;
         this.min = min;
         this.timestamp = timestamp;
+        this.twentyfivepercentile = twentyfivepercentile;
+        this.seventyfivepercentile = seventyfivepercentile;
     }
 
     /**
@@ -88,14 +92,6 @@ public class ForecastTable implements Serializable {
     }
 
     /**
-     * Getter for
-     * <code>public.forecast_table.twentyfivetoseventyfivepercentile</code>.
-     */
-    public JSONB getTwentyfivetoseventyfivepercentile() {
-        return this.twentyfivetoseventyfivepercentile;
-    }
-
-    /**
      * Getter for <code>public.forecast_table.max</code>.
      */
     public JSONB getMax() {
@@ -114,6 +110,20 @@ public class ForecastTable implements Serializable {
      */
     public OffsetDateTime getTimestamp() {
         return this.timestamp;
+    }
+
+    /**
+     * Getter for <code>public.forecast_table.twentyfivepercentile</code>.
+     */
+    public JSONB getTwentyfivepercentile() {
+        return this.twentyfivepercentile;
+    }
+
+    /**
+     * Getter for <code>public.forecast_table.seventyfivepercentile</code>.
+     */
+    public JSONB getSeventyfivepercentile() {
+        return this.seventyfivepercentile;
     }
 
     @Override
@@ -149,12 +159,6 @@ public class ForecastTable implements Serializable {
         }
         else if (!this.median.equals(other.median))
             return false;
-        if (this.twentyfivetoseventyfivepercentile == null) {
-            if (other.twentyfivetoseventyfivepercentile != null)
-                return false;
-        }
-        else if (!this.twentyfivetoseventyfivepercentile.equals(other.twentyfivetoseventyfivepercentile))
-            return false;
         if (this.max == null) {
             if (other.max != null)
                 return false;
@@ -173,6 +177,18 @@ public class ForecastTable implements Serializable {
         }
         else if (!this.timestamp.equals(other.timestamp))
             return false;
+        if (this.twentyfivepercentile == null) {
+            if (other.twentyfivepercentile != null)
+                return false;
+        }
+        else if (!this.twentyfivepercentile.equals(other.twentyfivepercentile))
+            return false;
+        if (this.seventyfivepercentile == null) {
+            if (other.seventyfivepercentile != null)
+                return false;
+        }
+        else if (!this.seventyfivepercentile.equals(other.seventyfivepercentile))
+            return false;
         return true;
     }
 
@@ -184,10 +200,11 @@ public class ForecastTable implements Serializable {
         result = prime * result + ((this.stationid == null) ? 0 : this.stationid.hashCode());
         result = prime * result + ((this.measureddata == null) ? 0 : this.measureddata.hashCode());
         result = prime * result + ((this.median == null) ? 0 : this.median.hashCode());
-        result = prime * result + ((this.twentyfivetoseventyfivepercentile == null) ? 0 : this.twentyfivetoseventyfivepercentile.hashCode());
         result = prime * result + ((this.max == null) ? 0 : this.max.hashCode());
         result = prime * result + ((this.min == null) ? 0 : this.min.hashCode());
         result = prime * result + ((this.timestamp == null) ? 0 : this.timestamp.hashCode());
+        result = prime * result + ((this.twentyfivepercentile == null) ? 0 : this.twentyfivepercentile.hashCode());
+        result = prime * result + ((this.seventyfivepercentile == null) ? 0 : this.seventyfivepercentile.hashCode());
         return result;
     }
 
@@ -199,10 +216,11 @@ public class ForecastTable implements Serializable {
         sb.append(", ").append(stationid);
         sb.append(", ").append(measureddata);
         sb.append(", ").append(median);
-        sb.append(", ").append(twentyfivetoseventyfivepercentile);
         sb.append(", ").append(max);
         sb.append(", ").append(min);
         sb.append(", ").append(timestamp);
+        sb.append(", ").append(twentyfivepercentile);
+        sb.append(", ").append(seventyfivepercentile);
 
         sb.append(")");
         return sb.toString();

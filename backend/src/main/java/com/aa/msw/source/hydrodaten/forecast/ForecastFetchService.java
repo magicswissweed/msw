@@ -37,20 +37,54 @@ public class ForecastFetchService extends AbstractFetchService {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
 		HydroForecast hydroForecast = objectMapper.readValue(response, new TypeReference<>() {});
+
+		// Hydrodaten does something very strange here. In this line, there are actually two lines.
+		// The second line (25 percentile) is ordered backwards (timestamps descending)
+		HydroForecastLine twentyFiveToSeventyFivePercentile = hydroForecast.plot().data().get(2);
+		ArrayList<OffsetDateTime> twenty5ToSeventy5PercentileTimestamps = twentyFiveToSeventyFivePercentile.x();
+		ArrayList<Double> twenty5ToSeventy5PercentileFlows = twentyFiveToSeventyFivePercentile.y();
+		HydroForecastLine seventyFivePercentile = getFirstHalfOfHydroForecastLine(
+				twenty5ToSeventy5PercentileTimestamps,
+				twenty5ToSeventy5PercentileFlows,
+				"seventyFivePercentile");
+		HydroForecastLine twentyFivePercentile = getFirstHalfOfHydroForecastLine(
+				twenty5ToSeventy5PercentileTimestamps.reversed(),
+				twenty5ToSeventy5PercentileFlows.reversed(),
+				"twentyFivePercentile");
+
 		return new Forecast(
 				new ForecastId(),
 				stationId,
 				extractTimestamp(hydroForecast),
-				mapForecastLine(hydroForecast, 4),
-				mapForecastLine(hydroForecast, 3),
-				mapForecastLine(hydroForecast, 2),
-				mapForecastLine(hydroForecast, 1),
-				mapForecastLine(hydroForecast, 0)
+				mapForecastLine(hydroForecast.plot().data().get(4)),
+				mapForecastLine(hydroForecast.plot().data().get(3)),
+				mapForecastLine(twentyFivePercentile),
+				mapForecastLine(seventyFivePercentile),
+				mapForecastLine(hydroForecast.plot().data().get(1)),
+				mapForecastLine(hydroForecast.plot().data().get(0))
 		);
 	}
 
-	private static Map<OffsetDateTime, Double> mapForecastLine (HydroForecast hydroForecast, int index) throws IOException {
-		HydroForecastLine hydroForecastLine = hydroForecast.plot().data().get(index);
+	private HydroForecastLine getFirstHalfOfHydroForecastLine (
+			List<OffsetDateTime> twenty5ToSeventy5PercentileTimestamps,
+			List<Double> twenty5ToSeventy5PercentileFlows,
+			String name) {
+		ArrayList<OffsetDateTime> timestamps = new ArrayList<>();
+		ArrayList<Double> flows = new ArrayList<>();
+
+		OffsetDateTime lastTimeStamp = OffsetDateTime.MIN;
+		for (int index = 0; index < twenty5ToSeventy5PercentileTimestamps.size(); index++) {
+			OffsetDateTime timestamp = twenty5ToSeventy5PercentileTimestamps.get(index);
+			if (timestamp.isAfter(lastTimeStamp)) {
+				timestamps.add(timestamp);
+				flows.add(twenty5ToSeventy5PercentileFlows.get(index));
+			}
+		}
+
+		return new HydroForecastLine(timestamps, flows, name);
+	}
+
+	private static Map<OffsetDateTime, Double> mapForecastLine (HydroForecastLine hydroForecastLine) throws IOException {
 		if (hydroForecastLine.x().size() > hydroForecastLine.y().size()) {
 			throw new IOException("Should be the same number of dates as values.");
 		}

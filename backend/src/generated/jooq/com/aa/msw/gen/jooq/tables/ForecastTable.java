@@ -73,12 +73,6 @@ public class ForecastTable extends TableImpl<ForecastTableRecord> {
     public final TableField<ForecastTableRecord, JSONB> MEDIAN = createField(DSL.name("median"), SQLDataType.JSONB, this, "");
 
     /**
-     * The column
-     * <code>public.forecast_table.twentyfivetoseventyfivepercentile</code>.
-     */
-    public final TableField<ForecastTableRecord, JSONB> TWENTYFIVETOSEVENTYFIVEPERCENTILE = createField(DSL.name("twentyfivetoseventyfivepercentile"), SQLDataType.JSONB, this, "");
-
-    /**
      * The column <code>public.forecast_table.max</code>.
      */
     public final TableField<ForecastTableRecord, JSONB> MAX = createField(DSL.name("max"), SQLDataType.JSONB, this, "");
@@ -92,6 +86,16 @@ public class ForecastTable extends TableImpl<ForecastTableRecord> {
      * The column <code>public.forecast_table.timestamp</code>.
      */
     public final TableField<ForecastTableRecord, OffsetDateTime> TIMESTAMP = createField(DSL.name("timestamp"), SQLDataType.TIMESTAMPWITHTIMEZONE(6), this, "");
+
+    /**
+     * The column <code>public.forecast_table.twentyfivepercentile</code>.
+     */
+    public final TableField<ForecastTableRecord, JSONB> TWENTYFIVEPERCENTILE = createField(DSL.name("twentyfivepercentile"), SQLDataType.JSONB, this, "");
+
+    /**
+     * The column <code>public.forecast_table.seventyfivepercentile</code>.
+     */
+    public final TableField<ForecastTableRecord, JSONB> SEVENTYFIVEPERCENTILE = createField(DSL.name("seventyfivepercentile"), SQLDataType.JSONB, this, "");
 
     private ForecastTable(Name alias, Table<ForecastTableRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

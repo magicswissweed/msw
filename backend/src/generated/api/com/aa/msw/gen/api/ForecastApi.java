@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-01T16:19:38.790291200+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-02T11:56:19.779926100+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
 @Tag(name = "forecast", description = "the forecast API")
 public interface ForecastApi {
@@ -69,7 +69,7 @@ public interface ForecastApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"min\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"median\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"max\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"twentyFiveToSeventyFivePercentile\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"measuredData\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }";
+                    String exampleString = "{ \"seventyFivePercentile\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"twentyFivePercentile\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"min\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"median\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"max\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"measuredData\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

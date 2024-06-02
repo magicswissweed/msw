@@ -117,22 +117,6 @@ public class ForecastTableDao extends DAOImpl<ForecastTableRecord, com.aa.msw.ge
     }
 
     /**
-     * Fetch records that have <code>twentyfivetoseventyfivepercentile BETWEEN
-     * lowerInclusive AND upperInclusive</code>
-     */
-    public List<com.aa.msw.gen.jooq.tables.pojos.ForecastTable> fetchRangeOfTwentyfivetoseventyfivepercentile(JSONB lowerInclusive, JSONB upperInclusive) {
-        return fetchRange(ForecastTable.FORECAST_TABLE.TWENTYFIVETOSEVENTYFIVEPERCENTILE, lowerInclusive, upperInclusive);
-    }
-
-    /**
-     * Fetch records that have <code>twentyfivetoseventyfivepercentile IN
-     * (values)</code>
-     */
-    public List<com.aa.msw.gen.jooq.tables.pojos.ForecastTable> fetchByTwentyfivetoseventyfivepercentile(JSONB... values) {
-        return fetch(ForecastTable.FORECAST_TABLE.TWENTYFIVETOSEVENTYFIVEPERCENTILE, values);
-    }
-
-    /**
      * Fetch records that have <code>max BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */
@@ -175,5 +159,35 @@ public class ForecastTableDao extends DAOImpl<ForecastTableRecord, com.aa.msw.ge
      */
     public List<com.aa.msw.gen.jooq.tables.pojos.ForecastTable> fetchByTimestamp(OffsetDateTime... values) {
         return fetch(ForecastTable.FORECAST_TABLE.TIMESTAMP, values);
+    }
+
+    /**
+     * Fetch records that have <code>twentyfivepercentile BETWEEN lowerInclusive
+     * AND upperInclusive</code>
+     */
+    public List<com.aa.msw.gen.jooq.tables.pojos.ForecastTable> fetchRangeOfTwentyfivepercentile(JSONB lowerInclusive, JSONB upperInclusive) {
+        return fetchRange(ForecastTable.FORECAST_TABLE.TWENTYFIVEPERCENTILE, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>twentyfivepercentile IN (values)</code>
+     */
+    public List<com.aa.msw.gen.jooq.tables.pojos.ForecastTable> fetchByTwentyfivepercentile(JSONB... values) {
+        return fetch(ForecastTable.FORECAST_TABLE.TWENTYFIVEPERCENTILE, values);
+    }
+
+    /**
+     * Fetch records that have <code>seventyfivepercentile BETWEEN
+     * lowerInclusive AND upperInclusive</code>
+     */
+    public List<com.aa.msw.gen.jooq.tables.pojos.ForecastTable> fetchRangeOfSeventyfivepercentile(JSONB lowerInclusive, JSONB upperInclusive) {
+        return fetchRange(ForecastTable.FORECAST_TABLE.SEVENTYFIVEPERCENTILE, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>seventyfivepercentile IN (values)</code>
+     */
+    public List<com.aa.msw.gen.jooq.tables.pojos.ForecastTable> fetchBySeventyfivepercentile(JSONB... values) {
+        return fetch(ForecastTable.FORECAST_TABLE.SEVENTYFIVEPERCENTILE, values);
     }
 }

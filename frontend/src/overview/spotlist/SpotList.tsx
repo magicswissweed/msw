@@ -9,7 +9,7 @@ interface SpotListProps {
   locations: any
 }
 
-export class SpotList extends Component<{ title: string, locations: Array<ApiSpotInformation> }> {
+export class SpotList extends Component<SpotListProps> {
   private readonly title: string;
   private readonly locations: Array<ApiSpotInformation> = new Array<ApiSpotInformation>();
 

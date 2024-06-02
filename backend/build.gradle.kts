@@ -63,7 +63,7 @@ flyway {
     url = "jdbc:postgresql://$gradlePostgresHost/gradlecodegen"
     user = "gradle"
     password = "password"
-    locations = listOf("filesystem:" + project.rootDir + "/src/main/resources/db/migration").toTypedArray()
+    locations = listOf("filesystem:" + project.rootDir + "/backend/src/main/resources/db/migration").toTypedArray()
 }
 
 tasks.register<GenerateTask>("openApiGenerateSpring") {

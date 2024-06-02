@@ -39,7 +39,12 @@ export interface ApiForecast {
      * @type {Array<ApiForecastLineEntry>}
      * @memberof ApiForecast
      */
-    twentyFiveToSeventyFivePercentile?: Array<ApiForecastLineEntry>;
+    twentyFivePercentile?: Array<ApiForecastLineEntry>;
+    /**
+     * @type {Array<ApiForecastLineEntry>}
+     * @memberof ApiForecast
+     */
+    seventyFivePercentile?: Array<ApiForecastLineEntry>;
     /**
      * @type {Array<ApiForecastLineEntry>}
      * @memberof ApiForecast

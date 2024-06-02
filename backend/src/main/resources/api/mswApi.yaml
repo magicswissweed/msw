@@ -88,6 +88,10 @@ components:
           type: string
         stationId:
           type: integer
+        minFlow:
+          type: integer
+        maxFlow:
+          type: integer
         currentSample:
           $ref: '#/components/schemas/ApiSample'
         forecast:
@@ -117,7 +121,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ApiForecastLineEntry'
-        twentyFiveToSeventyFivePercentile:
+        twentyFivePercentile:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiForecastLineEntry'
+        seventyFivePercentile:
           type: array
           items:
             $ref: '#/components/schemas/ApiForecastLineEntry'
@@ -129,7 +137,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ApiForecastLineEntry'
-
     ApiForecastLineEntry:
       type: object
       properties:

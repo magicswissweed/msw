@@ -40,7 +40,8 @@ public class ForecastRepository extends AbstractRepository<ForecastId, Forecast,
 				record.getTimestamp(),
 				record.getMeasureddata(),
 				record.getMedian(),
-				record.getTwentyfivetoseventyfivepercentile(),
+				record.getTwentyfivepercentile(),
+				record.getSeventyfivepercentile(),
 				record.getMin(),
 				record.getMax());
 	}
@@ -51,13 +52,15 @@ public class ForecastRepository extends AbstractRepository<ForecastId, Forecast,
 
 		JSONB measuredData;
 		JSONB median;
-		JSONB twentyFiveToSeventyFivePercentile;
+		JSONB twentyFivePercentile;
+		JSONB seventyFivePercentile;
 		JSONB min;
 		JSONB max;
 		try {
 			measuredData = toJsonB(forecast.getMeasuredData());
 			median = toJsonB(forecast.getMedian());
-			twentyFiveToSeventyFivePercentile = toJsonB(forecast.getTwentyFiveToSeventyFivePercentile());
+			twentyFivePercentile = toJsonB(forecast.getTwentyFivePercentile());
+			seventyFivePercentile = toJsonB(forecast.getSeventyFivePercentile());
 			min = toJsonB(forecast.getMin());
 			max = toJsonB(forecast.getMax());
 		} catch (JsonProcessingException e) {
@@ -69,7 +72,8 @@ public class ForecastRepository extends AbstractRepository<ForecastId, Forecast,
 		record.setTimestamp(forecast.getTimestamp());
 		record.setMeasureddata(measuredData);
 		record.setMedian(median);
-		record.setTwentyfivetoseventyfivepercentile(twentyFiveToSeventyFivePercentile);
+		record.setTwentyfivepercentile(twentyFivePercentile);
+		record.setSeventyfivepercentile(seventyFivePercentile);
 		record.setMin(min);
 		record.setMax(max);
 		return record;
@@ -87,21 +91,24 @@ public class ForecastRepository extends AbstractRepository<ForecastId, Forecast,
 				forecastTable.getTimestamp(),
 				forecastTable.getMeasureddata(),
 				forecastTable.getMedian(),
-				forecastTable.getTwentyfivetoseventyfivepercentile(),
+				forecastTable.getTwentyfivepercentile(),
+				forecastTable.getSeventyfivepercentile(),
 				forecastTable.getMin(),
 				forecastTable.getMax());
 	}
 
-	private Forecast getForecast (UUID forecastId, Integer stationid, OffsetDateTime timestamp, JSONB jsonMeasured, JSONB jsonMedian, JSONB jsonPercentile, JSONB jsonMin, JSONB jsonMax) {
+	private Forecast getForecast (UUID forecastId, Integer stationid, OffsetDateTime timestamp, JSONB jsonMeasured, JSONB jsonMedian, JSONB jsonTwentyFivePercentile, JSONB jsonSeventyFivePercentile, JSONB jsonMin, JSONB jsonMax) {
 		Map<OffsetDateTime, Double> measuredData;
 		Map<OffsetDateTime, Double> median;
-		Map<OffsetDateTime, Double> twentyFiveToSeventyFivePercentile;
+		Map<OffsetDateTime, Double> twentyFivePercentile;
+		Map<OffsetDateTime, Double> seventyFivePercentile;
 		Map<OffsetDateTime, Double> min;
 		Map<OffsetDateTime, Double> max;
 		try {
 			measuredData = jsonbToMap(jsonMeasured);
 			median = jsonbToMap(jsonMedian);
-			twentyFiveToSeventyFivePercentile = jsonbToMap(jsonPercentile);
+			twentyFivePercentile = jsonbToMap(jsonTwentyFivePercentile);
+			seventyFivePercentile = jsonbToMap(jsonSeventyFivePercentile);
 			min = jsonbToMap(jsonMin);
 			max = jsonbToMap(jsonMax);
 		} catch (JsonProcessingException e) {
@@ -114,7 +121,8 @@ public class ForecastRepository extends AbstractRepository<ForecastId, Forecast,
 				timestamp,
 				measuredData,
 				median,
-				twentyFiveToSeventyFivePercentile,
+				twentyFivePercentile,
+				seventyFivePercentile,
 				min,
 				max);
 	}
