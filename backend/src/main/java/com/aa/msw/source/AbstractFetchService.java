@@ -14,7 +14,7 @@ public class AbstractFetchService {
 		conn.setRequestMethod("GET");
 		conn.setRequestProperty("Accept", "application/json");
 //		conn.setRequestProperty("Authorization", authHeaderValue);
-		if (conn.getResponseCode() != 200) {
+		if ((conn.getResponseCode() != 200) && (conn.getResponseCode() != 404)) {
 			throw new RuntimeException("Failed : HTTP Error code : "
 					+ conn.getResponseCode());
 		}

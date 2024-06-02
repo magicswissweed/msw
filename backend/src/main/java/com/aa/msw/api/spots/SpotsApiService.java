@@ -5,6 +5,7 @@ import com.aa.msw.api.forecast.ForecastApiService;
 import com.aa.msw.config.Spot;
 import com.aa.msw.config.SpotList;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
+import com.aa.msw.gen.api.ApiForecast;
 import com.aa.msw.gen.api.ApiSpotInformation;
 import com.aa.msw.gen.api.ApiSpotInformationList;
 import org.springframework.stereotype.Service;
@@ -39,13 +40,21 @@ public class SpotsApiService {
 	private List<ApiSpotInformation> getApiSpotInformationList (List<Spot> spots) throws NoDataAvailableException {
 		List<ApiSpotInformation> spotInformationList = new ArrayList<>();
 		for (Spot spot : spots) {
+			ApiForecast currentForecast = null;
+			try {
+				currentForecast = forecastApiService.getCurrentForecast(spot.stationId());
+			} catch(NoDataAvailableException e) {
+				// NOP: This can happen if there is no forecase available for the station
+				// (unfortunately not every station has a forecast)
+			}
+
 			spotInformationList.add(new ApiSpotInformation()
 							.name(spot.name())
 							.minFlow(spot.minFlow())
 							.maxFlow(spot.maxFlow())
 							.stationId(spot.stationId())
 							.currentSample(currentSampleApiService.getCurrentSample(spot.stationId()))
-							.forecast(forecastApiService.getCurrentForecast(spot.stationId()))
+							.forecast(currentForecast)
 			);
 		}
 		return spotInformationList;

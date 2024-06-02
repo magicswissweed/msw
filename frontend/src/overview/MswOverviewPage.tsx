@@ -17,7 +17,7 @@ export class MswOverviewPage extends Component<any, any> {
 
   componentDidMount() {
     // TODO: toggle includeAll
-    new SpotsApi().getSpots({includeAll: false}).subscribe((res) => {
+    new SpotsApi().getSpots({includeAll: true}).subscribe((res) => {
       if(res && res.riverSurfSpots && res.bungeeSurfSpots) {
         this.setState({data: res});
       }
