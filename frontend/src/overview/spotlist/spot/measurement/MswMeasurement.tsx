@@ -55,6 +55,6 @@ export class MswMeasurement extends Component<MeasurementsProps> {
 
   private convertTimeStampToDisplayableString(timestampString: string) {
     let date = new Date(timestampString);
-    return date.getHours() + ":" + date.getMinutes();
+    return date.getHours() + ":" + ((date.getMinutes() == 0) ? ":00" : date.getMinutes());
   }
 }

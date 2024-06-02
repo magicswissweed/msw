@@ -37,6 +37,8 @@ const LINE_NAME_MIN = "Minimum";
 
 type NormalizedDataItem = { datetime: Date, [lineName: string]: unknown; };
 
+const TEMPORARY_DATA_KEY_FLOW = "flow";
+
 export class MswForecastGraph extends Component<MswForecastGraphProps> {
 
   private readonly location: ApiSpotInformation;
@@ -113,12 +115,14 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
                 dataKey={DATA_KEY_25_PERCENTILE}
                 stroke="orange"
                 dot={false}
-                name={LINE_NAME_25_PERCENTILE}/>
+                name={LINE_NAME_25_PERCENTILE}
+                activeDot={{ strokeWidth: 0, r: 0 }}/>
           <Line type="monotone"
                 dataKey={DATA_KEY_75_PERCENTILE}
                 stroke="orange"
                 dot={false}
-                name={LINE_NAME_75_PERCENTILE}/>
+                name={LINE_NAME_75_PERCENTILE}
+                activeDot={{ strokeWidth: 0, r: 0 }}/>
           <Line type="monotone"
                 dataKey={DATA_KEY_MEDIAN}
                 stroke="blue"
@@ -129,17 +133,20 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
                 dataKey={DATA_KEY_MEASURED}
                 stroke="green"
                 dot={false}
-                name={LINE_NAME_MEASURED}/>
+                name={LINE_NAME_MEASURED}
+                activeDot={{ stroke: 'green', strokeWidth: 1, r: 4 }}/>
           <Line type="monotone"
                 dataKey={DATA_KEY_MINIMUM}
                 stroke="pink"
                 dot={false}
-                name={LINE_NAME_MIN}/>
+                name={LINE_NAME_MIN}
+                activeDot={{ strokeWidth: 0, r: 0 }}/>
           <Line type="monotone"
                 dataKey={DATA_KEY_MAXIMUM}
                 stroke="pink"
                 dot={false}
-                name={LINE_NAME_MAX}/>
+                name={LINE_NAME_MAX}
+                activeDot={{ strokeWidth: 0, r: 0 }}/>
           <CartesianGrid/>
           <XAxis
             type="number"
@@ -173,12 +180,35 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
   }
 
   private getTooltip() {
-    return <Tooltip labelFormatter={
-      v => {
-        let date: Date = new Date(v);
-        return date.getDate() + "." + (date.getMonth()+1) + ". " + date.getHours() + ":00";
+    // @ts-ignore
+    const MswTooltip = ({ active, payload, label }) => {
+      if (active && payload && payload.length) {
+
+        let flowStr: string = "";
+        let color: string = "black";
+        for(let payloadItem of payload) {
+          if (payloadItem.dataKey === DATA_KEY_MEASURED) {
+            flowStr = "Measured: " + payloadItem.value;
+            color = payloadItem.stroke;
+          } else if (payloadItem.dataKey === DATA_KEY_MEDIAN) {
+            flowStr = "Median: " + payloadItem.value;
+            color = payloadItem.stroke;
+          }
+        }
+
+        return (
+          <div className="tooltip">
+            <p className="tooltip_timestamp">{label.getDate() + "." + (label.getMonth()+1) + ". " + label.getHours() + ":00"}</p>
+            <p className="tooltip_value" style={{ color: color }}>{flowStr}</p>
+          </div>
+        );
       }
-    }/>;
+
+      return null;
+    };
+
+    // @ts-ignore
+    return <Tooltip content={MswTooltip}/>;
   }
 
   private getYAxis() {
@@ -200,12 +230,17 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
     let normalizedData: NormalizedDataItem[] = [];
 
     normalizedData.push(...this.normalizeGraphDataLine(forecast.measuredData!, DATA_KEY_MEASURED));
-    normalizedData.push(...this.normalizeGraphDataLine(forecast.median!, DATA_KEY_MEDIAN));
-    normalizedData.push(...this.normalizeGraphDataLine(forecast.twentyFivePercentile!, DATA_KEY_25_PERCENTILE));
-    normalizedData.push(...this.normalizeGraphDataLine(forecast.seventyFivePercentile!, DATA_KEY_75_PERCENTILE));
-    normalizedData.push(...this.normalizeGraphDataLine(forecast.min!, DATA_KEY_MINIMUM));
-    normalizedData.push(...this.normalizeGraphDataLine(forecast.max!, DATA_KEY_MAXIMUM));
+    normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.median!), DATA_KEY_MEDIAN);
+    normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.twentyFivePercentile!), DATA_KEY_25_PERCENTILE);
+    normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.seventyFivePercentile!), DATA_KEY_75_PERCENTILE);
+    normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.min!), DATA_KEY_MINIMUM);
+    normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.max!), DATA_KEY_MAXIMUM);
+
     return normalizedData;
+  }
+
+  private getSimpleGraphDataLine(forecastLine: ApiForecastLineEntry[]): NormalizedDataItem[] {
+    return this.normalizeGraphDataLine(forecastLine, TEMPORARY_DATA_KEY_FLOW);
   }
 
   private normalizeGraphDataLine(forecastLine: ApiForecastLineEntry[], name: string): NormalizedDataItem[] {
@@ -216,5 +251,30 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
       normalizedData.push(obj);
     }
     return normalizedData;
+  }
+
+  private mergeDataLines(left: NormalizedDataItem[], right: NormalizedDataItem[], dataKey: string) {
+    let output: NormalizedDataItem[] = [];
+
+    left.forEach(leftItem => {
+      let filteredRight = right.filter(rightItem => leftItem.datetime.getTime() == rightItem.datetime.getTime());
+      let leftItemIsContainedInRightList: boolean = filteredRight.length > 0;
+      if(leftItemIsContainedInRightList) {
+        leftItem[dataKey] = filteredRight[0][TEMPORARY_DATA_KEY_FLOW];
+      }
+      output.push(leftItem);
+    });
+
+    right.forEach(rightItem => {
+      let filteredOutput = output.filter(outputItem => rightItem.datetime.getTime() == outputItem.datetime.getTime());
+      let rightItemIsContainedInOutputList: boolean = filteredOutput.length > 0;
+      if(!rightItemIsContainedInOutputList) {
+        let obj: NormalizedDataItem = {datetime: rightItem.datetime};
+        obj[dataKey] = rightItem.flow;
+        output.push(obj);
+      }
+    });
+
+    return output;
   }
 }
