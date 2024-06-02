@@ -160,7 +160,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
 
           {showMinMaxReferenceLines && this.getMinMaxReferenceLines()}
           {showTooltip && this.getTooltip()}
-          {showYAxis && this.getYAxis()}
+          {showYAxis && this.getYAxis(this.location.minFlow!, this.location.maxFlow!)}
           {/* payload is only necessary to get rid of unneccessary double legend entry because forecastFlow0 and forecastFlow1 are both named Min/Max */}
           {showLegend && this.getLegend()}
         </LineChart>
@@ -211,8 +211,8 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
     return <Tooltip content={MswTooltip}/>;
   }
 
-  private getYAxis() {
-    return <YAxis/>;
+  private getYAxis(min: number, max: number) {
+    return <YAxis domain={[min, max]}/>;
   }
 
   private getLegend() {
