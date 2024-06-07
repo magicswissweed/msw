@@ -24,10 +24,15 @@ public class ForecastFetchService extends AbstractFetchService {
 	final static String FETCH_URL_PREFIX = "https://www.hydrodaten.admin.ch/plots/q_forecast/";
 	final static String FETCH_URL_SUFFIX = "_q_forecast_de.json";
 
-	public List<Forecast> fetchForecasts (Set<Integer> stationIds) throws IOException, URISyntaxException {
+	public List<Forecast> fetchForecasts (Set<Integer> stationIds) throws URISyntaxException {
 		List<Forecast> forecasts = new ArrayList<>();
 		for (int stationId : stationIds) {
-			forecasts.add(fetchForecast(stationId));
+			try {
+				forecasts.add(fetchForecast(stationId));
+			} catch (IOException e) {
+				// ignore: could be that this station just does not have a forecast
+			}
+
 		}
 		return forecasts;
 	}

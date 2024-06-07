@@ -52,7 +52,7 @@ public class InputDataFetcherService {
 		sampleDao.persistSamplesIfNotExist(samples);
 	}
 
-	public void fetchAndWriteForecasts () throws IOException, URISyntaxException {
+	public void fetchAndWriteForecasts () throws URISyntaxException {
 		List<Forecast> forecasts = forecastFetchService.fetchForecasts(stationIds);
 		forecastDao.persistForecastsIfNotExist(forecasts);
 	}
