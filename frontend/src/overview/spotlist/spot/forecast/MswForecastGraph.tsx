@@ -100,7 +100,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
                          y2={this.location.maxFlow}
                          ifOverflow="extendDomain"
                          fill="green"/>
-          <ReferenceLine x={Date.now()} stroke="#f62e03"/>
+          <ReferenceLine x={Date.now()} stroke="#666666"/>
           <ReferenceDot x={new Date(this.location.forecast!.timestamp!).getTime()}
                         y={this.location.forecast.median!
                           .filter((v) => new Date(v.timestamp!).getMonth() === new Date(this.location.forecast!.timestamp!).getMonth())
