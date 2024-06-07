@@ -17,8 +17,7 @@ import {ApiForecast, ApiForecastLineEntry, ApiSpotInformation} from '../../../..
 
 interface MswForecastGraphProps {
   location: ApiSpotInformation,
-  isMini: boolean,
-  isMobile: boolean
+  isMini: boolean
 }
 
 const DATA_KEY_MEDIAN = "median";
@@ -43,13 +42,11 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
 
   private readonly location: ApiSpotInformation;
   private readonly isMini: boolean;
-  private readonly isMobile: boolean;
 
   constructor(props: MswForecastGraphProps) {
     super(props);
     this.location = props.location;
     this.isMini = props.isMini;
-    this.isMobile = props.isMobile;
   }
   
   render() {
@@ -82,10 +79,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
     let showLegend = true;
 
 
-    if (this.isMobile) {
-      showYAxis = false;
-      showLegend = false;
-    } else if (this.isMini) {
+    if (this.isMini) {
       showXAxis = false;
       showMinMaxReferenceLines = false;
       showTooltip = false;

@@ -1,8 +1,8 @@
-@import "../../../../ReactiveMixins";
-
 .miniGraph {
   flex: 1;
   width: 100%;
+  max-width: 350px;
+  margin: auto;
 }
 
 .forecastContainer {
@@ -12,14 +12,4 @@
   display: flex;
   column-gap: 5px;
   width: 100%;
-}
-
-.hiddenOnDesktop {
-  display: none;
-}
-
-@include small {
-  .hiddenOnMobile {
-    display: none;
-  }
 }

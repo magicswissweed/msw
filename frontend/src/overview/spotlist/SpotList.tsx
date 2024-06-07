@@ -1,6 +1,5 @@
 import './SpotList.scss';
 import React, {Component} from 'react';
-import arrow_down from "../../assets/arrow_down.png";
 import {Spot} from './spot/Spot';
 import {ApiSpotInformation} from '../../gen/msw-api-ts';
 
@@ -26,7 +25,7 @@ export class SpotList extends Component<SpotListProps> {
         <div className="tableHeaderCol doubleCol">Forecast</div>
       </div>
       {/* only to have the same columns as in the spots */}
-      {SpotList.getCollapsibleIcon(true)}
+      {Spot.getCollapsibleIcon(true)}
     </div>;
 
     this.locations.forEach((location) => console.log(location));
@@ -39,18 +38,6 @@ export class SpotList extends Component<SpotListProps> {
           {this.locations.map((location) => (<Spot location={location} />))}
         </div>
       </div>
-    </>;
-  }
-
-  public static getCollapsibleIcon(isHidden: Boolean) {
-    let className = "collapsibleIcon hiddenOnMobile";
-    if(isHidden) {
-      className += " hide";
-    }
-    return <>
-      <span className={className}>
-        <img alt="extend forecast" src={arrow_down} />
-      </span>
     </>;
   }
 }

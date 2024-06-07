@@ -1,10 +1,10 @@
 import './Spot.scss'
 import React, {Component} from 'react';
 import {ApiSpotInformation} from '../../../gen/msw-api-ts';
-import {SpotList} from '../SpotList';
 import {MswMeasurement} from './measurement/MswMeasurement';
 import {MswMiniForecast} from './miniForecast/MswMiniForecast';
 import {MswForecastGraph} from './forecast/MswForecastGraph';
+import arrow_down from '../../../assets/arrow_down.png';
 
 interface SpotProps {
   location: ApiSpotInformation
@@ -41,7 +41,7 @@ export class Spot extends Component<SpotProps> {
         <MswMeasurement location={location}/>
         <MswMiniForecast location={location}/>
       </div>
-      {SpotList.getCollapsibleIcon(!location.forecast)}
+      {Spot.getCollapsibleIcon(!location.forecast)}
     </>
   }
 
@@ -49,9 +49,20 @@ export class Spot extends Component<SpotProps> {
     return <>
       <div className="collapsibleContent hiddenOnMobile">
         <h2>Forecast</h2>
-        {/* TODO: looks buggy that I have to add isMobile here */}
-        <MswForecastGraph location={location} isMini={false} isMobile={false} />
+        <MswForecastGraph location={location} isMini={false} />
       </div>
+    </>;
+  }
+
+  public static getCollapsibleIcon(isHidden: Boolean) {
+    let className = "collapsibleIcon hiddenOnMobile";
+    if(isHidden) {
+      className += " hide";
+    }
+    return <>
+      <span className={className}>
+        <img alt="extend forecast" src={arrow_down} />
+      </span>
     </>;
   }
 }
