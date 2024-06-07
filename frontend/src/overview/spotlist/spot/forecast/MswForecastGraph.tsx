@@ -154,7 +154,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
             domain={[from, to]}
             scale="time"
             ticks={ticks}
-            tickFormatter={v => new Date(v).getDate() + "."}
+            tickFormatter={v => new Date(v).toLocaleString('de-CH', {  weekday: 'short' })}
             minTickGap={1}
             hide={!showXAxis}/>
 
