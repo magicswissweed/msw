@@ -2,12 +2,13 @@ import './MswMiniForecast.scss'
 import React, {Component} from 'react';
 import {ApiSpotInformation} from '../../../../gen/msw-api-ts';
 import {MswForecastGraph} from '../forecast/MswForecastGraph';
+import {MswLastMeasurementsGraph} from '../historical/MswLastMeasurementsGraph';
 
 interface MswMiniForecastProps {
   location: ApiSpotInformation
 }
 
-export class MswMiniForecast extends Component<MswMiniForecastProps> {
+export class MswMiniGraph extends Component<MswMiniForecastProps> {
   private readonly location: ApiSpotInformation;
 
   constructor(props: MswMiniForecastProps) {
@@ -18,12 +19,9 @@ export class MswMiniForecast extends Component<MswMiniForecastProps> {
   render() {
     let content;
     if(this.location.forecast) {
-      content = <MswForecastGraph location={this.location}
-                                  isMini={true}/>;
+      content = <MswForecastGraph location={this.location} isMini={true}/>;
     } else {
-      content = <>
-        <p>TODO: add Visualization if there is no forecast</p>
-      </>;
+      content = <MswLastMeasurementsGraph location={this.location} isMini={true} />
     }
 
     let className = "forecastContainer";

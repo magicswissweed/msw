@@ -7,7 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class AbstractFetchService {
+public abstract class AbstractFetchService {
 
 	protected static String fetchAsString (String url) throws IOException, URISyntaxException {
 		HttpURLConnection conn = (HttpURLConnection) new URI(url).toURL().openConnection();

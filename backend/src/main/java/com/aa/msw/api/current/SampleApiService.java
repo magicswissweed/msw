@@ -5,24 +5,38 @@ import com.aa.msw.database.repository.dao.SampleDao;
 import com.aa.msw.gen.api.ApiSample;
 import com.aa.msw.model.Sample;
 import com.aa.msw.source.InputDataFetcherService;
+import com.aa.msw.source.hydrodaten.historical.lastfourty.Last40DaysSampleFetchService;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
-public class CurrentSampleApiService {
+public class SampleApiService {
 
 	private final SampleDao sampleDao;
 	private final InputDataFetcherService inputDataFetcherService;
+	private final Last40DaysSampleFetchService last40DaysSampleFetchService;
 
-	CurrentSampleApiService (final SampleDao sampleDao, InputDataFetcherService inputDataFetcherService) {
+	SampleApiService (final SampleDao sampleDao, InputDataFetcherService inputDataFetcherService, Last40DaysSampleFetchService last40DaysSampleFetchService) {
 		this.sampleDao = sampleDao;
 		this.inputDataFetcherService = inputDataFetcherService;
+		this.last40DaysSampleFetchService = last40DaysSampleFetchService;
 	}
 
 	public ApiSample getCurrentSample (Integer stationId) throws NoDataAvailableException {
 		return mapSample(sampleDao.getCurrentSample(stationId));
+	}
+
+	public List<ApiSample> getHistoricalSamples (Integer stationId) throws IOException, URISyntaxException {
+		return last40DaysSampleFetchService.fetchLast40DaysSamples(stationId)
+				.stream()
+				.map(sample -> new ApiSample()
+						.timestamp(sample.getTimestamp())
+						.flow(sample.getFlow()))
+				.toList();
 	}
 
 	private static ApiSample mapSample (Sample sample) {

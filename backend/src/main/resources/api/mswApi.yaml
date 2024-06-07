@@ -18,7 +18,7 @@ paths:
             type: integer
           required: true
       tags:
-        - currentSample
+        - sample
       responses:
         '200':
           description: Returns the last measured Sample from the station.
@@ -26,7 +26,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiSample'
-
+  /sample/last40Days/{stationId}:
+    get:
+      summary: Get Samples from last 40 Days for this station.
+      operationId: getLast40DaysSamples
+      parameters:
+        - name: stationId
+          description: The id of the station to get the sample from.
+          in: path
+          schema:
+            type: integer
+          required: true
+      tags:
+        - sample
+      responses:
+        '200':
+          description: Returns the Samples from the last 40 Days for the station.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiLast40DaysSamples'
   /forecast/{stationId}:
     get:
       summary: Get Forecast for specific Station
@@ -107,6 +126,10 @@ components:
           format: double
         flow:
           type: integer
+    ApiLast40DaysSamples:
+      type: array
+      items:
+        $ref: '#/components/schemas/ApiSample'
     ApiForecast:
       type: object
       properties:

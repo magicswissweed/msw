@@ -1,3 +1,3 @@
-export * from './CurrentSampleApi';
 export * from './ForecastApi';
+export * from './SampleApi';
 export * from './SpotsApi';

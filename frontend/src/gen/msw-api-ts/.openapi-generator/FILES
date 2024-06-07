@@ -1,7 +1,7 @@
 .gitignore
 README.md
-apis/CurrentSampleApi.ts
 apis/ForecastApi.ts
+apis/SampleApi.ts
 apis/SpotsApi.ts
 apis/index.ts
 index.ts

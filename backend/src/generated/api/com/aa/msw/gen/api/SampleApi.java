@@ -32,10 +32,10 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-02T11:56:19.779926100+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-10T10:47:58.279956800+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
-@Tag(name = "currentSample", description = "the currentSample API")
-public interface CurrentSampleApi {
+@Tag(name = "sample", description = "the sample API")
+public interface SampleApi {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
@@ -50,7 +50,7 @@ public interface CurrentSampleApi {
     @Operation(
         operationId = "getCurrentSample",
         summary = "Get current Flow and Temperature of a specific Station",
-        tags = { "currentSample" },
+        tags = { "sample" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Returns the last measured Sample from the station.", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ApiSample.class))
@@ -70,6 +70,45 @@ public interface CurrentSampleApi {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"temperature\" : 0.8008281904610115, \"flow\" : 6, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /sample/last40Days/{stationId} : Get Samples from last 40 Days for this station.
+     *
+     * @param stationId The id of the station to get the sample from. (required)
+     * @return Returns the Samples from the last 40 Days for the station. (status code 200)
+     */
+    @Operation(
+        operationId = "getLast40DaysSamples",
+        summary = "Get Samples from last 40 Days for this station.",
+        tags = { "sample" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Returns the Samples from the last 40 Days for the station.", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ApiSample.class)))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/sample/last40Days/{stationId}",
+        produces = { "application/json" }
+    )
+    
+    default ResponseEntity<List<ApiSample>> getLast40DaysSamples(
+        @Parameter(name = "stationId", description = "The id of the station to get the sample from.", required = true, in = ParameterIn.PATH) @PathVariable("stationId") Integer stationId
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ { \"temperature\" : 0.8008281904610115, \"flow\" : 6, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"temperature\" : 0.8008281904610115, \"flow\" : 6, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

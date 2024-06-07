@@ -1,6 +1,6 @@
 package com.aa.msw.api.spots;
 
-import com.aa.msw.api.current.CurrentSampleApiService;
+import com.aa.msw.api.current.SampleApiService;
 import com.aa.msw.api.forecast.ForecastApiService;
 import com.aa.msw.config.Spot;
 import com.aa.msw.config.SpotList;
@@ -18,11 +18,11 @@ import static com.aa.msw.config.SpotListConfiguration.PUBLIC_SPOTS;
 
 @Service
 public class SpotsApiService {
-	private final CurrentSampleApiService currentSampleApiService;
+	private final SampleApiService sampleApiService;
 	private final ForecastApiService forecastApiService;
 
-	public SpotsApiService (CurrentSampleApiService currentSampleApiService, ForecastApiService forecastApiService) {
-		this.currentSampleApiService = currentSampleApiService;
+	public SpotsApiService (SampleApiService sampleApiService, ForecastApiService forecastApiService) {
+		this.sampleApiService = sampleApiService;
 		this.forecastApiService = forecastApiService;
 	}
 
@@ -44,16 +44,17 @@ public class SpotsApiService {
 			try {
 				currentForecast = forecastApiService.getCurrentForecast(spot.stationId());
 			} catch(NoDataAvailableException e) {
-				// NOP: This can happen if there is no forecase available for the station
+				// NOP: This can happen if there is no forecast available for the station
 				// (unfortunately not every station has a forecast)
 			}
 
-			spotInformationList.add(new ApiSpotInformation()
+			spotInformationList.add(
+					new ApiSpotInformation()
 							.name(spot.name())
 							.minFlow(spot.minFlow())
 							.maxFlow(spot.maxFlow())
 							.stationId(spot.stationId())
-							.currentSample(currentSampleApiService.getCurrentSample(spot.stationId()))
+							.currentSample(sampleApiService.getCurrentSample(spot.stationId()))
 							.forecast(currentForecast)
 			);
 		}

@@ -23,10 +23,14 @@ export interface GetCurrentSampleRequest {
     stationId: number;
 }
 
+export interface GetLast40DaysSamplesRequest {
+    stationId: number;
+}
+
 /**
  * no description
  */
-export class CurrentSampleApi extends BaseAPI {
+export class SampleApi extends BaseAPI {
 
     /**
      * Get current Flow and Temperature of a specific Station
@@ -38,6 +42,20 @@ export class CurrentSampleApi extends BaseAPI {
 
         return this.request<ApiSample>({
             url: '/sample/current/{stationId}'.replace('{stationId}', encodeURI(stationId)),
+            method: 'GET',
+        }, opts?.responseOpts);
+    };
+
+    /**
+     * Get Samples from last 40 Days for this station.
+     */
+    getLast40DaysSamples({ stationId }: GetLast40DaysSamplesRequest): Observable<Array<ApiSample>>
+    getLast40DaysSamples({ stationId }: GetLast40DaysSamplesRequest, opts?: OperationOpts): Observable<AjaxResponse<Array<ApiSample>>>
+    getLast40DaysSamples({ stationId }: GetLast40DaysSamplesRequest, opts?: OperationOpts): Observable<Array<ApiSample> | AjaxResponse<Array<ApiSample>>> {
+        throwIfNullOrUndefined(stationId, 'stationId', 'getLast40DaysSamples');
+
+        return this.request<Array<ApiSample>>({
+            url: '/sample/last40Days/{stationId}'.replace('{stationId}', encodeURI(stationId)),
             method: 'GET',
         }, opts?.responseOpts);
     };

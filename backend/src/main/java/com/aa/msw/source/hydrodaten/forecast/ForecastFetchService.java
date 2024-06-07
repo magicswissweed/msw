@@ -2,27 +2,23 @@ package com.aa.msw.source.hydrodaten.forecast;
 
 import com.aa.msw.database.helpers.id.ForecastId;
 import com.aa.msw.model.Forecast;
-import com.aa.msw.source.AbstractFetchService;
-import com.aa.msw.source.hydrodaten.forecast.model.HydroForecast;
-import com.aa.msw.source.hydrodaten.forecast.model.HydroForecastLine;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.aa.msw.source.hydrodaten.AbstractLineFetchService;
+import com.aa.msw.source.hydrodaten.model.HydroResponse;
+import com.aa.msw.source.hydrodaten.model.HydroLine;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Service
-public class ForecastFetchService extends AbstractFetchService {
-	final static String FETCH_URL_PREFIX = "https://www.hydrodaten.admin.ch/plots/q_forecast/";
-	final static String FETCH_URL_SUFFIX = "_q_forecast_de.json";
+public class ForecastFetchService extends AbstractLineFetchService {
+	ForecastFetchService () {
+		super("https://www.hydrodaten.admin.ch/plots/q_forecast/", "_q_forecast_de.json");
+	}
 
 	public List<Forecast> fetchForecasts (Set<Integer> stationIds) throws URISyntaxException {
 		List<Forecast> forecasts = new ArrayList<>();
@@ -38,21 +34,18 @@ public class ForecastFetchService extends AbstractFetchService {
 	}
 
 	public Forecast fetchForecast (int stationId) throws IOException, URISyntaxException {
-		String response = fetchAsString(FETCH_URL_PREFIX + stationId + FETCH_URL_SUFFIX);
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.registerModule(new JavaTimeModule());
-		HydroForecast hydroForecast = objectMapper.readValue(response, new TypeReference<>() {});
+		HydroResponse hydroResponse = fetchFromHydro(stationId);
 
 		// Hydrodaten does something very strange here. In this line, there are actually two lines.
 		// The second line (25 percentile) is ordered backwards (timestamps descending)
-		HydroForecastLine twentyFiveToSeventyFivePercentile = hydroForecast.plot().data().get(2);
+		HydroLine twentyFiveToSeventyFivePercentile = hydroResponse.plot().data().get(2);
 		ArrayList<OffsetDateTime> twenty5ToSeventy5PercentileTimestamps = twentyFiveToSeventyFivePercentile.x();
 		ArrayList<Double> twenty5ToSeventy5PercentileFlows = twentyFiveToSeventyFivePercentile.y();
-		HydroForecastLine seventyFivePercentile = getFirstHalfOfHydroForecastLine(
+		HydroLine seventyFivePercentile = getFirstHalfOfHydroForecastLine(
 				twenty5ToSeventy5PercentileTimestamps,
 				twenty5ToSeventy5PercentileFlows,
 				"seventyFivePercentile");
-		HydroForecastLine twentyFivePercentile = getFirstHalfOfHydroForecastLine(
+		HydroLine twentyFivePercentile = getFirstHalfOfHydroForecastLine(
 				twenty5ToSeventy5PercentileTimestamps.reversed(),
 				twenty5ToSeventy5PercentileFlows.reversed(),
 				"twentyFivePercentile");
@@ -60,17 +53,17 @@ public class ForecastFetchService extends AbstractFetchService {
 		return new Forecast(
 				new ForecastId(),
 				stationId,
-				extractTimestamp(hydroForecast),
-				mapForecastLine(hydroForecast.plot().data().get(4)),
-				mapForecastLine(hydroForecast.plot().data().get(3)),
-				mapForecastLine(twentyFivePercentile),
-				mapForecastLine(seventyFivePercentile),
-				mapForecastLine(hydroForecast.plot().data().get(1)),
-				mapForecastLine(hydroForecast.plot().data().get(0))
+				extractTimestamp(hydroResponse),
+				mapLine(hydroResponse.plot().data().get(4)),
+				mapLine(hydroResponse.plot().data().get(3)),
+				mapLine(twentyFivePercentile),
+				mapLine(seventyFivePercentile),
+				mapLine(hydroResponse.plot().data().get(1)),
+				mapLine(hydroResponse.plot().data().get(0))
 		);
 	}
 
-	private HydroForecastLine getFirstHalfOfHydroForecastLine (
+	private HydroLine getFirstHalfOfHydroForecastLine (
 			List<OffsetDateTime> twenty5ToSeventy5PercentileTimestamps,
 			List<Double> twenty5ToSeventy5PercentileFlows,
 			String name) {
@@ -86,22 +79,11 @@ public class ForecastFetchService extends AbstractFetchService {
 			}
 		}
 
-		return new HydroForecastLine(timestamps, flows, name);
+		return new HydroLine(timestamps, flows, name);
 	}
 
-	private static Map<OffsetDateTime, Double> mapForecastLine (HydroForecastLine hydroForecastLine) throws IOException {
-		if (hydroForecastLine.x().size() > hydroForecastLine.y().size()) {
-			throw new IOException("Should be the same number of dates as values.");
-		}
-		Map<OffsetDateTime, Double> forecastLine = new LinkedHashMap<>();
-		for (int i = 0; i <hydroForecastLine.x().size(); i++) {
-			forecastLine.put(hydroForecastLine.x().get(i), hydroForecastLine.y().get(i));
-		}
-		return forecastLine;
-	}
-
-	private static OffsetDateTime extractTimestamp (HydroForecast hydroForecast) {
-		String datetimeString = hydroForecast.plot().layout().annotations().stream()
+	private static OffsetDateTime extractTimestamp (HydroResponse hydroResponse) {
+		String datetimeString = hydroResponse.plot().layout().annotations().stream()
 				.filter((a) -> a.xref().equals("x"))
 				.toList().get(0).x();
 

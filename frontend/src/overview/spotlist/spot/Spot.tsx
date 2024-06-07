@@ -2,9 +2,10 @@ import './Spot.scss'
 import React, {Component} from 'react';
 import {ApiSpotInformation} from '../../../gen/msw-api-ts';
 import {MswMeasurement} from './measurement/MswMeasurement';
-import {MswMiniForecast} from './miniForecast/MswMiniForecast';
+import {MswMiniGraph} from './miniForecast/MswMiniGraph';
 import {MswForecastGraph} from './forecast/MswForecastGraph';
 import arrow_down from '../../../assets/arrow_down.png';
+import {MswLastMeasurementsGraph} from './historical/MswLastMeasurementsGraph';
 
 interface SpotProps {
   location: ApiSpotInformation
@@ -39,17 +40,26 @@ export class Spot extends Component<SpotProps> {
           {location.name}
         </a>
         <MswMeasurement location={location}/>
-        <MswMiniForecast location={location}/>
+        <MswMiniGraph location={location}/>
       </div>
-      {Spot.getCollapsibleIcon(!location.forecast)}
+      {Spot.getCollapsibleIcon(false)}
     </>
   }
 
   private getCollapsibleContent(location: ApiSpotInformation) {
+    let forecastContent = <>
+      <h2>Forecast</h2>
+      <MswForecastGraph location={location} isMini={false}/>
+    </>;
+
+    let lastMeasurementsContent = <>
+      <h2>Forecast</h2>
+      <MswLastMeasurementsGraph location={location} isMini={false}/>
+    </>;
+
     return <>
       <div className="collapsibleContent hiddenOnMobile">
-        <h2>Forecast</h2>
-        <MswForecastGraph location={location} isMini={false} />
+        {location.forecast ? forecastContent : lastMeasurementsContent}
       </div>
     </>;
   }

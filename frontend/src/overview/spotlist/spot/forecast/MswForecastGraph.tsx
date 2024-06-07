@@ -88,7 +88,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
     }
 
     return <>
-      <ResponsiveContainer className="forecastGraph" width="100%" aspect={2}>
+      <ResponsiveContainer className="graph" width="100%" aspect={2}>
         <LineChart data={normalizedGraphData}>
           <ReferenceArea y1={this.location.minFlow}
                          y2={this.location.maxFlow}
