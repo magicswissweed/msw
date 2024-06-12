@@ -14,6 +14,8 @@ import {
 } from 'recharts';
 import {Component} from 'react';
 import {ApiSample, ApiSpotInformation, SampleApi} from '../../../../gen/msw-api-ts';
+import {authConfiguration} from '../../../../api/config/AuthConfiguration';
+import {AxiosResponse} from 'axios';
 
 interface MswLastMeasurementsGraphProps {
   location: ApiSpotInformation,
@@ -43,11 +45,12 @@ export class MswLastMeasurementsGraph extends Component<MswLastMeasurementsGraph
     super(props);
     this.location = props.location;
     this.isMini = props.isMini;
-    new SampleApi().getLast40DaysSamples({stationId: this.location.stationId!}).subscribe(res => {
-      if(res) {
-        this.setState({samples: res});
-      }
-    });
+    new SampleApi(authConfiguration()).getLast40DaysSamples(this.location.stationId!)
+      .then((res: AxiosResponse<ApiSample[], any>) => {
+        if(res && res.data) {
+          this.setState({samples: res.data});
+        }
+      });
   }
   
   render() {

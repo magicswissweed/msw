@@ -2,3 +2,4 @@
 # @name Get Current Sample
 #
 GET {{base-path}}/sample/current/{{stationId}}
+Authorization: Bearer {{auth_token}}

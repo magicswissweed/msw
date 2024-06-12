@@ -26,8 +26,20 @@ public class SpotsApiService {
 		this.forecastApiService = forecastApiService;
 	}
 
-	public ApiSpotInformationList getSpots (Boolean includeAll) throws NoDataAvailableException {
-		SpotList spotList = includeAll ? ALL_SPOTS : PUBLIC_SPOTS;
+	public ApiSpotInformationList getPublicSpots () throws NoDataAvailableException {
+		SpotList spotList = PUBLIC_SPOTS;
+
+		List<ApiSpotInformation> riverSurfSpots = getApiSpotInformationList(spotList.riverSurfSpots());
+		List<ApiSpotInformation> bungeeSurfSpots = getApiSpotInformationList(spotList.bungeeSurfSpots());
+
+		return new ApiSpotInformationList()
+				.riverSurfSpots(riverSurfSpots)
+				.bungeeSurfSpots(bungeeSurfSpots);
+	}
+
+	public ApiSpotInformationList getAllSpots (String email) throws NoDataAvailableException {
+		// TODO
+		SpotList spotList = ALL_SPOTS;
 
 		List<ApiSpotInformation> riverSurfSpots = getApiSpotInformationList(spotList.riverSurfSpots());
 		List<ApiSpotInformation> bungeeSurfSpots = getApiSpotInformationList(spotList.bungeeSurfSpots());

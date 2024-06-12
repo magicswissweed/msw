@@ -5,6 +5,8 @@ import {MswFooter} from '../footer/MswFooter';
 import {SpotList} from './spotlist/SpotList'
 import {ApiSpotInformationList, SpotsApi} from '../gen/msw-api-ts';
 import {MswLoader} from '../loader/MswLoader';
+import {authConfiguration, isUserLoggedIn} from '../api/config/AuthConfiguration';
+import {AxiosResponse} from 'axios';
 
 interface MswOverviewPageState {
   data: ApiSpotInformationList | null
@@ -16,12 +18,17 @@ export class MswOverviewPage extends Component<any, any> {
   };
 
   componentDidMount() {
-    // TODO: toggle includeAll
-    new SpotsApi().getSpots({includeAll: true}).subscribe((res) => {
-      if(res && res.riverSurfSpots && res.bungeeSurfSpots) {
-        this.setState({data: res});
+    const writeSpotsToState = (res: AxiosResponse<ApiSpotInformationList, any>) => {
+      if(res && res.data && res.data.riverSurfSpots && res.data.bungeeSurfSpots) {
+        this.setState({data: res.data});
       }
-    });
+    };
+
+    if(isUserLoggedIn()) {
+      new SpotsApi(authConfiguration()).getAllSpots().then(writeSpotsToState);
+    } else {
+      new SpotsApi(authConfiguration()).getPublicSpots().then(writeSpotsToState);
+    }
   }
 
   render() {

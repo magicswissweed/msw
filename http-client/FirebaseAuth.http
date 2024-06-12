@@ -1,0 +1,32 @@
+###
+# @name login
+POST https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={{firebaseApiKey}}
+Accept: application/json
+Content-Type: application/json
+
+{
+"email": "{{email}}",
+"password": "{{password}}",
+"returnSecureToken": true
+}
+
+> {%
+    client.global.set("auth_token", response.body.idToken);
+    client.global.set("refresh_token", response.body.refreshToken);
+%}
+
+###
+# @name refresh Token
+POST https://securetoken.googleapis.com/v1/token?key={{firebaseApiKey}}
+Accept: application/json
+Content-Type: application/json
+
+{
+"grant_type": "refresh_token",
+"refresh_token": "{{refresh_token}}"
+}
+
+> {%
+    client.global.set("auth_token", response.body.id_token);
+    client.global.set("refresh_token", response.body.refresh_token);
+%}

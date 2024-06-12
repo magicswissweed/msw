@@ -1,5 +1,6 @@
 package com.aa.msw.api.spots;
 
+import com.aa.msw.auth.threadlocal.UserContext;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.gen.api.ApiSpotInformationList;
 import com.aa.msw.gen.api.SpotsApi;
@@ -16,12 +17,18 @@ public class SpotsApiController implements SpotsApi {
 	}
 
 	@Override
-	public ResponseEntity<ApiSpotInformationList> getSpots (Boolean includeAll) {
+	public ResponseEntity<ApiSpotInformationList> getAllSpots () {
 		try {
-			if(includeAll == null) {
-				includeAll = false;
-			}
-			return ResponseEntity.ok(spotsApiService.getSpots(includeAll));
+			return ResponseEntity.ok(spotsApiService.getAllSpots(UserContext.getCurrentEmail()));
+		} catch (NoDataAvailableException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@Override
+	public ResponseEntity<ApiSpotInformationList> getPublicSpots () {
+		try {
+			return ResponseEntity.ok(spotsApiService.getPublicSpots());
 		} catch (NoDataAvailableException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

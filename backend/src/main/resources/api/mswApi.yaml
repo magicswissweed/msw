@@ -9,6 +9,8 @@ paths:
   /sample/current/{stationId}:
     get:
       summary: Get current Flow and Temperature of a specific Station
+      security:
+        - bearerAuth: [ ]
       operationId: getCurrentSample
       parameters:
         - name: stationId
@@ -29,6 +31,8 @@ paths:
   /sample/last40Days/{stationId}:
     get:
       summary: Get Samples from last 40 Days for this station.
+      security:
+        - bearerAuth: [ ]
       operationId: getLast40DaysSamples
       parameters:
         - name: stationId
@@ -49,6 +53,8 @@ paths:
   /forecast/{stationId}:
     get:
       summary: Get Forecast for specific Station
+      security:
+        - bearerAuth: [ ]
       operationId: getForecast
       parameters:
         - name: stationId
@@ -66,17 +72,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiForecast'
-  /spots:
+  /spots/public:
     get:
-      summary: Get SpotInformation-List including Current Sample and Forecast.
-      operationId: getSpots
-      parameters:
-        - name: includeAll
-          description: Whether to include all Spots.
-          in: query
-          schema:
-            type: boolean
-          required: false
+      summary: Get SpotInformation-List including Current Sample and Forecast for non-logged-in user.
+      operationId: getPublicSpots
+      tags:
+        - spots
+      responses:
+        '200':
+          description: Returns a List with Data for the Spots.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiSpotInformationList'
+  /spots/all:
+    get:
+      summary: Get Public and Private SpotInformation-List including Current Sample and Forecast for logged in user.
+      security:
+        - bearerAuth: [ ]
+      operationId: getAllSpots
       tags:
         - spots
       responses:

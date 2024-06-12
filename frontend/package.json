@@ -10,13 +10,18 @@
     "@types/node": "^16.18.97",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "axios": "^1.7.2",
+    "firebase": "^10.12.2",
     "react": "^18.3.1",
+    "react-cookie": "^7.1.4",
     "react-dom": "^18.3.1",
+    "react-login-page": "^1.0.4",
+    "react-router-dom": "^6.21.0",
     "react-scripts": "5.0.1",
+    "recharts": "^2.10.3",
     "scss-bundle": "3.1.2",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4",
-    "recharts": "^2.10.3"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

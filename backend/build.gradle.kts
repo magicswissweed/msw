@@ -23,10 +23,13 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.boot:spring-boot-starter-jooq")
     implementation("org.flywaydb:flyway-core:9.8.2")
     implementation("org.openapitools:jackson-databind-nullable:0.2.6")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    implementation("com.google.firebase:firebase-admin:9.3.0")
 
     runtimeOnly("org.postgresql:postgresql")
 
@@ -97,7 +100,7 @@ tasks.register<GenerateTask>("openApiGenerateSpring") {
 tasks.register<GenerateTask>("openApiGenerateReact") {
     group = "Msw OpenApi"
 
-    generatorName = "typescript-rxjs"
+    generatorName = "typescript-axios"
     inputSpec = "$projectDir/src/main/resources/api/mswApi.yaml"
     outputDir = "$projectDir/../frontend/src/gen/msw-api-ts"
 

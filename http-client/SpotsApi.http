@@ -1,16 +1,12 @@
 ###
-# @name Get Public Spots without query Param
-#
-GET {{base-path}}/spots
-
-###
 # @name Get Public Spots
 #
-GET {{base-path}}/spots?includeAll=false
+GET {{base-path}}/spots/public
 
 ###
 # @name Get All Spots
 #
-GET {{base-path}}/spots?includeAll=true
+GET {{base-path}}/spots/all
+Authorization: Bearer {{auth_token}}
 
 

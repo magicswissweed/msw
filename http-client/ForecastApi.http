@@ -2,3 +2,4 @@
 # @name Get Forecast
 #
 GET {{base-path}}/forecast/{{stationId}}
+Authorization: Bearer {{auth_token}}
