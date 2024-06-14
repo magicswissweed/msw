@@ -7,6 +7,7 @@ package com.aa.msw.gen.jooq;
 import com.aa.msw.gen.jooq.tables.FlywaySchemaHistory;
 import com.aa.msw.gen.jooq.tables.ForecastTable;
 import com.aa.msw.gen.jooq.tables.SampleTable;
+import com.aa.msw.gen.jooq.tables.SpotTable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +46,11 @@ public class Public extends SchemaImpl {
     public final SampleTable SAMPLE_TABLE = SampleTable.SAMPLE_TABLE;
 
     /**
+     * The table <code>public.spot_table</code>.
+     */
+    public final SpotTable SPOT_TABLE = SpotTable.SPOT_TABLE;
+
+    /**
      * No further instances allowed
      */
     private Public() {
@@ -62,7 +68,8 @@ public class Public extends SchemaImpl {
         return Arrays.asList(
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
             ForecastTable.FORECAST_TABLE,
-            SampleTable.SAMPLE_TABLE
+            SampleTable.SAMPLE_TABLE,
+            SpotTable.SPOT_TABLE
         );
     }
 }

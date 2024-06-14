@@ -7,9 +7,11 @@ package com.aa.msw.gen.jooq;
 import com.aa.msw.gen.jooq.tables.FlywaySchemaHistory;
 import com.aa.msw.gen.jooq.tables.ForecastTable;
 import com.aa.msw.gen.jooq.tables.SampleTable;
+import com.aa.msw.gen.jooq.tables.SpotTable;
 import com.aa.msw.gen.jooq.tables.records.FlywaySchemaHistoryRecord;
 import com.aa.msw.gen.jooq.tables.records.ForecastTableRecord;
 import com.aa.msw.gen.jooq.tables.records.SampleTableRecord;
+import com.aa.msw.gen.jooq.tables.records.SpotTableRecord;
 
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
@@ -31,4 +33,5 @@ public class Keys {
     public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY_PK = Internal.createUniqueKey(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, DSL.name("flyway_schema_history_pk"), new TableField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK }, true);
     public static final UniqueKey<ForecastTableRecord> FORECAST_TABLE_PKEY = Internal.createUniqueKey(ForecastTable.FORECAST_TABLE, DSL.name("forecast_table_pkey"), new TableField[] { ForecastTable.FORECAST_TABLE.ID }, true);
     public static final UniqueKey<SampleTableRecord> SAMPLE_TABLE_PKEY = Internal.createUniqueKey(SampleTable.SAMPLE_TABLE, DSL.name("sample_table_pkey"), new TableField[] { SampleTable.SAMPLE_TABLE.ID }, true);
+    public static final UniqueKey<SpotTableRecord> SPOT_TABLE_PKEY = Internal.createUniqueKey(SpotTable.SPOT_TABLE, DSL.name("spot_table_pkey"), new TableField[] { SpotTable.SPOT_TABLE.ID }, true);
 }
