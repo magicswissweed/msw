@@ -1,37 +1,33 @@
 import './MswHeader.scss'
-import React, {Component, FormEvent} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
-import {firebaseAuth} from '../firebase/FirebaseConfig';
+import {useUserAuth} from '../user/UserAuthContext';
 
-export class MswHeader extends Component {
-  render() {
-    let loginOrLogout = <></>;
-    if (firebaseAuth.currentUser) {
-      loginOrLogout = <>
-        <Link id="login-Button" className="logout" to="/" onClick={this.logout}>Logout</Link>
-      </>
-    } else {
-      loginOrLogout = <>
-        <Link id="login-Button" className="login" to="/login">Log in</Link>
-        <Link id="login-Button" className="signup" to="/signup">Sign up</Link>
-      </>
-    }
+export const MswHeader = () => {
+  // @ts-ignore
+  const {user, logOut} = useUserAuth();
 
-    return <>
-      <header className="App-header">
-        <div className="loginOrLogoutContainer">
-          {loginOrLogout}
-        </div>
-        <div className="title">
-          <h1>MagicSwissWeed</h1>
-          <p>Current surfing conditions in Switzerland</p>
-        </div>
-      </header>
-    </>;
+  let loginOrLogout: JSX.Element;
+  if (user) {
+    loginOrLogout = <>
+      <button id="login-Button" className="logout" onClick={logOut}>Logout</button>
+    </>
+  } else {
+    loginOrLogout = <>
+      <Link id="login-Button" className="login" to="/login">Log in</Link>
+      <Link id="login-Button" className="signup" to="/signup">Sign up</Link>
+    </>
   }
 
-  private logout(event: FormEvent<HTMLAnchorElement>) {
-    event.preventDefault();
-    firebaseAuth.signOut().then(() => window.location.reload());
-  }
+  return <>
+    <header className="App-header">
+      <div className="loginOrLogoutContainer">
+        {loginOrLogout}
+      </div>
+      <div className="title">
+        <h1>MagicSwissWeed</h1>
+        <p>Current surfing conditions in Switzerland</p>
+      </div>
+    </header>
+  </>;
 }

@@ -35,9 +35,11 @@ p {
 }
 
 .login, .logout, .signup {
+  background: white;
   margin-top: 10px;
   margin-right: 10px;
   flex: 1;
+  color: blue;
   font-weight: normal;
   font-family: Arial, sans-serif;
   font-size: 15px;

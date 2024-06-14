@@ -1,49 +1,58 @@
 import "./MswOverviewPage.scss";
-import React, {Component} from "react";
+import React, {useEffect, useState} from "react";
 import {MswHeader} from '../header/MswHeader';
 import {MswFooter} from '../footer/MswFooter';
 import {SpotList} from './spotlist/SpotList'
-import {ApiSpotInformationList, SpotsApi} from '../gen/msw-api-ts';
+import {ApiSpotInformationList, Configuration, SpotsApi} from '../gen/msw-api-ts';
 import {MswLoader} from '../loader/MswLoader';
-import {authConfiguration, isUserLoggedIn} from '../api/config/AuthConfiguration';
 import {AxiosResponse} from 'axios';
+import {useUserAuth} from '../user/UserAuthContext';
+import {authConfiguration} from '../api/config/AuthConfiguration';
 
 interface MswOverviewPageState {
   data: ApiSpotInformationList | null
 }
 
-export class MswOverviewPage extends Component<any, any> {
-  state: MswOverviewPageState = {
-    data: null,
+export const MswOverviewPage = () => {
+  const [state, setState] = useState<MswOverviewPageState>({data: null});
+
+  // @ts-ignore
+  const {user, token} = useUserAuth();
+  const writeSpotsToState = (res: AxiosResponse<ApiSpotInformationList, any>) => {
+    if (res && res.data && res.data.riverSurfSpots && res.data.bungeeSurfSpots) {
+      setState({data: res.data});
+    }
   };
 
-  componentDidMount() {
-    const writeSpotsToState = (res: AxiosResponse<ApiSpotInformationList, any>) => {
-      if(res && res.data && res.data.riverSurfSpots && res.data.bungeeSurfSpots) {
-        this.setState({data: res.data});
-      }
-    };
-
-    if(isUserLoggedIn()) {
-      new SpotsApi(authConfiguration()).getAllSpots().then(writeSpotsToState);
+  function fetchData(showAllSpots: boolean) {
+    if (showAllSpots) {
+      authConfiguration(token, (config: Configuration) => {
+        new SpotsApi(config).getAllSpots().then(writeSpotsToState);
+      });
     } else {
-      new SpotsApi(authConfiguration()).getPublicSpots().then(writeSpotsToState);
+      new SpotsApi().getPublicSpots().then(writeSpotsToState);
     }
   }
 
-  render() {
-    const state: MswOverviewPageState = this.state;
+  // initial loading
+  useEffect(() => {
+    fetchData(false);
+  }, []);
 
-    return <>
-      <div className="App">
-        <MswHeader/>
-        {state.data ? this.getContent(state.data) : <MswLoader />}
-        <MswFooter/>
-      </div>
-    </>;
-  }
+  // load on user change
+  useEffect(() => {
+    fetchData((user != undefined));
+  }, [user])
 
-  private getContent(data: ApiSpotInformationList) {
+  return <>
+    <div className="App">
+      <MswHeader/>
+      {state.data ? getContent(state.data) : <MswLoader/>}
+      <MswFooter/>
+    </div>
+  </>;
+
+  function getContent(data: ApiSpotInformationList) {
     return <>
       <div className="surfspots">
         <div className="riversurf">
