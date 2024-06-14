@@ -3,14 +3,16 @@ import {firebaseAuth} from '../../firebase/FirebaseConfig';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import {
-  clearAccessTokenInCookies, clearRefreshTokenInCookies,
+  clearAccessTokenInCookies,
+  clearRefreshTokenInCookies,
   getAccessTokenFromCookies,
   setAccessTokenInCookies,
   setRefreshTokenInCookies,
 } from './CookieAccessor';
+
 export const ApiConfigurationInitialization = () => {
 
-  firebaseAuth.onAuthStateChanged((user)=> {
+  firebaseAuth.onAuthStateChanged((user) => {
     if (user) { // user is signed in
       setRefreshTokenInCookies(user.refreshToken)
       user.getIdToken(true).then(function (token) {
@@ -30,11 +32,11 @@ export function isUserLoggedIn() {
 
 export const authConfiguration = () => {
   const accessToken = getAccessTokenFromCookies();
-  if(accessToken) {
+  if (accessToken) {
     return new Configuration({
       baseOptions: {
-        headers: { Authorization: 'Bearer ' + accessToken },
-      }
+        headers: {Authorization: 'Bearer ' + accessToken},
+      },
     });
   } else {
     return new Configuration({});

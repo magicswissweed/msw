@@ -24,3 +24,26 @@ p {
   font-size: 92%;
   margin-block-start: 0;
 }
+
+.loginOrLogoutContainer {
+  display: flex;
+  width: 150px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  justify-content: right;
+}
+
+.login, .logout, .signup {
+  margin-top: 10px;
+  margin-right: 10px;
+  flex: 1;
+  font-weight: normal;
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  border: 1px solid blue;
+  border-radius: 3px;
+  text-decoration: none;
+  padding: 3px;
+  max-width: 60px;
+}

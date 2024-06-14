@@ -17,6 +17,7 @@ export class SpotList extends Component<SpotListProps> {
     this.title = props.title;
     this.locations = props.locations;
   }
+
   render() {
     let tableHeader = <div className="tableHeaderContainer hiddenOnMobile">
       <div className="tableHeader hiddenOnMobile">
@@ -28,14 +29,12 @@ export class SpotList extends Component<SpotListProps> {
       {Spot.getCollapsibleIcon(true)}
     </div>;
 
-    this.locations.forEach((location) => console.log(location));
-
     return <>
       <div className="spotsContainer">
         <h2>{this.title}</h2>
         {tableHeader}
         <div>
-          {this.locations.map((location) => (<Spot location={location} />))}
+          {this.locations.map((location) => (<Spot location={location}/>))}
         </div>
       </div>
     </>;
