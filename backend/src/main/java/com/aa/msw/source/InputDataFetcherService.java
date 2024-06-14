@@ -41,6 +41,7 @@ public class InputDataFetcherService {
 		stationIds = getAllStationIds();
 	}
 
+	// TODO: use this when a new spot was added (and fetch)
 	public void updateStationIds () {
 		this.stationIds = getAllStationIds();
 	}

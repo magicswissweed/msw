@@ -4,6 +4,7 @@
 package com.aa.msw.gen.jooq.tables.records;
 
 
+import com.aa.msw.gen.jooq.enums.Spottype;
 import com.aa.msw.gen.jooq.tables.SpotTable;
 
 import java.util.UUID;
@@ -36,10 +37,25 @@ public class SpotTableRecord extends UpdatableRecordImpl<SpotTableRecord> {
     }
 
     /**
+     * Setter for <code>public.spot_table.type</code>.
+     */
+    public SpotTableRecord setType(Spottype value) {
+        set(1, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.spot_table.type</code>.
+     */
+    public Spottype getType() {
+        return (Spottype) get(1);
+    }
+
+    /**
      * Setter for <code>public.spot_table.stationid</code>.
      */
     public SpotTableRecord setStationid(Integer value) {
-        set(1, value);
+        set(2, value);
         return this;
     }
 
@@ -47,14 +63,14 @@ public class SpotTableRecord extends UpdatableRecordImpl<SpotTableRecord> {
      * Getter for <code>public.spot_table.stationid</code>.
      */
     public Integer getStationid() {
-        return (Integer) get(1);
+        return (Integer) get(2);
     }
 
     /**
      * Setter for <code>public.spot_table.name</code>.
      */
     public SpotTableRecord setName(String value) {
-        set(2, value);
+        set(3, value);
         return this;
     }
 
@@ -62,14 +78,14 @@ public class SpotTableRecord extends UpdatableRecordImpl<SpotTableRecord> {
      * Getter for <code>public.spot_table.name</code>.
      */
     public String getName() {
-        return (String) get(2);
+        return (String) get(3);
     }
 
     /**
      * Setter for <code>public.spot_table.minflow</code>.
      */
     public SpotTableRecord setMinflow(Integer value) {
-        set(3, value);
+        set(4, value);
         return this;
     }
 
@@ -77,14 +93,14 @@ public class SpotTableRecord extends UpdatableRecordImpl<SpotTableRecord> {
      * Getter for <code>public.spot_table.minflow</code>.
      */
     public Integer getMinflow() {
-        return (Integer) get(3);
+        return (Integer) get(4);
     }
 
     /**
      * Setter for <code>public.spot_table.maxflow</code>.
      */
     public SpotTableRecord setMaxflow(Integer value) {
-        set(4, value);
+        set(5, value);
         return this;
     }
 
@@ -92,7 +108,7 @@ public class SpotTableRecord extends UpdatableRecordImpl<SpotTableRecord> {
      * Getter for <code>public.spot_table.maxflow</code>.
      */
     public Integer getMaxflow() {
-        return (Integer) get(4);
+        return (Integer) get(5);
     }
 
     // -------------------------------------------------------------------------
@@ -118,10 +134,11 @@ public class SpotTableRecord extends UpdatableRecordImpl<SpotTableRecord> {
     /**
      * Create a detached, initialised SpotTableRecord
      */
-    public SpotTableRecord(UUID id, Integer stationid, String name, Integer minflow, Integer maxflow) {
+    public SpotTableRecord(UUID id, Spottype type, Integer stationid, String name, Integer minflow, Integer maxflow) {
         super(SpotTable.SPOT_TABLE);
 
         setId(id);
+        setType(type);
         setStationid(stationid);
         setName(name);
         setMinflow(minflow);
@@ -137,6 +154,7 @@ public class SpotTableRecord extends UpdatableRecordImpl<SpotTableRecord> {
 
         if (value != null) {
             setId(value.getId());
+            setType(value.getType());
             setStationid(value.getStationid());
             setName(value.getName());
             setMinflow(value.getMinflow());

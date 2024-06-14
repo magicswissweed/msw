@@ -3,8 +3,11 @@ package com.aa.msw.api.spots;
 import com.aa.msw.api.current.SampleApiService;
 import com.aa.msw.api.forecast.ForecastApiService;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
+import com.aa.msw.database.exceptions.NoSuchUserException;
 import com.aa.msw.database.helpers.id.SpotId;
+import com.aa.msw.database.helpers.id.UserExtId;
 import com.aa.msw.database.repository.dao.SpotDao;
+import com.aa.msw.database.repository.dao.UserDao;
 import com.aa.msw.gen.api.ApiForecast;
 import com.aa.msw.gen.api.ApiSpotInformation;
 import com.aa.msw.gen.api.ApiSpotInformationList;
@@ -25,11 +28,13 @@ public class SpotsApiService {
 	private final SampleApiService sampleApiService;
 	private final ForecastApiService forecastApiService;
 	private final SpotDao spotDao;
+	private final UserDao userDao;
 
-	public SpotsApiService (SampleApiService sampleApiService, ForecastApiService forecastApiService, SpotDao spotDao) {
+	public SpotsApiService (SampleApiService sampleApiService, ForecastApiService forecastApiService, SpotDao spotDao, UserDao userDao) {
 		this.sampleApiService = sampleApiService;
 		this.forecastApiService = forecastApiService;
 		this.spotDao = spotDao;
+		this.userDao = userDao;
 	}
 
 	public ApiSpotInformationList getPublicSpots () throws NoDataAvailableException {
@@ -41,10 +46,8 @@ public class SpotsApiService {
 				.bungeeSurfSpots(bungeeSurfSpots);
 	}
 
-	public ApiSpotInformationList getAllSpots (String email) throws NoDataAvailableException {
-		// TODO: get spots of user from db
-		Set<SpotId> privateSpotIds = Set.of(new SpotId());
-
+	public ApiSpotInformationList getAllSpots (UserExtId externalId) throws NoDataAvailableException, NoSuchUserException {
+		Set<SpotId> privateSpotIds = userDao.getPrivateSpotIds(userDao.getUser(externalId).userId());
 		Set<Spot> privateSpots = spotDao.getSpots(privateSpotIds);
 
 		Set<Spot> allRiverSurfSpots = privateSpots.stream()
@@ -55,7 +58,7 @@ public class SpotsApiService {
 		Set<Spot> allBungeeSurfSpots = privateSpots.stream()
 				.filter(spot -> spot.type().equals(SpotTypeEnum.BUNGEE_SURF))
 				.collect(Collectors.toSet());
-		allRiverSurfSpots.addAll(PUBLIC_BUNGEE_SURF_SPOTS);
+		allBungeeSurfSpots.addAll(PUBLIC_BUNGEE_SURF_SPOTS);
 
 		List<ApiSpotInformation> riverSurfSpots = getApiSpotInformationList(allRiverSurfSpots);
 		List<ApiSpotInformation> bungeeSurfSpots = getApiSpotInformationList(allBungeeSurfSpots);

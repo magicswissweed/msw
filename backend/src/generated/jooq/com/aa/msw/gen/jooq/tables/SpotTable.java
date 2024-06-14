@@ -6,6 +6,8 @@ package com.aa.msw.gen.jooq.tables;
 
 import com.aa.msw.gen.jooq.Keys;
 import com.aa.msw.gen.jooq.Public;
+import com.aa.msw.gen.jooq.enums.Spottype;
+import com.aa.msw.gen.jooq.tables.UserToSpotTable.UserToSpotTablePath;
 import com.aa.msw.gen.jooq.tables.records.SpotTableRecord;
 
 import java.util.Collection;
@@ -13,9 +15,13 @@ import java.util.UUID;
 
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.ForeignKey;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
+import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
 import org.jooq.Select;
@@ -54,6 +60,11 @@ public class SpotTable extends TableImpl<SpotTableRecord> {
      * The column <code>public.spot_table.id</code>.
      */
     public final TableField<SpotTableRecord, UUID> ID = createField(DSL.name("id"), SQLDataType.UUID.nullable(false), this, "");
+
+    /**
+     * The column <code>public.spot_table.type</code>.
+     */
+    public final TableField<SpotTableRecord, Spottype> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR.nullable(false).asEnumDataType(Spottype.class), this, "");
 
     /**
      * The column <code>public.spot_table.stationid</code>.
@@ -104,6 +115,37 @@ public class SpotTable extends TableImpl<SpotTableRecord> {
         this(DSL.name("spot_table"), null);
     }
 
+    public <O extends Record> SpotTable(Table<O> path, ForeignKey<O, SpotTableRecord> childPath, InverseForeignKey<O, SpotTableRecord> parentPath) {
+        super(path, childPath, parentPath, SPOT_TABLE);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class SpotTablePath extends SpotTable implements Path<SpotTableRecord> {
+        public <O extends Record> SpotTablePath(Table<O> path, ForeignKey<O, SpotTableRecord> childPath, InverseForeignKey<O, SpotTableRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private SpotTablePath(Name alias, Table<SpotTableRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public SpotTablePath as(String alias) {
+            return new SpotTablePath(DSL.name(alias), this);
+        }
+
+        @Override
+        public SpotTablePath as(Name alias) {
+            return new SpotTablePath(alias, this);
+        }
+
+        @Override
+        public SpotTablePath as(Table<?> alias) {
+            return new SpotTablePath(alias.getQualifiedName(), this);
+        }
+    }
+
     @Override
     public Schema getSchema() {
         return aliased() ? null : Public.PUBLIC;
@@ -112,6 +154,19 @@ public class SpotTable extends TableImpl<SpotTableRecord> {
     @Override
     public UniqueKey<SpotTableRecord> getPrimaryKey() {
         return Keys.SPOT_TABLE_PKEY;
+    }
+
+    private transient UserToSpotTablePath _userToSpotTable;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.user_to_spot_table</code> table
+     */
+    public UserToSpotTablePath userToSpotTable() {
+        if (_userToSpotTable == null)
+            _userToSpotTable = new UserToSpotTablePath(this, null, Keys.USER_TO_SPOT_TABLE__USER_TO_SPOT_TABLE_SPOT_ID_FKEY.getInverseKey());
+
+        return _userToSpotTable;
     }
 
     @Override

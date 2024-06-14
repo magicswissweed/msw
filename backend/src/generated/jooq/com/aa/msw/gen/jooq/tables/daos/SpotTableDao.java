@@ -4,6 +4,7 @@
 package com.aa.msw.gen.jooq.tables.daos;
 
 
+import com.aa.msw.gen.jooq.enums.Spottype;
 import com.aa.msw.gen.jooq.tables.SpotTable;
 import com.aa.msw.gen.jooq.tables.records.SpotTableRecord;
 
@@ -67,6 +68,21 @@ public class SpotTableDao extends DAOImpl<SpotTableRecord, com.aa.msw.gen.jooq.t
      */
     public Optional<com.aa.msw.gen.jooq.tables.pojos.SpotTable> fetchOptionalById(UUID value) {
         return fetchOptional(SpotTable.SPOT_TABLE.ID, value);
+    }
+
+    /**
+     * Fetch records that have <code>type BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<com.aa.msw.gen.jooq.tables.pojos.SpotTable> fetchRangeOfType(Spottype lowerInclusive, Spottype upperInclusive) {
+        return fetchRange(SpotTable.SPOT_TABLE.TYPE, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>type IN (values)</code>
+     */
+    public List<com.aa.msw.gen.jooq.tables.pojos.SpotTable> fetchByType(Spottype... values) {
+        return fetch(SpotTable.SPOT_TABLE.TYPE, values);
     }
 
     /**

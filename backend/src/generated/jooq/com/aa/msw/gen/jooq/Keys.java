@@ -8,11 +8,16 @@ import com.aa.msw.gen.jooq.tables.FlywaySchemaHistory;
 import com.aa.msw.gen.jooq.tables.ForecastTable;
 import com.aa.msw.gen.jooq.tables.SampleTable;
 import com.aa.msw.gen.jooq.tables.SpotTable;
+import com.aa.msw.gen.jooq.tables.UserTable;
+import com.aa.msw.gen.jooq.tables.UserToSpotTable;
 import com.aa.msw.gen.jooq.tables.records.FlywaySchemaHistoryRecord;
 import com.aa.msw.gen.jooq.tables.records.ForecastTableRecord;
 import com.aa.msw.gen.jooq.tables.records.SampleTableRecord;
 import com.aa.msw.gen.jooq.tables.records.SpotTableRecord;
+import com.aa.msw.gen.jooq.tables.records.UserTableRecord;
+import com.aa.msw.gen.jooq.tables.records.UserToSpotTableRecord;
 
+import org.jooq.ForeignKey;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
@@ -34,4 +39,13 @@ public class Keys {
     public static final UniqueKey<ForecastTableRecord> FORECAST_TABLE_PKEY = Internal.createUniqueKey(ForecastTable.FORECAST_TABLE, DSL.name("forecast_table_pkey"), new TableField[] { ForecastTable.FORECAST_TABLE.ID }, true);
     public static final UniqueKey<SampleTableRecord> SAMPLE_TABLE_PKEY = Internal.createUniqueKey(SampleTable.SAMPLE_TABLE, DSL.name("sample_table_pkey"), new TableField[] { SampleTable.SAMPLE_TABLE.ID }, true);
     public static final UniqueKey<SpotTableRecord> SPOT_TABLE_PKEY = Internal.createUniqueKey(SpotTable.SPOT_TABLE, DSL.name("spot_table_pkey"), new TableField[] { SpotTable.SPOT_TABLE.ID }, true);
+    public static final UniqueKey<UserTableRecord> USER_TABLE_PKEY = Internal.createUniqueKey(UserTable.USER_TABLE, DSL.name("user_table_pkey"), new TableField[] { UserTable.USER_TABLE.ID }, true);
+    public static final UniqueKey<UserToSpotTableRecord> USER_TO_SPOT_TABLE_PKEY = Internal.createUniqueKey(UserToSpotTable.USER_TO_SPOT_TABLE, DSL.name("user_to_spot_table_pkey"), new TableField[] { UserToSpotTable.USER_TO_SPOT_TABLE.ID }, true);
+
+    // -------------------------------------------------------------------------
+    // FOREIGN KEY definitions
+    // -------------------------------------------------------------------------
+
+    public static final ForeignKey<UserToSpotTableRecord, SpotTableRecord> USER_TO_SPOT_TABLE__USER_TO_SPOT_TABLE_SPOT_ID_FKEY = Internal.createForeignKey(UserToSpotTable.USER_TO_SPOT_TABLE, DSL.name("user_to_spot_table_spot_id_fkey"), new TableField[] { UserToSpotTable.USER_TO_SPOT_TABLE.SPOT_ID }, Keys.SPOT_TABLE_PKEY, new TableField[] { SpotTable.SPOT_TABLE.ID }, true);
+    public static final ForeignKey<UserToSpotTableRecord, UserTableRecord> USER_TO_SPOT_TABLE__USER_TO_SPOT_TABLE_USER_ID_FKEY = Internal.createForeignKey(UserToSpotTable.USER_TO_SPOT_TABLE, DSL.name("user_to_spot_table_user_id_fkey"), new TableField[] { UserToSpotTable.USER_TO_SPOT_TABLE.USER_ID }, Keys.USER_TABLE_PKEY, new TableField[] { UserTable.USER_TABLE.ID }, true);
 }

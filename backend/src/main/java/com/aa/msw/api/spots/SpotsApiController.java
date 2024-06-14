@@ -2,6 +2,8 @@ package com.aa.msw.api.spots;
 
 import com.aa.msw.auth.threadlocal.UserContext;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
+import com.aa.msw.database.exceptions.NoSuchUserException;
+import com.aa.msw.database.helpers.id.UserExtId;
 import com.aa.msw.gen.api.ApiSpotInformationList;
 import com.aa.msw.gen.api.SpotsApi;
 import org.springframework.http.HttpStatus;
@@ -19,9 +21,11 @@ public class SpotsApiController implements SpotsApi {
 	@Override
 	public ResponseEntity<ApiSpotInformationList> getAllSpots () {
 		try {
-			return ResponseEntity.ok(spotsApiService.getAllSpots(UserContext.getCurrentEmail()));
+			return ResponseEntity.ok(spotsApiService.getAllSpots(new UserExtId(UserContext.getCurrentExtUserId())));
 		} catch (NoDataAvailableException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (NoSuchUserException e) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 	}
 

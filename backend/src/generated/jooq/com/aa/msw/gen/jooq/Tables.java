@@ -8,6 +8,8 @@ import com.aa.msw.gen.jooq.tables.FlywaySchemaHistory;
 import com.aa.msw.gen.jooq.tables.ForecastTable;
 import com.aa.msw.gen.jooq.tables.SampleTable;
 import com.aa.msw.gen.jooq.tables.SpotTable;
+import com.aa.msw.gen.jooq.tables.UserTable;
+import com.aa.msw.gen.jooq.tables.UserToSpotTable;
 
 
 /**
@@ -35,4 +37,14 @@ public class Tables {
      * The table <code>public.spot_table</code>.
      */
     public static final SpotTable SPOT_TABLE = SpotTable.SPOT_TABLE;
+
+    /**
+     * The table <code>public.user_table</code>.
+     */
+    public static final UserTable USER_TABLE = UserTable.USER_TABLE;
+
+    /**
+     * The table <code>public.user_to_spot_table</code>.
+     */
+    public static final UserToSpotTable USER_TO_SPOT_TABLE = UserToSpotTable.USER_TO_SPOT_TABLE;
 }

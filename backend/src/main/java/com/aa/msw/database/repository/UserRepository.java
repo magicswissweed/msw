@@ -1,0 +1,79 @@
+package com.aa.msw.database.repository;
+
+import com.aa.msw.database.exceptions.NoSuchUserException;
+import com.aa.msw.database.helpers.id.SpotId;
+import com.aa.msw.database.helpers.id.UserExtId;
+import com.aa.msw.database.helpers.id.UserId;
+import com.aa.msw.database.repository.dao.UserDao;
+import com.aa.msw.database.repository.dao.UserToSpotDao;
+import com.aa.msw.gen.jooq.tables.UserTable;
+import com.aa.msw.gen.jooq.tables.daos.UserTableDao;
+import com.aa.msw.gen.jooq.tables.records.UserTableRecord;
+import com.aa.msw.model.User;
+import org.jooq.DSLContext;
+import org.springframework.stereotype.Component;
+
+import java.util.NoSuchElementException;
+import java.util.Set;
+
+
+@Component
+public class UserRepository extends AbstractRepository<UserId, User, UserTableRecord, com.aa.msw.gen.jooq.tables.pojos.UserTable, UserTableDao>
+		implements UserDao {
+
+	private static final UserTable TABLE = UserTable.USER_TABLE;
+
+	private final UserToSpotDao userToSpotDao;
+
+	public UserRepository (final DSLContext dsl, UserToSpotDao userToSpotDao) {
+		super(dsl, new UserTableDao(dsl.configuration()), TABLE, TABLE.ID);
+		this.userToSpotDao = userToSpotDao;
+	}
+
+	@Override
+	public Set<SpotId> getPrivateSpotIds (UserId userId) {
+		return userToSpotDao.getSpotIdsForUser(userId);
+	}
+
+	@Override
+	public User getUser (UserExtId externalId) throws NoSuchUserException {
+		try {
+			return dsl.selectFrom(TABLE)
+					.where(TABLE.EXTID.eq(externalId.getId()))
+					.fetch(this::mapRecord)
+					.getFirst();
+		} catch (NoSuchElementException e) {
+			throw new NoSuchUserException(e);
+		}
+	}
+
+	@Override
+	protected User mapRecord (UserTableRecord record) {
+		return new User(
+				new UserId(record.getId()),
+				new UserExtId(record.getExtid()),
+				record.getEmail(),
+				record.getUsername()
+		);
+	}
+
+	@Override
+	protected UserTableRecord mapDomain (User user) {
+		return new UserTableRecord(
+				user.getId().getId(),
+				user.externalId().getId(),
+				user.email(),
+				user.username()
+		);
+	}
+
+	@Override
+	protected User mapEntity (com.aa.msw.gen.jooq.tables.pojos.UserTable userTable) {
+		return new User(
+				new UserId(userTable.getId()),
+				new UserExtId(userTable.getExtid()),
+				userTable.getEmail(),
+				userTable.getUsername()
+		);
+	}
+}

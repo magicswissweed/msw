@@ -4,6 +4,8 @@
 package com.aa.msw.gen.jooq.tables.pojos;
 
 
+import com.aa.msw.gen.jooq.enums.Spottype;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -17,6 +19,7 @@ public class SpotTable implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final UUID id;
+    private final Spottype type;
     private final Integer stationid;
     private final String name;
     private final Integer minflow;
@@ -24,6 +27,7 @@ public class SpotTable implements Serializable {
 
     public SpotTable(SpotTable value) {
         this.id = value.id;
+        this.type = value.type;
         this.stationid = value.stationid;
         this.name = value.name;
         this.minflow = value.minflow;
@@ -32,12 +36,14 @@ public class SpotTable implements Serializable {
 
     public SpotTable(
         UUID id,
+        Spottype type,
         Integer stationid,
         String name,
         Integer minflow,
         Integer maxflow
     ) {
         this.id = id;
+        this.type = type;
         this.stationid = stationid;
         this.name = name;
         this.minflow = minflow;
@@ -49,6 +55,13 @@ public class SpotTable implements Serializable {
      */
     public UUID getId() {
         return this.id;
+    }
+
+    /**
+     * Getter for <code>public.spot_table.type</code>.
+     */
+    public Spottype getType() {
+        return this.type;
     }
 
     /**
@@ -94,6 +107,12 @@ public class SpotTable implements Serializable {
         }
         else if (!this.id.equals(other.id))
             return false;
+        if (this.type == null) {
+            if (other.type != null)
+                return false;
+        }
+        else if (!this.type.equals(other.type))
+            return false;
         if (this.stationid == null) {
             if (other.stationid != null)
                 return false;
@@ -126,6 +145,7 @@ public class SpotTable implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
         result = prime * result + ((this.stationid == null) ? 0 : this.stationid.hashCode());
         result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
         result = prime * result + ((this.minflow == null) ? 0 : this.minflow.hashCode());
@@ -138,6 +158,7 @@ public class SpotTable implements Serializable {
         StringBuilder sb = new StringBuilder("SpotTable (");
 
         sb.append(id);
+        sb.append(", ").append(type);
         sb.append(", ").append(stationid);
         sb.append(", ").append(name);
         sb.append(", ").append(minflow);

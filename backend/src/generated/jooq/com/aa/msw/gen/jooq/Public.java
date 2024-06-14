@@ -8,6 +8,8 @@ import com.aa.msw.gen.jooq.tables.FlywaySchemaHistory;
 import com.aa.msw.gen.jooq.tables.ForecastTable;
 import com.aa.msw.gen.jooq.tables.SampleTable;
 import com.aa.msw.gen.jooq.tables.SpotTable;
+import com.aa.msw.gen.jooq.tables.UserTable;
+import com.aa.msw.gen.jooq.tables.UserToSpotTable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,6 +53,16 @@ public class Public extends SchemaImpl {
     public final SpotTable SPOT_TABLE = SpotTable.SPOT_TABLE;
 
     /**
+     * The table <code>public.user_table</code>.
+     */
+    public final UserTable USER_TABLE = UserTable.USER_TABLE;
+
+    /**
+     * The table <code>public.user_to_spot_table</code>.
+     */
+    public final UserToSpotTable USER_TO_SPOT_TABLE = UserToSpotTable.USER_TO_SPOT_TABLE;
+
+    /**
      * No further instances allowed
      */
     private Public() {
@@ -69,7 +81,9 @@ public class Public extends SchemaImpl {
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
             ForecastTable.FORECAST_TABLE,
             SampleTable.SAMPLE_TABLE,
-            SpotTable.SPOT_TABLE
+            SpotTable.SPOT_TABLE,
+            UserTable.USER_TABLE,
+            UserToSpotTable.USER_TO_SPOT_TABLE
         );
     }
 }
