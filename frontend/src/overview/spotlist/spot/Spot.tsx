@@ -5,6 +5,7 @@ import {MswMeasurement} from './measurement/MswMeasurement';
 import {MswMiniGraph} from './miniForecast/MswMiniGraph';
 import {MswForecastGraph} from './forecast/MswForecastGraph';
 import arrow_down from '../../../assets/arrow_down.png';
+import lock from '../../../assets/lock.svg';
 import {MswLastMeasurementsGraph} from './historical/MswLastMeasurementsGraph';
 
 interface SpotProps {
@@ -42,7 +43,15 @@ export class Spot extends Component<SpotProps> {
         <MswMeasurement location={location}/>
         <MswMiniGraph location={location}/>
       </div>
-      {Spot.getCollapsibleIcon(false)}
+      <div className="right-side-icons-container">
+        <div className="is-private-icon">
+          <img className={location.isPublic ? "public" : ""}
+               alt="This is a private spot. Only you can see it."
+               title="This is a private spot. Only you can see it."
+               src={lock}/>
+        </div>
+        {Spot.getCollapsibleIcon(false)}
+      </div>
     </>
   }
 
@@ -66,12 +75,12 @@ export class Spot extends Component<SpotProps> {
 
   public static getCollapsibleIcon(isHidden: Boolean) {
     let className = "collapsibleIcon hiddenOnMobile";
-    if(isHidden) {
+    if (isHidden) {
       className += " hide";
     }
     return <>
       <span className={className}>
-        <img alt="extend forecast" src={arrow_down} />
+        <img alt="extend forecast" src={arrow_down}/>
       </span>
     </>;
   }

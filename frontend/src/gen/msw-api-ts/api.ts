@@ -136,6 +136,12 @@ export interface ApiSpotInformation {
     'stationId'?: number;
     /**
      * 
+     * @type {boolean}
+     * @memberof ApiSpotInformation
+     */
+    'isPublic'?: boolean;
+    /**
+     * 
      * @type {number}
      * @memberof ApiSpotInformation
      */

@@ -32,6 +32,7 @@ public class SpotRepository extends AbstractRepository<SpotId, Spot, SpotTableRe
 	protected Spot mapRecord (SpotTableRecord record) {
 		return new Spot(
 				new SpotId(record.getId()),
+				false,
 				mapDbToDomainEnum(record.getType()),
 				record.getName(),
 				record.getStationid(),
@@ -56,6 +57,7 @@ public class SpotRepository extends AbstractRepository<SpotId, Spot, SpotTableRe
 	protected Spot mapEntity (com.aa.msw.gen.jooq.tables.pojos.SpotTable spotTable) {
 		return new Spot(
 				new SpotId(spotTable.getId()),
+				false,
 				mapDbToDomainEnum(spotTable.getType()),
 				spotTable.getName(),
 				spotTable.getStationid(),

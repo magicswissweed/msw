@@ -20,12 +20,14 @@ import jakarta.annotation.Generated;
  * ApiSpotInformation
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-12T18:21:17.510905600+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-17T10:37:30.045746800+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiSpotInformation {
 
   private String name;
 
   private Integer stationId;
+
+  private Boolean isPublic;
 
   private Integer minFlow;
 
@@ -73,6 +75,26 @@ public class ApiSpotInformation {
 
   public void setStationId(Integer stationId) {
     this.stationId = stationId;
+  }
+
+  public ApiSpotInformation isPublic(Boolean isPublic) {
+    this.isPublic = isPublic;
+    return this;
+  }
+
+  /**
+   * Get isPublic
+   * @return isPublic
+  */
+  
+  @Schema(name = "isPublic", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("isPublic")
+  public Boolean getIsPublic() {
+    return isPublic;
+  }
+
+  public void setIsPublic(Boolean isPublic) {
+    this.isPublic = isPublic;
   }
 
   public ApiSpotInformation minFlow(Integer minFlow) {
@@ -166,6 +188,7 @@ public class ApiSpotInformation {
     ApiSpotInformation apiSpotInformation = (ApiSpotInformation) o;
     return Objects.equals(this.name, apiSpotInformation.name) &&
         Objects.equals(this.stationId, apiSpotInformation.stationId) &&
+        Objects.equals(this.isPublic, apiSpotInformation.isPublic) &&
         Objects.equals(this.minFlow, apiSpotInformation.minFlow) &&
         Objects.equals(this.maxFlow, apiSpotInformation.maxFlow) &&
         Objects.equals(this.currentSample, apiSpotInformation.currentSample) &&
@@ -174,7 +197,7 @@ public class ApiSpotInformation {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, stationId, minFlow, maxFlow, currentSample, forecast);
+    return Objects.hash(name, stationId, isPublic, minFlow, maxFlow, currentSample, forecast);
   }
 
   @Override
@@ -183,6 +206,7 @@ public class ApiSpotInformation {
     sb.append("class ApiSpotInformation {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    stationId: ").append(toIndentedString(stationId)).append("\n");
+    sb.append("    isPublic: ").append(toIndentedString(isPublic)).append("\n");
     sb.append("    minFlow: ").append(toIndentedString(minFlow)).append("\n");
     sb.append("    maxFlow: ").append(toIndentedString(maxFlow)).append("\n");
     sb.append("    currentSample: ").append(toIndentedString(currentSample)).append("\n");

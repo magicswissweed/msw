@@ -82,6 +82,7 @@ public class SpotsApiService {
 			spotInformationList.add(
 					new ApiSpotInformation()
 							.name(spot.name())
+							.isPublic(spot.isPublic())
 							.minFlow(spot.minFlow())
 							.maxFlow(spot.maxFlow())
 							.stationId(spot.stationId())

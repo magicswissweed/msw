@@ -9,7 +9,27 @@
   border-radius: 20px;
 }
 
-details>summary span.collapsibleIcon {
+.right-side-icons-container {
+  margin: 0 10px;
+  flex: 0.06;
+  display: flex;
+  flex-direction: column;
+}
+
+.is-private-icon {
+  margin: 0 10px;
+  flex: 1;
+}
+
+.is-private-icon > img {
+  width: 100%;
+}
+
+.public {
+  display: none;
+}
+
+details > summary span.collapsibleIcon {
   transition: all 1s;
   align-self: center;
 }
@@ -19,12 +39,11 @@ details[open] summary span.collapsibleIcon {
 }
 
 .collapsibleIcon {
-  margin: 0 10px;
   flex: 0.03;
+  align-content: center;
 }
 
-.collapsibleIcon>img {
-  width: 100%;
+.collapsibleIcon > img {
   cursor: pointer;
 }
 
