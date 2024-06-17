@@ -1,0 +1,7 @@
+###
+# @name Register User
+#
+POST {{base-path}}/user/register
+Authorization: Bearer {{auth_token}}
+
+

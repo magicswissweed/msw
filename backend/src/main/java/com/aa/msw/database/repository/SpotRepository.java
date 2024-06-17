@@ -43,14 +43,14 @@ public class SpotRepository extends AbstractRepository<SpotId, Spot, SpotTableRe
 
 	@Override
 	protected SpotTableRecord mapDomain (Spot spot) {
-		return new SpotTableRecord(
-				spot.getId().getId(),
-				mapDomainToDbEnum(spot.type()),
-				spot.stationId(),
-				spot.name(),
-				spot.minFlow(),
-				spot.maxFlow()
-		);
+		SpotTableRecord record = dsl.newRecord(TABLE);
+		record.setId(spot.getId().getId());
+		record.setType(mapDomainToDbEnum(spot.type()));
+		record.setStationid(spot.stationId());
+		record.setName(spot.name());
+		record.setMinflow(spot.minFlow());
+		record.setMaxflow(spot.maxFlow());
+		return record;
 	}
 
 	@Override

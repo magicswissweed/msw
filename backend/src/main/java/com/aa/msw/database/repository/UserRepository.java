@@ -59,12 +59,12 @@ public class UserRepository extends AbstractRepository<UserId, User, UserTableRe
 
 	@Override
 	protected UserTableRecord mapDomain (User user) {
-		return new UserTableRecord(
-				user.getId().getId(),
-				user.externalId().getId(),
-				user.email(),
-				user.username()
-		);
+		final UserTableRecord record = dsl.newRecord(table);
+		record.setId(user.getId().getId());
+		record.setExtid(user.externalId().getId());
+		record.setEmail(user.email());
+		record.setUsername("");
+		return record;
 	}
 
 	@Override

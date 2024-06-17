@@ -8,6 +8,8 @@ import {
   User,
 } from "firebase/auth";
 import {firebaseAuth} from '../firebase/FirebaseConfig';
+import {Configuration, UserApi} from '../gen/msw-api-ts';
+import {authConfiguration} from '../api/config/AuthConfiguration';
 
 
 // @ts-ignore
@@ -49,9 +51,16 @@ export function UserAuthContextProvider({children}) {
     return signInWithEmailAndPassword(firebaseAuth, email, password);
   }
 
-  function signUp(email: string, password: string) {
-    // TODO: create also in Backend
-    return createUserWithEmailAndPassword(firebaseAuth, email, password);
+  function signUp(email: string, password: string, callback: () => void) {
+    return createUserWithEmailAndPassword(firebaseAuth, email, password).then((user) => {
+      user.user.getIdToken(false).then(token => {
+        authConfiguration(token, (config: Configuration) => {
+          new UserApi(config)
+            .registerUser()
+            .then(callback);
+        });
+      });
+    });
   }
 
   function logOut() {

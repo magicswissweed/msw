@@ -46,11 +46,11 @@ public class UserToSpotRepository extends AbstractRepository<UserToSpotId, UserT
 
 	@Override
 	protected UserToSpotTableRecord mapDomain (UserToSpot userToSpot) {
-		return new UserToSpotTableRecord(
-				userToSpot.getId().getId(),
-				userToSpot.userId().getId(),
-				userToSpot.spotId().getId()
-		);
+		UserToSpotTableRecord record = dsl.newRecord(TABLE);
+		record.setId(userToSpot.getId().getId());
+		record.setUserId(userToSpot.userId().getId());
+		record.setSpotId(userToSpot.spotId().getId());
+		return record;
 	}
 
 	@Override

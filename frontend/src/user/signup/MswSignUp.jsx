@@ -15,8 +15,7 @@ const MswSignup = () => {
         e.preventDefault();
         setError("");
         try {
-            await signUp(email, password);
-            navigate("/");
+            signUp(email, password, () => navigate("/"));
         } catch (err) {
             setError(err.message);
         }
