@@ -1,8 +1,6 @@
 package com.aa.msw.api.user;
 
 import com.aa.msw.auth.threadlocal.UserContext;
-import com.aa.msw.database.helpers.id.UserExtId;
-import com.aa.msw.database.helpers.id.UserId;
 import com.aa.msw.gen.api.UserApi;
 import com.aa.msw.model.User;
 import org.springframework.http.HttpStatus;
@@ -19,11 +17,7 @@ public class UserApiController implements UserApi {
 
 	@Override
 	public ResponseEntity<Void> registerUser () {
-		User domainUser = new User(
-				new UserId(),
-				new UserExtId(UserContext.getCurrentExtUserId()),
-				UserContext.getCurrentEmail(),
-				"");
+		User domainUser = UserContext.getCurrentUser();
 		userApiService.registerUser(domainUser);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

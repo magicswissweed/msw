@@ -3,6 +3,7 @@
 $mswBlue: #3bbae8;
 
 .Footer {
+  margin-top: 30px;
   padding: 1.25rem 1.875rem;
   display: flex;
   flex-wrap: wrap;
@@ -26,6 +27,6 @@ $mswBlue: #3bbae8;
 .Footer_item {
   margin: auto;
   padding: 1rem;
-  min-width: 12.5rem /*200px*/;
+  min-width: 12.5rem;
 }
 

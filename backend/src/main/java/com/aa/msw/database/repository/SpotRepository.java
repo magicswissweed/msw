@@ -1,8 +1,12 @@
 package com.aa.msw.database.repository;
 
+import com.aa.msw.auth.threadlocal.UserContext;
+import com.aa.msw.database.helpers.UserToSpot;
 import com.aa.msw.database.helpers.id.Id;
 import com.aa.msw.database.helpers.id.SpotId;
+import com.aa.msw.database.helpers.id.UserToSpotId;
 import com.aa.msw.database.repository.dao.SpotDao;
+import com.aa.msw.database.repository.dao.UserToSpotDao;
 import com.aa.msw.gen.jooq.enums.Spottype;
 import com.aa.msw.gen.jooq.tables.SpotTable;
 import com.aa.msw.gen.jooq.tables.daos.SpotTableDao;
@@ -12,6 +16,7 @@ import com.aa.msw.model.SpotTypeEnum;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,8 +29,11 @@ public class SpotRepository extends AbstractRepository<SpotId, Spot, SpotTableRe
 
 	private static final SpotTable TABLE = SpotTable.SPOT_TABLE;
 
-	public SpotRepository (final DSLContext dsl) {
+	private final UserToSpotDao userToSpotDao;
+
+	public SpotRepository (final DSLContext dsl, UserToSpotDao userToSpotDao) {
 		super(dsl, new SpotTableDao(dsl.configuration()), TABLE, TABLE.ID);
+		this.userToSpotDao = userToSpotDao;
 	}
 
 	@Override
@@ -82,7 +90,6 @@ public class SpotRepository extends AbstractRepository<SpotId, Spot, SpotTableRe
 
 	@Override
 	public Set<Integer> getAllStationIds () {
-		// TODO: check implementation
 		return new HashSet<>(
 				dsl.selectDistinct(TABLE.STATIONID).from(TABLE)
 						.fetch(Record1::value1)
@@ -96,5 +103,16 @@ public class SpotRepository extends AbstractRepository<SpotId, Spot, SpotTableRe
 						.where(TABLE.ID.in(spotIds.stream().map(Id::getId).collect(Collectors.toSet())))
 						.fetch(this::mapRecord)
 		);
+	}
+
+	@Override
+	@Transactional
+	public void addPrivateSpot (Spot spot) {
+		persist(spot);
+		userToSpotDao.persist(new UserToSpot(
+				new UserToSpotId(),
+				UserContext.getCurrentUser().userId(),
+				spot.spotId()
+		));
 	}
 }

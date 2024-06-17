@@ -10,12 +10,13 @@ export const MswHeader = () => {
   let loginOrLogout: JSX.Element;
   if (user) {
     loginOrLogout = <>
-      <button id="login-Button" className="logout" onClick={logOut}>Logout</button>
+      <Link className="add-spot msw-button" to={'/spots/add'}>Add Spot</Link>
+      <button id="login-Button" className="logout msw-button" onClick={logOut}>Logout</button>
     </>
   } else {
     loginOrLogout = <>
-      <Link id="login-Button" className="login" to="/login">Log in</Link>
-      <Link id="login-Button" className="signup" to="/signup">Sign up</Link>
+      <Link id="login-Button" className="login msw-button" to="/login">Log in</Link>
+      <Link id="login-Button" className="signup msw-button" to="/signup">Sign up</Link>
     </>
   }
 

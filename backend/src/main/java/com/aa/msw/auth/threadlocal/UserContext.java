@@ -1,27 +1,20 @@
 package com.aa.msw.auth.threadlocal;
 
+import com.aa.msw.model.User;
+
 public class UserContext {
-	private static final ThreadLocal<String> currentEmail = new ThreadLocal<>();
-	private static final ThreadLocal<String> currentExtUserId = new ThreadLocal<>();
+	private static final ThreadLocal<User> currentUser = new ThreadLocal<>();
 
-	public static String getCurrentEmail() {
-		return currentEmail.get();
+	public static User getCurrentUser () {
+		return currentUser.get();
 	}
 
-	public static void setCurrentEmail(String user) {
-		currentEmail.set(user);
+	public static void setCurrentUser (User user) {
+		currentUser.set(user);
 	}
 
-	public static String getCurrentExtUserId() {
-		return currentExtUserId.get();
-	}
-
-	public static void setCurrentExtUserId(String user) {
-		currentExtUserId.set(user);
-	}
-
-	public static void clear() {
-		currentEmail.remove();
-		currentExtUserId.remove();
+	// TODO: clear after request completion. Otherwise we could run into a security issue.
+	public static void clear () {
+		currentUser.remove();
 	}
 }

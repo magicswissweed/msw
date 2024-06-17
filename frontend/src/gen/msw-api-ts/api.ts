@@ -119,6 +119,57 @@ export interface ApiSample {
 /**
  * 
  * @export
+ * @interface ApiSpot
+ */
+export interface ApiSpot {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiSpot
+     */
+    'name'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiSpot
+     */
+    'stationId'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiSpot
+     */
+    'spotType'?: ApiSpotSpotTypeEnum;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ApiSpot
+     */
+    'isPublic'?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiSpot
+     */
+    'minFlow'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiSpot
+     */
+    'maxFlow'?: number;
+}
+
+export const ApiSpotSpotTypeEnum = {
+    RiverSurf: 'RIVER_SURF',
+    BungeeSurf: 'BUNGEE_SURF'
+} as const;
+
+export type ApiSpotSpotTypeEnum = typeof ApiSpotSpotTypeEnum[keyof typeof ApiSpotSpotTypeEnum];
+
+/**
+ * 
+ * @export
  * @interface ApiSpotInformation
  */
 export interface ApiSpotInformation {
@@ -134,6 +185,12 @@ export interface ApiSpotInformation {
      * @memberof ApiSpotInformation
      */
     'stationId'?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiSpotInformation
+     */
+    'spotType'?: ApiSpotInformationSpotTypeEnum;
     /**
      * 
      * @type {boolean}
@@ -165,6 +222,14 @@ export interface ApiSpotInformation {
      */
     'forecast'?: ApiForecast;
 }
+
+export const ApiSpotInformationSpotTypeEnum = {
+    RiverSurf: 'RIVER_SURF',
+    BungeeSurf: 'BUNGEE_SURF'
+} as const;
+
+export type ApiSpotInformationSpotTypeEnum = typeof ApiSpotInformationSpotTypeEnum[keyof typeof ApiSpotInformationSpotTypeEnum];
+
 /**
  * 
  * @export
@@ -478,6 +543,42 @@ export const SpotsApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
+         * @summary Add a new private Spot.
+         * @param {ApiSpot} apiSpot Optional description in *Markdown*
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addPrivateSpot: async (apiSpot: ApiSpot, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'apiSpot' is not null or undefined
+            assertParamExists('addPrivateSpot', 'apiSpot', apiSpot)
+            const localVarPath = `/spots/add`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(apiSpot, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get Public and Private SpotInformation-List including Current Sample and Forecast for logged in user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -548,6 +649,19 @@ export const SpotsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Add a new private Spot.
+         * @param {ApiSpot} apiSpot Optional description in *Markdown*
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async addPrivateSpot(apiSpot: ApiSpot, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addPrivateSpot(apiSpot, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SpotsApi.addPrivateSpot']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Get Public and Private SpotInformation-List including Current Sample and Forecast for logged in user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -582,6 +696,16 @@ export const SpotsApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
+         * @summary Add a new private Spot.
+         * @param {ApiSpot} apiSpot Optional description in *Markdown*
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addPrivateSpot(apiSpot: ApiSpot, options?: any): AxiosPromise<void> {
+            return localVarFp.addPrivateSpot(apiSpot, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get Public and Private SpotInformation-List including Current Sample and Forecast for logged in user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -608,6 +732,18 @@ export const SpotsApiFactory = function (configuration?: Configuration, basePath
  * @extends {BaseAPI}
  */
 export class SpotsApi extends BaseAPI {
+    /**
+     * 
+     * @summary Add a new private Spot.
+     * @param {ApiSpot} apiSpot Optional description in *Markdown*
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SpotsApi
+     */
+    public addPrivateSpot(apiSpot: ApiSpot, options?: RawAxiosRequestConfig) {
+        return SpotsApiFp(this.configuration).addPrivateSpot(apiSpot, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Get Public and Private SpotInformation-List including Current Sample and Forecast for logged in user.

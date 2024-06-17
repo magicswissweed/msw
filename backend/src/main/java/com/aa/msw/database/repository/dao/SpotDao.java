@@ -9,4 +9,6 @@ public interface SpotDao extends Dao<SpotId, Spot> {
 	Set<Integer> getAllStationIds ();
 
 	Set<Spot> getSpots (Set<SpotId> spotIds);
+
+	void addPrivateSpot (Spot spot);
 }

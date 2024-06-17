@@ -27,25 +27,14 @@ p {
 
 .loginOrLogoutContainer {
   display: flex;
-  width: 150px;
+  width: 200px;
   position: absolute;
   top: 0;
   right: 0;
   justify-content: right;
 }
 
-.login, .logout, .signup {
-  background: white;
-  margin-top: 10px;
-  margin-right: 10px;
+.login, .logout, .signup, .add-spot {
+  margin-left: 0;
   flex: 1;
-  color: blue;
-  font-weight: normal;
-  font-family: Arial, sans-serif;
-  font-size: 15px;
-  border: 1px solid blue;
-  border-radius: 3px;
-  text-decoration: none;
-  padding: 3px;
-  max-width: 60px;
 }

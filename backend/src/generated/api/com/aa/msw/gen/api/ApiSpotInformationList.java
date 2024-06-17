@@ -22,16 +22,16 @@ import jakarta.annotation.Generated;
  * ApiSpotInformationList
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-17T12:36:29.857843+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-17T15:09:35.521143+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiSpotInformationList {
 
   @Valid
-  private List<@Valid ApiSpotInformation> riverSurfSpots = new ArrayList<>();
+  private List<ApiSpotInformation> riverSurfSpots = new ArrayList<>();
 
   @Valid
-  private List<@Valid ApiSpotInformation> bungeeSurfSpots = new ArrayList<>();
+  private List<ApiSpotInformation> bungeeSurfSpots = new ArrayList<>();
 
-  public ApiSpotInformationList riverSurfSpots(List<@Valid ApiSpotInformation> riverSurfSpots) {
+  public ApiSpotInformationList riverSurfSpots(List<ApiSpotInformation> riverSurfSpots) {
     this.riverSurfSpots = riverSurfSpots;
     return this;
   }
@@ -51,15 +51,15 @@ public class ApiSpotInformationList {
   @Valid 
   @Schema(name = "riverSurfSpots", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("riverSurfSpots")
-  public List<@Valid ApiSpotInformation> getRiverSurfSpots() {
+  public List<ApiSpotInformation> getRiverSurfSpots() {
     return riverSurfSpots;
   }
 
-  public void setRiverSurfSpots(List<@Valid ApiSpotInformation> riverSurfSpots) {
+  public void setRiverSurfSpots(List<ApiSpotInformation> riverSurfSpots) {
     this.riverSurfSpots = riverSurfSpots;
   }
 
-  public ApiSpotInformationList bungeeSurfSpots(List<@Valid ApiSpotInformation> bungeeSurfSpots) {
+  public ApiSpotInformationList bungeeSurfSpots(List<ApiSpotInformation> bungeeSurfSpots) {
     this.bungeeSurfSpots = bungeeSurfSpots;
     return this;
   }
@@ -79,11 +79,11 @@ public class ApiSpotInformationList {
   @Valid 
   @Schema(name = "bungeeSurfSpots", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("bungeeSurfSpots")
-  public List<@Valid ApiSpotInformation> getBungeeSurfSpots() {
+  public List<ApiSpotInformation> getBungeeSurfSpots() {
     return bungeeSurfSpots;
   }
 
-  public void setBungeeSurfSpots(List<@Valid ApiSpotInformation> bungeeSurfSpots) {
+  public void setBungeeSurfSpots(List<ApiSpotInformation> bungeeSurfSpots) {
     this.bungeeSurfSpots = bungeeSurfSpots;
   }
 

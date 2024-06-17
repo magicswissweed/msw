@@ -2,8 +2,6 @@ package com.aa.msw.gen.api;
 
 import java.net.URI;
 import java.util.Objects;
-import com.aa.msw.gen.api.ApiForecast;
-import com.aa.msw.gen.api.ApiSample;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -18,11 +16,11 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * ApiSpotInformation
+ * ApiSpot
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-17T15:09:35.521143+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
-public class ApiSpotInformation {
+public class ApiSpot {
 
   private String name;
 
@@ -71,11 +69,7 @@ public class ApiSpotInformation {
 
   private Integer maxFlow;
 
-  private ApiSample currentSample;
-
-  private ApiForecast forecast;
-
-  public ApiSpotInformation name(String name) {
+  public ApiSpot name(String name) {
     this.name = name;
     return this;
   }
@@ -95,7 +89,7 @@ public class ApiSpotInformation {
     this.name = name;
   }
 
-  public ApiSpotInformation stationId(Integer stationId) {
+  public ApiSpot stationId(Integer stationId) {
     this.stationId = stationId;
     return this;
   }
@@ -115,7 +109,7 @@ public class ApiSpotInformation {
     this.stationId = stationId;
   }
 
-  public ApiSpotInformation spotType(SpotTypeEnum spotType) {
+  public ApiSpot spotType(SpotTypeEnum spotType) {
     this.spotType = spotType;
     return this;
   }
@@ -135,7 +129,7 @@ public class ApiSpotInformation {
     this.spotType = spotType;
   }
 
-  public ApiSpotInformation isPublic(Boolean isPublic) {
+  public ApiSpot isPublic(Boolean isPublic) {
     this.isPublic = isPublic;
     return this;
   }
@@ -155,7 +149,7 @@ public class ApiSpotInformation {
     this.isPublic = isPublic;
   }
 
-  public ApiSpotInformation minFlow(Integer minFlow) {
+  public ApiSpot minFlow(Integer minFlow) {
     this.minFlow = minFlow;
     return this;
   }
@@ -175,7 +169,7 @@ public class ApiSpotInformation {
     this.minFlow = minFlow;
   }
 
-  public ApiSpotInformation maxFlow(Integer maxFlow) {
+  public ApiSpot maxFlow(Integer maxFlow) {
     this.maxFlow = maxFlow;
     return this;
   }
@@ -195,46 +189,6 @@ public class ApiSpotInformation {
     this.maxFlow = maxFlow;
   }
 
-  public ApiSpotInformation currentSample(ApiSample currentSample) {
-    this.currentSample = currentSample;
-    return this;
-  }
-
-  /**
-   * Get currentSample
-   * @return currentSample
-  */
-  @Valid 
-  @Schema(name = "currentSample", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("currentSample")
-  public ApiSample getCurrentSample() {
-    return currentSample;
-  }
-
-  public void setCurrentSample(ApiSample currentSample) {
-    this.currentSample = currentSample;
-  }
-
-  public ApiSpotInformation forecast(ApiForecast forecast) {
-    this.forecast = forecast;
-    return this;
-  }
-
-  /**
-   * Get forecast
-   * @return forecast
-  */
-  @Valid 
-  @Schema(name = "forecast", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("forecast")
-  public ApiForecast getForecast() {
-    return forecast;
-  }
-
-  public void setForecast(ApiForecast forecast) {
-    this.forecast = forecast;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -243,34 +197,30 @@ public class ApiSpotInformation {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ApiSpotInformation apiSpotInformation = (ApiSpotInformation) o;
-    return Objects.equals(this.name, apiSpotInformation.name) &&
-        Objects.equals(this.stationId, apiSpotInformation.stationId) &&
-        Objects.equals(this.spotType, apiSpotInformation.spotType) &&
-        Objects.equals(this.isPublic, apiSpotInformation.isPublic) &&
-        Objects.equals(this.minFlow, apiSpotInformation.minFlow) &&
-        Objects.equals(this.maxFlow, apiSpotInformation.maxFlow) &&
-        Objects.equals(this.currentSample, apiSpotInformation.currentSample) &&
-        Objects.equals(this.forecast, apiSpotInformation.forecast);
+    ApiSpot apiSpot = (ApiSpot) o;
+    return Objects.equals(this.name, apiSpot.name) &&
+        Objects.equals(this.stationId, apiSpot.stationId) &&
+        Objects.equals(this.spotType, apiSpot.spotType) &&
+        Objects.equals(this.isPublic, apiSpot.isPublic) &&
+        Objects.equals(this.minFlow, apiSpot.minFlow) &&
+        Objects.equals(this.maxFlow, apiSpot.maxFlow);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, stationId, spotType, isPublic, minFlow, maxFlow, currentSample, forecast);
+    return Objects.hash(name, stationId, spotType, isPublic, minFlow, maxFlow);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ApiSpotInformation {\n");
+    sb.append("class ApiSpot {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    stationId: ").append(toIndentedString(stationId)).append("\n");
     sb.append("    spotType: ").append(toIndentedString(spotType)).append("\n");
     sb.append("    isPublic: ").append(toIndentedString(isPublic)).append("\n");
     sb.append("    minFlow: ").append(toIndentedString(minFlow)).append("\n");
     sb.append("    maxFlow: ").append(toIndentedString(maxFlow)).append("\n");
-    sb.append("    currentSample: ").append(toIndentedString(currentSample)).append("\n");
-    sb.append("    forecast: ").append(toIndentedString(forecast)).append("\n");
     sb.append("}");
     return sb.toString();
   }

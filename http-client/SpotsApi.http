@@ -9,4 +9,21 @@ GET {{base-path}}/spots/public
 GET {{base-path}}/spots/all
 Authorization: Bearer {{auth_token}}
 
+###
+# @name Add new private Spot
+#
+POST {{base-path}}/spots/add
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Aare",
+  "stationId": 2016,
+  "spotType": "RIVER_SURF",
+  "isPublic": true,
+  "minFlow": 800,
+  "maxFlow": 1000
+}
+
 

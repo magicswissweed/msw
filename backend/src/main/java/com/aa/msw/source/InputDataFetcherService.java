@@ -41,9 +41,21 @@ public class InputDataFetcherService {
 		stationIds = getAllStationIds();
 	}
 
-	// TODO: use this when a new spot was added (and fetch)
 	public void updateStationIds () {
 		this.stationIds = getAllStationIds();
+	}
+
+	public void fetchForStationId (Integer stationId) {
+		try {
+			sampleFetchService.fetchSamples(Set.of(stationId));
+		} catch (IOException | URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+		try {
+			forecastFetchService.fetchForecasts(Set.of(stationId));
+		} catch (URISyntaxException e) {
+			// NOP
+		}
 	}
 
 	private Set<Integer> getAllStationIds () {

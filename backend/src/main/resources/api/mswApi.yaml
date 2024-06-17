@@ -100,6 +100,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiSpotInformationList'
+  /spots/add:
+    post:
+      summary: Add a new private Spot.
+      security:
+        - bearerAuth: [ ]
+      operationId: addPrivateSpot
+      tags:
+        - spots
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiSpot'
+      responses:
+        '200':
+          description: Added private Spot successfully.
   /user/register:
     post:
       summary: Register new User.
@@ -123,23 +141,33 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ApiSpotInformation'
-    ApiSpotInformation:
+    ApiSpot:
       type: object
       properties:
         name:
           type: string
         stationId:
           type: integer
+        spotType:
+          type: string
+          enum:
+            - RIVER_SURF
+            - BUNGEE_SURF
         isPublic:
           type: boolean
         minFlow:
           type: integer
         maxFlow:
           type: integer
-        currentSample:
-          $ref: '#/components/schemas/ApiSample'
-        forecast:
-          $ref: '#/components/schemas/ApiForecast'
+    ApiSpotInformation:
+      allOf:
+        - $ref: '#/components/schemas/ApiSpot'
+        - type: object
+          properties:
+            currentSample:
+              $ref: '#/components/schemas/ApiSample'
+            forecast:
+              $ref: '#/components/schemas/ApiForecast'
     ApiSample:
       type: object
       properties:

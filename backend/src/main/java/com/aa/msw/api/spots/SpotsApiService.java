@@ -13,6 +13,7 @@ import com.aa.msw.gen.api.ApiSpotInformation;
 import com.aa.msw.gen.api.ApiSpotInformationList;
 import com.aa.msw.model.Spot;
 import com.aa.msw.model.SpotTypeEnum;
+import com.aa.msw.source.InputDataFetcherService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,12 +30,14 @@ public class SpotsApiService {
 	private final ForecastApiService forecastApiService;
 	private final SpotDao spotDao;
 	private final UserDao userDao;
+	private final InputDataFetcherService inputDataFetcherService;
 
-	public SpotsApiService (SampleApiService sampleApiService, ForecastApiService forecastApiService, SpotDao spotDao, UserDao userDao) {
+	public SpotsApiService (SampleApiService sampleApiService, ForecastApiService forecastApiService, SpotDao spotDao, UserDao userDao, InputDataFetcherService inputDataFetcherService) {
 		this.sampleApiService = sampleApiService;
 		this.forecastApiService = forecastApiService;
 		this.spotDao = spotDao;
 		this.userDao = userDao;
+		this.inputDataFetcherService = inputDataFetcherService;
 	}
 
 	public ApiSpotInformationList getPublicSpots () throws NoDataAvailableException {
@@ -91,5 +94,12 @@ public class SpotsApiService {
 			);
 		}
 		return spotInformationList;
+	}
+
+	public void addPrivateSpot (Spot spot) {
+		spotDao.addPrivateSpot(spot);
+		inputDataFetcherService.updateStationIds();
+		// fetch data for new spot, to instantly show the new spot to the user...
+		inputDataFetcherService.fetchForStationId(spot.stationId());
 	}
 }
