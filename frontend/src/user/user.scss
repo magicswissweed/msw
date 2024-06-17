@@ -1,15 +1,21 @@
-// TODO: this breaks the style of the whole app
-// body {
-//  background-color: #eaeaea;
-//  display: flex;
-//  justify-content: center;
-//  align-content: center;
-//  width: 100%;
-//  align-items: center;
-//  height: 100vh;
-//}
+.form {
+  background-color: #efefef;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  width: 100%;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.box-container {
+  width: 50%;
+  margin: auto;
+}
 
 .box {
+  width: 100%;
   border: 1px solid #dfdfdf;
   background-color: #fff;
 }
