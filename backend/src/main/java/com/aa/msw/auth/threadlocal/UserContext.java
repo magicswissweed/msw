@@ -13,7 +13,6 @@ public class UserContext {
 		currentUser.set(user);
 	}
 
-	// TODO: clear after request completion. Otherwise we could run into a security issue.
 	public static void clear () {
 		currentUser.remove();
 	}
