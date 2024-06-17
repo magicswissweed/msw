@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 public class SpotsApiController implements SpotsApi {
 	private final SpotsApiService spotsApiService;
@@ -53,6 +55,12 @@ public class SpotsApiController implements SpotsApi {
 				apiSpot.getMaxFlow()
 		);
 		spotsApiService.addPrivateSpot(spot);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Void> deletePrivateSpot (UUID spotId) {
+		spotsApiService.deletePrivateSpot(new SpotId(spotId));
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

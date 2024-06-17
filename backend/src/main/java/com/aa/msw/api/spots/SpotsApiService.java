@@ -84,6 +84,7 @@ public class SpotsApiService {
 
 			spotInformationList.add(
 					new ApiSpotInformation()
+							.id(spot.spotId().getId())
 							.name(spot.name())
 							.isPublic(spot.isPublic())
 							.minFlow(spot.minFlow())
@@ -101,5 +102,9 @@ public class SpotsApiService {
 		inputDataFetcherService.updateStationIds();
 		// fetch data for new spot, to instantly show the new spot to the user...
 		inputDataFetcherService.fetchForStationId(spot.stationId());
+	}
+
+	public void deletePrivateSpot (SpotId spotId) {
+		spotDao.deletePrivateSpot(spotId);
 	}
 }

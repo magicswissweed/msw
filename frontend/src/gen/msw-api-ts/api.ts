@@ -127,6 +127,12 @@ export interface ApiSpot {
      * @type {string}
      * @memberof ApiSpot
      */
+    'id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiSpot
+     */
     'name'?: string;
     /**
      * 
@@ -173,6 +179,12 @@ export type ApiSpotSpotTypeEnum = typeof ApiSpotSpotTypeEnum[keyof typeof ApiSpo
  * @interface ApiSpotInformation
  */
 export interface ApiSpotInformation {
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiSpotInformation
+     */
+    'id'?: string;
     /**
      * 
      * @type {string}
@@ -544,7 +556,7 @@ export const SpotsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary Add a new private Spot.
-         * @param {ApiSpot} apiSpot Optional description in *Markdown*
+         * @param {ApiSpot} apiSpot Add a new private Spot.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -571,6 +583,40 @@ export const SpotsApiAxiosParamCreator = function (configuration?: Configuration
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(apiSpot, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Remove a private Spot.
+         * @param {string} spotId The id of the spot to delete.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePrivateSpot: async (spotId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'spotId' is not null or undefined
+            assertParamExists('deletePrivateSpot', 'spotId', spotId)
+            const localVarPath = `/spots/delete/{spotId}`
+                .replace(`{${"spotId"}}`, encodeURIComponent(String(spotId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -650,7 +696,7 @@ export const SpotsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Add a new private Spot.
-         * @param {ApiSpot} apiSpot Optional description in *Markdown*
+         * @param {ApiSpot} apiSpot Add a new private Spot.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -658,6 +704,19 @@ export const SpotsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.addPrivateSpot(apiSpot, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SpotsApi.addPrivateSpot']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Remove a private Spot.
+         * @param {string} spotId The id of the spot to delete.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deletePrivateSpot(spotId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePrivateSpot(spotId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SpotsApi.deletePrivateSpot']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -697,12 +756,22 @@ export const SpotsApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @summary Add a new private Spot.
-         * @param {ApiSpot} apiSpot Optional description in *Markdown*
+         * @param {ApiSpot} apiSpot Add a new private Spot.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         addPrivateSpot(apiSpot: ApiSpot, options?: any): AxiosPromise<void> {
             return localVarFp.addPrivateSpot(apiSpot, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Remove a private Spot.
+         * @param {string} spotId The id of the spot to delete.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePrivateSpot(spotId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deletePrivateSpot(spotId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -735,13 +804,25 @@ export class SpotsApi extends BaseAPI {
     /**
      * 
      * @summary Add a new private Spot.
-     * @param {ApiSpot} apiSpot Optional description in *Markdown*
+     * @param {ApiSpot} apiSpot Add a new private Spot.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SpotsApi
      */
     public addPrivateSpot(apiSpot: ApiSpot, options?: RawAxiosRequestConfig) {
         return SpotsApiFp(this.configuration).addPrivateSpot(apiSpot, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Remove a private Spot.
+     * @param {string} spotId The id of the spot to delete.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SpotsApi
+     */
+    public deletePrivateSpot(spotId: string, options?: RawAxiosRequestConfig) {
+        return SpotsApiFp(this.configuration).deletePrivateSpot(spotId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

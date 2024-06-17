@@ -1,6 +1,6 @@
 import './SpotList.scss';
 import React from 'react';
-import {Spot} from './spot/Spot';
+import {getCollapsibleIcon, Spot} from './spot/Spot';
 import {ApiSpotInformation} from '../../gen/msw-api-ts';
 
 interface SpotListProps {
@@ -16,7 +16,7 @@ export const SpotList = (props: SpotListProps) => {
       <div className="tableHeaderCol doubleCol">Forecast</div>
     </div>
     {/* only to have the same columns as in the spots */}
-    {Spot.getCollapsibleIcon(true)}
+    {getCollapsibleIcon(true)}
   </div>;
 
   return <>

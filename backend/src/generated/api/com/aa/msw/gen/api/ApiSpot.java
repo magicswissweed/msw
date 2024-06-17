@@ -5,6 +5,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.UUID;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -19,8 +20,10 @@ import jakarta.annotation.Generated;
  * ApiSpot
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-17T15:09:35.521143+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-17T17:31:48.181215500+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiSpot {
+
+  private UUID id;
 
   private String name;
 
@@ -68,6 +71,26 @@ public class ApiSpot {
   private Integer minFlow;
 
   private Integer maxFlow;
+
+  public ApiSpot id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+  */
+  @Valid 
+  @Schema(name = "id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("id")
+  public UUID getId() {
+    return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
   public ApiSpot name(String name) {
     this.name = name;
@@ -198,7 +221,8 @@ public class ApiSpot {
       return false;
     }
     ApiSpot apiSpot = (ApiSpot) o;
-    return Objects.equals(this.name, apiSpot.name) &&
+    return Objects.equals(this.id, apiSpot.id) &&
+        Objects.equals(this.name, apiSpot.name) &&
         Objects.equals(this.stationId, apiSpot.stationId) &&
         Objects.equals(this.spotType, apiSpot.spotType) &&
         Objects.equals(this.isPublic, apiSpot.isPublic) &&
@@ -208,13 +232,14 @@ public class ApiSpot {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, stationId, spotType, isPublic, minFlow, maxFlow);
+    return Objects.hash(id, name, stationId, spotType, isPublic, minFlow, maxFlow);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ApiSpot {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    stationId: ").append(toIndentedString(stationId)).append("\n");
     sb.append("    spotType: ").append(toIndentedString(spotType)).append("\n");

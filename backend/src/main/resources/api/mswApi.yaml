@@ -109,7 +109,7 @@ paths:
       tags:
         - spots
       requestBody:
-        description: Optional description in *Markdown*
+        description: Add a new private Spot.
         required: true
         content:
           application/json:
@@ -118,6 +118,25 @@ paths:
       responses:
         '200':
           description: Added private Spot successfully.
+  /spots/delete/{spotId}:
+    delete:
+      summary: Remove a private Spot.
+      security:
+        - bearerAuth: [ ]
+      operationId: deletePrivateSpot
+      parameters:
+        - name: spotId
+          description: The id of the spot to delete.
+          in: path
+          schema:
+            type: string
+            format: uuid
+          required: true
+      tags:
+        - spots
+      responses:
+        '200':
+          description: Removed private Spot successfully.
   /user/register:
     post:
       summary: Register new User.
@@ -144,6 +163,9 @@ components:
     ApiSpot:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
         name:
           type: string
         stationId:

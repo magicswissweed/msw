@@ -7,6 +7,7 @@ import com.aa.msw.gen.api.ApiSample;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.UUID;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -21,8 +22,10 @@ import jakarta.annotation.Generated;
  * ApiSpotInformation
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-17T15:09:35.521143+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-17T17:31:48.181215500+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiSpotInformation {
+
+  private UUID id;
 
   private String name;
 
@@ -74,6 +77,26 @@ public class ApiSpotInformation {
   private ApiSample currentSample;
 
   private ApiForecast forecast;
+
+  public ApiSpotInformation id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+  */
+  @Valid 
+  @Schema(name = "id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("id")
+  public UUID getId() {
+    return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
   public ApiSpotInformation name(String name) {
     this.name = name;
@@ -244,7 +267,8 @@ public class ApiSpotInformation {
       return false;
     }
     ApiSpotInformation apiSpotInformation = (ApiSpotInformation) o;
-    return Objects.equals(this.name, apiSpotInformation.name) &&
+    return Objects.equals(this.id, apiSpotInformation.id) &&
+        Objects.equals(this.name, apiSpotInformation.name) &&
         Objects.equals(this.stationId, apiSpotInformation.stationId) &&
         Objects.equals(this.spotType, apiSpotInformation.spotType) &&
         Objects.equals(this.isPublic, apiSpotInformation.isPublic) &&
@@ -256,13 +280,14 @@ public class ApiSpotInformation {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, stationId, spotType, isPublic, minFlow, maxFlow, currentSample, forecast);
+    return Objects.hash(id, name, stationId, spotType, isPublic, minFlow, maxFlow, currentSample, forecast);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ApiSpotInformation {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    stationId: ").append(toIndentedString(stationId)).append("\n");
     sb.append("    spotType: ").append(toIndentedString(spotType)).append("\n");

@@ -115,4 +115,14 @@ public class SpotRepository extends AbstractRepository<SpotId, Spot, SpotTableRe
 				spot.spotId()
 		));
 	}
+
+	@Override
+	@Transactional
+	public void deletePrivateSpot (SpotId spotId) {
+		// Check if spot belongs to user
+		Set<SpotId> spots = userToSpotDao.getSpotIdsForUser(UserContext.getCurrentUser().userId());
+		spots.stream()
+				.filter(id -> id.equals(spotId))
+				.forEach(this::delete);
+	}
 }

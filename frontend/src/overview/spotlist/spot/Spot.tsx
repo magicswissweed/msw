@@ -1,38 +1,34 @@
 import './Spot.scss'
-import React, {Component} from 'react';
-import {ApiSpotInformation} from '../../../gen/msw-api-ts';
+import React from 'react';
+import {ApiSpotInformation, Configuration, SpotsApi} from '../../../gen/msw-api-ts';
 import {MswMeasurement} from './measurement/MswMeasurement';
 import {MswMiniGraph} from './miniForecast/MswMiniGraph';
 import {MswForecastGraph} from './forecast/MswForecastGraph';
 import arrow_down from '../../../assets/arrow_down.png';
 import lock from '../../../assets/lock.svg';
 import {MswLastMeasurementsGraph} from './historical/MswLastMeasurementsGraph';
+import {authConfiguration} from '../../../api/config/AuthConfiguration';
+import {useUserAuth} from '../../../user/UserAuthContext';
 
 interface SpotProps {
   location: ApiSpotInformation
 }
 
-export class Spot extends Component<SpotProps> {
+export const Spot = (props: SpotProps) => {
 
-  private readonly location: ApiSpotInformation;
+  // @ts-ignore
+  const {token} = useUserAuth();
 
-  constructor(props: SpotProps) {
-    super(props);
-    this.location = props.location;
-  }
+  return <>
+    <details key={props.location.name} className="spot">
+      <summary className="spotname">
+        {getSpotSummaryContent(props.location)}
+      </summary>
+      {getCollapsibleContent(props.location)}
+    </details>
+  </>;
 
-  render() {
-    return <>
-      <details key={this.props.location.name} className="spot">
-        <summary className="spotname">
-          {this.getSpotSummaryContent(this.props.location)}
-        </summary>
-        {this.getCollapsibleContent(this.props.location)}
-      </details>
-    </>;
-  }
-
-  private getSpotSummaryContent(location: ApiSpotInformation) {
+  function getSpotSummaryContent(location: ApiSpotInformation) {
     let link = "https://www.hydrodaten.admin.ch/de/seen-und-fluesse/stationen-und-daten/" + location.stationId;
 
     return <>
@@ -50,12 +46,12 @@ export class Spot extends Component<SpotProps> {
                title="This is a private spot. Only you can see it."
                src={lock}/>
         </div>
-        {Spot.getCollapsibleIcon(false)}
+        {getCollapsibleIcon(false)}
       </div>
     </>
   }
 
-  private getCollapsibleContent(location: ApiSpotInformation) {
+  function getCollapsibleContent(location: ApiSpotInformation) {
     let forecastContent = <>
       <h2>Forecast</h2>
       <MswForecastGraph location={location} isMini={false}/>
@@ -66,22 +62,32 @@ export class Spot extends Component<SpotProps> {
       <MswLastMeasurementsGraph location={location} isMini={false}/>
     </>;
 
+    const privateSpotInteractions = <>
+      <button className="msw-button delete-spot-btn" onClick={() => onDeleteSpot(location)}>Delete Spot</button>
+    </>;
     return <>
       <div className="collapsibleContent hiddenOnMobile">
         {location.forecast ? forecastContent : lastMeasurementsContent}
       </div>
+      {!location.isPublic && privateSpotInteractions}
     </>;
   }
 
-  public static getCollapsibleIcon(isHidden: Boolean) {
-    let className = "collapsibleIcon hiddenOnMobile";
-    if (isHidden) {
-      className += " hide";
-    }
-    return <>
+  function onDeleteSpot(location: ApiSpotInformation) {
+    authConfiguration(token, (config: Configuration) => {
+      new SpotsApi(config).deletePrivateSpot(location.id!).then(() => document.location.reload());
+    });
+  }
+}
+
+export function getCollapsibleIcon(isHidden: Boolean) {
+  let className = "collapsibleIcon hiddenOnMobile";
+  if (isHidden) {
+    className += " hide";
+  }
+  return <>
       <span className={className}>
         <img alt="extend forecast" src={arrow_down}/>
       </span>
-    </>;
-  }
+  </>;
 }
