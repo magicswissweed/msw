@@ -29,7 +29,14 @@ export const MswAddSpot = () => {
         minFlow: minFlow,
         maxFlow: maxFlow,
       };
-      new SpotsApi(config).addPrivateSpot(apiSpot).then(() => navigate('/'));
+      new SpotsApi(config).addPrivateSpot(apiSpot)
+        .then((response) => {
+          if (response.status === 200) {
+            navigate('/');
+          } else {
+            alert('StationId is not valid. Please check your entered data.');
+          }
+        });
     });
   }
 

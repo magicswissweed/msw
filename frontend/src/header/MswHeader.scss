@@ -1,6 +1,12 @@
+@import "../ReactiveMixins";
+
 .App-header {
   font-size: 4vmin;
   color: #000000;
+
+  @include small() {
+    margin-top: 50px;
+  }
 }
 
 .title > h1 {

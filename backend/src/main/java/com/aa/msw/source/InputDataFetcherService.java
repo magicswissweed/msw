@@ -1,5 +1,6 @@
 package com.aa.msw.source;
 
+import com.aa.msw.database.exceptions.NoSampleAvailableException;
 import com.aa.msw.database.repository.dao.ForecastDao;
 import com.aa.msw.database.repository.dao.SampleDao;
 import com.aa.msw.database.repository.dao.SpotDao;
@@ -45,17 +46,20 @@ public class InputDataFetcherService {
 		this.stationIds = getAllStationIds();
 	}
 
-	public void fetchForStationId (Integer stationId) {
+	public List<Sample> fetchForStationId (Integer stationId) throws NoSampleAvailableException {
+		List<Sample> samples;
 		try {
-			sampleFetchService.fetchSamples(Set.of(stationId));
+			samples = sampleFetchService.fetchSamples(Set.of(stationId));
 		} catch (IOException | URISyntaxException e) {
-			throw new RuntimeException(e);
+			throw new NoSampleAvailableException(e.getMessage());
 		}
 		try {
 			forecastFetchService.fetchForecasts(Set.of(stationId));
 		} catch (URISyntaxException e) {
-			// NOP
+			// NOP: This can happen, if no forecast is available for the spot...
 		}
+
+		return samples;
 	}
 
 	private Set<Integer> getAllStationIds () {

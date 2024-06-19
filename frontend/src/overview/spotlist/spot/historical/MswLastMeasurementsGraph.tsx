@@ -16,6 +16,7 @@ import {useState} from 'react';
 import {ApiSample, ApiSpotInformation, SampleApi} from '../../../../gen/msw-api-ts';
 import {authConfiguration} from '../../../../api/config/AuthConfiguration';
 import {AxiosResponse} from 'axios';
+import {useUserAuth} from '../../../../user/UserAuthContext';
 
 interface MswLastMeasurementsGraphProps {
   location: ApiSpotInformation,

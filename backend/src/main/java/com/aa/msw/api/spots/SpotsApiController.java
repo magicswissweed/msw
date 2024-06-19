@@ -2,6 +2,7 @@ package com.aa.msw.api.spots;
 
 import com.aa.msw.auth.threadlocal.UserContext;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
+import com.aa.msw.database.exceptions.NoSampleAvailableException;
 import com.aa.msw.database.exceptions.NoSuchUserException;
 import com.aa.msw.database.helpers.id.SpotId;
 import com.aa.msw.gen.api.ApiSpot;
@@ -54,7 +55,11 @@ public class SpotsApiController implements SpotsApi {
 				apiSpot.getMinFlow(),
 				apiSpot.getMaxFlow()
 		);
-		spotsApiService.addPrivateSpot(spot);
+		try {
+			spotsApiService.addPrivateSpot(spot);
+		} catch (NoSampleAvailableException e) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

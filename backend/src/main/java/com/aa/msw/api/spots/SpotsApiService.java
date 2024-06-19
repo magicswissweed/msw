@@ -3,14 +3,17 @@ package com.aa.msw.api.spots;
 import com.aa.msw.api.current.SampleApiService;
 import com.aa.msw.api.forecast.ForecastApiService;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
+import com.aa.msw.database.exceptions.NoSampleAvailableException;
 import com.aa.msw.database.exceptions.NoSuchUserException;
 import com.aa.msw.database.helpers.id.SpotId;
 import com.aa.msw.database.helpers.id.UserExtId;
+import com.aa.msw.database.repository.dao.SampleDao;
 import com.aa.msw.database.repository.dao.SpotDao;
 import com.aa.msw.database.repository.dao.UserDao;
 import com.aa.msw.gen.api.ApiForecast;
 import com.aa.msw.gen.api.ApiSpotInformation;
 import com.aa.msw.gen.api.ApiSpotInformationList;
+import com.aa.msw.model.Sample;
 import com.aa.msw.model.Spot;
 import com.aa.msw.model.SpotTypeEnum;
 import com.aa.msw.source.InputDataFetcherService;
@@ -28,13 +31,15 @@ import static com.aa.msw.config.SpotListConfiguration.PUBLIC_RIVER_SURF_SPOTS;
 public class SpotsApiService {
 	private final SampleApiService sampleApiService;
 	private final ForecastApiService forecastApiService;
+	private final SampleDao sampleDao;
 	private final SpotDao spotDao;
 	private final UserDao userDao;
 	private final InputDataFetcherService inputDataFetcherService;
 
-	public SpotsApiService (SampleApiService sampleApiService, ForecastApiService forecastApiService, SpotDao spotDao, UserDao userDao, InputDataFetcherService inputDataFetcherService) {
+	public SpotsApiService (SampleApiService sampleApiService, ForecastApiService forecastApiService, SampleDao sampleDao, SpotDao spotDao, UserDao userDao, InputDataFetcherService inputDataFetcherService) {
 		this.sampleApiService = sampleApiService;
 		this.forecastApiService = forecastApiService;
+		this.sampleDao = sampleDao;
 		this.spotDao = spotDao;
 		this.userDao = userDao;
 		this.inputDataFetcherService = inputDataFetcherService;
@@ -97,11 +102,12 @@ public class SpotsApiService {
 		return spotInformationList;
 	}
 
-	public void addPrivateSpot (Spot spot) {
+	public void addPrivateSpot (Spot spot) throws NoSampleAvailableException {
+		List<Sample> samples = inputDataFetcherService.fetchForStationId(spot.stationId());
+		sampleDao.persistSamplesIfNotExist(samples);
+
 		spotDao.addPrivateSpot(spot);
 		inputDataFetcherService.updateStationIds();
-		// fetch data for new spot, to instantly show the new spot to the user...
-		inputDataFetcherService.fetchForStationId(spot.stationId());
 	}
 
 	public void deletePrivateSpot (SpotId spotId) {
