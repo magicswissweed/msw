@@ -2,30 +2,26 @@ package com.aa.msw.api.spots;
 
 import com.aa.msw.api.current.SampleApiService;
 import com.aa.msw.api.forecast.ForecastApiService;
+import com.aa.msw.auth.threadlocal.UserContext;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.exceptions.NoSampleAvailableException;
 import com.aa.msw.database.exceptions.NoSuchUserException;
 import com.aa.msw.database.helpers.id.SpotId;
-import com.aa.msw.database.helpers.id.UserExtId;
 import com.aa.msw.database.repository.dao.SampleDao;
 import com.aa.msw.database.repository.dao.SpotDao;
-import com.aa.msw.database.repository.dao.UserDao;
+import com.aa.msw.database.repository.dao.UserToSpotDao;
 import com.aa.msw.gen.api.ApiForecast;
 import com.aa.msw.gen.api.ApiSpotInformation;
 import com.aa.msw.gen.api.ApiSpotInformationList;
 import com.aa.msw.model.Sample;
 import com.aa.msw.model.Spot;
 import com.aa.msw.model.SpotTypeEnum;
+import com.aa.msw.model.UserSpot;
 import com.aa.msw.source.InputDataFetcherService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static com.aa.msw.config.SpotListConfiguration.PUBLIC_BUNGEE_SURF_SPOTS;
-import static com.aa.msw.config.SpotListConfiguration.PUBLIC_RIVER_SURF_SPOTS;
 
 @Service
 public class SpotsApiService {
@@ -33,50 +29,47 @@ public class SpotsApiService {
 	private final ForecastApiService forecastApiService;
 	private final SampleDao sampleDao;
 	private final SpotDao spotDao;
-	private final UserDao userDao;
+	private final UserToSpotDao userToSpotDao;
 	private final InputDataFetcherService inputDataFetcherService;
 
-	public SpotsApiService (SampleApiService sampleApiService, ForecastApiService forecastApiService, SampleDao sampleDao, SpotDao spotDao, UserDao userDao, InputDataFetcherService inputDataFetcherService) {
+	public SpotsApiService (SampleApiService sampleApiService, ForecastApiService forecastApiService, SampleDao sampleDao, SpotDao spotDao, UserToSpotDao userToSpotDao, InputDataFetcherService inputDataFetcherService) {
 		this.sampleApiService = sampleApiService;
 		this.forecastApiService = forecastApiService;
 		this.sampleDao = sampleDao;
 		this.spotDao = spotDao;
-		this.userDao = userDao;
+		this.userToSpotDao = userToSpotDao;
 		this.inputDataFetcherService = inputDataFetcherService;
 	}
 
 	public ApiSpotInformationList getPublicSpots () throws NoDataAvailableException {
-		List<ApiSpotInformation> riverSurfSpots = getApiSpotInformationList(PUBLIC_RIVER_SURF_SPOTS);
-		List<ApiSpotInformation> bungeeSurfSpots = getApiSpotInformationList(PUBLIC_BUNGEE_SURF_SPOTS);
+		List<ApiSpotInformation> riverSurfSpots = getApiSpotInformationList(spotDao.getPublicRiverSurfSpots());
+		List<ApiSpotInformation> bungeeSurfSpots = getApiSpotInformationList(spotDao.getPublicBungeeSurfSpots());
 
 		return new ApiSpotInformationList()
 				.riverSurfSpots(riverSurfSpots)
 				.bungeeSurfSpots(bungeeSurfSpots);
 	}
 
-	public ApiSpotInformationList getAllSpots (UserExtId externalId) throws NoDataAvailableException, NoSuchUserException {
-		Set<SpotId> privateSpotIds = userDao.getPrivateSpotIds(userDao.getUser(externalId).userId());
-		Set<Spot> privateSpots = spotDao.getSpots(privateSpotIds);
+	public ApiSpotInformationList getAllSpots () throws NoDataAvailableException, NoSuchUserException {
+		List<UserSpot> userSpots = userToSpotDao.getUserSpotsOrdered(UserContext.getCurrentUser().userId());
 
-		Set<Spot> allRiverSurfSpots = privateSpots.stream()
-				.filter(spot -> spot.type().equals(SpotTypeEnum.RIVER_SURF))
-				.collect(Collectors.toSet());
-		allRiverSurfSpots.addAll(PUBLIC_RIVER_SURF_SPOTS);
-
-		Set<Spot> allBungeeSurfSpots = privateSpots.stream()
-				.filter(spot -> spot.type().equals(SpotTypeEnum.BUNGEE_SURF))
-				.collect(Collectors.toSet());
-		allBungeeSurfSpots.addAll(PUBLIC_BUNGEE_SURF_SPOTS);
-
-		List<ApiSpotInformation> riverSurfSpots = getApiSpotInformationList(allRiverSurfSpots);
-		List<ApiSpotInformation> bungeeSurfSpots = getApiSpotInformationList(allBungeeSurfSpots);
+		List<ApiSpotInformation> apiRiverSurfSpots = getApiSpotInformationList(
+				userSpots.stream()
+						.map(UserSpot::spot)
+						.filter(spot -> spot.type().equals(SpotTypeEnum.RIVER_SURF))
+						.toList());
+		List<ApiSpotInformation> apiBungeeSurfSpots = getApiSpotInformationList(
+				userSpots.stream()
+						.map(UserSpot::spot)
+						.filter(spot -> spot.type().equals(SpotTypeEnum.BUNGEE_SURF))
+						.toList());
 
 		return new ApiSpotInformationList()
-				.riverSurfSpots(riverSurfSpots)
-				.bungeeSurfSpots(bungeeSurfSpots);
+				.riverSurfSpots(apiRiverSurfSpots)
+				.bungeeSurfSpots(apiBungeeSurfSpots);
 	}
 
-	private List<ApiSpotInformation> getApiSpotInformationList (Set<Spot> spots) throws NoDataAvailableException {
+	private List<ApiSpotInformation> getApiSpotInformationList (List<Spot> spots) throws NoDataAvailableException {
 		List<ApiSpotInformation> spotInformationList = new ArrayList<>();
 		for (Spot spot : spots) {
 			ApiForecast currentForecast = null;
@@ -102,15 +95,23 @@ public class SpotsApiService {
 		return spotInformationList;
 	}
 
-	public void addPrivateSpot (Spot spot) throws NoSampleAvailableException {
+	public void addPrivateSpot (Spot spot, int position) throws NoSampleAvailableException {
 		List<Sample> samples = inputDataFetcherService.fetchForStationId(spot.stationId());
 		sampleDao.persistSamplesIfNotExist(samples);
 
-		spotDao.addPrivateSpot(spot);
+		userToSpotDao.addPrivateSpot(spot, position);
 		inputDataFetcherService.updateStationIds();
 	}
 
 	public void deletePrivateSpot (SpotId spotId) {
-		spotDao.deletePrivateSpot(spotId);
+		userToSpotDao.deletePrivateSpot(spotId);
+	}
+
+	public void orderSpots (List<SpotId> orderedSpotIds) {
+		int position = 0;
+		for (SpotId spotId : orderedSpotIds) {
+			userToSpotDao.setPosition(spotId, position);
+			position++;
+		}
 	}
 }

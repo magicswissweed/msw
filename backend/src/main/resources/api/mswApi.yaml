@@ -114,7 +114,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ApiSpot'
+              type: object
+              properties:
+                spot:
+                  $ref: '#/components/schemas/ApiSpot'
+                position:
+                  type: integer
       responses:
         '200':
           description: Added private Spot successfully.
@@ -137,6 +142,24 @@ paths:
       responses:
         '200':
           description: Removed private Spot successfully.
+  /spots/order:
+    patch:
+      summary: Change the order of the spots
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        description: The new order of the spots.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpotOrderList'
+      operationId: orderSpots
+      tags:
+        - spots
+      responses:
+        '200':
+          description: Ordered spots successfully
   /user/register:
     post:
       summary: Register new User.
@@ -190,6 +213,11 @@ components:
               $ref: '#/components/schemas/ApiSample'
             forecast:
               $ref: '#/components/schemas/ApiForecast'
+    SpotOrderList:
+      type: array
+      items:
+        type: string
+        format: uuid
     ApiSample:
       type: object
       properties:

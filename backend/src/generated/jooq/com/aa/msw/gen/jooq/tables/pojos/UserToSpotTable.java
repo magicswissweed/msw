@@ -19,21 +19,25 @@ public class UserToSpotTable implements Serializable {
     private final UUID id;
     private final UUID userId;
     private final UUID spotId;
+    private final Integer position;
 
     public UserToSpotTable(UserToSpotTable value) {
         this.id = value.id;
         this.userId = value.userId;
         this.spotId = value.spotId;
+        this.position = value.position;
     }
 
     public UserToSpotTable(
         UUID id,
         UUID userId,
-        UUID spotId
+        UUID spotId,
+        Integer position
     ) {
         this.id = id;
         this.userId = userId;
         this.spotId = spotId;
+        this.position = position;
     }
 
     /**
@@ -55,6 +59,13 @@ public class UserToSpotTable implements Serializable {
      */
     public UUID getSpotId() {
         return this.spotId;
+    }
+
+    /**
+     * Getter for <code>public.user_to_spot_table.position</code>.
+     */
+    public Integer getPosition() {
+        return this.position;
     }
 
     @Override
@@ -84,6 +95,12 @@ public class UserToSpotTable implements Serializable {
         }
         else if (!this.spotId.equals(other.spotId))
             return false;
+        if (this.position == null) {
+            if (other.position != null)
+                return false;
+        }
+        else if (!this.position.equals(other.position))
+            return false;
         return true;
     }
 
@@ -94,6 +111,7 @@ public class UserToSpotTable implements Serializable {
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.userId == null) ? 0 : this.userId.hashCode());
         result = prime * result + ((this.spotId == null) ? 0 : this.spotId.hashCode());
+        result = prime * result + ((this.position == null) ? 0 : this.position.hashCode());
         return result;
     }
 
@@ -104,6 +122,7 @@ public class UserToSpotTable implements Serializable {
         sb.append(id);
         sb.append(", ").append(userId);
         sb.append(", ").append(spotId);
+        sb.append(", ").append(position);
 
         sb.append(")");
         return sb.toString();

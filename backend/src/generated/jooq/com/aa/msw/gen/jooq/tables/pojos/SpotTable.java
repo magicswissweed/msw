@@ -24,6 +24,7 @@ public class SpotTable implements Serializable {
     private final String name;
     private final Integer minflow;
     private final Integer maxflow;
+    private final Boolean ispublic;
 
     public SpotTable(SpotTable value) {
         this.id = value.id;
@@ -32,6 +33,7 @@ public class SpotTable implements Serializable {
         this.name = value.name;
         this.minflow = value.minflow;
         this.maxflow = value.maxflow;
+        this.ispublic = value.ispublic;
     }
 
     public SpotTable(
@@ -40,7 +42,8 @@ public class SpotTable implements Serializable {
         Integer stationid,
         String name,
         Integer minflow,
-        Integer maxflow
+        Integer maxflow,
+        Boolean ispublic
     ) {
         this.id = id;
         this.type = type;
@@ -48,6 +51,7 @@ public class SpotTable implements Serializable {
         this.name = name;
         this.minflow = minflow;
         this.maxflow = maxflow;
+        this.ispublic = ispublic;
     }
 
     /**
@@ -90,6 +94,13 @@ public class SpotTable implements Serializable {
      */
     public Integer getMaxflow() {
         return this.maxflow;
+    }
+
+    /**
+     * Getter for <code>public.spot_table.ispublic</code>.
+     */
+    public Boolean getIspublic() {
+        return this.ispublic;
     }
 
     @Override
@@ -137,6 +148,12 @@ public class SpotTable implements Serializable {
         }
         else if (!this.maxflow.equals(other.maxflow))
             return false;
+        if (this.ispublic == null) {
+            if (other.ispublic != null)
+                return false;
+        }
+        else if (!this.ispublic.equals(other.ispublic))
+            return false;
         return true;
     }
 
@@ -150,6 +167,7 @@ public class SpotTable implements Serializable {
         result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
         result = prime * result + ((this.minflow == null) ? 0 : this.minflow.hashCode());
         result = prime * result + ((this.maxflow == null) ? 0 : this.maxflow.hashCode());
+        result = prime * result + ((this.ispublic == null) ? 0 : this.ispublic.hashCode());
         return result;
     }
 
@@ -163,6 +181,7 @@ public class SpotTable implements Serializable {
         sb.append(", ").append(name);
         sb.append(", ").append(minflow);
         sb.append(", ").append(maxflow);
+        sb.append(", ").append(ispublic);
 
         sb.append(")");
         return sb.toString();

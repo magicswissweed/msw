@@ -65,6 +65,21 @@ public class UserToSpotTableRecord extends UpdatableRecordImpl<UserToSpotTableRe
         return (UUID) get(2);
     }
 
+    /**
+     * Setter for <code>public.user_to_spot_table.position</code>.
+     */
+    public UserToSpotTableRecord setPosition(Integer value) {
+        set(3, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.user_to_spot_table.position</code>.
+     */
+    public Integer getPosition() {
+        return (Integer) get(3);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -88,12 +103,13 @@ public class UserToSpotTableRecord extends UpdatableRecordImpl<UserToSpotTableRe
     /**
      * Create a detached, initialised UserToSpotTableRecord
      */
-    public UserToSpotTableRecord(UUID id, UUID userId, UUID spotId) {
+    public UserToSpotTableRecord(UUID id, UUID userId, UUID spotId, Integer position) {
         super(UserToSpotTable.USER_TO_SPOT_TABLE);
 
         setId(id);
         setUserId(userId);
         setSpotId(spotId);
+        setPosition(position);
         resetChangedOnNotNull();
     }
 
@@ -107,6 +123,7 @@ public class UserToSpotTableRecord extends UpdatableRecordImpl<UserToSpotTableRe
             setId(value.getId());
             setUserId(value.getUserId());
             setSpotId(value.getSpotId());
+            setPosition(value.getPosition());
             resetChangedOnNotNull();
         }
     }

@@ -144,4 +144,19 @@ public class SpotTableDao extends DAOImpl<SpotTableRecord, com.aa.msw.gen.jooq.t
     public List<com.aa.msw.gen.jooq.tables.pojos.SpotTable> fetchByMaxflow(Integer... values) {
         return fetch(SpotTable.SPOT_TABLE.MAXFLOW, values);
     }
+
+    /**
+     * Fetch records that have <code>ispublic BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<com.aa.msw.gen.jooq.tables.pojos.SpotTable> fetchRangeOfIspublic(Boolean lowerInclusive, Boolean upperInclusive) {
+        return fetchRange(SpotTable.SPOT_TABLE.ISPUBLIC, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>ispublic IN (values)</code>
+     */
+    public List<com.aa.msw.gen.jooq.tables.pojos.SpotTable> fetchByIspublic(Boolean... values) {
+        return fetch(SpotTable.SPOT_TABLE.ISPUBLIC, values);
+    }
 }

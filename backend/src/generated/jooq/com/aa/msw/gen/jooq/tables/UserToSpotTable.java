@@ -73,6 +73,11 @@ public class UserToSpotTable extends TableImpl<UserToSpotTableRecord> {
      */
     public final TableField<UserToSpotTableRecord, UUID> SPOT_ID = createField(DSL.name("spot_id"), SQLDataType.UUID, this, "");
 
+    /**
+     * The column <code>public.user_to_spot_table.position</code>.
+     */
+    public final TableField<UserToSpotTableRecord, Integer> POSITION = createField(DSL.name("position"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field(DSL.raw("0"), SQLDataType.INTEGER)), this, "");
+
     private UserToSpotTable(Name alias, Table<UserToSpotTableRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

@@ -111,6 +111,21 @@ public class SpotTableRecord extends UpdatableRecordImpl<SpotTableRecord> {
         return (Integer) get(5);
     }
 
+    /**
+     * Setter for <code>public.spot_table.ispublic</code>.
+     */
+    public SpotTableRecord setIspublic(Boolean value) {
+        set(6, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.spot_table.ispublic</code>.
+     */
+    public Boolean getIspublic() {
+        return (Boolean) get(6);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -134,7 +149,7 @@ public class SpotTableRecord extends UpdatableRecordImpl<SpotTableRecord> {
     /**
      * Create a detached, initialised SpotTableRecord
      */
-    public SpotTableRecord(UUID id, Spottype type, Integer stationid, String name, Integer minflow, Integer maxflow) {
+    public SpotTableRecord(UUID id, Spottype type, Integer stationid, String name, Integer minflow, Integer maxflow, Boolean ispublic) {
         super(SpotTable.SPOT_TABLE);
 
         setId(id);
@@ -143,6 +158,7 @@ public class SpotTableRecord extends UpdatableRecordImpl<SpotTableRecord> {
         setName(name);
         setMinflow(minflow);
         setMaxflow(maxflow);
+        setIspublic(ispublic);
         resetChangedOnNotNull();
     }
 
@@ -159,6 +175,7 @@ public class SpotTableRecord extends UpdatableRecordImpl<SpotTableRecord> {
             setName(value.getName());
             setMinflow(value.getMinflow());
             setMaxflow(value.getMaxflow());
+            setIspublic(value.getIspublic());
             resetChangedOnNotNull();
         }
     }

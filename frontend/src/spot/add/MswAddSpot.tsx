@@ -29,7 +29,8 @@ export const MswAddSpot = () => {
         minFlow: minFlow,
         maxFlow: maxFlow,
       };
-      new SpotsApi(config).addPrivateSpot(apiSpot)
+      // TODO: position should not be 0, but riversurfspots.length + 1, or bungeesurfSpots.length + 1
+      new SpotsApi(config).addPrivateSpot({spot: apiSpot, position: 0})
         .then((response) => {
           if (response.status === 200) {
             navigate('/');

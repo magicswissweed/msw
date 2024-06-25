@@ -5,7 +5,7 @@
   display: flex;
 }
 
-.tableHeaderCol{
+.tableHeaderCol {
   flex: 1;
 }
 
@@ -37,9 +37,13 @@
   flex: 0.03;
 }
 
-.collapsibleIcon>img {
+.collapsibleIcon > img {
   width: 100%;
   cursor: pointer;
+}
+
+.item.dragging {
+  opacity: 0.6;
 }
 
 @include small {

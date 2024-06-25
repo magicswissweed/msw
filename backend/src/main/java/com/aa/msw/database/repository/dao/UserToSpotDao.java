@@ -4,9 +4,18 @@ import com.aa.msw.database.helpers.UserToSpot;
 import com.aa.msw.database.helpers.id.SpotId;
 import com.aa.msw.database.helpers.id.UserId;
 import com.aa.msw.database.helpers.id.UserToSpotId;
+import com.aa.msw.model.Spot;
+import com.aa.msw.model.UserSpot;
 
-import java.util.Set;
+import java.util.List;
 
 public interface UserToSpotDao extends Dao<UserToSpotId, UserToSpot> {
-	Set<SpotId> getSpotIdsForUser (UserId userId);
+
+	void addPrivateSpot (Spot spot, int position);
+
+	void setPosition (SpotId spotId, int position);
+
+	void deletePrivateSpot (SpotId spotId);
+
+	List<UserSpot> getUserSpotsOrdered (UserId userId);
 }

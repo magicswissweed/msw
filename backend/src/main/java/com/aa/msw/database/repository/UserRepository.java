@@ -1,7 +1,6 @@
 package com.aa.msw.database.repository;
 
 import com.aa.msw.database.exceptions.NoSuchUserException;
-import com.aa.msw.database.helpers.id.SpotId;
 import com.aa.msw.database.helpers.id.UserExtId;
 import com.aa.msw.database.helpers.id.UserId;
 import com.aa.msw.database.repository.dao.UserDao;
@@ -14,7 +13,6 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 
 @Component
@@ -28,11 +26,6 @@ public class UserRepository extends AbstractRepository<UserId, User, UserTableRe
 	public UserRepository (final DSLContext dsl, UserToSpotDao userToSpotDao) {
 		super(dsl, new UserTableDao(dsl.configuration()), TABLE, TABLE.ID);
 		this.userToSpotDao = userToSpotDao;
-	}
-
-	@Override
-	public Set<SpotId> getPrivateSpotIds (UserId userId) {
-		return userToSpotDao.getSpotIdsForUser(userId);
 	}
 
 	@Override

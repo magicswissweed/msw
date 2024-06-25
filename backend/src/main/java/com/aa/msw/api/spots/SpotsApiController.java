@@ -1,10 +1,10 @@
 package com.aa.msw.api.spots;
 
-import com.aa.msw.auth.threadlocal.UserContext;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.exceptions.NoSampleAvailableException;
 import com.aa.msw.database.exceptions.NoSuchUserException;
 import com.aa.msw.database.helpers.id.SpotId;
+import com.aa.msw.gen.api.AddPrivateSpotRequest;
 import com.aa.msw.gen.api.ApiSpot;
 import com.aa.msw.gen.api.ApiSpotInformationList;
 import com.aa.msw.gen.api.SpotsApi;
@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,9 +26,16 @@ public class SpotsApiController implements SpotsApi {
 	}
 
 	@Override
+	public ResponseEntity<Void> orderSpots (List<UUID> UUID) {
+		List<SpotId> orderedSpotIds = UUID.stream().map(SpotId::new).toList();
+		spotsApiService.orderSpots(orderedSpotIds);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@Override
 	public ResponseEntity<ApiSpotInformationList> getAllSpots () {
 		try {
-			return ResponseEntity.ok(spotsApiService.getAllSpots(UserContext.getCurrentUser().externalId()));
+			return ResponseEntity.ok(spotsApiService.getAllSpots());
 		} catch (NoDataAvailableException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (NoSuchUserException e) {
@@ -45,7 +53,10 @@ public class SpotsApiController implements SpotsApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> addPrivateSpot (ApiSpot apiSpot) {
+	public ResponseEntity<Void> addPrivateSpot (AddPrivateSpotRequest addPrivateSpotRequest) {
+		ApiSpot apiSpot = addPrivateSpotRequest.getSpot();
+		int position = addPrivateSpotRequest.getPosition();
+
 		Spot spot = new Spot(
 				new SpotId(),
 				false,
@@ -56,7 +67,7 @@ public class SpotsApiController implements SpotsApi {
 				apiSpot.getMaxFlow()
 		);
 		try {
-			spotsApiService.addPrivateSpot(spot);
+			spotsApiService.addPrivateSpot(spot, position);
 		} catch (NoSampleAvailableException e) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}

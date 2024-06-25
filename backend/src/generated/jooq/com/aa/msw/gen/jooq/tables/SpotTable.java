@@ -86,6 +86,11 @@ public class SpotTable extends TableImpl<SpotTableRecord> {
      */
     public final TableField<SpotTableRecord, Integer> MAXFLOW = createField(DSL.name("maxflow"), SQLDataType.INTEGER.nullable(false), this, "");
 
+    /**
+     * The column <code>public.spot_table.ispublic</code>.
+     */
+    public final TableField<SpotTableRecord, Boolean> ISPUBLIC = createField(DSL.name("ispublic"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field(DSL.raw("false"), SQLDataType.BOOLEAN)), this, "");
+
     private SpotTable(Name alias, Table<SpotTableRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

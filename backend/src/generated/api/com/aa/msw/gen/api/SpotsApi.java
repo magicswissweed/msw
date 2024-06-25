@@ -5,7 +5,7 @@
  */
 package com.aa.msw.gen.api;
 
-import com.aa.msw.gen.api.ApiSpot;
+import com.aa.msw.gen.api.AddPrivateSpotRequest;
 import com.aa.msw.gen.api.ApiSpotInformationList;
 import java.util.UUID;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-17T17:31:48.181215500+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-21T11:04:37.180287600+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
 @Tag(name = "spots", description = "the spots API")
 public interface SpotsApi {
@@ -46,7 +46,7 @@ public interface SpotsApi {
     /**
      * POST /spots/add : Add a new private Spot.
      *
-     * @param apiSpot Add a new private Spot. (required)
+     * @param addPrivateSpotRequest Add a new private Spot. (required)
      * @return Added private Spot successfully. (status code 200)
      */
     @Operation(
@@ -64,7 +64,7 @@ public interface SpotsApi {
     )
     
     default ResponseEntity<Void> addPrivateSpot(
-        @Parameter(name = "ApiSpot", description = "Add a new private Spot.", required = true) @Valid @RequestBody ApiSpot apiSpot
+        @Parameter(name = "AddPrivateSpotRequest", description = "Add a new private Spot.", required = true) @Valid @RequestBody AddPrivateSpotRequest addPrivateSpotRequest
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
@@ -169,6 +169,34 @@ public interface SpotsApi {
                 }
             }
         });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * PATCH /spots/order : Change the order of the spots
+     *
+     * @param UUID The new order of the spots. (required)
+     * @return Ordered spots successfully (status code 200)
+     */
+    @Operation(
+        operationId = "orderSpots",
+        summary = "Change the order of the spots",
+        tags = { "spots" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Ordered spots successfully")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PATCH,
+        value = "/spots/order",
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<Void> orderSpots(
+        @Parameter(name = "UUID", description = "The new order of the spots.", required = true) @Valid @RequestBody List<UUID> UUID
+    ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

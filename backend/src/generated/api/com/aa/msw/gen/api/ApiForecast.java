@@ -24,7 +24,7 @@ import jakarta.annotation.Generated;
  * ApiForecast
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-17T17:31:48.181215500+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-06-21T11:04:37.180287600+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiForecast {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

@@ -26,6 +26,25 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface AddPrivateSpotRequest
+ */
+export interface AddPrivateSpotRequest {
+    /**
+     * 
+     * @type {ApiSpot}
+     * @memberof AddPrivateSpotRequest
+     */
+    'spot'?: ApiSpot;
+    /**
+     * 
+     * @type {number}
+     * @memberof AddPrivateSpotRequest
+     */
+    'position'?: number;
+}
+/**
+ * 
+ * @export
  * @interface ApiForecast
  */
 export interface ApiForecast {
@@ -556,13 +575,13 @@ export const SpotsApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary Add a new private Spot.
-         * @param {ApiSpot} apiSpot Add a new private Spot.
+         * @param {AddPrivateSpotRequest} addPrivateSpotRequest Add a new private Spot.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addPrivateSpot: async (apiSpot: ApiSpot, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'apiSpot' is not null or undefined
-            assertParamExists('addPrivateSpot', 'apiSpot', apiSpot)
+        addPrivateSpot: async (addPrivateSpotRequest: AddPrivateSpotRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addPrivateSpotRequest' is not null or undefined
+            assertParamExists('addPrivateSpot', 'addPrivateSpotRequest', addPrivateSpotRequest)
             const localVarPath = `/spots/add`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -582,7 +601,7 @@ export const SpotsApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(apiSpot, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(addPrivateSpotRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -683,6 +702,42 @@ export const SpotsApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Change the order of the spots
+         * @param {Array<string>} requestBody The new order of the spots.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderSpots: async (requestBody: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'requestBody' is not null or undefined
+            assertParamExists('orderSpots', 'requestBody', requestBody)
+            const localVarPath = `/spots/order`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -696,12 +751,12 @@ export const SpotsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Add a new private Spot.
-         * @param {ApiSpot} apiSpot Add a new private Spot.
+         * @param {AddPrivateSpotRequest} addPrivateSpotRequest Add a new private Spot.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async addPrivateSpot(apiSpot: ApiSpot, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.addPrivateSpot(apiSpot, options);
+        async addPrivateSpot(addPrivateSpotRequest: AddPrivateSpotRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addPrivateSpot(addPrivateSpotRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SpotsApi.addPrivateSpot']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -743,6 +798,19 @@ export const SpotsApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['SpotsApi.getPublicSpots']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @summary Change the order of the spots
+         * @param {Array<string>} requestBody The new order of the spots.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async orderSpots(requestBody: Array<string>, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.orderSpots(requestBody, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SpotsApi.orderSpots']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -756,12 +824,12 @@ export const SpotsApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @summary Add a new private Spot.
-         * @param {ApiSpot} apiSpot Add a new private Spot.
+         * @param {AddPrivateSpotRequest} addPrivateSpotRequest Add a new private Spot.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addPrivateSpot(apiSpot: ApiSpot, options?: any): AxiosPromise<void> {
-            return localVarFp.addPrivateSpot(apiSpot, options).then((request) => request(axios, basePath));
+        addPrivateSpot(addPrivateSpotRequest: AddPrivateSpotRequest, options?: any): AxiosPromise<void> {
+            return localVarFp.addPrivateSpot(addPrivateSpotRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -791,6 +859,16 @@ export const SpotsApiFactory = function (configuration?: Configuration, basePath
         getPublicSpots(options?: any): AxiosPromise<ApiSpotInformationList> {
             return localVarFp.getPublicSpots(options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Change the order of the spots
+         * @param {Array<string>} requestBody The new order of the spots.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderSpots(requestBody: Array<string>, options?: any): AxiosPromise<void> {
+            return localVarFp.orderSpots(requestBody, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -804,13 +882,13 @@ export class SpotsApi extends BaseAPI {
     /**
      * 
      * @summary Add a new private Spot.
-     * @param {ApiSpot} apiSpot Add a new private Spot.
+     * @param {AddPrivateSpotRequest} addPrivateSpotRequest Add a new private Spot.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SpotsApi
      */
-    public addPrivateSpot(apiSpot: ApiSpot, options?: RawAxiosRequestConfig) {
-        return SpotsApiFp(this.configuration).addPrivateSpot(apiSpot, options).then((request) => request(this.axios, this.basePath));
+    public addPrivateSpot(addPrivateSpotRequest: AddPrivateSpotRequest, options?: RawAxiosRequestConfig) {
+        return SpotsApiFp(this.configuration).addPrivateSpot(addPrivateSpotRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -845,6 +923,18 @@ export class SpotsApi extends BaseAPI {
      */
     public getPublicSpots(options?: RawAxiosRequestConfig) {
         return SpotsApiFp(this.configuration).getPublicSpots(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Change the order of the spots
+     * @param {Array<string>} requestBody The new order of the spots.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SpotsApi
+     */
+    public orderSpots(requestBody: Array<string>, options?: RawAxiosRequestConfig) {
+        return SpotsApiFp(this.configuration).orderSpots(requestBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
