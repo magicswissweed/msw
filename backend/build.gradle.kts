@@ -7,7 +7,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.5"
     id("org.flywaydb.flyway") version "9.7.0"
     id("org.openapi.generator") version "7.5.0"
-    id ("nu.studer.jooq") version "9.0"
+    id("nu.studer.jooq") version "9.0"
 }
 
 group = "com.aa"
@@ -44,6 +44,9 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.32")
 
     jooqGenerator("org.postgresql:postgresql:42.7.3")
+
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("io.rest-assured:rest-assured")
 }
 
 tasks.withType<Test> {
@@ -159,7 +162,7 @@ tasks.openApiGenerate {
     }
 }
 
-tasks.named("generateJooq").configure{
+tasks.named("generateJooq").configure {
     dependsOn("flywayMigrate")
 }// JooqGenerator cleansOut the generated dir, so buildAllApi has to build after jooq has.
 
