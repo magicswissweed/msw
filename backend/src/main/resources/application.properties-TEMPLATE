@@ -1,0 +1,10 @@
+spring.application.name=msw
+
+spring.datasource.url=jdbc:postgresql://localhost:7010/msw
+spring.datasource.username=backend
+spring.datasource.password=password
+
+spring.security.oauth2.resourceserver.jwt.jwk-set-uri=https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com
+spring.security.oauth2.resourceserver.jwt.issuer-uri=https://securetoken.google.com/magicswissweed-293e2
+
+firebase.service-account.path=firebase-service-account.json
