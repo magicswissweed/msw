@@ -1,18 +1,20 @@
 import './MswForecastGraph.scss'
 import {
-  LineChart,
-  Line,
+  Area,
   CartesianGrid,
-  XAxis,
-  YAxis,
+  ComposedChart,
+  Label,
+  Legend,
+  Line,
   ReferenceArea,
+  ReferenceDot,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
-  Legend,
-  ReferenceLine,
-  Label, ReferenceDot,
+  XAxis,
+  YAxis,
 } from 'recharts';
-import {Component} from 'react';
+import React, {Component} from 'react';
 import {ApiForecast, ApiForecastLineEntry, ApiSpotInformation} from '../../../../gen/msw-api-ts';
 
 interface MswForecastGraphProps {
@@ -29,10 +31,6 @@ const DATA_KEY_MAXIMUM = "maximum";
 
 const LINE_NAME_MEASURED = "Gemessen";
 let LINE_NAME_MEDIAN = "Median";
-const LINE_NAME_25_PERCENTILE = "25. Perzentil";
-const LINE_NAME_75_PERCENTILE = "75. Perzentil";
-const LINE_NAME_MAX = "Maximum";
-const LINE_NAME_MIN = "Minimum";
 
 type NormalizedDataItem = { datetime: Date, [lineName: string]: unknown; };
 
@@ -48,7 +46,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
     this.location = props.location;
     this.isMini = props.isMini;
   }
-  
+
   render() {
     if (!this.location.forecast) {
       return <>
@@ -69,7 +67,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
       firstDayMidnightDate.setHours(24, 0, 0, 0),
       firstDayMidnightDate.setHours(24, 0, 0, 0),
       firstDayMidnightDate.setHours(24, 0, 0, 0),
-      firstDayMidnightDate.setHours(24, 0, 0, 0)
+      firstDayMidnightDate.setHours(24, 0, 0, 0),
     ]
 
     let showXAxis = true;
@@ -89,7 +87,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
 
     return <>
       <ResponsiveContainer className="graph" width="100%" aspect={2}>
-        <LineChart data={normalizedGraphData}>
+        <ComposedChart data={normalizedGraphData}>
           <ReferenceArea y1={this.location.minFlow}
                          y2={this.location.maxFlow}
                          ifOverflow="extendDomain"
@@ -99,48 +97,35 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
                         y={this.location.forecast.median!
                           .filter((v) => new Date(v.timestamp!).getMonth() === new Date(this.location.forecast!.timestamp!).getMonth())
                           .filter((v) => new Date(v.timestamp!).getDay() === new Date(this.location.forecast!.timestamp!).getDay())
-                          .filter((v) => new Date(v.timestamp!).getHours() === new Date(this.location.forecast!.timestamp!).getHours())
-                              [0].flow
+                          .filter((v) => new Date(v.timestamp!).getHours() === new Date(this.location.forecast!.timestamp!).getHours())[0].flow
                         }
                         stroke="gold"
                         r={6}
           />
-          <Line type="monotone"
-                dataKey={DATA_KEY_25_PERCENTILE}
-                stroke="orange"
-                dot={false}
-                name={LINE_NAME_25_PERCENTILE}
-                activeDot={{ strokeWidth: 0, r: 0 }}/>
-          <Line type="monotone"
-                dataKey={DATA_KEY_75_PERCENTILE}
-                stroke="orange"
-                dot={false}
-                name={LINE_NAME_75_PERCENTILE}
-                activeDot={{ strokeWidth: 0, r: 0 }}/>
+
+          <Area
+            dataKey="minMaxRange"
+            strokeWidth={0}
+            fill="#75d4d9"
+          />
+          <Area
+            dataKey="percentileRange"
+            strokeWidth={0}
+            fill="#1e9196"
+          />
+
           <Line type="monotone"
                 dataKey={DATA_KEY_MEDIAN}
                 stroke="blue"
                 dot={false}
                 name={LINE_NAME_MEDIAN}
-                activeDot={{ stroke: 'blue', strokeWidth: 1, r: 4 }}/>
+                activeDot={{stroke: '#029ca3', strokeWidth: 1, r: 4}}/>
           <Line type="monotone"
                 dataKey={DATA_KEY_MEASURED}
                 stroke="green"
                 dot={false}
                 name={LINE_NAME_MEASURED}
-                activeDot={{ stroke: 'green', strokeWidth: 1, r: 4 }}/>
-          <Line type="monotone"
-                dataKey={DATA_KEY_MINIMUM}
-                stroke="pink"
-                dot={false}
-                name={LINE_NAME_MIN}
-                activeDot={{ strokeWidth: 0, r: 0 }}/>
-          <Line type="monotone"
-                dataKey={DATA_KEY_MAXIMUM}
-                stroke="pink"
-                dot={false}
-                name={LINE_NAME_MAX}
-                activeDot={{ strokeWidth: 0, r: 0 }}/>
+                activeDot={{stroke: 'green', strokeWidth: 1, r: 4}}/>
           <CartesianGrid/>
           <XAxis
             type="number"
@@ -148,7 +133,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
             domain={[from, to]}
             scale="time"
             ticks={ticks}
-            tickFormatter={v => new Date(v).toLocaleString('de-CH', {  weekday: 'short' })}
+            tickFormatter={v => new Date(v).toLocaleString('de-CH', {weekday: 'short'})}
             minTickGap={1}
             hide={!showXAxis}/>
 
@@ -157,7 +142,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
           {showYAxis && this.getYAxis(this.location.minFlow!, this.location.maxFlow!)}
           {/* payload is only necessary to get rid of unneccessary double legend entry because forecastFlow0 and forecastFlow1 are both named Min/Max */}
           {showLegend && this.getLegend()}
-        </LineChart>
+        </ComposedChart>
       </ResponsiveContainer>
     </>
   }
@@ -175,12 +160,12 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
 
   private getTooltip() {
     // @ts-ignore
-    const MswTooltip = ({ active, payload, label }) => {
+    const MswTooltip = ({active, payload, label}) => {
       if (active && payload && payload.length) {
 
         let flowStr: string = "";
         let color: string = "black";
-        for(let payloadItem of payload) {
+        for (let payloadItem of payload) {
           if (payloadItem.dataKey === DATA_KEY_MEASURED) {
             flowStr = "Measured: " + payloadItem.value;
             color = payloadItem.stroke;
@@ -192,8 +177,8 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
 
         return (
           <div className="tooltip">
-            <p className="tooltip_timestamp">{label.getDate() + "." + (label.getMonth()+1) + ". " + label.getHours() + ":00"}</p>
-            <p className="tooltip_value" style={{ color: color }}>{flowStr}</p>
+            <p className="tooltip_timestamp">{label.getDate() + "." + (label.getMonth() + 1) + ". " + label.getHours() + ":00"}</p>
+            <p className="tooltip_value" style={{color: color}}>{flowStr}</p>
           </div>
         );
       }
@@ -214,8 +199,8 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
       payload={[
         {type: "line", value: LINE_NAME_MEASURED, color: "green"},
         {type: "line", value: LINE_NAME_MEDIAN, color: "blue"},
-        {type: "line", value: "25.-75. Perzentil", color: "orange"},
-        {type: "line", value: "Min / Max", color: "pink"},
+        {type: "square", value: "25.-75. Perzentil", color: "#1e9196"},
+        {type: "square", value: "Min / Max", color: "#75d4d9"},
       ]}
     />;
   }
@@ -229,6 +214,24 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
     normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.seventyFivePercentile!), DATA_KEY_75_PERCENTILE);
     normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.min!), DATA_KEY_MINIMUM);
     normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.max!), DATA_KEY_MAXIMUM);
+
+    // area for percentiles
+    normalizedData = normalizedData.map((d) => ({
+      ...d,
+      percentileRange:
+        d[DATA_KEY_25_PERCENTILE] !== undefined && d[DATA_KEY_75_PERCENTILE] !== undefined
+          ? [d[DATA_KEY_25_PERCENTILE], d[DATA_KEY_75_PERCENTILE]]
+          : [],
+    }));
+
+    // area for min-max
+    normalizedData = normalizedData.map((d) => ({
+      ...d,
+      minMaxRange:
+        d[DATA_KEY_MINIMUM] !== undefined && d[DATA_KEY_MAXIMUM] !== undefined
+          ? [d[DATA_KEY_MINIMUM], d[DATA_KEY_MAXIMUM]]
+          : [],
+    }));
 
     return normalizedData;
   }
@@ -253,7 +256,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
     left.forEach(leftItem => {
       let filteredRight = right.filter(rightItem => leftItem.datetime.getTime() == rightItem.datetime.getTime());
       let leftItemIsContainedInRightList: boolean = filteredRight.length > 0;
-      if(leftItemIsContainedInRightList) {
+      if (leftItemIsContainedInRightList) {
         leftItem[dataKey] = filteredRight[0][TEMPORARY_DATA_KEY_FLOW];
       }
       output.push(leftItem);
@@ -262,7 +265,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
     right.forEach(rightItem => {
       let filteredOutput = output.filter(outputItem => rightItem.datetime.getTime() == outputItem.datetime.getTime());
       let rightItemIsContainedInOutputList: boolean = filteredOutput.length > 0;
-      if(!rightItemIsContainedInOutputList) {
+      if (!rightItemIsContainedInOutputList) {
         let obj: NormalizedDataItem = {datetime: rightItem.datetime};
         obj[dataKey] = rightItem.flow;
         output.push(obj);
