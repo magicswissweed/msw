@@ -17,8 +17,11 @@ public class UserApiController implements UserApi {
 
     @Override
     public ResponseEntity<Void> registerUser() {
+        // User should already be registered by Interceptor. So here we only need to check if this worked.
         User domainUser = UserContext.getCurrentUser();
-        userApiService.registerUser(domainUser);
-        return new ResponseEntity<>(HttpStatus.OK);
+        boolean isUserPresent = userApiService.isUserPresent(domainUser);
+        return isUserPresent ?
+                new ResponseEntity<>(HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
