@@ -20,6 +20,8 @@ import com.aa.msw.model.UserSpot;
 import com.aa.msw.source.InputDataFetcherService;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,6 +103,12 @@ public class SpotsApiService {
 
         userToSpotDao.addPrivateSpot(spot, position);
         inputDataFetcherService.updateStationIds();
+        try {
+            inputDataFetcherService.fetchDataAndWriteToDb();
+        } catch (IOException | URISyntaxException e) {
+            // NOP. Should never happen.
+            // If something went wrong, the data will get fetched again in a few minutes and the problem fixes itself.
+        }
     }
 
     public void deletePrivateSpot(SpotId spotId) {
