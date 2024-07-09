@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserApiController implements UserApi {
-	private final UserApiService userApiService;
+    private final UserApiService userApiService;
 
-	public UserApiController (UserApiService userApiService) {
-		this.userApiService = userApiService;
-	}
+    public UserApiController(UserApiService userApiService) {
+        this.userApiService = userApiService;
+    }
 
-	@Override
-	public ResponseEntity<Void> registerUser () {
-		User domainUser = UserContext.getCurrentUser();
-		userApiService.registerUser(domainUser);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+    @Override
+    public ResponseEntity<Void> registerUser() {
+        User domainUser = UserContext.getCurrentUser();
+        userApiService.registerUser(domainUser);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

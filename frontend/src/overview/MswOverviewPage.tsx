@@ -10,58 +10,58 @@ import {useUserAuth} from '../user/UserAuthContext';
 import {authConfiguration} from '../api/config/AuthConfiguration';
 
 interface MswOverviewPageState {
-  data: ApiSpotInformationList | null
+    data: ApiSpotInformationList | null
 }
 
 export const MswOverviewPage = () => {
-  const [state, setState] = useState<MswOverviewPageState>({data: null});
+    const [state, setState] = useState<MswOverviewPageState>({data: null});
 
-  // @ts-ignore
-  const {user, token} = useUserAuth();
-  const writeSpotsToState = (res: AxiosResponse<ApiSpotInformationList, any>) => {
-    if (res && res.data && res.data.riverSurfSpots && res.data.bungeeSurfSpots) {
-      setState({data: res.data});
+    // @ts-ignore
+    const {user, token} = useUserAuth();
+    const writeSpotsToState = (res: AxiosResponse<ApiSpotInformationList, any>) => {
+        if (res && res.data && res.data.riverSurfSpots && res.data.bungeeSurfSpots) {
+            setState({data: res.data});
+        }
+    };
+
+    function fetchData(showAllSpots: boolean) {
+        if (showAllSpots) {
+            authConfiguration(token, (config: Configuration) => {
+                new SpotsApi(config).getAllSpots().then(writeSpotsToState);
+            });
+        } else {
+            new SpotsApi().getPublicSpots().then(writeSpotsToState);
+        }
     }
-  };
 
-  function fetchData(showAllSpots: boolean) {
-    if (showAllSpots) {
-      authConfiguration(token, (config: Configuration) => {
-        new SpotsApi(config).getAllSpots().then(writeSpotsToState);
-      });
-    } else {
-      new SpotsApi().getPublicSpots().then(writeSpotsToState);
-    }
-  }
+    // initial loading
+    useEffect(() => {
+        fetchData(false);
+    }, []);
 
-  // initial loading
-  useEffect(() => {
-    fetchData(false);
-  }, []);
+    // load on user change
+    useEffect(() => {
+        fetchData((user != undefined));
+    }, [user])
 
-  // load on user change
-  useEffect(() => {
-    fetchData((user != undefined));
-  }, [user])
-
-  return <>
-    <div className="App">
-      <MswHeader/>
-      {state.data ? getContent(state.data) : <MswLoader/>}
-      <MswFooter/>
-    </div>
-  </>;
-
-  function getContent(data: ApiSpotInformationList) {
     return <>
-      <div className="surfspots">
-        <div className="riversurf">
-          <SpotList title="Riversurf" locations={data.riverSurfSpots!}/>
+        <div className="App">
+            <MswHeader/>
+            {state.data ? getContent(state.data) : <MswLoader/>}
+            <MswFooter/>
         </div>
-        <div className="bungeesurf">
-          <SpotList title="Bungeesurf" locations={data.bungeeSurfSpots!}/>
-        </div>
-      </div>
     </>;
-  }
+
+    function getContent(data: ApiSpotInformationList) {
+        return <>
+            <div className="surfspots">
+                <div className="riversurf">
+                    <SpotList title="Riversurf" locations={data.riverSurfSpots!}/>
+                </div>
+                <div className="bungeesurf">
+                    <SpotList title="Bungeesurf" locations={data.bungeeSurfSpots!}/>
+                </div>
+            </div>
+        </>;
+    }
 }

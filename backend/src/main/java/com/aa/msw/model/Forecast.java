@@ -7,19 +7,19 @@ import lombok.Getter;
 import java.time.OffsetDateTime;
 import java.util.Map;
 
-public record Forecast (
-		ForecastId forecastId,
-		@Getter int stationId,
-		@Getter OffsetDateTime timestamp,
-		@Getter Map<OffsetDateTime, Double> measuredData,
-		@Getter Map<OffsetDateTime, Double> median,
-		@Getter Map<OffsetDateTime, Double> twentyFivePercentile,
-		@Getter Map<OffsetDateTime, Double> seventyFivePercentile,
-		@Getter Map<OffsetDateTime, Double> max,
-		@Getter Map<OffsetDateTime, Double> min)
-		implements HasId<ForecastId> {
-	@Override
-	public ForecastId getId () {
-		return forecastId;
-	}
+public record Forecast(
+        ForecastId forecastId,
+        @Getter int stationId,
+        @Getter OffsetDateTime timestamp,
+        @Getter Map<OffsetDateTime, Double> measuredData,
+        @Getter Map<OffsetDateTime, Double> median,
+        @Getter Map<OffsetDateTime, Double> twentyFivePercentile,
+        @Getter Map<OffsetDateTime, Double> seventyFivePercentile,
+        @Getter Map<OffsetDateTime, Double> max,
+        @Getter Map<OffsetDateTime, Double> min)
+        implements HasId<ForecastId> {
+    @Override
+    public ForecastId getId() {
+        return forecastId;
+    }
 }

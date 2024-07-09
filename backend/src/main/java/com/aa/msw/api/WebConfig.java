@@ -10,28 +10,28 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-	private final RequestUserInterceptor requestUserInterceptor;
+    private final RequestUserInterceptor requestUserInterceptor;
 
-	@Override
-	public void addInterceptors (InterceptorRegistry registry) {
-		registry.addInterceptor(requestUserInterceptor);
-	}
+    public WebConfig(RequestUserInterceptor requestUserInterceptor) {
+        this.requestUserInterceptor = requestUserInterceptor;
+    }
 
-	public WebConfig (RequestUserInterceptor requestUserInterceptor) {
-		this.requestUserInterceptor = requestUserInterceptor;
-	}
+    private static void addAccessControlAllowOriginHeaders(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedHeaders("*")
+                .allowedMethods("*")
+                .allowedOrigins("*")
+                .exposedHeaders("ETag");
+    }
 
-	@Override
-	public void addCorsMappings (@NonNull CorsRegistry registry) {
-		addAccessControlAllowOriginHeaders(registry);
-		WebMvcConfigurer.super.addCorsMappings(registry);
-	}
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(requestUserInterceptor);
+    }
 
-	private static void addAccessControlAllowOriginHeaders (CorsRegistry registry) {
-		registry.addMapping("/**")
-				.allowedHeaders("*")
-				.allowedMethods("*")
-				.allowedOrigins("*")
-				.exposedHeaders("ETag");
-	}
+    @Override
+    public void addCorsMappings(@NonNull CorsRegistry registry) {
+        addAccessControlAllowOriginHeaders(registry);
+        WebMvcConfigurer.super.addCorsMappings(registry);
+    }
 }

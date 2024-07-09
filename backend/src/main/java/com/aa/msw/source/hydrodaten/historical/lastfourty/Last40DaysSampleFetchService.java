@@ -15,23 +15,23 @@ import java.util.Map;
 @Service
 public class Last40DaysSampleFetchService extends AbstractLineFetchService {
 
-	Last40DaysSampleFetchService () {
-		super("https://www.hydrodaten.admin.ch/plots/p_q_40days/", "_p_q_40days_de.json");
-	}
+    Last40DaysSampleFetchService() {
+        super("https://www.hydrodaten.admin.ch/plots/p_q_40days/", "_p_q_40days_de.json");
+    }
 
-	public List<Sample> fetchLast40DaysSamples (int stationId) throws IOException, URISyntaxException {
-		HydroResponse hydroResponse = fetchFromHydro(stationId);
+    public List<Sample> fetchLast40DaysSamples(int stationId) throws IOException, URISyntaxException {
+        HydroResponse hydroResponse = fetchFromHydro(stationId);
 
-		Map<OffsetDateTime, Double> line = mapLine(hydroResponse.plot().data().get(1));
+        Map<OffsetDateTime, Double> line = mapLine(hydroResponse.plot().data().get(1));
 
-		return line.entrySet().stream()
-				.map(entry -> new Sample(
-						new SampleId(),
-						stationId,
-						entry.getKey(),
-						0,
-						entry.getValue().intValue()
-						))
-				.toList();
-	}
+        return line.entrySet().stream()
+                .map(entry -> new Sample(
+                        new SampleId(),
+                        stationId,
+                        entry.getKey(),
+                        0,
+                        entry.getValue().intValue()
+                ))
+                .toList();
+    }
 }

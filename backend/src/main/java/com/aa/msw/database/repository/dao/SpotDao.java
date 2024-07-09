@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Set;
 
 public interface SpotDao extends Dao<SpotId, Spot> {
-	Set<Integer> getAllStationIds ();
+    Set<Integer> getAllStationIds();
 
-	List<Spot> getPublicRiverSurfSpots ();
+    List<Spot> getPublicRiverSurfSpots();
 
-	List<Spot> getPublicBungeeSurfSpots ();
+    List<Spot> getPublicBungeeSurfSpots();
 }

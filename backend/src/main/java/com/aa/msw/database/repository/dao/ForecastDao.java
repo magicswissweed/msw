@@ -8,11 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface ForecastDao extends Dao<ForecastId, Forecast> {
-	Forecast getCurrentForecast(int stationId) throws NoDataAvailableException;
+    Forecast getCurrentForecast(int stationId) throws NoDataAvailableException;
 
-	@Transactional
-	void persistForecastsIfNotExist (List<Forecast> forecasts);
+    @Transactional
+    void persistForecastsIfNotExist(List<Forecast> forecasts);
 
-	@Transactional
-	void persistForecastIfNotExists (Forecast forecast);
+    @Transactional
+    void persistForecastIfNotExists(Forecast forecast);
 }

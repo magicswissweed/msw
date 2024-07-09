@@ -27,44 +27,43 @@ import static io.restassured.RestAssured.given;
 @RunWith(SpringRunner.class)
 public abstract class IntegrationTest {
 
-	@Value("${msw.firebase.api_key}")
-	private String firebaseApiKey;
+    @LocalServerPort
+    public int port;
+    @Value("${msw.firebase.api_key}")
+    private String firebaseApiKey;
 
-	@LocalServerPort
-	public int port;
+    @Before
+    public void readPort() {
+        RestAssured.port = port;
+    }
 
-	@Before
-	public void readPort () {
-		RestAssured.port = port;
-	}
-
-	protected RequestSpecification getTemplateRequest (TestUser user) {
+    protected RequestSpecification getTemplateRequest(TestUser user) {
 
 
-		return given()
-				.header(HttpHeaders.AUTHORIZATION, "Bearer " + getToken(user))
-				.port(port);
-	}
+        return given()
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + getToken(user))
+                .port(port);
+    }
 
-	private String getToken (TestUser user) {
-		String url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + firebaseApiKey;
-		Map<String, Object> requestBody = new HashMap<>();
-		requestBody.put("email", user.email());
-		requestBody.put("password", user.password());
-		requestBody.put("returnSecureToken", true);
-		HttpEntity<?> httpEntity = new HttpEntity<>(requestBody, new HttpHeaders());
-		ResponseEntity<String> response = new RestTemplate().exchange(url, HttpMethod.POST, httpEntity, String.class);
-		String responseString = response.getBody();
-		return new Gson()
-				.fromJson(responseString, LoginOutputFromFirebase.class)
-				.idToken;
-	}
+    private String getToken(TestUser user) {
+        String url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + firebaseApiKey;
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("email", user.email());
+        requestBody.put("password", user.password());
+        requestBody.put("returnSecureToken", true);
+        HttpEntity<?> httpEntity = new HttpEntity<>(requestBody, new HttpHeaders());
+        ResponseEntity<String> response = new RestTemplate().exchange(url, HttpMethod.POST, httpEntity, String.class);
+        String responseString = response.getBody();
+        return new Gson()
+                .fromJson(responseString, LoginOutputFromFirebase.class)
+                .idToken;
+    }
 
-	public record LoginOutputFromFirebase(String idToken,
-										  String email,
-										  String refreshToken,
-										  String expiresIn,
-										  String localId) {
-	}
+    public record LoginOutputFromFirebase(String idToken,
+                                          String email,
+                                          String refreshToken,
+                                          String expiresIn,
+                                          String localId) {
+    }
 }
 

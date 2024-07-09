@@ -1,4 +1,4 @@
-.loader{
+.loader {
   align-self: center;
   width: 70px;
   height: 50px;
@@ -7,7 +7,7 @@
   margin: auto;
 }
 
-.wave{
+.wave {
   position: relative;
   top: 0;
   width: 100%;
@@ -17,8 +17,8 @@
   box-shadow: inset 0 0 50px 0 rgba(0, 0, 0, 0.5);
 }
 
-.wave:before, .wave:after{
-  content:'';
+.wave:before, .wave:after {
+  content: '';
   position: absolute;
   top: 0;
   left: 50%;
@@ -28,13 +28,13 @@
   transform: translate(-50%, -75%);
 }
 
-.wave:before{
+.wave:before {
   border-radius: 45%;
   background: rgba(255, 255, 255, 1);
   animation: animate 5s linear infinite;
 }
 
-.wave:after{
+.wave:after {
   border-radius: 40%;
   background: rgba(255, 255, 255, 0.5);
   animation: animate 10s linear infinite;

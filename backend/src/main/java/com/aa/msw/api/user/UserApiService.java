@@ -6,13 +6,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserApiService {
-	private final UserDao userDao;
+    private final UserDao userDao;
 
-	public UserApiService (UserDao userDao) {
-		this.userDao = userDao;
-	}
+    public UserApiService(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
-	public void registerUser (User user) {
-		userDao.persist(user);
-	}
+    public void registerUser(User user) {
+        userDao.persist(user);
+    }
 }

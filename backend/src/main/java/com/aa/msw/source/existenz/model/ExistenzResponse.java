@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 
 public record ExistenzResponse(String source,
-							   @JsonProperty("apiurl") String apiUrl,
-							   String opendata,
-							   String license,
-							   ArrayList<ExistenzSample> payload) {}
+                               @JsonProperty("apiurl") String apiUrl,
+                               String opendata,
+                               String license,
+                               ArrayList<ExistenzSample> payload) {
+}

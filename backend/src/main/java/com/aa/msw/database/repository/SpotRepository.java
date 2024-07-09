@@ -19,87 +19,87 @@ import java.util.Set;
 
 @Component
 public class SpotRepository extends AbstractRepository<SpotId, Spot, SpotTableRecord, com.aa.msw.gen.jooq.tables.pojos.SpotTable, SpotTableDao>
-		implements SpotDao {
+        implements SpotDao {
 
-	private static final SpotTable TABLE = SpotTable.SPOT_TABLE;
+    private static final SpotTable TABLE = SpotTable.SPOT_TABLE;
 
 
-	public SpotRepository (final DSLContext dsl) {
-		super(dsl, new SpotTableDao(dsl.configuration()), TABLE, TABLE.ID);
-	}
+    public SpotRepository(final DSLContext dsl) {
+        super(dsl, new SpotTableDao(dsl.configuration()), TABLE, TABLE.ID);
+    }
 
-	@Override
-	protected Spot mapRecord (SpotTableRecord record) {
-		return new Spot(
-				new SpotId(record.getId()),
-				record.getIspublic(),
-				mapDbToDomainEnum(record.getType()),
-				record.getName(),
-				record.getStationid(),
-				record.getMinflow(),
-				record.getMaxflow()
-		);
-	}
+    @Override
+    protected Spot mapRecord(SpotTableRecord record) {
+        return new Spot(
+                new SpotId(record.getId()),
+                record.getIspublic(),
+                mapDbToDomainEnum(record.getType()),
+                record.getName(),
+                record.getStationid(),
+                record.getMinflow(),
+                record.getMaxflow()
+        );
+    }
 
-	@Override
-	protected SpotTableRecord mapDomain (Spot spot) {
-		SpotTableRecord record = dsl.newRecord(TABLE);
-		record.setId(spot.getId().getId());
-		record.setIspublic(spot.isPublic());
-		record.setType(mapDomainToDbEnum(spot.type()));
-		record.setStationid(spot.stationId());
-		record.setName(spot.name());
-		record.setMinflow(spot.minFlow());
-		record.setMaxflow(spot.maxFlow());
-		return record;
-	}
+    @Override
+    protected SpotTableRecord mapDomain(Spot spot) {
+        SpotTableRecord record = dsl.newRecord(TABLE);
+        record.setId(spot.getId().getId());
+        record.setIspublic(spot.isPublic());
+        record.setType(mapDomainToDbEnum(spot.type()));
+        record.setStationid(spot.stationId());
+        record.setName(spot.name());
+        record.setMinflow(spot.minFlow());
+        record.setMaxflow(spot.maxFlow());
+        return record;
+    }
 
-	@Override
-	protected Spot mapEntity (com.aa.msw.gen.jooq.tables.pojos.SpotTable spotTable) {
-		return new Spot(
-				new SpotId(spotTable.getId()),
-				spotTable.getIspublic(),
-				mapDbToDomainEnum(spotTable.getType()),
-				spotTable.getName(),
-				spotTable.getStationid(),
-				spotTable.getMinflow(),
-				spotTable.getMaxflow()
-		);
-	}
+    @Override
+    protected Spot mapEntity(com.aa.msw.gen.jooq.tables.pojos.SpotTable spotTable) {
+        return new Spot(
+                new SpotId(spotTable.getId()),
+                spotTable.getIspublic(),
+                mapDbToDomainEnum(spotTable.getType()),
+                spotTable.getName(),
+                spotTable.getStationid(),
+                spotTable.getMinflow(),
+                spotTable.getMaxflow()
+        );
+    }
 
-	private Spottype mapDomainToDbEnum (SpotTypeEnum type) {
-		return switch (type) {
-			case RIVER_SURF -> Spottype.RIVER_SURF;
-			case BUNGEE_SURF -> Spottype.BUNGEE_SURF;
-		};
-	}
+    private Spottype mapDomainToDbEnum(SpotTypeEnum type) {
+        return switch (type) {
+            case RIVER_SURF -> Spottype.RIVER_SURF;
+            case BUNGEE_SURF -> Spottype.BUNGEE_SURF;
+        };
+    }
 
-	private SpotTypeEnum mapDbToDomainEnum (Spottype type) {
-		return switch (type) {
-			case RIVER_SURF -> SpotTypeEnum.RIVER_SURF;
-			case BUNGEE_SURF -> SpotTypeEnum.BUNGEE_SURF;
-		};
-	}
+    private SpotTypeEnum mapDbToDomainEnum(Spottype type) {
+        return switch (type) {
+            case RIVER_SURF -> SpotTypeEnum.RIVER_SURF;
+            case BUNGEE_SURF -> SpotTypeEnum.BUNGEE_SURF;
+        };
+    }
 
-	@Override
-	public Set<Integer> getAllStationIds () {
-		return new HashSet<>(
-				dsl.selectDistinct(TABLE.STATIONID).from(TABLE)
-						.fetch(Record1::value1)
-		);
-	}
+    @Override
+    public Set<Integer> getAllStationIds() {
+        return new HashSet<>(
+                dsl.selectDistinct(TABLE.STATIONID).from(TABLE)
+                        .fetch(Record1::value1)
+        );
+    }
 
-	@Override
-	public List<Spot> getPublicRiverSurfSpots () {
-		return dsl.selectFrom(TABLE)
-				.where(TABLE.TYPE.eq(Spottype.RIVER_SURF).and(TABLE.ISPUBLIC))
-				.fetch(this::mapRecord);
-	}
+    @Override
+    public List<Spot> getPublicRiverSurfSpots() {
+        return dsl.selectFrom(TABLE)
+                .where(TABLE.TYPE.eq(Spottype.RIVER_SURF).and(TABLE.ISPUBLIC))
+                .fetch(this::mapRecord);
+    }
 
-	@Override
-	public List<Spot> getPublicBungeeSurfSpots () {
-		return dsl.selectFrom(TABLE)
-				.where(TABLE.TYPE.eq(Spottype.BUNGEE_SURF).and(TABLE.ISPUBLIC))
-				.fetch(this::mapRecord);
-	}
+    @Override
+    public List<Spot> getPublicBungeeSurfSpots() {
+        return dsl.selectFrom(TABLE)
+                .where(TABLE.TYPE.eq(Spottype.BUNGEE_SURF).and(TABLE.ISPUBLIC))
+                .fetch(this::mapRecord);
+    }
 }

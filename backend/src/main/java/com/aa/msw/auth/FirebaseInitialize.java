@@ -11,24 +11,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class FirebaseInitialize {
 
-	@Value("${spring.datasource.url}")
-	String databaseUrl;
+    @Value("${spring.datasource.url}")
+    String databaseUrl;
 
-	@Value("${firebase.service-account.path}")
-	String serviceAccountDir;
+    @Value("${firebase.service-account.path}")
+    String serviceAccountDir;
 
-	@PostConstruct
-	public void initialize() {
-		try {
-			ClassPathResource serviceAccount = new ClassPathResource(serviceAccountDir);
+    @PostConstruct
+    public void initialize() {
+        try {
+            ClassPathResource serviceAccount = new ClassPathResource(serviceAccountDir);
 
-			FirebaseOptions options = FirebaseOptions.builder()
-					.setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
-					.build();
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
+                    .build();
 
-			FirebaseApp.initializeApp(options);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            FirebaseApp.initializeApp(options);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -16,22 +16,22 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-	@Bean
-	public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
-		JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-		http.oauth2ResourceServer(oAuth2ResourceServerConfigurer -> oAuth2ResourceServerConfigurer
-				.jwt(withDefaults())
-				.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(converter)));
-		http.authorizeHttpRequests(requests -> requests
-				.requestMatchers(getMatchersForRequestsNotToBeAuthenticated()).permitAll()
-				.anyRequest().authenticated()
-		).httpBasic(withDefaults());
-		return http.build();
-	}
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        http.oauth2ResourceServer(oAuth2ResourceServerConfigurer -> oAuth2ResourceServerConfigurer
+                .jwt(withDefaults())
+                .jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(converter)));
+        http.authorizeHttpRequests(requests -> requests
+                .requestMatchers(getMatchersForRequestsNotToBeAuthenticated()).permitAll()
+                .anyRequest().authenticated()
+        ).httpBasic(withDefaults());
+        return http.build();
+    }
 
-	RequestMatcher[] getMatchersForRequestsNotToBeAuthenticated () {
-		return new AntPathRequestMatcher[]{
-				new AntPathRequestMatcher("/spots/public", HttpMethod.GET.toString())
-		};
-	}
+    RequestMatcher[] getMatchersForRequestsNotToBeAuthenticated() {
+        return new AntPathRequestMatcher[]{
+                new AntPathRequestMatcher("/spots/public", HttpMethod.GET.toString())
+        };
+    }
 }

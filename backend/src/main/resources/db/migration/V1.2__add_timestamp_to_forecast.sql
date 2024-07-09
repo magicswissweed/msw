@@ -1,1 +1,2 @@
-ALTER TABLE forecast_table ADD COLUMN timestamp TIMESTAMP WITH TIME ZONE;
+ALTER TABLE forecast_table
+    ADD COLUMN timestamp TIMESTAMP WITH TIME ZONE;

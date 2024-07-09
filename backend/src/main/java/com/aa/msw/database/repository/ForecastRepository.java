@@ -24,142 +24,143 @@ import java.util.UUID;
 
 @Component
 public class ForecastRepository extends AbstractRepository<ForecastId, Forecast, ForecastTableRecord, com.aa.msw.gen.jooq.tables.pojos.ForecastTable, ForecastTableDao>
-		implements ForecastDao {
+        implements ForecastDao {
 
-	private static final ForecastTable TABLE = ForecastTable.FORECAST_TABLE;
+    private static final ForecastTable TABLE = ForecastTable.FORECAST_TABLE;
 
-	public ForecastRepository (final DSLContext dsl) {
-		super(dsl, new ForecastTableDao(dsl.configuration()), TABLE, TABLE.ID);
-	}
+    public ForecastRepository(final DSLContext dsl) {
+        super(dsl, new ForecastTableDao(dsl.configuration()), TABLE, TABLE.ID);
+    }
 
-	@Override
-	protected Forecast mapRecord (ForecastTableRecord record) {
-		return getForecast(
-				record.getId(),
-				record.getStationid(),
-				record.getTimestamp(),
-				record.getMeasureddata(),
-				record.getMedian(),
-				record.getTwentyfivepercentile(),
-				record.getSeventyfivepercentile(),
-				record.getMin(),
-				record.getMax());
-	}
+    private static JSONB toJsonB(Map<OffsetDateTime, Double> data) throws JsonProcessingException {
+        return JSONB.valueOf(new ObjectMapper().writeValueAsString(data));
+    }
 
-	@Override
-	protected ForecastTableRecord mapDomain (Forecast forecast) {
-		final ForecastTableRecord record = dsl.newRecord(table);
+    private static Map<OffsetDateTime, Double> jsonbToMap(JSONB data) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        return objectMapper.readValue(data.data(), new TypeReference<>() {
+        });
+    }
 
-		JSONB measuredData;
-		JSONB median;
-		JSONB twentyFivePercentile;
-		JSONB seventyFivePercentile;
-		JSONB min;
-		JSONB max;
-		try {
-			measuredData = toJsonB(forecast.getMeasuredData());
-			median = toJsonB(forecast.getMedian());
-			twentyFivePercentile = toJsonB(forecast.getTwentyFivePercentile());
-			seventyFivePercentile = toJsonB(forecast.getSeventyFivePercentile());
-			min = toJsonB(forecast.getMin());
-			max = toJsonB(forecast.getMax());
-		} catch (JsonProcessingException e) {
-			return null; // Handle somehow
-		}
+    @Override
+    protected Forecast mapRecord(ForecastTableRecord record) {
+        return getForecast(
+                record.getId(),
+                record.getStationid(),
+                record.getTimestamp(),
+                record.getMeasureddata(),
+                record.getMedian(),
+                record.getTwentyfivepercentile(),
+                record.getSeventyfivepercentile(),
+                record.getMin(),
+                record.getMax());
+    }
 
-		record.setId(forecast.forecastId().getId());
-		record.setStationid(forecast.getStationId());
-		record.setTimestamp(forecast.getTimestamp());
-		record.setMeasureddata(measuredData);
-		record.setMedian(median);
-		record.setTwentyfivepercentile(twentyFivePercentile);
-		record.setSeventyfivepercentile(seventyFivePercentile);
-		record.setMin(min);
-		record.setMax(max);
-		return record;
-	}
+    @Override
+    protected ForecastTableRecord mapDomain(Forecast forecast) {
+        final ForecastTableRecord record = dsl.newRecord(table);
 
-	private static JSONB toJsonB (Map<OffsetDateTime, Double> data) throws JsonProcessingException {
-		return JSONB.valueOf(new ObjectMapper().writeValueAsString(data));
-	}
+        JSONB measuredData;
+        JSONB median;
+        JSONB twentyFivePercentile;
+        JSONB seventyFivePercentile;
+        JSONB min;
+        JSONB max;
+        try {
+            measuredData = toJsonB(forecast.getMeasuredData());
+            median = toJsonB(forecast.getMedian());
+            twentyFivePercentile = toJsonB(forecast.getTwentyFivePercentile());
+            seventyFivePercentile = toJsonB(forecast.getSeventyFivePercentile());
+            min = toJsonB(forecast.getMin());
+            max = toJsonB(forecast.getMax());
+        } catch (JsonProcessingException e) {
+            return null; // Handle somehow
+        }
 
-	@Override
-	protected Forecast mapEntity (com.aa.msw.gen.jooq.tables.pojos.ForecastTable forecastTable) {
-		return getForecast(
-				forecastTable.getId(),
-				forecastTable.getStationid(),
-				forecastTable.getTimestamp(),
-				forecastTable.getMeasureddata(),
-				forecastTable.getMedian(),
-				forecastTable.getTwentyfivepercentile(),
-				forecastTable.getSeventyfivepercentile(),
-				forecastTable.getMin(),
-				forecastTable.getMax());
-	}
+        record.setId(forecast.forecastId().getId());
+        record.setStationid(forecast.getStationId());
+        record.setTimestamp(forecast.getTimestamp());
+        record.setMeasureddata(measuredData);
+        record.setMedian(median);
+        record.setTwentyfivepercentile(twentyFivePercentile);
+        record.setSeventyfivepercentile(seventyFivePercentile);
+        record.setMin(min);
+        record.setMax(max);
+        return record;
+    }
 
-	private Forecast getForecast (UUID forecastId, Integer stationid, OffsetDateTime timestamp, JSONB jsonMeasured, JSONB jsonMedian, JSONB jsonTwentyFivePercentile, JSONB jsonSeventyFivePercentile, JSONB jsonMin, JSONB jsonMax) {
-		Map<OffsetDateTime, Double> measuredData;
-		Map<OffsetDateTime, Double> median;
-		Map<OffsetDateTime, Double> twentyFivePercentile;
-		Map<OffsetDateTime, Double> seventyFivePercentile;
-		Map<OffsetDateTime, Double> min;
-		Map<OffsetDateTime, Double> max;
-		try {
-			measuredData = jsonbToMap(jsonMeasured);
-			median = jsonbToMap(jsonMedian);
-			twentyFivePercentile = jsonbToMap(jsonTwentyFivePercentile);
-			seventyFivePercentile = jsonbToMap(jsonSeventyFivePercentile);
-			min = jsonbToMap(jsonMin);
-			max = jsonbToMap(jsonMax);
-		} catch (JsonProcessingException e) {
-			return null;
-		}
+    @Override
+    protected Forecast mapEntity(com.aa.msw.gen.jooq.tables.pojos.ForecastTable forecastTable) {
+        return getForecast(
+                forecastTable.getId(),
+                forecastTable.getStationid(),
+                forecastTable.getTimestamp(),
+                forecastTable.getMeasureddata(),
+                forecastTable.getMedian(),
+                forecastTable.getTwentyfivepercentile(),
+                forecastTable.getSeventyfivepercentile(),
+                forecastTable.getMin(),
+                forecastTable.getMax());
+    }
 
-		return new Forecast(
-				new ForecastId(forecastId),
-				stationid,
-				timestamp,
-				measuredData,
-				median,
-				twentyFivePercentile,
-				seventyFivePercentile,
-				min,
-				max);
-	}
+    private Forecast getForecast(UUID forecastId, Integer stationid, OffsetDateTime timestamp, JSONB jsonMeasured, JSONB jsonMedian, JSONB jsonTwentyFivePercentile, JSONB jsonSeventyFivePercentile, JSONB jsonMin, JSONB jsonMax) {
+        Map<OffsetDateTime, Double> measuredData;
+        Map<OffsetDateTime, Double> median;
+        Map<OffsetDateTime, Double> twentyFivePercentile;
+        Map<OffsetDateTime, Double> seventyFivePercentile;
+        Map<OffsetDateTime, Double> min;
+        Map<OffsetDateTime, Double> max;
+        try {
+            measuredData = jsonbToMap(jsonMeasured);
+            median = jsonbToMap(jsonMedian);
+            twentyFivePercentile = jsonbToMap(jsonTwentyFivePercentile);
+            seventyFivePercentile = jsonbToMap(jsonSeventyFivePercentile);
+            min = jsonbToMap(jsonMin);
+            max = jsonbToMap(jsonMax);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
 
-	private static Map<OffsetDateTime, Double> jsonbToMap (JSONB data) throws JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.registerModule(new JavaTimeModule());
-		return objectMapper.readValue(data.data(), new TypeReference<>() {});
-	}
+        return new Forecast(
+                new ForecastId(forecastId),
+                stationid,
+                timestamp,
+                measuredData,
+                median,
+                twentyFivePercentile,
+                seventyFivePercentile,
+                min,
+                max);
+    }
 
-	@Override
-	public Forecast getCurrentForecast (int stationId) throws NoDataAvailableException {
-		return dsl.selectFrom(TABLE)
-				.where(TABLE.STATIONID.eq(stationId))
-				.orderBy(TABLE.TIMESTAMP.desc())
-				.limit(1)
-				.fetchOptional(this::mapRecord)
-				.orElseThrow(() -> new NoDataAvailableException("No current Forecast found for station " + stationId));
-	}
+    @Override
+    public Forecast getCurrentForecast(int stationId) throws NoDataAvailableException {
+        return dsl.selectFrom(TABLE)
+                .where(TABLE.STATIONID.eq(stationId))
+                .orderBy(TABLE.TIMESTAMP.desc())
+                .limit(1)
+                .fetchOptional(this::mapRecord)
+                .orElseThrow(() -> new NoDataAvailableException("No current Forecast found for station " + stationId));
+    }
 
-	@Override
-	@Transactional
-	public void persistForecastsIfNotExist (List<Forecast> forecasts) {
-		for(Forecast forecast : forecasts) {
-			persistForecastIfNotExists(forecast);
-		}
-	}
+    @Override
+    @Transactional
+    public void persistForecastsIfNotExist(List<Forecast> forecasts) {
+        for (Forecast forecast : forecasts) {
+            persistForecastIfNotExists(forecast);
+        }
+    }
 
-	@Override
-	@Transactional
-	public void persistForecastIfNotExists (Forecast forecast) {
-		try {
-			if (!getCurrentForecast(forecast.getStationId()).getTimestamp().equals(forecast.getTimestamp())) {
-				persist(forecast);
-			}
-		} catch (NoDataAvailableException e) {
-			persist(forecast);
-		}
-	}
+    @Override
+    @Transactional
+    public void persistForecastIfNotExists(Forecast forecast) {
+        try {
+            if (!getCurrentForecast(forecast.getStationId()).getTimestamp().equals(forecast.getTimestamp())) {
+                persist(forecast);
+            }
+        } catch (NoDataAvailableException e) {
+            persist(forecast);
+        }
+    }
 }

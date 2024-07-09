@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ForecastApiController implements ForecastApi {
-	private final ForecastApiService forecastApiService;
+    private final ForecastApiService forecastApiService;
 
-	public ForecastApiController (ForecastApiService forecastApiService) {
-		this.forecastApiService = forecastApiService;
-	}
+    public ForecastApiController(ForecastApiService forecastApiService) {
+        this.forecastApiService = forecastApiService;
+    }
 
-	@Override
-	public ResponseEntity<ApiForecast> getForecast (Integer stationId) {
-		try {
-			ApiForecast forecast = forecastApiService.getCurrentForecast(stationId);
-			return ResponseEntity.ok(forecast);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+    @Override
+    public ResponseEntity<ApiForecast> getForecast(Integer stationId) {
+        try {
+            ApiForecast forecast = forecastApiService.getCurrentForecast(stationId);
+            return ResponseEntity.ok(forecast);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface UserToSpotDao extends Dao<UserToSpotId, UserToSpot> {
 
-	void addPrivateSpot (Spot spot, int position);
+    void addPrivateSpot(Spot spot, int position);
 
-	void setPosition (SpotId spotId, int position);
+    void setPosition(SpotId spotId, int position);
 
-	void deletePrivateSpot (SpotId spotId);
+    void deletePrivateSpot(SpotId spotId);
 
-	List<UserSpot> getUserSpotsOrdered (UserId userId);
+    List<UserSpot> getUserSpotsOrdered(UserId userId);
 }

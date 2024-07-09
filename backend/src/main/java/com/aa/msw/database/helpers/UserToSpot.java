@@ -6,9 +6,9 @@ import com.aa.msw.database.helpers.id.UserId;
 import com.aa.msw.database.helpers.id.UserToSpotId;
 
 public record UserToSpot(UserToSpotId userToSpotId, UserId userId, SpotId spotId,
-						 int position) implements HasId<UserToSpotId> {
-	@Override
-	public UserToSpotId getId () {
-		return userToSpotId;
-	}
+                         int position) implements HasId<UserToSpotId> {
+    @Override
+    public UserToSpotId getId() {
+        return userToSpotId;
+    }
 }

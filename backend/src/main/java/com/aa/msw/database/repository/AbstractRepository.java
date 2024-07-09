@@ -4,11 +4,7 @@ import com.aa.msw.database.helpers.AbstractUUID;
 import com.aa.msw.database.helpers.id.DbSyncedId;
 import com.aa.msw.database.helpers.id.HasId;
 import com.aa.msw.database.repository.dao.Dao;
-import org.jooq.DAO;
-import org.jooq.DSLContext;
-import org.jooq.Table;
-import org.jooq.TableField;
-import org.jooq.UpdatableRecord;
+import org.jooq.*;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +28,7 @@ public abstract class AbstractRepository<ID extends DbSyncedId,
     protected final Table<RECORD> table;
     protected final TableField<RECORD, UUID> idField;
 
-    public AbstractRepository (DSLContext dsl, D dao, Table<RECORD> table, TableField<RECORD, UUID> idField) {
+    public AbstractRepository(DSLContext dsl, D dao, Table<RECORD> table, TableField<RECORD, UUID> idField) {
         this.dsl = dsl;
         this.dao = dao;
         this.table = table;

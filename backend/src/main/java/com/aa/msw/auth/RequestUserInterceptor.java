@@ -21,42 +21,42 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class RequestUserInterceptor implements HandlerInterceptor {
 
-	private static final Logger LOG = LoggerFactory.getLogger(RequestUserInterceptor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RequestUserInterceptor.class);
 
-	private final UserDao userDao;
+    private final UserDao userDao;
 
-	public RequestUserInterceptor (UserDao userDao) {
-		this.userDao = userDao;
-	}
+    public RequestUserInterceptor(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
-	@Override
-	public boolean preHandle (HttpServletRequest request, HttpServletResponse response, Object handler) {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (principal instanceof Jwt jwt) {
-			try {
-				FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(jwt.getTokenValue());
-				UserExtId extUserId = new UserExtId(decodedToken.getUid());
-				User user;
-				try {
-					user = userDao.getUser(extUserId);
-				} catch (NoSuchUserException e) { // on register
-					user = new User(
-							new UserId(),
-							extUserId,
-							decodedToken.getEmail(),
-							"");
-				}
-				UserContext.setCurrentUser(user);
-			} catch (FirebaseAuthException e) {
-				LOG.info("Exception when decoding token: " + e.getMessage());
-			}
-		}
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof Jwt jwt) {
+            try {
+                FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(jwt.getTokenValue());
+                UserExtId extUserId = new UserExtId(decodedToken.getUid());
+                User user;
+                try {
+                    user = userDao.getUser(extUserId);
+                } catch (NoSuchUserException e) { // on register
+                    user = new User(
+                            new UserId(),
+                            extUserId,
+                            decodedToken.getEmail(),
+                            "");
+                }
+                UserContext.setCurrentUser(user);
+            } catch (FirebaseAuthException e) {
+                LOG.info("Exception when decoding token: " + e.getMessage());
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public void afterCompletion (HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-		UserContext.clear();
-	}
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        UserContext.clear();
+    }
 }

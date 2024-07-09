@@ -15,37 +15,36 @@ import java.util.stream.Collectors;
 @Service
 public class ForecastApiService {
 
-	private final ForecastDao forecastDao;
+    private final ForecastDao forecastDao;
 
-	public ForecastApiService (ForecastDao forecastDao) {
-		this.forecastDao = forecastDao;
-	}
+    public ForecastApiService(ForecastDao forecastDao) {
+        this.forecastDao = forecastDao;
+    }
 
+    private static ApiForecast mapForecast(Forecast forecast) {
+        ApiForecast apiForecast = new ApiForecast();
+        apiForecast.setTimestamp(forecast.getTimestamp());
+        apiForecast.setMeasuredData(mapApiForecastLine(forecast.getMeasuredData()));
+        apiForecast.setMedian(mapApiForecastLine(forecast.getMedian()));
+        apiForecast.setTwentyFivePercentile(mapApiForecastLine(forecast.getTwentyFivePercentile()));
+        apiForecast.setSeventyFivePercentile(mapApiForecastLine(forecast.getSeventyFivePercentile()));
+        apiForecast.setMin(mapApiForecastLine(forecast.getMin()));
+        apiForecast.setMax(mapApiForecastLine(forecast.getMax()));
+        return apiForecast;
+    }
 
-	public ApiForecast getCurrentForecast (Integer stationId) throws NoDataAvailableException {
-		return mapForecast(forecastDao.getCurrentForecast(stationId));
-	}
+    private static List<ApiForecastLineEntry> mapApiForecastLine(Map<OffsetDateTime, Double> input) {
+        return input.entrySet().stream()
+                .map(entry -> {
+                    ApiForecastLineEntry output = new ApiForecastLineEntry();
+                    output.setTimestamp(entry.getKey());
+                    output.setFlow(entry.getValue());
+                    return output;
+                })
+                .collect(Collectors.toList());
+    }
 
-	private static ApiForecast mapForecast (Forecast forecast) {
-		ApiForecast apiForecast = new ApiForecast();
-		apiForecast.setTimestamp(forecast.getTimestamp());
-		apiForecast.setMeasuredData(mapApiForecastLine(forecast.getMeasuredData()));
-		apiForecast.setMedian(mapApiForecastLine(forecast.getMedian()));
-		apiForecast.setTwentyFivePercentile(mapApiForecastLine(forecast.getTwentyFivePercentile()));
-		apiForecast.setSeventyFivePercentile(mapApiForecastLine(forecast.getSeventyFivePercentile()));
-		apiForecast.setMin(mapApiForecastLine(forecast.getMin()));
-		apiForecast.setMax(mapApiForecastLine(forecast.getMax()));
-		return apiForecast;
-	}
-
-	private static List<ApiForecastLineEntry> mapApiForecastLine (Map<OffsetDateTime, Double> input) {
-		return input.entrySet().stream()
-				.map(entry -> {
-					ApiForecastLineEntry output = new ApiForecastLineEntry();
-					output.setTimestamp(entry.getKey());
-					output.setFlow(entry.getValue());
-					return output;
-				})
-				.collect(Collectors.toList());
-	}
+    public ApiForecast getCurrentForecast(Integer stationId) throws NoDataAvailableException {
+        return mapForecast(forecastDao.getCurrentForecast(stationId));
+    }
 }

@@ -18,61 +18,59 @@ import java.util.Set;
 
 @Service
 public class InputDataFetcherService {
-	private Set<Integer> stationIds;
+    private final SampleFetchService sampleFetchService;
+    private final ForecastFetchService forecastFetchService;
+    private final SpotDao spotDao;
+    private final SampleDao sampleDao;
+    private final ForecastDao forecastDao;
+    private Set<Integer> stationIds;
 
-	private final SampleFetchService sampleFetchService;
-	private final ForecastFetchService forecastFetchService;
+    public InputDataFetcherService(SampleFetchService sampleFetchService, ForecastFetchService forecastFetchService, SpotDao spotDao, SampleDao sampleDao, ForecastDao forecastDao) {
+        this.sampleFetchService = sampleFetchService;
+        this.forecastFetchService = forecastFetchService;
+        this.spotDao = spotDao;
+        this.sampleDao = sampleDao;
+        this.forecastDao = forecastDao;
+        stationIds = getAllStationIds();
+    }
 
-	private final SpotDao spotDao;
-	private final SampleDao sampleDao;
-	private final ForecastDao forecastDao;
+    public void updateStationIds() {
+        this.stationIds = getAllStationIds();
+    }
 
-	public InputDataFetcherService (SampleFetchService sampleFetchService, ForecastFetchService forecastFetchService, SpotDao spotDao, SampleDao sampleDao, ForecastDao forecastDao) {
-		this.sampleFetchService = sampleFetchService;
-		this.forecastFetchService = forecastFetchService;
-		this.spotDao = spotDao;
-		this.sampleDao = sampleDao;
-		this.forecastDao = forecastDao;
-		stationIds = getAllStationIds();
-	}
+    public List<Sample> fetchForStationId(Integer stationId) throws NoSampleAvailableException {
+        List<Sample> samples;
+        try {
+            samples = sampleFetchService.fetchSamples(Set.of(stationId));
+        } catch (IOException | URISyntaxException e) {
+            throw new NoSampleAvailableException(e.getMessage());
+        }
+        try {
+            forecastFetchService.fetchForecasts(Set.of(stationId));
+        } catch (URISyntaxException e) {
+            // NOP: This can happen, if no forecast is available for the spot...
+        }
 
-	public void updateStationIds () {
-		this.stationIds = getAllStationIds();
-	}
+        return samples;
+    }
 
-	public List<Sample> fetchForStationId (Integer stationId) throws NoSampleAvailableException {
-		List<Sample> samples;
-		try {
-			samples = sampleFetchService.fetchSamples(Set.of(stationId));
-		} catch (IOException | URISyntaxException e) {
-			throw new NoSampleAvailableException(e.getMessage());
-		}
-		try {
-			forecastFetchService.fetchForecasts(Set.of(stationId));
-		} catch (URISyntaxException e) {
-			// NOP: This can happen, if no forecast is available for the spot...
-		}
+    private Set<Integer> getAllStationIds() {
+        return spotDao.getAllStationIds();
+    }
 
-		return samples;
-	}
+    @Scheduled(fixedRate = 5 * 60 * 1000) // 5 minutes in milliseconds
+    public void fetchDataAndWriteToDb() throws IOException, URISyntaxException {
+        fetchAndWriteSamples();
+        fetchAndWriteForecasts();
+    }
 
-	private Set<Integer> getAllStationIds () {
-		return spotDao.getAllStationIds();
-	}
+    public void fetchAndWriteSamples() throws IOException, URISyntaxException {
+        List<Sample> samples = sampleFetchService.fetchSamples(stationIds);
+        sampleDao.persistSamplesIfNotExist(samples);
+    }
 
-	@Scheduled(fixedRate = 5 * 60 * 1000) // 5 minutes in milliseconds
-	public void fetchDataAndWriteToDb () throws IOException, URISyntaxException {
-		fetchAndWriteSamples();
-		fetchAndWriteForecasts();
-	}
-
-	public void fetchAndWriteSamples () throws IOException, URISyntaxException {
-		List<Sample> samples = sampleFetchService.fetchSamples(stationIds);
-		sampleDao.persistSamplesIfNotExist(samples);
-	}
-
-	public void fetchAndWriteForecasts () throws URISyntaxException {
-		List<Forecast> forecasts = forecastFetchService.fetchForecasts(stationIds);
-		forecastDao.persistForecastsIfNotExist(forecasts);
-	}
+    public void fetchAndWriteForecasts() throws URISyntaxException {
+        List<Forecast> forecasts = forecastFetchService.fetchForecasts(stationIds);
+        forecastDao.persistForecastsIfNotExist(forecasts);
+    }
 }

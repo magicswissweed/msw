@@ -5,32 +5,32 @@ import {MswForecastGraph} from '../forecast/MswForecastGraph';
 import {MswLastMeasurementsGraph} from '../historical/MswLastMeasurementsGraph';
 
 interface MswMiniForecastProps {
-  location: ApiSpotInformation
+    location: ApiSpotInformation
 }
 
 export class MswMiniGraph extends Component<MswMiniForecastProps> {
-  private readonly location: ApiSpotInformation;
+    private readonly location: ApiSpotInformation;
 
-  constructor(props: MswMiniForecastProps) {
-    super(props);
-    this.location = props.location;
-  }
-
-  render() {
-    let content;
-    if(this.location.forecast) {
-      content = <MswForecastGraph location={this.location} isMini={true}/>;
-    } else {
-      content = <MswLastMeasurementsGraph location={this.location} isMini={true} />
+    constructor(props: MswMiniForecastProps) {
+        super(props);
+        this.location = props.location;
     }
 
-    let className = "forecastContainer";
-    return <>
-      <div className={className}>
-        <div className="miniGraph">
-          {content}
-        </div>
-      </div>
-    </>;
-  }
+    render() {
+        let content;
+        if (this.location.forecast) {
+            content = <MswForecastGraph location={this.location} isMini={true}/>;
+        } else {
+            content = <MswLastMeasurementsGraph location={this.location} isMini={true}/>
+        }
+
+        let className = "forecastContainer";
+        return <>
+            <div className={className}>
+                <div className="miniGraph">
+                    {content}
+                </div>
+            </div>
+        </>;
+    }
 }

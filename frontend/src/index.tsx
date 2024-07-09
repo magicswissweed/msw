@@ -10,21 +10,21 @@ import MswSignUp from './user/signup/MswSignUp';
 import {MswAddSpot} from './spot/add/MswAddSpot';
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement,
+    document.getElementById('root') as HTMLElement,
 );
 
 root.render(
-  <UserAuthContextProvider>
-    <React.StrictMode>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate replace to="/spots"/>}/>
-          <Route path="/login" element={<MswLogin/>}/>
-          <Route path="/signup" element={<MswSignUp/>}/>
-          <Route path="/spots" element={<MswOverviewPage/>}/>
-          <Route path="/spots/add" element={<MswAddSpot/>}></Route>
-        </Routes>
-      </BrowserRouter>
-    </React.StrictMode>
-  </UserAuthContextProvider>,
+    <UserAuthContextProvider>
+        <React.StrictMode>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Navigate replace to="/spots"/>}/>
+                    <Route path="/login" element={<MswLogin/>}/>
+                    <Route path="/signup" element={<MswSignUp/>}/>
+                    <Route path="/spots" element={<MswOverviewPage/>}/>
+                    <Route path="/spots/add" element={<MswAddSpot/>}></Route>
+                </Routes>
+            </BrowserRouter>
+        </React.StrictMode>
+    </UserAuthContextProvider>,
 );

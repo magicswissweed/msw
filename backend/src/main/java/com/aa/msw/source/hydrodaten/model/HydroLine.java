@@ -6,4 +6,5 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record HydroLine(ArrayList<OffsetDateTime> x, ArrayList<Double> y, String name) {}
+public record HydroLine(ArrayList<OffsetDateTime> x, ArrayList<Double> y, String name) {
+}

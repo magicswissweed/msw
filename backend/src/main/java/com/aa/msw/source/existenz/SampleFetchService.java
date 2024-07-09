@@ -23,56 +23,57 @@ import java.util.stream.Collectors;
 @Service
 public class SampleFetchService extends AbstractFetchService {
 
-	public List<Sample> fetchSamples (Set<Integer> stationIds) throws IOException, URISyntaxException {
-		String fetchUrl = getExistenzUrl(stationIds);
-		List<ExistenzSample> existenzSamples = fetchData(fetchUrl).payload();
-		List<Sample> samples = new ArrayList<>();
-		for(Integer stationId : stationIds) {
-			samples.add(extractSampleForStationId(existenzSamples, stationId));
-		}
+    private static String getExistenzUrl(Set<Integer> stationIds) {
+        String locationsString = stationIds.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining("%2C"));
+        return "https://api.existenz.ch/apiv1/hydro/latest?locations=" + locationsString + "&parameters=flow%2C%20temperature&app=MagicSwissWeed&version=0.2.0";
+    }
 
-		return samples;
-	}
+    private static Sample extractSampleForStationId(List<ExistenzSample> samples, Integer stationId) throws IncorrectDataReceivedException {
+        List<ExistenzSample> stationSamples = samples.stream()
+                .filter(sample -> sample.stationId().equals(stationId.toString()))
+                .toList();
 
-	private static String getExistenzUrl (Set<Integer> stationIds) {
-		String locationsString = stationIds.stream()
-				.map(Object::toString)
-				.collect(Collectors.joining("%2C"));
-		return "https://api.existenz.ch/apiv1/hydro/latest?locations=" + locationsString + "&parameters=flow%2C%20temperature&app=MagicSwissWeed&version=0.2.0";
-	}
+        Integer flow = null;
+        Double temp = null;
+        OffsetDateTime timestamp = null;
+        for (ExistenzSample sample : stationSamples) {
+            if (sample.par().equals("flow")) {
+                flow = (int) sample.value();
+                timestamp = Instant.ofEpochSecond(sample.timestamp()).atOffset(ZoneOffset.of("+02:00"));
+            } else if (sample.par().equals("temperature")) {
+                temp = sample.value();
+            }
+        }
 
-	private static Sample extractSampleForStationId (List<ExistenzSample> samples, Integer stationId) throws IncorrectDataReceivedException {
-		List<ExistenzSample> stationSamples = samples.stream()
-				.filter(sample -> sample.stationId().equals(stationId.toString()))
-				.toList();
+        if (flow == null || temp == null) {
+            throw new IncorrectDataReceivedException("Unable to extract flow and temp for the station " + stationId);
+        }
 
-		Integer flow = null;
-		Double temp = null;
-		OffsetDateTime timestamp = null;
-		for (ExistenzSample sample : stationSamples) {
-			if (sample.par().equals("flow")) {
-				flow = (int) sample.value();
-				timestamp = Instant.ofEpochSecond(sample.timestamp()).atOffset(ZoneOffset.of("+02:00"));
-			} else if (sample.par().equals("temperature")) {
-				temp = sample.value();
-			}
-		}
+        return new Sample(
+                new SampleId(),
+                stationId,
+                timestamp,
+                temp,
+                flow);
+    }
 
-		if (flow == null || temp == null) {
-			throw new IncorrectDataReceivedException("Unable to extract flow and temp for the station " + stationId);
-		}
+    public List<Sample> fetchSamples(Set<Integer> stationIds) throws IOException, URISyntaxException {
+        String fetchUrl = getExistenzUrl(stationIds);
+        List<ExistenzSample> existenzSamples = fetchData(fetchUrl).payload();
+        List<Sample> samples = new ArrayList<>();
+        for (Integer stationId : stationIds) {
+            samples.add(extractSampleForStationId(existenzSamples, stationId));
+        }
 
-		return new Sample(
-				new SampleId(),
-				stationId,
-				timestamp,
-				temp,
-				flow);
-	}
+        return samples;
+    }
 
-	private ExistenzResponse fetchData (String url) throws IOException, URISyntaxException {
-		String response = fetchAsString(url);
-		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.readValue(response, new TypeReference<>() {});
-	}
+    private ExistenzResponse fetchData(String url) throws IOException, URISyntaxException {
+        String response = fetchAsString(url);
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(response, new TypeReference<>() {
+        });
+    }
 }

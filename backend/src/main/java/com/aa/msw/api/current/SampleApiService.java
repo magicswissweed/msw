@@ -15,42 +15,42 @@ import java.util.List;
 @Service
 public class SampleApiService {
 
-	private final SampleDao sampleDao;
-	private final InputDataFetcherService inputDataFetcherService;
-	private final Last40DaysSampleFetchService last40DaysSampleFetchService;
+    private final SampleDao sampleDao;
+    private final InputDataFetcherService inputDataFetcherService;
+    private final Last40DaysSampleFetchService last40DaysSampleFetchService;
 
-	SampleApiService (final SampleDao sampleDao, InputDataFetcherService inputDataFetcherService, Last40DaysSampleFetchService last40DaysSampleFetchService) {
-		this.sampleDao = sampleDao;
-		this.inputDataFetcherService = inputDataFetcherService;
-		this.last40DaysSampleFetchService = last40DaysSampleFetchService;
-	}
+    SampleApiService(final SampleDao sampleDao, InputDataFetcherService inputDataFetcherService, Last40DaysSampleFetchService last40DaysSampleFetchService) {
+        this.sampleDao = sampleDao;
+        this.inputDataFetcherService = inputDataFetcherService;
+        this.last40DaysSampleFetchService = last40DaysSampleFetchService;
+    }
 
-	public ApiSample getCurrentSample (Integer stationId) throws NoDataAvailableException {
-		return mapSample(sampleDao.getCurrentSample(stationId));
-	}
+    private static ApiSample mapSample(Sample sample) {
+        return new ApiSample()
+                .timestamp(sample.getTimestamp())
+                .temperature(sample.getTemperature())
+                .flow(sample.flow());
+    }
 
-	public List<ApiSample> getHistoricalSamples (Integer stationId) throws IOException, URISyntaxException {
-		return last40DaysSampleFetchService.fetchLast40DaysSamples(stationId)
-				.stream()
-				.map(sample -> new ApiSample()
-						.timestamp(sample.getTimestamp())
-						.flow(sample.getFlow()))
-				.toList();
-	}
+    public ApiSample getCurrentSample(Integer stationId) throws NoDataAvailableException {
+        return mapSample(sampleDao.getCurrentSample(stationId));
+    }
 
-	private static ApiSample mapSample (Sample sample) {
-		return new ApiSample()
-				.timestamp(sample.getTimestamp())
-				.temperature(sample.getTemperature())
-				.flow(sample.flow());
-	}
+    public List<ApiSample> getHistoricalSamples(Integer stationId) throws IOException, URISyntaxException {
+        return last40DaysSampleFetchService.fetchLast40DaysSamples(stationId)
+                .stream()
+                .map(sample -> new ApiSample()
+                        .timestamp(sample.getTimestamp())
+                        .flow(sample.getFlow()))
+                .toList();
+    }
 
-	public void searchForNewerSample () {
-		try {
-			inputDataFetcherService.fetchAndWriteSamples();
-		} catch (IOException | URISyntaxException e) {
-			// NOP
-		}
+    public void searchForNewerSample() {
+        try {
+            inputDataFetcherService.fetchAndWriteSamples();
+        } catch (IOException | URISyntaxException e) {
+            // NOP
+        }
 
-	}
+    }
 }

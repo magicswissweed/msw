@@ -17,36 +17,33 @@ import java.util.Set;
 
 @Component
 public class PublicSpotListConfiguration {
-	private static final Logger LOG = LoggerFactory.getLogger(PublicSpotListConfiguration.class);
+    public static final Set<Spot> PUBLIC_RIVER_SURF_SPOTS = Set.of(
+            new Spot(new SpotId(), true, SpotTypeEnum.RIVER_SURF, "Bremgarten", 2018, 180, 390),
+            new Spot(new SpotId(), true, SpotTypeEnum.RIVER_SURF, "Thun", 2030, 90, 210)
+    );
+    public static final Set<Spot> PUBLIC_BUNGEE_SURF_SPOTS = Set.of(
+            new Spot(new SpotId(), true, SpotTypeEnum.BUNGEE_SURF, "Zürich", 2243, 75, 350),
+            new Spot(new SpotId(), true, SpotTypeEnum.BUNGEE_SURF, "Bern", 2135, 80, 360),
+            new Spot(new SpotId(), true, SpotTypeEnum.BUNGEE_SURF, "Luzern", 2152, 80, 350),
+            new Spot(new SpotId(), true, SpotTypeEnum.BUNGEE_SURF, "Basel", 2091, 850, 2500),
+            new Spot(new SpotId(), true, SpotTypeEnum.BUNGEE_SURF, "St. Gallen", 2473, 130, 1300)
+    );
+    private static final Logger LOG = LoggerFactory.getLogger(PublicSpotListConfiguration.class);
+    public final SpotDao spotDao;
 
-	public static final Set<Spot> PUBLIC_RIVER_SURF_SPOTS = Set.of(
-			new Spot(new SpotId(), true, SpotTypeEnum.RIVER_SURF, "Bremgarten", 2018, 180, 390),
-			new Spot(new SpotId(), true, SpotTypeEnum.RIVER_SURF, "Thun", 2030, 90, 210)
-	);
+    public PublicSpotListConfiguration(SpotDao spotDao) {
+        this.spotDao = spotDao;
+    }
 
-	public static final Set<Spot> PUBLIC_BUNGEE_SURF_SPOTS = Set.of(
-			new Spot(new SpotId(), true, SpotTypeEnum.BUNGEE_SURF, "Zürich", 2243, 75, 350),
-			new Spot(new SpotId(), true, SpotTypeEnum.BUNGEE_SURF, "Bern", 2135, 80, 360),
-			new Spot(new SpotId(), true, SpotTypeEnum.BUNGEE_SURF, "Luzern", 2152, 80, 350),
-			new Spot(new SpotId(), true, SpotTypeEnum.BUNGEE_SURF, "Basel", 2091, 850, 2500),
-			new Spot(new SpotId(), true, SpotTypeEnum.BUNGEE_SURF, "St. Gallen", 2473, 130, 1300)
-	);
-
-	public final SpotDao spotDao;
-
-	public PublicSpotListConfiguration (SpotDao spotDao) {
-		this.spotDao = spotDao;
-	}
-
-	@ManagedOperation
+    @ManagedOperation
 //	@Scheduled(fixedDelay = 60_000)
-	void persistPublicSpots () {
-		LOG.info("PERSISTING PUBLIC SPOTS");
-		persistSpots(PUBLIC_RIVER_SURF_SPOTS);
-		persistSpots(PUBLIC_BUNGEE_SURF_SPOTS);
-	}
+    void persistPublicSpots() {
+        LOG.info("PERSISTING PUBLIC SPOTS");
+        persistSpots(PUBLIC_RIVER_SURF_SPOTS);
+        persistSpots(PUBLIC_BUNGEE_SURF_SPOTS);
+    }
 
-	private void persistSpots (Set<Spot> spots) {
-		spots.forEach(spotDao::persist);
-	}
+    private void persistSpots(Set<Spot> spots) {
+        spots.forEach(spotDao::persist);
+    }
 }
