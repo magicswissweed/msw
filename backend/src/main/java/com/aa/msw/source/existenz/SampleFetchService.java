@@ -17,6 +17,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,18 +37,18 @@ public class SampleFetchService extends AbstractFetchService {
                 .toList();
 
         Integer flow = null;
-        Double temp = null;
+        Optional<Double> temp = Optional.empty();
         OffsetDateTime timestamp = null;
         for (ExistenzSample sample : stationSamples) {
             if (sample.par().equals("flow")) {
                 flow = (int) sample.value();
                 timestamp = Instant.ofEpochSecond(sample.timestamp()).atOffset(ZoneOffset.of("+02:00"));
             } else if (sample.par().equals("temperature")) {
-                temp = sample.value();
+                temp = Optional.of(sample.value());
             }
         }
 
-        if (flow == null || temp == null) {
+        if (flow == null) {
             throw new IncorrectDataReceivedException("Unable to extract flow and temp for the station " + stationId);
         }
 

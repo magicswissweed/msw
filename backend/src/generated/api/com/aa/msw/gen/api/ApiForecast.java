@@ -24,7 +24,7 @@ import jakarta.annotation.Generated;
  * ApiForecast
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-07-07T14:58:04.372451500+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-07-09T18:59:26.968547600+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiForecast {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -48,6 +48,23 @@ public class ApiForecast {
   @Valid
   private List<@Valid ApiForecastLineEntry> min = new ArrayList<>();
 
+  public ApiForecast() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public ApiForecast(OffsetDateTime timestamp, List<@Valid ApiForecastLineEntry> measuredData, List<@Valid ApiForecastLineEntry> median, List<@Valid ApiForecastLineEntry> twentyFivePercentile, List<@Valid ApiForecastLineEntry> seventyFivePercentile, List<@Valid ApiForecastLineEntry> max, List<@Valid ApiForecastLineEntry> min) {
+    this.timestamp = timestamp;
+    this.measuredData = measuredData;
+    this.median = median;
+    this.twentyFivePercentile = twentyFivePercentile;
+    this.seventyFivePercentile = seventyFivePercentile;
+    this.max = max;
+    this.min = min;
+  }
+
   public ApiForecast timestamp(OffsetDateTime timestamp) {
     this.timestamp = timestamp;
     return this;
@@ -57,8 +74,8 @@ public class ApiForecast {
    * Get timestamp
    * @return timestamp
   */
-  @Valid 
-  @Schema(name = "timestamp", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "timestamp", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("timestamp")
   public OffsetDateTime getTimestamp() {
     return timestamp;
@@ -85,8 +102,8 @@ public class ApiForecast {
    * Get measuredData
    * @return measuredData
   */
-  @Valid 
-  @Schema(name = "measuredData", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "measuredData", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("measuredData")
   public List<@Valid ApiForecastLineEntry> getMeasuredData() {
     return measuredData;
@@ -113,8 +130,8 @@ public class ApiForecast {
    * Get median
    * @return median
   */
-  @Valid 
-  @Schema(name = "median", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "median", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("median")
   public List<@Valid ApiForecastLineEntry> getMedian() {
     return median;
@@ -141,8 +158,8 @@ public class ApiForecast {
    * Get twentyFivePercentile
    * @return twentyFivePercentile
   */
-  @Valid 
-  @Schema(name = "twentyFivePercentile", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "twentyFivePercentile", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("twentyFivePercentile")
   public List<@Valid ApiForecastLineEntry> getTwentyFivePercentile() {
     return twentyFivePercentile;
@@ -169,8 +186,8 @@ public class ApiForecast {
    * Get seventyFivePercentile
    * @return seventyFivePercentile
   */
-  @Valid 
-  @Schema(name = "seventyFivePercentile", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "seventyFivePercentile", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("seventyFivePercentile")
   public List<@Valid ApiForecastLineEntry> getSeventyFivePercentile() {
     return seventyFivePercentile;
@@ -197,8 +214,8 @@ public class ApiForecast {
    * Get max
    * @return max
   */
-  @Valid 
-  @Schema(name = "max", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "max", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("max")
   public List<@Valid ApiForecastLineEntry> getMax() {
     return max;
@@ -225,8 +242,8 @@ public class ApiForecast {
    * Get min
    * @return min
   */
-  @Valid 
-  @Schema(name = "min", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "min", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("min")
   public List<@Valid ApiForecastLineEntry> getMin() {
     return min;

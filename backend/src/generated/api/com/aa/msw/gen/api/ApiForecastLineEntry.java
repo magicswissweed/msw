@@ -20,13 +20,25 @@ import jakarta.annotation.Generated;
  * ApiForecastLineEntry
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-07-07T14:58:04.372451500+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-07-09T18:59:26.968547600+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiForecastLineEntry {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime timestamp;
 
   private Double flow;
+
+  public ApiForecastLineEntry() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public ApiForecastLineEntry(OffsetDateTime timestamp, Double flow) {
+    this.timestamp = timestamp;
+    this.flow = flow;
+  }
 
   public ApiForecastLineEntry timestamp(OffsetDateTime timestamp) {
     this.timestamp = timestamp;
@@ -37,8 +49,8 @@ public class ApiForecastLineEntry {
    * Get timestamp
    * @return timestamp
   */
-  @Valid 
-  @Schema(name = "timestamp", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "timestamp", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("timestamp")
   public OffsetDateTime getTimestamp() {
     return timestamp;
@@ -57,8 +69,8 @@ public class ApiForecastLineEntry {
    * Get flow
    * @return flow
   */
-  
-  @Schema(name = "flow", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "flow", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("flow")
   public Double getFlow() {
     return flow;

@@ -21,12 +21,24 @@ import jakarta.annotation.Generated;
  */
 
 @JsonTypeName("addPrivateSpot_request")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-07-07T14:58:04.372451500+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-07-09T18:59:26.968547600+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class AddPrivateSpotRequest {
 
   private ApiSpot spot;
 
   private Integer position;
+
+  public AddPrivateSpotRequest() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public AddPrivateSpotRequest(ApiSpot spot, Integer position) {
+    this.spot = spot;
+    this.position = position;
+  }
 
   public AddPrivateSpotRequest spot(ApiSpot spot) {
     this.spot = spot;
@@ -37,8 +49,8 @@ public class AddPrivateSpotRequest {
    * Get spot
    * @return spot
   */
-  @Valid 
-  @Schema(name = "spot", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "spot", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("spot")
   public ApiSpot getSpot() {
     return spot;
@@ -57,8 +69,8 @@ public class AddPrivateSpotRequest {
    * Get position
    * @return position
   */
-  
-  @Schema(name = "position", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "position", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("position")
   public Integer getPosition() {
     return position;

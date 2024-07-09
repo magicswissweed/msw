@@ -22,7 +22,7 @@ import jakarta.annotation.Generated;
  * ApiSpotInformationList
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-07-07T14:58:04.372451500+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-07-09T18:59:26.968547600+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiSpotInformationList {
 
   @Valid
@@ -30,6 +30,18 @@ public class ApiSpotInformationList {
 
   @Valid
   private List<ApiSpotInformation> bungeeSurfSpots = new ArrayList<>();
+
+  public ApiSpotInformationList() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public ApiSpotInformationList(List<ApiSpotInformation> riverSurfSpots, List<ApiSpotInformation> bungeeSurfSpots) {
+    this.riverSurfSpots = riverSurfSpots;
+    this.bungeeSurfSpots = bungeeSurfSpots;
+  }
 
   public ApiSpotInformationList riverSurfSpots(List<ApiSpotInformation> riverSurfSpots) {
     this.riverSurfSpots = riverSurfSpots;
@@ -48,8 +60,8 @@ public class ApiSpotInformationList {
    * Get riverSurfSpots
    * @return riverSurfSpots
   */
-  @Valid 
-  @Schema(name = "riverSurfSpots", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "riverSurfSpots", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("riverSurfSpots")
   public List<ApiSpotInformation> getRiverSurfSpots() {
     return riverSurfSpots;
@@ -76,8 +88,8 @@ public class ApiSpotInformationList {
    * Get bungeeSurfSpots
    * @return bungeeSurfSpots
   */
-  @Valid 
-  @Schema(name = "bungeeSurfSpots", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "bungeeSurfSpots", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("bungeeSurfSpots")
   public List<ApiSpotInformation> getBungeeSurfSpots() {
     return bungeeSurfSpots;
