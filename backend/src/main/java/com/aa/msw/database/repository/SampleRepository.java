@@ -16,13 +16,14 @@ import java.util.List;
 
 
 @Component
-public class SampleRepository extends AbstractRepository<SampleId, Sample, SampleTableRecord, com.aa.msw.gen.jooq.tables.pojos.SampleTable, SampleTableDao>
+public class SampleRepository extends AbstractTimestampedRepository
+        <SampleId, Sample, SampleTableRecord, com.aa.msw.gen.jooq.tables.pojos.SampleTable, SampleTableDao>
         implements SampleDao {
 
     private static final SampleTable TABLE = SampleTable.SAMPLE_TABLE;
 
     public SampleRepository(final DSLContext dsl) {
-        super(dsl, new SampleTableDao(dsl.configuration()), TABLE, TABLE.ID);
+        super(dsl, new SampleTableDao(dsl.configuration()), TABLE, TABLE.ID, TABLE.TIMESTAMP);
     }
 
     @Override

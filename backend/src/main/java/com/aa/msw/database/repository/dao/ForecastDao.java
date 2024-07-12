@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface ForecastDao extends Dao<ForecastId, Forecast> {
+public interface ForecastDao extends TimestampedDao, Dao<ForecastId, Forecast> {
     Forecast getCurrentForecast(int stationId) throws NoDataAvailableException;
 
     @Transactional
