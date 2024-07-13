@@ -55,8 +55,8 @@ export const SpotList = (props: SpotListProps) => {
         }
     };
 
-    let tableHeader = <div className="tableHeaderContainer hiddenOnMobile">
-        <div className="tableHeader hiddenOnMobile">
+    let tableHeader = <div className="tableHeaderContainer">
+        <div className="tableHeader">
             <div className="tableHeaderCol">Name</div>
             <div className="tableHeaderCol">Flow/Temp</div>
             <div className="tableHeaderCol doubleCol">Forecast</div>
