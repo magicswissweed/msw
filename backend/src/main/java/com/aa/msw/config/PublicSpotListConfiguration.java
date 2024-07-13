@@ -17,10 +17,7 @@ import java.util.Set;
 
 @Component
 public class PublicSpotListConfiguration {
-    public static final Set<Spot> PUBLIC_RIVER_SURF_SPOTS = Set.of(
-            new Spot(new SpotId(), true, SpotTypeEnum.RIVER_SURF, "Bremgarten", 2018, 180, 390),
-            new Spot(new SpotId(), true, SpotTypeEnum.RIVER_SURF, "Thun", 2030, 90, 210)
-    );
+    public static final Set<Spot> PUBLIC_RIVER_SURF_SPOTS = Set.of();
     public static final Set<Spot> PUBLIC_BUNGEE_SURF_SPOTS = Set.of(
             new Spot(new SpotId(), true, SpotTypeEnum.BUNGEE_SURF, "Zürich", 2243, 75, 350),
             new Spot(new SpotId(), true, SpotTypeEnum.BUNGEE_SURF, "Bern", 2135, 80, 360),
