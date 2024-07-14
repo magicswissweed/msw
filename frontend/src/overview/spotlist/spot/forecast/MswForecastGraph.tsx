@@ -1,4 +1,4 @@
-import './MswForecastGraph.scss'
+import "./MswForecastGraph.scss";
 import {
     Area,
     CartesianGrid,
@@ -29,10 +29,10 @@ const DATA_KEY_75_PERCENTILE = "seventyFivePercentile";
 const DATA_KEY_MINIMUM = "minimum";
 const DATA_KEY_MAXIMUM = "maximum";
 
-const LINE_NAME_MEASURED = "Gemessen";
-let LINE_NAME_MEDIAN = "Median";
+const LINE_NAME_MEASURED = "measured";
+let LINE_NAME_MEDIAN = "median";
 
-type NormalizedDataItem = { datetime: Date, [lineName: string]: unknown; };
+type NormalizedDataItem = { datetime: Date; [lineName: string]: unknown };
 
 const TEMPORARY_DATA_KEY_FLOW = "flow";
 
