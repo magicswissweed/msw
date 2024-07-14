@@ -1,0 +1,27 @@
+// TODO: move this to index.scss?
+
+/* variables */
+$msw-blue: #3bbae8;
+
+/* general bootstrap customizations */
+$theme-colors: (
+    "primary": $msw-blue,
+);
+
+/* import bootstrap to set changes */
+@import "~bootstrap/scss/bootstrap";
+
+/* custom styles */
+.btn-primary {
+    color: white;
+
+    &:hover {
+        color: white;
+    }
+}
+
+.btn-outline-primary {
+    &:hover {
+        color: white;
+    }
+}
