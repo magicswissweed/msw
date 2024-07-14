@@ -1,32 +1,39 @@
 @import "../ReactiveMixins";
+@import "../index";
 
 .App {
-  text-align: center;
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
+    text-align: center;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+        Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+    color: $msw-blue;
 }
 
 .surfspots {
-  column-gap: 40px;
-  margin: auto;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  flex-flow: row wrap;
-  color: #1c9bc9;
+    column-gap: 40px;
+    margin: auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-flow: row wrap;
+    color: $msw-blue;
 
-  @include small {
-    flex-direction: column;
-    width: 100%;
-  }
+    @include small {
+        flex-direction: column;
+        width: 100%;
+    }
 }
 
 .riversurf {
-  flex: 1;
+    flex: 1;
 }
 
 .bungeesurf {
-  flex: 1;
+    flex: 1;
 }

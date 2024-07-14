@@ -1,32 +1,30 @@
 @import "../ReactiveMixins";
-
-$mswBlue: #3bbae8;
+@import "../custom";
 
 .Footer {
-  margin-top: 30px;
-  padding: 1.25rem 1.875rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  color: white;
-  background-color: $mswBlue;
+    margin-top: 30px;
+    padding: 1.25rem 1.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    color: white;
+    background-color: $msw-blue;
 
-  @include small {
-    flex-direction: column;
-  }
+    @include small {
+        flex-direction: column;
+    }
 
-  @include medium {
-    flex-direction: column;
-  }
+    @include medium {
+        flex-direction: column;
+    }
 }
 
 .Footer a {
-  color: white;
+    color: white;
 }
 
 .Footer_item {
-  margin: auto;
-  padding: 1rem;
-  min-width: 12.5rem;
+    margin: auto;
+    padding: 1rem;
+    min-width: 12.5rem;
 }
-

@@ -1,34 +1,46 @@
-import './MswHeader.scss'
-import React from 'react';
-import {Link} from 'react-router-dom';
-import {useUserAuth} from '../user/UserAuthContext';
+import "./MswHeader.scss";
+import React from "react";
+import { useUserAuth } from "../user/UserAuthContext";
+import { Button } from "react-bootstrap";
 
 export const MswHeader = () => {
     // @ts-ignore
-    const {user, logOut} = useUserAuth();
+    const { user, logOut } = useUserAuth();
 
     let loginOrLogout: JSX.Element;
     if (user) {
-        loginOrLogout = <>
-            <Link className="add-spot msw-button" to={'/spots/add'}>Add Spot</Link>
-            <button id="login-Button" className="logout msw-button" onClick={logOut}>Logout</button>
-        </>
+        loginOrLogout = (
+            <>
+                <Button variant="outline-primary" href="/spots/add">
+                    Add Spot
+                </Button>
+                <Button variant="outline-primary" onClick={logOut}>
+                    Sign Out
+                </Button>
+            </>
+        );
     } else {
-        loginOrLogout = <>
-            <Link id="login-Button" className="login msw-button" to="/login">Log in</Link>
-            <Link id="login-Button" className="signup msw-button" to="/signup">Sign up</Link>
-        </>
+        loginOrLogout = (
+            <>
+                <Button variant="outline-primary" href="/login">
+                    Log In
+                </Button>
+                <Button variant="outline-primary" href="/signup">
+                    Sign Up
+                </Button>
+            </>
+        );
     }
 
-    return <>
-        <header className="App-header">
-            <div className="loginOrLogoutContainer">
-                {loginOrLogout}
-            </div>
-            <div className="title">
-                <h1>MagicSwissWeed</h1>
-                <p>Current surfing conditions in Switzerland</p>
-            </div>
-        </header>
-    </>;
-}
+    return (
+        <>
+            <header className="App-header">
+                <div className="title">
+                    <h1>magicswissweed</h1>
+                    <p>The surf forecast for Switzerland</p>
+                </div>
+                <div className="loginOrLogoutContainer">{loginOrLogout}</div>
+            </header>
+        </>
+    );
+};
