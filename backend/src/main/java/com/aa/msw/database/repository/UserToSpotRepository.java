@@ -16,6 +16,7 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,22 +38,26 @@ public class UserToSpotRepository extends AbstractRepository<UserToSpotId, UserT
     @Transactional
     public void addPrivateSpot(Spot spot, int position) {
         spotDao.persist(spot);
+        persistUserToSpot(spot, position);
+    }
+
+    @Transactional
+    public void persistUserToSpot(Spot spot, int position) {
         persist(
                 new UserToSpot(
                         new UserToSpotId(),
                         UserContext.getCurrentUser().userId(),
                         spot.spotId(),
                         position
-                ));
+                )
+        );
     }
 
     @Override
     @Transactional
-    public List<UserSpot> getUserSpotsOrdered(UserId userId) {
-        mapPublicSpotsToUserIfNotMapped(userId);
-
+    public List<UserSpot> getUserSpotsOrdered() {
         return dsl.selectFrom(TABLE)
-                .where(TABLE.USER_ID.eq(userId.getId()))
+                .where(TABLE.USER_ID.eq(UserContext.getCurrentUser().userId().getId()))
                 .orderBy(TABLE.POSITION)
                 .fetch(this::mapRecord)
                 .stream()
@@ -61,24 +66,18 @@ public class UserToSpotRepository extends AbstractRepository<UserToSpotId, UserT
                 .collect(Collectors.toList());
     }
 
+    @Override
     @Transactional
-    public void mapPublicSpotsToUserIfNotMapped(UserId userId) {
-        mapPublicSpotsToUserIfNotMapped(userId, spotDao.getPublicRiverSurfSpots());
-        mapPublicSpotsToUserIfNotMapped(userId, spotDao.getPublicBungeeSurfSpots());
-    }
+    public void addAllPublicSpotsToUser() {
+        List<Spot> publicSpots = new ArrayList<>();
+        publicSpots.addAll(spotDao.getPublicBungeeSurfSpots());
+        publicSpots.addAll(spotDao.getPublicRiverSurfSpots());
 
-    @Transactional
-    public void mapPublicSpotsToUserIfNotMapped(UserId userId, List<Spot> publicSpots) {
-        List<SpotId> mappedSpotIds = dsl.selectFrom(TABLE)
-                .where(TABLE.USER_ID.eq(userId.getId()))
-                .fetch(this::mapRecord)
-                .stream()
-                .map(UserToSpot::spotId)
-                .toList();
+        List<Spot> mappedSpotIds = getUserSpotsOrdered().stream().map(UserSpot::spot).toList();
 
         for (Spot publicSpot : publicSpots) {
-            if (!mappedSpotIds.contains(publicSpot.getId())) {
-                persist(new UserToSpot(new UserToSpotId(), userId, publicSpot.getId(), 0));
+            if (!mappedSpotIds.contains(publicSpot)) {
+                persistUserToSpot(publicSpot, 0);
             }
         }
     }
