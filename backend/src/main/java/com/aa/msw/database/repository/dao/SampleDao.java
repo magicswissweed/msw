@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface SampleDao extends Dao<SampleId, Sample> {
+public interface SampleDao extends TimestampedDao, Dao<SampleId, Sample> {
     Sample getCurrentSample(int stationId) throws NoDataAvailableException;
 
     @Transactional
