@@ -1,6 +1,6 @@
 import './SpotList.scss';
 import React, {useEffect, useState} from 'react';
-import {ApiSpotInformation, Configuration, SpotsApi} from '../../gen/msw-api-ts';
+import {ApiSpotInformation, SpotsApi} from '../../gen/msw-api-ts';
 import {getCollapsibleIcon, Spot} from './spot/Spot';
 import {authConfiguration} from '../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../user/UserAuthContext';
@@ -34,7 +34,7 @@ export const SpotList = (props: SpotListProps) => {
         e.preventDefault();
     };
 
-    const handleDrop = (e: React.DragEvent<HTMLDivElement>, targetItem: any) => {
+    const handleDrop = async (e: React.DragEvent<HTMLDivElement>, targetItem: any) => {
         if (!draggingItem) return;
 
         const tempLocations = locations;
@@ -45,12 +45,11 @@ export const SpotList = (props: SpotListProps) => {
         if (currentIndex !== -1 && targetIndex !== -1) {
             tempLocations.splice(currentIndex, 1);
             tempLocations.splice(targetIndex, 0, draggingItem);
-            authConfiguration(token, (config: Configuration) => {
-                new SpotsApi(config).orderSpots(
-                    locations
-                        .filter(loc => loc.id)
-                        .map(loc => loc.id!));
-            });
+            let config = await authConfiguration(token);
+            await new SpotsApi(config).orderSpots(
+                locations
+                    .filter(loc => loc.id)
+                    .map(loc => loc.id!));
             setLocations(tempLocations);
         }
     };

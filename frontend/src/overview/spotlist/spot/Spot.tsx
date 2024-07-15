@@ -1,6 +1,6 @@
 import './Spot.scss'
 import React from 'react';
-import {ApiSpotInformation, Configuration, SpotsApi} from '../../../gen/msw-api-ts';
+import {ApiSpotInformation, SpotsApi} from '../../../gen/msw-api-ts';
 import {MswMeasurement} from './measurement/MswMeasurement';
 import {MswMiniGraph} from './miniForecast/MswMiniGraph';
 import {MswForecastGraph} from './forecast/MswForecastGraph';
@@ -73,10 +73,10 @@ export const Spot = (props: SpotProps) => {
         </>;
     }
 
-    function onDeleteSpot(location: ApiSpotInformation) {
-        authConfiguration(token, (config: Configuration) => {
-            new SpotsApi(config).deletePrivateSpot(location.id!).then(() => document.location.reload());
-        });
+    async function onDeleteSpot(location: ApiSpotInformation) {
+        let config = await authConfiguration(token);
+        await new SpotsApi(config).deletePrivateSpot(location.id!)
+        document.location.reload();
     }
 }
 

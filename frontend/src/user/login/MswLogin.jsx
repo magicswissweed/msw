@@ -15,9 +15,8 @@ export const MswLogin = () => {
         e.preventDefault();
         setError("");
         try {
-            await logIn(email, password).then(() => {
-                navigate("/spots")
-            });
+            await logIn(email, password)
+            navigate("/spots")
         } catch (err) {
             setError(err.message);
         }

@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {MswHeader} from '../header/MswHeader';
 import {MswFooter} from '../footer/MswFooter';
 import {SpotList} from './spotlist/SpotList'
-import {ApiSpotInformationList, Configuration, SpotsApi} from '../gen/msw-api-ts';
+import {ApiSpotInformationList, SpotsApi} from '../gen/msw-api-ts';
 import {MswLoader} from '../loader/MswLoader';
 import {AxiosResponse} from 'axios';
 import {useUserAuth} from '../user/UserAuthContext';
@@ -24,11 +24,10 @@ export const MswOverviewPage = () => {
         }
     };
 
-    function fetchData(showAllSpots: boolean) {
+    async function fetchData(showAllSpots: boolean) {
         if (showAllSpots) {
-            authConfiguration(token, (config: Configuration) => {
-                new SpotsApi(config).getAllSpots().then(writeSpotsToState);
-            });
+            let config = await authConfiguration(token);
+            new SpotsApi(config).getAllSpots().then(writeSpotsToState);
         } else {
             new SpotsApi().getPublicSpots().then(writeSpotsToState);
         }
