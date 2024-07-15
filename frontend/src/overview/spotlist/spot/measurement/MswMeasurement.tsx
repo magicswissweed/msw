@@ -26,10 +26,13 @@ export class MswMeasurement extends Component<MeasurementsProps> {
                     {this.getFlow()}
                 </div>
 
-                <div className={"measurement_row meas temp"}>
-                    <div>{this.location.currentSample!.temperature}</div>
-                    <div className="unit">°C</div>
-                </div>
+                {this.location.currentSample!.temperature &&
+                    <div className={"measurement_row meas temp"}>
+                        <div>{this.location.currentSample!.temperature}</div>
+                        <div className="unit">°C</div>
+                    </div>
+                }
+
             </div>
         </>;
     }

@@ -18,12 +18,16 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "name": "Aare",
-  "stationId": 2016,
-  "spotType": "RIVER_SURF",
-  "isPublic": true,
-  "minFlow": 800,
-  "maxFlow": 1000
+  "spot": {
+    "id": "37996bbb-546d-411d-837b-53fc56643f0f",
+    "name": "ASDF",
+    "stationId": 2099,
+    "spotType": "RIVER_SURF",
+    "isPublic": false,
+    "minFlow": 800,
+    "maxFlow": 1000
+  },
+  "position": 0
 }
 
 

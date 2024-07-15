@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class Last40DaysSampleFetchService extends AbstractLineFetchService {
@@ -29,7 +30,7 @@ public class Last40DaysSampleFetchService extends AbstractLineFetchService {
                         new SampleId(),
                         stationId,
                         entry.getKey(),
-                        0,
+                        Optional.empty(),
                         entry.getValue().intValue()
                 ))
                 .toList();

@@ -20,7 +20,7 @@ import jakarta.annotation.Generated;
  * ApiSpot
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-07-07T14:58:04.372451500+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-07-09T18:59:26.968547600+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiSpot {
 
   private UUID id;
@@ -72,6 +72,23 @@ public class ApiSpot {
 
   private Integer maxFlow;
 
+  public ApiSpot() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public ApiSpot(UUID id, String name, Integer stationId, SpotTypeEnum spotType, Boolean isPublic, Integer minFlow, Integer maxFlow) {
+    this.id = id;
+    this.name = name;
+    this.stationId = stationId;
+    this.spotType = spotType;
+    this.isPublic = isPublic;
+    this.minFlow = minFlow;
+    this.maxFlow = maxFlow;
+  }
+
   public ApiSpot id(UUID id) {
     this.id = id;
     return this;
@@ -81,8 +98,8 @@ public class ApiSpot {
    * Get id
    * @return id
   */
-  @Valid 
-  @Schema(name = "id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "id", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("id")
   public UUID getId() {
     return id;
@@ -101,8 +118,8 @@ public class ApiSpot {
    * Get name
    * @return name
   */
-  
-  @Schema(name = "name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "name", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("name")
   public String getName() {
     return name;
@@ -121,8 +138,8 @@ public class ApiSpot {
    * Get stationId
    * @return stationId
   */
-  
-  @Schema(name = "stationId", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "stationId", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("stationId")
   public Integer getStationId() {
     return stationId;
@@ -141,8 +158,8 @@ public class ApiSpot {
    * Get spotType
    * @return spotType
   */
-  
-  @Schema(name = "spotType", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "spotType", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("spotType")
   public SpotTypeEnum getSpotType() {
     return spotType;
@@ -161,8 +178,8 @@ public class ApiSpot {
    * Get isPublic
    * @return isPublic
   */
-  
-  @Schema(name = "isPublic", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "isPublic", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("isPublic")
   public Boolean getIsPublic() {
     return isPublic;
@@ -181,8 +198,8 @@ public class ApiSpot {
    * Get minFlow
    * @return minFlow
   */
-  
-  @Schema(name = "minFlow", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "minFlow", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("minFlow")
   public Integer getMinFlow() {
     return minFlow;
@@ -201,8 +218,8 @@ public class ApiSpot {
    * Get maxFlow
    * @return maxFlow
   */
-  
-  @Schema(name = "maxFlow", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull 
+  @Schema(name = "maxFlow", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("maxFlow")
   public Integer getMaxFlow() {
     return maxFlow;
