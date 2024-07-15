@@ -15,7 +15,7 @@ export const SpotList = (props: SpotListProps) => {
     const [draggingItem, setDraggingItem] = useState<ApiSpotInformation | null>(null);
 
     // @ts-ignore
-    const {token} = useUserAuth();
+    const {user, token} = useUserAuth();
 
     useEffect(() => {
         setLocations(props.locations);
@@ -35,6 +35,14 @@ export const SpotList = (props: SpotListProps) => {
     };
 
     const handleDrop = async (e: React.DragEvent<HTMLDivElement>, targetItem: any) => {
+        async function saveSpotsOrdering() {
+            let config = await authConfiguration(token);
+            await new SpotsApi(config).orderSpots(
+                locations
+                    .filter(loc => loc.id)
+                    .map(loc => loc.id!));
+        }
+
         if (!draggingItem) return;
 
         const tempLocations = locations;
@@ -45,12 +53,11 @@ export const SpotList = (props: SpotListProps) => {
         if (currentIndex !== -1 && targetIndex !== -1) {
             tempLocations.splice(currentIndex, 1);
             tempLocations.splice(targetIndex, 0, draggingItem);
-            let config = await authConfiguration(token);
-            await new SpotsApi(config).orderSpots(
-                locations
-                    .filter(loc => loc.id)
-                    .map(loc => loc.id!));
             setLocations(tempLocations);
+
+            if (user) {
+                saveSpotsOrdering();
+            }
         }
     };
 

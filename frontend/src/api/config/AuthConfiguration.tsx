@@ -2,7 +2,7 @@ import {Configuration} from '../../gen/msw-api-ts';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
-export async function authConfiguration(token: string | null) {
+export async function authConfiguration(token: string | null): Promise<Configuration> {
     let config: Configuration;
     if (token) {
         config = new Configuration({
