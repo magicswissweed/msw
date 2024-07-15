@@ -39,12 +39,13 @@ public class RequestUserInterceptor implements HandlerInterceptor {
                 User user;
                 try {
                     user = userDao.getUser(extUserId);
-                } catch (NoSuchUserException e) { // on register
+                } catch (NoSuchUserException e) { // on register or downsync from firebase
                     user = new User(
                             new UserId(),
                             extUserId,
                             decodedToken.getEmail(),
                             "");
+                    userDao.persist(user);
                 }
                 UserContext.setCurrentUser(user);
             } catch (FirebaseAuthException e) {
@@ -56,7 +57,7 @@ public class RequestUserInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         UserContext.clear();
     }
 }

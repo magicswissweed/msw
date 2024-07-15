@@ -12,7 +12,7 @@ public class UserApiService {
         this.userDao = userDao;
     }
 
-    public void registerUser(User user) {
-        userDao.persist(user);
+    public boolean isUserPresent(User user) {
+        return userDao.find(user.userId()).isPresent();
     }
 }
