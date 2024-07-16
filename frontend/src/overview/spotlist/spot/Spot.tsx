@@ -39,7 +39,7 @@ export const Spot = (props: SpotProps) => {
                 <MswMeasurement location={location}/>
                 <MswMiniGraph location={location}/>
             </div>
-            <div className="right-side-icons-container">
+            <div className="right-side-icons-container hiddenOnMobile">
                 <div className="is-private-icon">
                     <img className={location.isPublic ? "public" : ""}
                          alt="This is a private spot. Only you can see it."
@@ -68,8 +68,8 @@ export const Spot = (props: SpotProps) => {
         return <>
             <div className="collapsibleContent hiddenOnMobile">
                 {location.forecast ? forecastContent : lastMeasurementsContent}
+                {!location.isPublic && privateSpotInteractions}
             </div>
-            {!location.isPublic && privateSpotInteractions}
         </>;
     }
 
@@ -81,7 +81,7 @@ export const Spot = (props: SpotProps) => {
 }
 
 export function getCollapsibleIcon(isHidden: Boolean) {
-    let className = "collapsibleIcon hiddenOnMobile";
+    let className = "collapsibleIcon";
     if (isHidden) {
         className += " hide";
     }
