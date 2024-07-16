@@ -17,11 +17,18 @@ export const MswLogin = () => {
         e.preventDefault();
         setError("");
         try {
-            await logIn(email, password).then(() => {
-                navigate("/spots");
-            });
+            await logIn(email, password)
+            navigate("/spots")
         } catch (err) {
-            setError(err.message);
+            if (err.message.includes('auth/invalid-credential')) {
+                setError('Wrong email or password.');
+            } else if (err.message.includes('auth/invalid-email')) {
+                setError('Wrong email.');
+            } else if (err.message.includes('auth/missing-passwordl')) {
+                setError('Please provide a password.');
+            } else {
+                setError(err.message);
+            }
         }
     };
 
@@ -60,43 +67,40 @@ export const MswLogin = () => {
                                     />
                                 </Form.Group>
 
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="formBasicPassword"
-                                >
-                                    <Form.Control
-                                        type="password"
-                                        placeholder="Password"
-                                        onChange={(e) =>
-                                            setPassword(e.target.value)
-                                        }
-                                    />
-                                </Form.Group>
+                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                <Form.Control
+                                    type="email"
+                                    placeholder="Email address"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
 
-                                <div className="d-grid gap-2">
-                                    <Button variant="primary" type="Submit">
-                                        Log In
-                                    </Button>
-                                    {/* <button
-                                        class="btn btn-msw-primary"
-                                        type="submit"
-                                    >
-                                        Log In
-                                    </button> */}
-                                </div>
-                            </Form>
-                            <hr />
-                            {/*<div className="google-button-container">*/}
-                            {/*    <GoogleButton*/}
-                            {/*        type="dark"*/}
-                            {/*        onClick={handleGoogleSignIn}*/}
-                            {/*    />*/}
-                            {/*</div>*/}
-                        </div>
-                        <div className="p-2 box text-center">
-                            Don't have an account?{" "}
-                            <Link to="/signup">Sign up</Link>
-                        </div>
+                            <Form.Group className="mb-3" controlId="formBasicPassword">
+                                <Form.Control
+                                    type="password"
+                                    placeholder="Password"
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+
+                            <div className="d-grid gap-2">
+                                <Button variant="primary" type="Submit">
+                                    Log In
+                                </Button>
+                            </div>
+                        </Form>
+                        <hr/>
+                        {/*<div className="google-button-container">*/}
+                        {/*    <GoogleButton*/}
+                        {/*        type="dark"*/}
+                        {/*        onClick={handleGoogleSignIn}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
+                    </div>
+                    <div className="p-2 box text-center">
+                        Don't have an account? <Link to="/signup">Sign up</Link>
                     </div>
                 </div>
                 <MswFooter />

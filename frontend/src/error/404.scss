@@ -1,0 +1,28 @@
+.container {
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+
+  height: 100vh;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-code {
+  color: #1F7099; // TODO: use MswBlue
+  font-weight: bold;
+}
+
+.status-title {
+  font-weight: 900;
+  font-size: min(8vw, 35px);
+}
+
+.status-explanation {
+  font-size: min(4vw, 16px);
+}
+
+.row {
+  margin: 10px 0;
+}

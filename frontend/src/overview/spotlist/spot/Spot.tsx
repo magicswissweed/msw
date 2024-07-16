@@ -1,6 +1,6 @@
 import './Spot.scss'
 import React from 'react';
-import {ApiSpotInformation, Configuration, SpotsApi} from '../../../gen/msw-api-ts';
+import {ApiSpotInformation, SpotsApi} from '../../../gen/msw-api-ts';
 import {MswMeasurement} from './measurement/MswMeasurement';
 import {MswMiniGraph} from './miniForecast/MswMiniGraph';
 import {MswForecastGraph} from './forecast/MswForecastGraph';
@@ -39,7 +39,7 @@ export const Spot = (props: SpotProps) => {
                 <MswMeasurement location={location}/>
                 <MswMiniGraph location={location}/>
             </div>
-            <div className="right-side-icons-container">
+            <div className="right-side-icons-container hiddenOnMobile">
                 <div className="is-private-icon">
                     <img className={location.isPublic ? "public" : ""}
                          alt="This is a private spot. Only you can see it."
@@ -68,20 +68,20 @@ export const Spot = (props: SpotProps) => {
         return <>
             <div className="collapsibleContent hiddenOnMobile">
                 {location.forecast ? forecastContent : lastMeasurementsContent}
+                {!location.isPublic && privateSpotInteractions}
             </div>
-            {!location.isPublic && privateSpotInteractions}
         </>;
     }
 
-    function onDeleteSpot(location: ApiSpotInformation) {
-        authConfiguration(token, (config: Configuration) => {
-            new SpotsApi(config).deletePrivateSpot(location.id!).then(() => document.location.reload());
-        });
+    async function onDeleteSpot(location: ApiSpotInformation) {
+        let config = await authConfiguration(token);
+        await new SpotsApi(config).deletePrivateSpot(location.id!)
+        document.location.reload();
     }
 }
 
 export function getCollapsibleIcon(isHidden: Boolean) {
-    let className = "collapsibleIcon hiddenOnMobile";
+    let className = "collapsibleIcon";
     if (isHidden) {
         className += " hide";
     }

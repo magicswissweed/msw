@@ -13,28 +13,34 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Optional;
 
 
 @Component
-public class SampleRepository extends AbstractRepository<SampleId, Sample, SampleTableRecord, com.aa.msw.gen.jooq.tables.pojos.SampleTable, SampleTableDao>
+public class SampleRepository extends AbstractTimestampedRepository
+        <SampleId, Sample, SampleTableRecord, com.aa.msw.gen.jooq.tables.pojos.SampleTable, SampleTableDao>
         implements SampleDao {
 
     private static final SampleTable TABLE = SampleTable.SAMPLE_TABLE;
 
     public SampleRepository(final DSLContext dsl) {
-        super(dsl, new SampleTableDao(dsl.configuration()), TABLE, TABLE.ID);
+        super(dsl, new SampleTableDao(dsl.configuration()), TABLE, TABLE.ID, TABLE.TIMESTAMP);
     }
 
     @Override
     protected Sample mapRecord(SampleTableRecord record) {
-        DecimalFormat roundToOneDigit = new DecimalFormat("##.#");
-        double roundedTemp = Double.parseDouble(roundToOneDigit.format(record.getTemperature()));
+        Optional<Double> optionalTemp = Optional.empty();
+        if (record.getTemperature() != null) {
+            DecimalFormat roundToOneDigit = new DecimalFormat("##.#");
+            optionalTemp = Optional.of(
+                    Double.parseDouble(roundToOneDigit.format(record.getTemperature())));
+        }
 
         return new Sample(
                 new SampleId(record.getId()),
                 record.getStationid(),
                 record.getTimestamp(),
-                roundedTemp,
+                optionalTemp,
                 record.getFlow());
     }
 
@@ -44,18 +50,19 @@ public class SampleRepository extends AbstractRepository<SampleId, Sample, Sampl
         record.setId(sample.sampleId().getId());
         record.setStationid(sample.getStationId());
         record.setTimestamp(sample.getTimestamp());
-        record.setTemperature((float) sample.getTemperature());
+        record.setTemperature(sample.getTemperature().map(Double::floatValue).orElse(null));
         record.setFlow(sample.getFlow());
         return record;
     }
 
     @Override
     protected Sample mapEntity(com.aa.msw.gen.jooq.tables.pojos.SampleTable sampleTable) {
+        Float temperature = sampleTable.getTemperature();
         return new Sample(
                 new SampleId(sampleTable.getId()),
                 sampleTable.getStationid(),
                 sampleTable.getTimestamp(),
-                sampleTable.getTemperature(),
+                temperature == null ? Optional.empty() : Optional.of(temperature.doubleValue()),
                 sampleTable.getFlow()
         );
     }

@@ -115,6 +115,7 @@ paths:
           application/json:
             schema:
               type: object
+              required: [ spot, position ]
               properties:
                 spot:
                   $ref: '#/components/schemas/ApiSpot'
@@ -174,6 +175,7 @@ components:
   schemas:
     ApiSpotInformationList:
       type: object
+      required: [ riverSurfSpots, bungeeSurfSpots ]
       properties:
         riverSurfSpots:
           type: array
@@ -185,6 +187,7 @@ components:
             $ref: '#/components/schemas/ApiSpotInformation'
     ApiSpot:
       type: object
+      required: [ id, name, stationId, spotType, isPublic, minFlow, maxFlow ]
       properties:
         id:
           type: string
@@ -208,6 +211,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/ApiSpot'
         - type: object
+          required: [ currentSample, forecast ]
           properties:
             currentSample:
               $ref: '#/components/schemas/ApiSample'
@@ -215,11 +219,13 @@ components:
               $ref: '#/components/schemas/ApiForecast'
     SpotOrderList:
       type: array
+      required: [ type, format ]
       items:
         type: string
         format: uuid
     ApiSample:
       type: object
+      required: [ timestamp, flow ]
       properties:
         timestamp:
           type: string
@@ -235,6 +241,7 @@ components:
         $ref: '#/components/schemas/ApiSample'
     ApiForecast:
       type: object
+      required: [ timestamp, measuredData, median, twentyFivePercentile, seventyFivePercentile, max, min ]
       properties:
         timestamp:
           type: string
@@ -265,6 +272,7 @@ components:
             $ref: '#/components/schemas/ApiForecastLineEntry'
     ApiForecastLineEntry:
       type: object
+      required: [ timestamp, flow ]
       properties:
         timestamp:
           type: string

@@ -23,13 +23,14 @@ import java.util.UUID;
 
 
 @Component
-public class ForecastRepository extends AbstractRepository<ForecastId, Forecast, ForecastTableRecord, com.aa.msw.gen.jooq.tables.pojos.ForecastTable, ForecastTableDao>
+public class ForecastRepository extends AbstractTimestampedRepository
+        <ForecastId, Forecast, ForecastTableRecord, com.aa.msw.gen.jooq.tables.pojos.ForecastTable, ForecastTableDao>
         implements ForecastDao {
 
     private static final ForecastTable TABLE = ForecastTable.FORECAST_TABLE;
 
     public ForecastRepository(final DSLContext dsl) {
-        super(dsl, new ForecastTableDao(dsl.configuration()), TABLE, TABLE.ID);
+        super(dsl, new ForecastTableDao(dsl.configuration()), TABLE, TABLE.ID, TABLE.TIMESTAMP);
     }
 
     private static JSONB toJsonB(Map<OffsetDateTime, Double> data) throws JsonProcessingException {

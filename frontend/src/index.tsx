@@ -8,6 +8,7 @@ import {UserAuthContextProvider} from './user/UserAuthContext';
 import {MswOverviewPage} from './overview/MswOverviewPage';
 import MswSignUp from './user/signup/MswSignUp';
 import {MswAddSpot} from './spot/add/MswAddSpot';
+import {ErrorNotFound} from "./error/404";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement,
@@ -22,7 +23,9 @@ root.render(
                     <Route path="/login" element={<MswLogin/>}/>
                     <Route path="/signup" element={<MswSignUp/>}/>
                     <Route path="/spots" element={<MswOverviewPage/>}/>
-                    <Route path="/spots/add" element={<MswAddSpot/>}></Route>
+                    <Route path="/spots/add" element={<MswAddSpot/>}/>
+
+                    <Route path="*" element={<ErrorNotFound/>}/>
                 </Routes>
             </BrowserRouter>
         </React.StrictMode>

@@ -84,3 +84,9 @@ summary::-webkit-details-marker {
 .delete-spot-btn {
   margin: 20px auto auto;
 }
+
+@include small() {
+  .hiddenOnMobile {
+    display: none;
+  }
+}

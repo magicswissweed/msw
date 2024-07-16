@@ -2,8 +2,8 @@ import {Configuration} from '../../gen/msw-api-ts';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
-export const authConfiguration = (token: string | null, callback: (config: Configuration) => void) => {
-    let config;
+export async function authConfiguration(token: string | null): Promise<Configuration> {
+    let config: Configuration;
     if (token) {
         config = new Configuration({
             baseOptions: {
@@ -14,5 +14,5 @@ export const authConfiguration = (token: string | null, callback: (config: Confi
         config = new Configuration({});
     }
 
-    callback(config);
+    return config;
 }
