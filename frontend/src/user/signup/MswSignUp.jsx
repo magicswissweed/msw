@@ -15,9 +15,16 @@ const MswSignup = () => {
         e.preventDefault();
         setError("");
         try {
-            signUp(email, password, () => navigate("/"));
+            await signUp(email, password);
+            navigate("/");
         } catch (err) {
-            setError(err.message);
+            if (err.message.includes('auth/email-already-in-use')) {
+                setError('This email is already registered. Please try to log in.');
+            } else if (err.message.includes('auth/weak-password')) {
+                setError('Password should have at least 6 Characters.')
+            } else {
+                setError(err.message);
+            }
         }
     };
 
@@ -37,6 +44,7 @@ const MswSignup = () => {
                                     type="email"
                                     placeholder="Email address"
                                     onChange={(e) => setEmail(e.target.value)}
+                                    required
                                 />
                             </Form.Group>
 
@@ -45,6 +53,7 @@ const MswSignup = () => {
                                     type="password"
                                     placeholder="Password"
                                     onChange={(e) => setPassword(e.target.value)}
+                                    required
                                 />
                             </Form.Group>
 

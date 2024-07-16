@@ -1,10 +1,11 @@
 import './MswAddSpot.scss'
 import React, {FormEvent, useState} from "react";
 import {Button, Form} from 'react-bootstrap';
-import {ApiSpot, ApiSpotSpotTypeEnum, Configuration, SpotsApi} from '../../gen/msw-api-ts';
+import {ApiSpot, ApiSpotSpotTypeEnum, SpotsApi} from '../../gen/msw-api-ts';
 import {authConfiguration} from '../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../user/UserAuthContext';
 import {useNavigate} from 'react-router-dom';
+import {AxiosResponse} from "axios";
 
 export const MswAddSpot = () => {
     const navigate = useNavigate();
@@ -20,25 +21,22 @@ export const MswAddSpot = () => {
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
-        authConfiguration(token, (config: Configuration) => {
-            const apiSpot: ApiSpot = {
-                name: spotName,
-                stationId: stationId,
-                spotType: type,
-                isPublic: false,
-                minFlow: minFlow,
-                maxFlow: maxFlow,
-            };
-            // TODO: position should not be 0, but riversurfspots.length + 1, or bungeesurfSpots.length + 1
-            new SpotsApi(config).addPrivateSpot({spot: apiSpot, position: 0})
-                .then((response) => {
-                    if (response.status === 200) {
-                        navigate('/');
-                    } else {
-                        alert('StationId is not valid. Please check your entered data.');
-                    }
-                });
-        });
+        let config = await authConfiguration(token);
+        const apiSpot: ApiSpot = {
+            name: spotName,
+            stationId: stationId,
+            spotType: type,
+            isPublic: false,
+            minFlow: minFlow,
+            maxFlow: maxFlow,
+        };
+        // TODO: position should not be 0, but riversurfspots.length + 1, or bungeesurfSpots.length + 1
+        let response: AxiosResponse<void, any> = await new SpotsApi(config).addPrivateSpot({spot: apiSpot, position: 0})
+        if (response.status === 200) {
+            navigate('/');
+        } else {
+            alert('Something went wrong. Please check your entered data.');
+        }
     }
 
     return <>

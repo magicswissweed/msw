@@ -45,14 +45,17 @@ export const MswLastMeasurementsGraph = (props: MswLastMeasurementsGraphProps) =
     location = props.location;
     isMini = props.isMini;
 
-    authConfiguration(token, (config) => {
+    fetchLast40DaysSamples();
+
+    async function fetchLast40DaysSamples() {
+        let config = await authConfiguration(token);
         new SampleApi(config).getLast40DaysSamples(location.stationId!)
             .then((res: AxiosResponse<ApiSample[], any>) => {
                 if (res && res.data) {
                     setState({samples: res.data});
                 }
             });
-    });
+    }
 
     if (state.samples.length == 0) {
         return <>

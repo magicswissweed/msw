@@ -15,11 +15,18 @@ export const MswLogin = () => {
         e.preventDefault();
         setError("");
         try {
-            await logIn(email, password).then(() => {
-                navigate("/spots")
-            });
+            await logIn(email, password)
+            navigate("/spots")
         } catch (err) {
-            setError(err.message);
+            if (err.message.includes('auth/invalid-credential')) {
+                setError('Wrong email or password.');
+            } else if (err.message.includes('auth/invalid-email')) {
+                setError('Wrong email.');
+            } else if (err.message.includes('auth/missing-passwordl')) {
+                setError('Please provide a password.');
+            } else {
+                setError(err.message);
+            }
         }
     };
 
@@ -49,6 +56,7 @@ export const MswLogin = () => {
                                     type="email"
                                     placeholder="Email address"
                                     onChange={(e) => setEmail(e.target.value)}
+                                    required
                                 />
                             </Form.Group>
 
@@ -57,6 +65,7 @@ export const MswLogin = () => {
                                     type="password"
                                     placeholder="Password"
                                     onChange={(e) => setPassword(e.target.value)}
+                                    required
                                 />
                             </Form.Group>
 

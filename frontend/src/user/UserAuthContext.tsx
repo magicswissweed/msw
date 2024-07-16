@@ -8,7 +8,7 @@ import {
     User,
 } from "firebase/auth";
 import {firebaseAuth} from '../firebase/FirebaseConfig';
-import {Configuration, UserApi} from '../gen/msw-api-ts';
+import {UserApi} from '../gen/msw-api-ts';
 import {authConfiguration} from '../api/config/AuthConfiguration';
 
 
@@ -51,16 +51,11 @@ export function UserAuthContextProvider({children}) {
         return signInWithEmailAndPassword(firebaseAuth, email, password);
     }
 
-    function signUp(email: string, password: string, callback: () => void) {
-        return createUserWithEmailAndPassword(firebaseAuth, email, password).then((user) => {
-            user.user.getIdToken(false).then(token => {
-                authConfiguration(token, (config: Configuration) => {
-                    new UserApi(config)
-                        .registerUser()
-                        .then(callback);
-                });
-            });
-        });
+    async function signUp(email: string, password: string): Promise<void> {
+        let user = await createUserWithEmailAndPassword(firebaseAuth, email, password);
+        let token = await user.user.getIdToken(false);
+        let config = await authConfiguration(token);
+        await new UserApi(config).registerUser();
     }
 
     function logOut() {
