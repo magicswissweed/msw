@@ -54,53 +54,43 @@ export const MswLogin = () => {
                             {error && <Alert variant="danger">{error}</Alert>}
 
                             <Form onSubmit={handleSubmit}>
-                                <Form.Group
-                                    className="mb-3"
-                                    controlId="formBasicEmail"
-                                >
+
+                                <Form.Group className="mb-3" controlId="formBasicEmail">
                                     <Form.Control
                                         type="email"
                                         placeholder="Email address"
-                                        onChange={(e) =>
-                                            setEmail(e.target.value)
-                                        }
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
                                     />
                                 </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="formBasicEmail">
-                                <Form.Control
-                                    type="email"
-                                    placeholder="Email address"
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                />
-                            </Form.Group>
+                                <Form.Group className="mb-3" controlId="formBasicPassword">
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Password"
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                    />
+                                </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="formBasicPassword">
-                                <Form.Control
-                                    type="password"
-                                    placeholder="Password"
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
-                            </Form.Group>
+                                <div className="d-grid gap-2">
+                                    <Button variant="primary" type="Submit">
+                                        Log In
+                                    </Button>
+                                </div>
+                            </Form>
+                            <hr />
+                            {/*<div className="google-button-container">*/}
+                            {/*    <GoogleButton*/}
+                            {/*        type="dark"*/}
+                            {/*        onClick={handleGoogleSignIn}*/}
+                            {/*    />*/}
+                            {/*</div>*/}
+                        </div>
 
-                            <div className="d-grid gap-2">
-                                <Button variant="primary" type="Submit">
-                                    Log In
-                                </Button>
-                            </div>
-                        </Form>
-                        <hr/>
-                        {/*<div className="google-button-container">*/}
-                        {/*    <GoogleButton*/}
-                        {/*        type="dark"*/}
-                        {/*        onClick={handleGoogleSignIn}*/}
-                        {/*    />*/}
-                        {/*</div>*/}
-                    </div>
-                    <div className="p-2 box text-center">
-                        Don't have an account? <Link to="/signup">Sign up</Link>
+                        <div className="p-2 box text-center">
+                            Don't have an account? <Link to="/signup">Sign up</Link>
+                        </div>
                     </div>
                 </div>
                 <MswFooter />

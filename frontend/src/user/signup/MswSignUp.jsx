@@ -40,7 +40,8 @@ const MswSignup = () => {
                             <h2 className="mb-3">Signup</h2>
 
                             {error && <Alert variant="danger">{error}</Alert>}
-
+                            
+                            <Form onSubmit={handleSubmit}>
 
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Control
@@ -65,12 +66,13 @@ const MswSignup = () => {
                                     Sign up
                                 </Button>
                             </div>
-                        </Form>
+                            </Form>
+                        </div>
+                        <div className="p-2 box text-center">
+                            Already have an account? <Link to="/login">Log In</Link>
+                        </div>
                     </div>
-                    <div className="p-2 box text-center">
-                        Already have an account? <Link to="/login">Log In</Link>
-                    </div>
-                </div>
+            </div>
                 <MswFooter />
             </div>
         </>
