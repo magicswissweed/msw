@@ -13,11 +13,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+@Profile("!test")
 @Component
 public class RequestUserInterceptor implements HandlerInterceptor {
 
@@ -39,15 +41,16 @@ public class RequestUserInterceptor implements HandlerInterceptor {
                 User user;
                 try {
                     user = userDao.getUser(extUserId);
+                    UserContext.setCurrentUser(user);
                 } catch (NoSuchUserException e) { // on register or downsync from firebase
                     user = new User(
                             new UserId(),
                             extUserId,
                             decodedToken.getEmail(),
                             "");
-                    userDao.persist(user);
+                    UserContext.setCurrentUser(user);
+                    userDao.registerUserAndAddPublicSpots();
                 }
-                UserContext.setCurrentUser(user);
             } catch (FirebaseAuthException e) {
                 LOG.info("Exception when decoding token: " + e.getMessage());
             }

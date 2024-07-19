@@ -2,7 +2,6 @@ package com.aa.msw.api.spots;
 
 import com.aa.msw.api.current.SampleApiService;
 import com.aa.msw.api.forecast.ForecastApiService;
-import com.aa.msw.auth.threadlocal.UserContext;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.exceptions.NoSampleAvailableException;
 import com.aa.msw.database.exceptions.NoSuchUserException;
@@ -53,7 +52,7 @@ public class SpotsApiService {
     }
 
     public ApiSpotInformationList getAllSpots() throws NoDataAvailableException, NoSuchUserException {
-        List<UserSpot> userSpots = userToSpotDao.getUserSpotsOrdered(UserContext.getCurrentUser().userId());
+        List<UserSpot> userSpots = userToSpotDao.getUserSpotsOrdered();
 
         List<ApiSpotInformation> apiRiverSurfSpots = getApiSpotInformationList(
                 userSpots.stream()

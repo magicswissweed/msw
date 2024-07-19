@@ -1,8 +1,8 @@
 package com.aa.msw.api;
 
-import com.aa.msw.auth.RequestUserInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -10,9 +10,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private final RequestUserInterceptor requestUserInterceptor;
+    private final HandlerInterceptor requestUserInterceptor;
 
-    public WebConfig(RequestUserInterceptor requestUserInterceptor) {
+    public WebConfig(HandlerInterceptor requestUserInterceptor) {
         this.requestUserInterceptor = requestUserInterceptor;
     }
 

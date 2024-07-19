@@ -1,22 +1,17 @@
 package com.aa.msw.integrationtest;
 
-import com.google.gson.Gson;
+import com.aa.msw.config.PublicSpotListConfiguration;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Before;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
@@ -25,45 +20,29 @@ import static io.restassured.RestAssured.given;
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class IntegrationTest {
 
     @LocalServerPort
     public int port;
-    @Value("${msw.firebase.api_key}")
-    private String firebaseApiKey;
+
+    @Autowired
+    public PublicSpotListConfiguration publicSpotListConfiguration;
 
     @Before
     public void readPort() {
         RestAssured.port = port;
     }
 
+    @BeforeAll
+    public void initializePublicSpots() {
+        publicSpotListConfiguration.persistPublicSpots();
+    }
+
     protected RequestSpecification getTemplateRequest(TestUser user) {
-
-
         return given()
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + getToken(user))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + user.token())
                 .port(port);
-    }
-
-    private String getToken(TestUser user) {
-        String url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + firebaseApiKey;
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("email", user.email());
-        requestBody.put("password", user.password());
-        requestBody.put("returnSecureToken", true);
-        HttpEntity<?> httpEntity = new HttpEntity<>(requestBody, new HttpHeaders());
-        ResponseEntity<String> response = new RestTemplate().exchange(url, HttpMethod.POST, httpEntity, String.class);
-        String responseString = response.getBody();
-        return new Gson()
-                .fromJson(responseString, LoginOutputFromFirebase.class)
-                .idToken;
-    }
-
-    public record LoginOutputFromFirebase(String idToken,
-                                          String email,
-                                          String refreshToken,
-                                          String expiresIn,
-                                          String localId) {
     }
 }
 
