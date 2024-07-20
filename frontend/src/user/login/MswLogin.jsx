@@ -1,4 +1,5 @@
-import '../user.scss'
+import '../user.scss';
+import './MswLogin.scss';
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {Alert, Button, Form} from "react-bootstrap";
@@ -74,8 +75,9 @@ export const MswLogin = () => {
                                     Log In
                                 </Button>
                             </div>
+
+                            <Link className="forgot-password" to="/forgot-password">Forgot Password</Link>
                         </Form>
-                        <hr/>
                         {/*<div className="google-button-container">*/}
                         {/*    <GoogleButton*/}
                         {/*        type="dark"*/}

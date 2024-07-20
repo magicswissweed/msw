@@ -2,6 +2,7 @@ import {createContext, useContext, useEffect, useState} from "react";
 import {
     createUserWithEmailAndPassword,
     GoogleAuthProvider,
+    sendPasswordResetEmail,
     signInWithEmailAndPassword,
     signInWithPopup,
     signOut,
@@ -41,7 +42,7 @@ export function UserAuthContextProvider({children}) {
 
     return (
         <userAuthContext.Provider
-            value={{user, token, logIn, signUp, logOut, googleSignIn}}
+            value={{user, token, logIn, signUp, logOut, sendForgotPasswordEmail, googleSignIn}}
         >
             {children}
         </userAuthContext.Provider>
@@ -56,6 +57,10 @@ export function UserAuthContextProvider({children}) {
         let token = await user.user.getIdToken(false);
         let config = await authConfiguration(token);
         await new UserApi(config).registerUser();
+    }
+
+    async function sendForgotPasswordEmail(email: string): Promise<void> {
+        await sendPasswordResetEmail(firebaseAuth, email);
     }
 
     function logOut() {
