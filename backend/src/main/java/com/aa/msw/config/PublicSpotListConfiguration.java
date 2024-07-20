@@ -40,7 +40,7 @@ public class PublicSpotListConfiguration {
     @EventListener(ContextStartedEvent.class)
     @Transactional
     public void persistPublicSpots() {
-        if (spotDao.getPublicRiverSurfSpots().size() != PUBLIC_RIVER_SURF_SPOTS.size() &&
+        if (spotDao.getPublicRiverSurfSpots().size() != PUBLIC_RIVER_SURF_SPOTS.size() ||
                 spotDao.getPublicBungeeSurfSpots().size() != PUBLIC_BUNGEE_SURF_SPOTS.size()) {
             LOG.info("PERSISTING PUBLIC SPOTS");
             persistSpots(PUBLIC_RIVER_SURF_SPOTS);
