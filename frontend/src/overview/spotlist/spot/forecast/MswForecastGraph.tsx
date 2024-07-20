@@ -207,9 +207,9 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
         return <Legend
             payload={[
                 {type: "line", value: LINE_NAME_MEASURED, color: "green"},
-                {type: "line", value: LINE_NAME_MEDIAN, color: "blue"},
-                {type: "square", value: "25.-75. Perzentil", color: "#1e9196"},
-                {type: "square", value: "Min / Max", color: "#75d4d9"},
+                {type: "line", value: LINE_NAME_MEDIAN, color: "#3bbae8"},
+                {type: "square", value: "25.-75. percentile", color: "#3bbae8d5"},
+                {type: "square", value: "min-max", color: "#3bbae8d5"},
             ]}
         />;
     }
