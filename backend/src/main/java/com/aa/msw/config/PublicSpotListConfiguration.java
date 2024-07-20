@@ -4,23 +4,22 @@ import com.aa.msw.database.helpers.id.SpotId;
 import com.aa.msw.database.repository.dao.SpotDao;
 import com.aa.msw.model.Spot;
 import com.aa.msw.model.SpotTypeEnum;
+import com.aa.msw.source.InputDataFetcherService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.event.ContextStartedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Set;
-
-// TODO: user_to_spot_table
-//  -> on signup: new entry for each of these public spots
-//  -> or even better on every call GET spots - because this way we could always add new public spots
 
 @Component
 public class PublicSpotListConfiguration {
-    public static final Set<Spot> PUBLIC_RIVER_SURF_SPOTS = Set.of(
-            new Spot(new SpotId(), true, SpotTypeEnum.RIVER_SURF, "Bremgarten", 2018, 180, 390),
-            new Spot(new SpotId(), true, SpotTypeEnum.RIVER_SURF, "Thun", 2030, 90, 210)
-    );
+    public static final Set<Spot> PUBLIC_RIVER_SURF_SPOTS = Set.of();
     public static final Set<Spot> PUBLIC_BUNGEE_SURF_SPOTS = Set.of(
             new Spot(new SpotId(), true, SpotTypeEnum.BUNGEE_SURF, "Zürich", 2243, 75, 350),
             new Spot(new SpotId(), true, SpotTypeEnum.BUNGEE_SURF, "Bern", 2135, 80, 360),
@@ -30,17 +29,31 @@ public class PublicSpotListConfiguration {
     );
     private static final Logger LOG = LoggerFactory.getLogger(PublicSpotListConfiguration.class);
     public final SpotDao spotDao;
+    private final InputDataFetcherService inputDataFetcherService;
 
-    public PublicSpotListConfiguration(SpotDao spotDao) {
+    public PublicSpotListConfiguration(SpotDao spotDao, InputDataFetcherService inputDataFetcherService) {
         this.spotDao = spotDao;
+        this.inputDataFetcherService = inputDataFetcherService;
     }
 
     @ManagedOperation
-//	@Scheduled(fixedDelay = 60_000)
-    void persistPublicSpots() {
-        LOG.info("PERSISTING PUBLIC SPOTS");
-        persistSpots(PUBLIC_RIVER_SURF_SPOTS);
-        persistSpots(PUBLIC_BUNGEE_SURF_SPOTS);
+    @EventListener(ContextStartedEvent.class)
+    @Transactional
+    public void persistPublicSpots() {
+        if (spotDao.getPublicRiverSurfSpots().size() != PUBLIC_RIVER_SURF_SPOTS.size() &&
+                spotDao.getPublicBungeeSurfSpots().size() != PUBLIC_BUNGEE_SURF_SPOTS.size()) {
+            LOG.info("PERSISTING PUBLIC SPOTS");
+            persistSpots(PUBLIC_RIVER_SURF_SPOTS);
+            persistSpots(PUBLIC_BUNGEE_SURF_SPOTS);
+
+            inputDataFetcherService.updateStationIds();
+            try {
+                inputDataFetcherService.fetchDataAndWriteToDb();
+            } catch (IOException | URISyntaxException e) {
+                // NOP. Should never happen.
+                // If something went wrong, the data will get fetched again in a few minutes and the problem fixes itself.
+            }
+        }
     }
 
     private void persistSpots(Set<Spot> spots) {

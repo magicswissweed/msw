@@ -1,5 +1,6 @@
 package com.aa.msw.database.repository;
 
+import com.aa.msw.auth.threadlocal.UserContext;
 import com.aa.msw.database.exceptions.NoSuchUserException;
 import com.aa.msw.database.helpers.id.UserExtId;
 import com.aa.msw.database.helpers.id.UserId;
@@ -11,6 +12,7 @@ import com.aa.msw.gen.jooq.tables.records.UserTableRecord;
 import com.aa.msw.model.User;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
@@ -38,6 +40,13 @@ public class UserRepository extends AbstractRepository<UserId, User, UserTableRe
         } catch (NoSuchElementException e) {
             throw new NoSuchUserException(e);
         }
+    }
+
+    @Override
+    @Transactional
+    public void registerUserAndAddPublicSpots() {
+        persist(UserContext.getCurrentUser());
+        userToSpotDao.addAllPublicSpotsToUser();
     }
 
     @Override

@@ -13,6 +13,10 @@ interface MswOverviewPageState {
     data: ApiSpotInformationList | null
 }
 
+function isNotEmpty(array: Array<any> | undefined) {
+    return array && array.length > 0;
+}
+
 export const MswOverviewPage = () => {
     const [state, setState] = useState<MswOverviewPageState>({data: null});
 
@@ -40,7 +44,7 @@ export const MswOverviewPage = () => {
 
     // load on user change
     useEffect(() => {
-        fetchData((user != undefined));
+        fetchData(user != undefined);
     }, [user])
 
     return <>
@@ -54,12 +58,10 @@ export const MswOverviewPage = () => {
     function getContent(data: ApiSpotInformationList) {
         return <>
             <div className="surfspots">
-                <div className="riversurf">
-                    <SpotList title="Riversurf" locations={data.riverSurfSpots!}/>
-                </div>
-                <div className="bungeesurf">
-                    <SpotList title="Bungeesurf" locations={data.bungeeSurfSpots!}/>
-                </div>
+                {isNotEmpty(data.riverSurfSpots) &&
+                    <SpotList title="Riversurf" locations={data.riverSurfSpots!}/>}
+                {isNotEmpty(data.bungeeSurfSpots) &&
+                    <SpotList title="Bungeesurf" locations={data.bungeeSurfSpots!}/>}
             </div>
         </>;
     }
