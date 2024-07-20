@@ -9,7 +9,7 @@ public class DbSyncedId extends AbstractUUID implements Serializable {
 
     private final boolean dbSynced;
 
-    private DbSyncedId(UUID identifier, boolean dbSynced) {
+    public DbSyncedId(UUID identifier, boolean dbSynced) {
         super(identifier);
         this.dbSynced = dbSynced;
     }

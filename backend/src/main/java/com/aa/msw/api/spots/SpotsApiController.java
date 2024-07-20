@@ -65,7 +65,7 @@ public class SpotsApiController implements SpotsApi {
         int position = addPrivateSpotRequest.getPosition();
 
         Spot spot = new Spot(
-                new SpotId(),
+                new SpotId(apiSpot.getId(), false),
                 false,
                 getSpotTypeEnum(apiSpot.getSpotType()),
                 apiSpot.getName(),

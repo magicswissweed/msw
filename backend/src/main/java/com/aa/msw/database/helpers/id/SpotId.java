@@ -11,6 +11,10 @@ public class SpotId extends DbSyncedId {
         super(identifier);
     }
 
+    public SpotId(final UUID identifier, boolean isDbSynced) {
+        super(identifier, isDbSynced);
+    }
+
     public SpotId(final String identifier) {
         super(UUID.fromString(identifier));
     }
