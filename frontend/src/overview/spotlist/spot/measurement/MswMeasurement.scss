@@ -26,15 +26,52 @@
 }
 
 .flow {
-  color: darkblue;
+  align-items: end;
+  font-size: 180%;
+}
+
+/* colors for flow */
+.flow_bad {
+  color: #e2576f;
+}
+
+.flow_ok {
+  color: #f8cd4c;
+}
+
+.flow_good {
+  color: #409073;
 }
 
 .temp {
-  color: deepskyblue;
+  align-items: start;
+  font-size: 120%;
+  margin-top: -10px;
+}
+
+/* colors for temperature */
+.temp_0 {
+  color: #5944fa;
+}
+
+.temp_1 {
+  color: #3b91f4;
+}
+
+.temp_2 {
+  color: #7cece5;
+}
+
+.temp_3 {
+  color: #f6db2a;
+}
+
+.temp_4 {
+  color: #ec5529;
 }
 
 .unit {
+  color: black;
   font-size: 70%;
   display: inline;
 }
-

@@ -1,6 +1,7 @@
 @import "../ReactiveMixins";
 
 .form {
+    text-align: left;
     display: flex;
     justify-content: center;
     align-content: center;
@@ -12,11 +13,11 @@
 }
 
 .box-container {
-    width: 33%;
+    width: 550px;
     margin: auto;
 
     @include small {
-        width: 50%;
+        width: 80%;
     }
 }
 

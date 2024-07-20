@@ -1,6 +1,6 @@
 import './MswMeasurement.scss'
 import {Component} from 'react';
-import {ApiSpotInformation} from '../../../../gen/msw-api-ts';
+import {ApiSample, ApiSpotInformation} from '../../../../gen/msw-api-ts';
 
 interface MeasurementsProps {
     location: ApiSpotInformation
@@ -16,19 +16,20 @@ export class MswMeasurement extends Component<MeasurementsProps> {
     }
 
     render() {
+      let temperature = this.location.currentSample!.temperature;
         return <>
             <div className="measurements">
-                <div className="measurement_row timestamp">
+                {/* <div className="measurement_row timestamp">
                     {this.convertTimeStampToDisplayableString(this.location.currentSample!.timestamp!)}
-                </div>
+                </div> */}
 
                 <div className="measurement_row meas flow">
                     {this.getFlow()}
                 </div>
 
-                {this.location.currentSample!.temperature &&
-                    <div className={"measurement_row meas temp"}>
-                        <div>{this.location.currentSample!.temperature}</div>
+                {temperature &&
+                    <div className="measurement_row meas temp">
+                        <div className={this.convertTemperatureToColor(temperature)}>{Math.round(temperature)}</div>
                         <div className="unit">°C</div>
                     </div>
                 }
@@ -38,8 +39,12 @@ export class MswMeasurement extends Component<MeasurementsProps> {
     }
 
     private getFlow() {
+      let flow = this.location.currentSample!.flow;
+      let min_flow = this.location.minFlow;
+      let max_flow = this.location.maxFlow;
+      
         return <>
-            <div>{this.location.currentSample!.flow}</div>
+            <div className={this.convertFlowToColor(flow!, min_flow!, max_flow!)}>{flow}</div>
             <div className="unit">
                 m<sup>3</sup>/s
             </div>
@@ -59,5 +64,31 @@ export class MswMeasurement extends Component<MeasurementsProps> {
     private convertTimeStampToDisplayableString(timestampString: string) {
         let date = new Date(timestampString);
         return date.getHours() + ":" + ((date.getMinutes() == 0) ? "00" : date.getMinutes());
+    }
+
+    // convert flow value to color
+    private convertFlowToColor(_flow: number, _min_flow: number, _max_flow: number) {
+      if (_flow >= _min_flow && _flow <= _max_flow) {
+        return "flow_good";
+      } else {
+        return "flow_bad";
+      }
+    }
+
+    // convert temperature value to color
+    private convertTemperatureToColor(_temp: number) {
+      if (_temp < 8) {
+        return "temp_0";
+      }
+      if (_temp < 13) {
+        return "temp_1";
+      }
+      if (_temp < 18) {
+        return "temp_2";
+      }
+      if (_temp < 23) {
+        return "temp_3";
+      }
+      return "temp_4";
     }
 }

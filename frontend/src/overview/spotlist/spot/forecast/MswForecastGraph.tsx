@@ -1,6 +1,7 @@
 import "./MswForecastGraph.scss";
 import {
     Area,
+    CartesianAxis,
     CartesianGrid,
     ComposedChart,
     Label,
@@ -75,6 +76,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
         let showTooltip = true;
         let showYAxis = true;
         let showLegend = true;
+        let horizontalGrid = true;
 
 
         if (this.isMini) {
@@ -83,6 +85,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
             showTooltip = false;
             showYAxis = false;
             showLegend = false;
+            horizontalGrid = false;
         }
 
         return <>
@@ -91,7 +94,8 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
                     <ReferenceArea y1={this.location.minFlow}
                                    y2={this.location.maxFlow}
                                    ifOverflow="extendDomain"
-                                   fill="green"/>
+                                   fill="green"
+                                   opacity={0.5}/>
                     <ReferenceLine x={Date.now()} stroke="#666666"/>
                     <ReferenceDot x={new Date(this.location.forecast!.timestamp!).getTime()}
                                   y={this.location.forecast.median!
@@ -106,17 +110,21 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
                     <Area
                         dataKey="minMaxRange"
                         strokeWidth={0}
-                        fill="#75d4d9"
+                        // fill="#75d4d9"
+                        fill="#3bbae8"
+                        opacity={.4}
                     />
                     <Area
                         dataKey="percentileRange"
                         strokeWidth={0}
-                        fill="#1e9196"
+                        // fill="#1e9196"
+                        fill="#3bbae8"
+                        opacity={0.6}
                     />
 
                     <Line type="monotone"
                           dataKey={DATA_KEY_MEDIAN}
-                          stroke="blue"
+                          stroke="#3bbae8"
                           dot={false}
                           name={LINE_NAME_MEDIAN}
                           activeDot={{stroke: '#029ca3', strokeWidth: 1, r: 4}}/>
@@ -126,7 +134,8 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
                           dot={false}
                           name={LINE_NAME_MEASURED}
                           activeDot={{stroke: 'green', strokeWidth: 1, r: 4}}/>
-                    <CartesianGrid/>
+                    <CartesianGrid
+                        horizontal={horizontalGrid}/>
                     <XAxis
                         type="number"
                         dataKey="datetime"

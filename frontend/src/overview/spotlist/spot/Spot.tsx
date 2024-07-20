@@ -9,6 +9,7 @@ import lock from '../../../assets/lock.svg';
 import {MswLastMeasurementsGraph} from './historical/MswLastMeasurementsGraph';
 import {authConfiguration} from '../../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../../user/UserAuthContext';
+import { Button } from 'react-bootstrap';
 
 interface SpotProps {
     location: ApiSpotInformation
@@ -63,8 +64,8 @@ export const Spot = (props: SpotProps) => {
         </>;
 
         const privateSpotInteractions = <>
-            <button className="msw-button delete-spot-btn" onClick={() => onDeleteSpot(location)}>Delete Spot</button>
-        </>;
+            <Button variant="outline-primary delete-spot-btn" onClick={() => onDeleteSpot(location)}>Delete Spot</Button>
+            </>;
         return <>
             <div className="collapsibleContent hiddenOnMobile">
                 {location.forecast ? forecastContent : lastMeasurementsContent}

@@ -70,6 +70,8 @@ flyway {
     user = "gradle"
     password = "password"
     locations = listOf("filesystem:" + project.rootDir + "/backend/src/main/resources/db/migration").toTypedArray()
+    cleanDisabled = false
+    baselineOnMigrate = true
 }
 
 tasks.register<GenerateTask>("openApiGenerateSpring") {

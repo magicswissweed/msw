@@ -6,12 +6,20 @@
     display: flex;
     min-height: 100vh;
     flex-direction: column;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-        Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    font-family: -apple-system, Inter, Helvetica Neue, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+        Ubuntu, Cantarell, Fira Sans, Droid Sans, sans-serif;
+
+    h2 {
+        color: $msw-blue;
+    }
 }
 
 a {
     color: $msw-blue;
+}
+
+.black {
+    color: black;
 }
 
 .surfspots {
@@ -22,7 +30,6 @@ a {
     flex-direction: row;
     justify-content: space-evenly;
     flex-flow: row wrap;
-    color: $msw-blue;
 
     @include small {
         flex-direction: column;

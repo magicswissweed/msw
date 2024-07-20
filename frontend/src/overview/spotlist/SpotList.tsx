@@ -61,20 +61,20 @@ export const SpotList = (props: SpotListProps) => {
         }
     };
 
-    let tableHeader = <div className="tableHeaderContainer">
-        <div className="tableHeader">
-            <div className="tableHeaderCol">Name</div>
-            <div className="tableHeaderCol">Flow/Temp</div>
-            <div className="tableHeaderCol doubleCol">Forecast</div>
-        </div>
-        {/* only to have the same columns as in the spots */}
-        {getCollapsibleIcon(true)}
-    </div>;
+    // let tableHeader = <div className="tableHeaderContainer">
+    //     {/* <div className="tableHeader">
+    //         <div className="tableHeaderCol">Name</div>
+    //         <div className="tableHeaderCol">Flow/Temp</div>
+    //         <div className="tableHeaderCol doubleCol">Forecast</div>
+    //     </div> */}
+    //     {/* only to have the same columns as in the spots */}
+    //     {getCollapsibleIcon(true)}
+    // </div>;
 
     return <>
         <div className="spotsContainer">
             <h2>{props.title}</h2>
-            {tableHeader}
+            {/* {tableHeader} */}
             <div className="sortable-list">
                 {locations.map((location: ApiSpotInformation) => (
                     <div

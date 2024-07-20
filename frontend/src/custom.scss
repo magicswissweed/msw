@@ -4,24 +4,22 @@
 $msw-blue: #3bbae8;
 
 /* general bootstrap customizations */
-$theme-colors: (
-    "primary": $msw-blue,
-);
+$primary: $msw-blue;
 
 /* import bootstrap to set changes */
-@import "~bootstrap/scss/bootstrap";
+@import '~bootstrap/scss/bootstrap';
 
 /* custom styles */
 .btn-primary {
-    color: white;
+  color: white;
 
-    &:hover {
-        color: white;
-    }
+  &:hover {
+    color: white;
+  }
 }
 
 .btn-outline-primary {
-    &:hover {
-        color: white;
-    }
+  &:hover {
+    color: white;
+  }
 }

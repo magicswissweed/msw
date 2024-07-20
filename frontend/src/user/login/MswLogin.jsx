@@ -49,7 +49,7 @@ export const MswLogin = () => {
                 <div className="form">
                     <div className="box-container">
                         <div className="p-2 box">
-                            <h2 className="mb-3">Login</h2>
+                            <h2 className="mb-3 text-center">Login</h2>
 
                             {error && <Alert variant="danger">{error}</Alert>}
 

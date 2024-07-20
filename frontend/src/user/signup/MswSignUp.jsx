@@ -37,7 +37,7 @@ const MswSignup = () => {
                 <div className="form">
                     <div className="box-container">
                         <div className="p-2 box">
-                            <h2 className="mb-3">Signup</h2>
+                            <h2 className="mb-3 text-center">Signup</h2>
 
                             {error && <Alert variant="danger">{error}</Alert>}
                             
