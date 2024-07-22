@@ -9,6 +9,7 @@ import {MswOverviewPage} from './overview/MswOverviewPage';
 import MswSignUp from './user/signup/MswSignUp';
 import {MswAddSpot} from './spot/add/MswAddSpot';
 import {ErrorNotFound} from "./error/404";
+import {MswForgotPassword} from "./user/forgot-password/MswForgotPassword";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement,
@@ -22,6 +23,7 @@ root.render(
                     <Route path="/" element={<Navigate replace to="/spots"/>}/>
                     <Route path="/login" element={<MswLogin/>}/>
                     <Route path="/signup" element={<MswSignUp/>}/>
+                    <Route path="/forgot-password" element={<MswForgotPassword/>}/>
                     <Route path="/spots" element={<MswOverviewPage/>}/>
                     <Route path="/spots/add" element={<MswAddSpot/>}/>
 
