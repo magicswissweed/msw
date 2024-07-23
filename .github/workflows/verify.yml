@@ -15,9 +15,9 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT }}
-  GAR_LOCATION: europe-west6
-  GAR_REPOSITORY: msw-backend
-  IMAGE: msw-backend
+  GAR_LOCATION: ${{ vars.GAR_LOCATION }}
+  GAR_REPOSITORY_BACKEND: ${{ vars.GAR_REPOSITORY_BACKEND }}
+  GAR_REPOSITORY_FRONTEND: ${{ vars.GAR_REPOSITORY_FRONTEND }}
 
 jobs:
   verify:
@@ -58,14 +58,25 @@ jobs:
       - name: 🖨️ Copy Jar File
         run: mv backend/build/libs/$(ls backend/build/libs | grep -v plain) backend/app.jar
 
-      - name: 🐳 Build Docker Image
+      - name: 🐳 Build Backend Docker Image
         run: |
           docker build \
-            --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY/$GITHUB_SHA" \
+            --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY_BACKEND/$GITHUB_SHA" \
             --build-arg JAR_FILE=app.jar \
             backend
 
-      - name: 🚀 Push Image to GCP Artifact Registry
+      - name: 🐳 Build Frontend Docker Image
+        run: |
+          docker build \
+          --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY_FRONTEND/$GITHUB_SHA" \
+          frontend
+
+      - name: 🚀 Push Backend Image to GCP Artifact Registry
         if: github.ref == 'refs/heads/master'
         run: |
-          docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY/$GITHUB_SHA"
+          docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY_BACKEND/$GITHUB_SHA"
+
+      - name: 🚀 Push Frontend Image to GCP Artifact Registry
+        if: github.ref == 'refs/heads/master'
+        run: |
+          docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY_FRONTEND/$GITHUB_SHA"
