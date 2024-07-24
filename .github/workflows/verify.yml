@@ -16,6 +16,7 @@ on:
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT }}
   GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+  FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
   FIREBASE_OAUTH2_JWT_ISSUER_URI: ${{ secrets.FIREBASE_OAUTH2_JWT_ISSUER_URI }}
 
   GAR_LOCATION: ${{ vars.GAR_LOCATION }}
@@ -50,6 +51,10 @@ jobs:
       - name: Start Database
         run: docker compose --project-name msw -f docker-compose.yml up -d
 
+      - name: 🖨️ Prepare Backend Build
+        run: |
+          echo '${{ env.FIREBASE_SERVICE_ACCOUNT }}' >backend/src/main/resources/${{ env.FIREBASE_SERVICE_ACCOUNT_FILENAME }}
+
       - name: 🔨 Build
         run: |
           chmod +x ./gradlew
@@ -63,8 +68,7 @@ jobs:
       - name: 🖨️ Prepare Backend Docker Build
         run: |
           mv backend/build/libs/$(ls backend/build/libs | grep -v plain) backend/app.jar &&
-          mkdir backend/config &&
-          echo '${{ env.GCP_SERVICE_ACCOUNT }}' >backend/src/main/resources/${{ env.FIREBASE_SERVICE_ACCOUNT_FILENAME }}
+          mkdir backend/config
 
       - name: 📝 Create application.properties-file
         uses: SpicyPizza/create-envfile@v1.3
@@ -88,6 +92,18 @@ jobs:
             --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY_BACKEND/$GITHUB_SHA" \
             --build-arg JAR_FILE=app.jar \
             backend
+
+      - name: 📝 Create .env-file
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_REACT_APP_APIKEY: ${{ secrets.REACT_APP_APIKEY }}
+          envkey_REACT_APP_AUTHDOMAIN: ${{ secrets.REACT_APP_AUTHDOMAIN }}
+          envkey_REACT_APP_PROJECTID: ${{ secrets.REACT_APP_PROJECTID }}
+          envkey_REACT_APP_STORAGEBUCKET: ${{ secrets.REACT_APP_STORAGEBUCKET }}
+          envkey_REACT_APP_MESSAGINGSENDERID: ${{ secrets.REACT_APP_MESSAGINGSENDERID }}
+          envkey_REACT_APP_APPID: ${{ secrets.REACT_APP_APPID }}
+          file_name: .env.local
+          directory: ./frontend
 
       - name: 🐳 Build Frontend Docker Image
         run: |
