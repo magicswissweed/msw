@@ -1,7 +1,7 @@
 spring.profiles.active=dev
 spring.application.name=msw
 
-spring.datasource.url=jdbc:postgresql://localhost:7010/msw
+spring.datasource.url=jdbc:postgresql://localhost:5432/msw
 spring.datasource.username=backend
 spring.datasource.password=password
 

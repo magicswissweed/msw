@@ -63,7 +63,7 @@ java.sourceSets["main"].java {
     srcDir(generatedJooqDir)
 }
 
-val gradlePostgresHost = "localhost:7010"
+val gradlePostgresHost = "localhost:5432"
 
 flyway {
     url = "jdbc:postgresql://$gradlePostgresHost/gradlecodegen"
