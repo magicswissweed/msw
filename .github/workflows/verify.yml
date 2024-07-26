@@ -17,13 +17,10 @@ env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT }}
   GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
   FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-  FIREBASE_OAUTH2_JWT_ISSUER_URI: ${{ secrets.FIREBASE_OAUTH2_JWT_ISSUER_URI }}
 
   GAR_LOCATION: ${{ vars.GAR_LOCATION }}
   GAR_REPOSITORY_BACKEND: ${{ vars.GAR_REPOSITORY_BACKEND }}
   GAR_REPOSITORY_FRONTEND: ${{ vars.GAR_REPOSITORY_FRONTEND }}
-
-  FIREBASE_SERVICE_ACCOUNT_FILENAME: firebase-service-account.json
 
 jobs:
   verify:
@@ -51,10 +48,6 @@ jobs:
       - name: Start Database
         run: docker compose --project-name msw -f docker-compose.yml up -d
 
-      - name: 🖨️ Prepare Backend Build
-        run: |
-          echo '${{ env.FIREBASE_SERVICE_ACCOUNT }}' >backend/src/main/resources/${{ env.FIREBASE_SERVICE_ACCOUNT_FILENAME }}
-
       - name: 🔨 Build
         run: |
           chmod +x ./gradlew
@@ -67,24 +60,7 @@ jobs:
 
       - name: 🖨️ Prepare Backend Docker Build
         run: |
-          mv backend/build/libs/$(ls backend/build/libs | grep -v plain) backend/app.jar &&
-          mkdir backend/config
-
-      - name: 📝 Create application.properties-file
-        uses: SpicyPizza/create-envfile@v1.3
-        with:
-          envkey_spring.profiles.active: prd
-          envkey_spring.application.name: msw
-          envkey_spring.datasource.url: jdbc:postgresql://localhost:5432/msw
-          # TODO: use secret
-          envkey_spring.datasource.username: backend
-          # TODO: use secret
-          envkey_spring.datasource.password: password
-          envkey_spring.security.oauth2.resourceserver.jwt.jwk-set-uri: https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com
-          envkey_spring.security.oauth2.resourceserver.jwt.issuer-uri: ${{ env.FIREBASE_OAUTH2_JWT_ISSUER_URI }}
-          envkey_firebase.service-account.path: ${{ env.FIREBASE_SERVICE_ACCOUNT_FILENAME }}
-          file_name: application.properties
-          directory: ./backend/config/
+          mv backend/build/libs/$(ls backend/build/libs | grep -v plain) backend/app.jar
 
       - name: 🐳 Build Backend Docker Image
         run: |
@@ -100,11 +76,13 @@ jobs:
           frontend
 
       - name: 🚀 Push Backend Image to GCP Artifact Registry
+        # TODO: only push if master branch
         #        if: github.ref == 'refs/heads/master'
         run: |
           docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY_BACKEND/$GITHUB_SHA"
 
       - name: 🚀 Push Frontend Image to GCP Artifact Registry
+        # TODO: only push if master branch
         #        if: github.ref == 'refs/heads/master'
         run: |
           docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY_FRONTEND/$GITHUB_SHA"
