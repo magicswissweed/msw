@@ -3,12 +3,10 @@ import './MswLogin.scss';
 import React, {useState, useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {Alert, Button, Form} from "react-bootstrap";
-import {useUserAuth} from "../UserAuthContext";
+import {useUserAuth, firebaseUiConfig} from "../UserAuthContext";
 import firebase from "firebase/compat/app";
 import * as firebaseui from "firebaseui";
 import { firebaseAuth } from '../../firebase/FirebaseConfig';
-import "firebaseui/dist/firebaseui.css"
-
 
 
 export const MswLogin = () => {
@@ -39,20 +37,9 @@ export const MswLogin = () => {
 
     // firebaseUI login
     useEffect(() => {
-      const uiConfig = {
-        signInSuccessUrl: '/spots',
-        signInOptions: [
-          firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-          "apple.com",
-          // Add other providers as needed
-        ],
-        tosUrl: '<your-tos-url>',
-        privacyPolicyUrl: '<your-privacy-policy-url>',
-        credentialHelper: firebaseui.auth.CredentialHelper.NONE // If you don't want to show credential helper
-      };
   
       const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebaseAuth);
-      ui.start('#firebaseui-auth-container', uiConfig);
+      ui.start('#firebaseui-auth-container', firebaseUiConfig);
   
       return () => {
         ui.reset();

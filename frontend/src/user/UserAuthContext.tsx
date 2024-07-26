@@ -6,36 +6,39 @@ import {
   signOut,
   User,
 } from "firebase/auth";
+import firebase from "firebase/compat/app";
 import { firebaseAuth } from '../firebase/FirebaseConfig';
 import { UserApi } from '../gen/msw-api-ts';
 import { authConfiguration } from '../api/config/AuthConfiguration';
+import * as firebaseui from "firebaseui";
+import "firebaseui/dist/firebaseui.css"
 
 // @ts-ignore
 const userAuthContext: Context<any> = createContext();
 
 export function useUserAuth() {
-    return useContext(userAuthContext);
+  return useContext(userAuthContext);
 }
 
 // @ts-ignore
-export function UserAuthContextProvider({children}) {
-    const [user, setUser] = useState<User | null>(null);
-    const [token, setToken] = useState<string | null>(null);
+export function UserAuthContextProvider({ children }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
 
-    useEffect(() => {
-        const unsubscribe = firebaseAuth.onAuthStateChanged((currentuser) => {
-            if (currentuser) {
-                currentuser.getIdToken(false).then((token) => {
-                    setToken(token);
-                })
-            }
-            setUser(currentuser);
-        });
+  useEffect(() => {
+    const unsubscribe = firebaseAuth.onAuthStateChanged((currentuser) => {
+      if (currentuser) {
+        currentuser.getIdToken(false).then((token) => {
+          setToken(token);
+        })
+      }
+      setUser(currentuser);
+    });
 
-        return () => {
-            unsubscribe();
-        };
-    }, []);
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <userAuthContext.Provider
@@ -43,26 +46,38 @@ export function UserAuthContextProvider({children}) {
     >
       {children}
     </userAuthContext.Provider>
-    );
+  );
 
-    function logIn(email: string, password: string) {
-        return signInWithEmailAndPassword(firebaseAuth, email, password);
-    }
+  function logIn(email: string, password: string) {
+    return signInWithEmailAndPassword(firebaseAuth, email, password);
+  }
 
-    async function signUp(email: string, password: string): Promise<void> {
-        let user = await createUserWithEmailAndPassword(firebaseAuth, email, password);
-        let token = await user.user.getIdToken(false);
-        let config = await authConfiguration(token);
-        await new UserApi(config).registerUser();
-    }
+  async function signUp(email: string, password: string): Promise<void> {
+    let user = await createUserWithEmailAndPassword(firebaseAuth, email, password);
+    let token = await user.user.getIdToken(false);
+    let config = await authConfiguration(token);
+    await new UserApi(config).registerUser();
+  }
 
-    async function sendForgotPasswordEmail(email: string): Promise<void> {
-        await sendPasswordResetEmail(firebaseAuth, email);
-    }
+  async function sendForgotPasswordEmail(email: string): Promise<void> {
+    await sendPasswordResetEmail(firebaseAuth, email);
+  }
 
-    function logOut() {
-        return signOut(firebaseAuth).then(() => {
+  function logOut() {
+    return signOut(firebaseAuth).then(() => {
       document.location.reload();
     });
   }
 }
+
+export const firebaseUiConfig = {
+  signInSuccessUrl: '/spots',
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    "apple.com",
+    // Add other providers as needed
+  ],
+  tosUrl: '<your-tos-url>',
+  privacyPolicyUrl: '<your-privacy-policy-url>',
+  credentialHelper: firebaseui.auth.CredentialHelper.NONE // If you don't want to show credential helper
+};
