@@ -1,17 +1,14 @@
-import {createContext, useContext, useEffect, useState} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
-    createUserWithEmailAndPassword,
-    GoogleAuthProvider,
-    sendPasswordResetEmail,
-    signInWithEmailAndPassword,
-    signInWithPopup,
-    signOut,
-    User,
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signOut,
+  User,
 } from "firebase/auth";
-import {firebaseAuth} from '../firebase/FirebaseConfig';
-import {UserApi} from '../gen/msw-api-ts';
-import {authConfiguration} from '../api/config/AuthConfiguration';
-
+import { firebaseAuth } from '../firebase/FirebaseConfig';
+import { UserApi } from '../gen/msw-api-ts';
+import { authConfiguration } from '../api/config/AuthConfiguration';
 
 // @ts-ignore
 const userAuthContext: Context<any> = createContext();
@@ -40,12 +37,12 @@ export function UserAuthContextProvider({children}) {
         };
     }, []);
 
-    return (
-        <userAuthContext.Provider
-            value={{user, token, logIn, signUp, logOut, sendForgotPasswordEmail, googleSignIn}}
-        >
-            {children}
-        </userAuthContext.Provider>
+  return (
+    <userAuthContext.Provider
+      value={{ user, token, logIn, signUp, logOut, sendForgotPasswordEmail }}
+    >
+      {children}
+    </userAuthContext.Provider>
     );
 
     function logIn(email: string, password: string) {
@@ -65,12 +62,7 @@ export function UserAuthContextProvider({children}) {
 
     function logOut() {
         return signOut(firebaseAuth).then(() => {
-            document.location.reload();
-        });
-    }
-
-    function googleSignIn() {
-        const googleAuthProvider = new GoogleAuthProvider();
-        return signInWithPopup(firebaseAuth, googleAuthProvider);
-    }
+      document.location.reload();
+    });
+  }
 }
