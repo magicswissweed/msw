@@ -1,8 +1,10 @@
 import '../user.scss'
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {Alert, Button, Form} from "react-bootstrap";
-import {useUserAuth} from "../UserAuthContext";
+import {useUserAuth, firebaseUiConfig} from "../UserAuthContext";
+import * as firebaseui from "firebaseui";
+import { firebaseAuth } from '../../firebase/FirebaseConfig';
 
 const MswSignup = () => {
     const [email, setEmail] = useState("");
@@ -27,6 +29,16 @@ const MswSignup = () => {
             }
         }
     };
+
+     // firebaseUI login
+     useEffect(() => {
+      const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebaseAuth);
+      ui.start('#firebaseui-auth-container', firebaseUiConfig);
+  
+      return () => {
+        ui.reset();
+      };
+    }, []);
 
     return (
         <>
@@ -63,6 +75,9 @@ const MswSignup = () => {
                                 </Button>
                             </div>
                         </Form>
+                        <hr/>
+                        <p className='text-center'>or</p>
+                        <div id="firebaseui-auth-container"></div>
                     </div>
                     <div className="p-4 box mt-3 text-center">
                         Already have an account? <Link to="/login">Log In</Link>
