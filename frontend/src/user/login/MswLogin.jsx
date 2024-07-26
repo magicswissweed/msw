@@ -1,15 +1,21 @@
 import '../user.scss';
 import './MswLogin.scss';
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {Alert, Button, Form} from "react-bootstrap";
 import {useUserAuth} from "../UserAuthContext";
+import firebase from "firebase/compat/app";
+import * as firebaseui from "firebaseui";
+import { firebaseAuth } from '../../firebase/FirebaseConfig';
+import "firebaseui/dist/firebaseui.css"
+
+
 
 export const MswLogin = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const {logIn, googleSignIn} = useUserAuth();
+    const {logIn} = useUserAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -23,7 +29,7 @@ export const MswLogin = () => {
                 setError('Wrong email or password.');
             } else if (err.message.includes('auth/invalid-email')) {
                 setError('Wrong email.');
-            } else if (err.message.includes('auth/missing-passwordl')) {
+            } else if (err.message.includes('auth/missing-password')) {
                 setError('Please provide a password.');
             } else {
                 setError(err.message);
@@ -31,15 +37,27 @@ export const MswLogin = () => {
         }
     };
 
-    const handleGoogleSignIn = async (e) => {
-        e.preventDefault();
-        try {
-            await googleSignIn();
-            navigate("/spots");
-        } catch (error) {
-            console.log(error.message);
-        }
-    };
+    // firebaseUI login
+    useEffect(() => {
+      const uiConfig = {
+        signInSuccessUrl: '/spots',
+        signInOptions: [
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+          "apple.com",
+          // Add other providers as needed
+        ],
+        tosUrl: '<your-tos-url>',
+        privacyPolicyUrl: '<your-privacy-policy-url>',
+        credentialHelper: firebaseui.auth.CredentialHelper.NONE // If you don't want to show credential helper
+      };
+  
+      const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebaseAuth);
+      ui.start('#firebaseui-auth-container', uiConfig);
+  
+      return () => {
+        ui.reset();
+      };
+    }, []);
 
     return (
         <>
@@ -69,21 +87,17 @@ export const MswLogin = () => {
                                     required
                                 />
                             </Form.Group>
+                            <Link className="forgot-password" to="/forgot-password">Forgot Password?</Link>
 
                             <div className="d-grid gap-2">
                                 <Button variant="primary" type="Submit">
                                     Log In
                                 </Button>
                             </div>
-
-                            <Link className="forgot-password" to="/forgot-password">Forgot Password</Link>
                         </Form>
-                        {/*<div className="google-button-container">*/}
-                        {/*    <GoogleButton*/}
-                        {/*        type="dark"*/}
-                        {/*        onClick={handleGoogleSignIn}*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+                        <hr/>
+                        <p className='text-center'>or</p>
+                        <div id="firebaseui-auth-container"></div>
                     </div>
                     <div className="p-4 box mt-3 text-center">
                         Don't have an account? <Link to="/signup">Sign up</Link>
