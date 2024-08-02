@@ -39,5 +39,5 @@ out/
 
 ### VS Code ###
 .vscode/
-/service-account.json
-/docker-compose-deployment.yml
+!deployment/HOW_TO_DEPLOY.md
+/deployment/**
