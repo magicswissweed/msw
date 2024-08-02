@@ -26,8 +26,8 @@ export const MswHeader = () => {
                 {loginOrLogout}
             </div>
             <div className="title">
-                <h1>MagicSwissWeed</h1>
-                <p>Current surfing conditions in Switzerland</p>
+                <h1>magicswissweed</h1>
+                <p>Know when the rivers flow</p>
             </div>
         </header>
     </>;

@@ -1,7 +1,6 @@
 @import "../ReactiveMixins";
 
 .App-header {
-  font-size: 4vmin;
   color: #000000;
 
   @include small() {
@@ -9,17 +8,19 @@
   }
 }
 
-.title > h1 {
-  text-transform: uppercase;
-  font-weight: 800;
-}
-
 .title {
-  font-family: Arial, sans-serif;
-  background-image: url(../../public/ripples-snip.jpg);
-  background-repeat: repeat;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 2.5em;
+
+  h1 {
+    font-weight: 800;
+    font-size: 1em;
+  }
+
+  p {
+    font-size: 50%;
+    position: relative;
+    top: -9px;
+  }
 }
 
 h1 {
@@ -27,7 +28,7 @@ h1 {
 }
 
 p {
-  font-size: 92%;
+  // font-size: 92%;
   margin-block-start: 0;
 }
 
@@ -40,7 +41,10 @@ p {
   justify-content: right;
 }
 
-.login, .logout, .signup, .add-spot {
+.login,
+.logout,
+.signup,
+.add-spot {
   margin-left: 0;
   flex: 1;
 }
