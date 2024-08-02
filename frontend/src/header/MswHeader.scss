@@ -2,34 +2,27 @@
 
 .App-header {
   color: #000000;
+  font-size: 2.5em;
 
   @include small() {
     margin-top: 50px;
-  }
-}
-
-.title {
-  font-size: 2.5em;
-
-  h1 {
-    font-weight: 800;
-    font-size: 1em;
-  }
-
-  p {
-    font-size: 50%;
-    position: relative;
-    top: -9px;
+    font-size: 2em;
   }
 }
 
 h1 {
+  font-weight: 800;
+  font-size: 1em;
   margin-block-end: 0;
+
 }
 
 p {
-  // font-size: 92%;
+  font-size: 50%;
+  position: relative;
+  top: -9px;
   margin-block-start: 0;
+
 }
 
 .loginOrLogoutContainer {
