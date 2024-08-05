@@ -6,6 +6,7 @@ import {authConfiguration} from '../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../user/UserAuthContext';
 import {useNavigate} from 'react-router-dom';
 import {AxiosResponse} from "axios";
+import {v4 as uuid} from 'uuid';
 
 export const MswAddSpot = () => {
     const navigate = useNavigate();
@@ -23,12 +24,13 @@ export const MswAddSpot = () => {
         event.preventDefault()
         let config = await authConfiguration(token);
         const apiSpot: ApiSpot = {
+            id: uuid(),
             name: spotName,
-            stationId: stationId,
+            stationId: stationId!,
             spotType: type,
             isPublic: false,
-            minFlow: minFlow,
-            maxFlow: maxFlow,
+            minFlow: minFlow!,
+            maxFlow: maxFlow!,
         };
         // TODO: position should not be 0, but riversurfspots.length + 1, or bungeesurfSpots.length + 1
         let response: AxiosResponse<void, any> = await new SpotsApi(config).addPrivateSpot({spot: apiSpot, position: 0})
