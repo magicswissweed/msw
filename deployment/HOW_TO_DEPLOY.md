@@ -12,25 +12,33 @@
 
 1. connect to VM by clicking on 'SSH':
     - <https://console.cloud.google.com/compute/instancesDetail/zones/europe-west8-c/instances/msw-instance-medium?project=magicswissweed-msw>
-2. modify the file docker-compose-deployment.yml (that you have locally, not checked in because of secrets)
+
+2. Switch to Nicola's directory (where the Docker containers live)
+
+    ```bash
+    cd ../nickueng
+    ```
+
+3. modify the file `docker-compose-deployment.yml` (that you have locally, not checked in because of secrets)
     - change the version of the backend- and frontend-images to your desired version (check Artifact Registry for existing images or have them built by filing a pull request on GitHub)
-3. upload the file docker-compose-deployment.yml to the VM
+4. upload the file docker-compose-deployment.yml to the VM
     - use the button 'Upload File' in the console
-4. rename docker-compose-deployment.yml to docker-compose.yml
+5. rename docker-compose-deployment.yml to docker-compose.yml
 
       ```bash
       mv docker-compose-deployment.yml docker-compose.yml
       ```
 
-5. build the containers (and overwrite existing ones)
+6. build the containers (updating existing ones)
 
     ```bash
-    docker compose down
     docker compose up -d
     ```
 
-6. Check if everything is running smoothly
-7. delete docker-compose.yml from VM
+    If you get an error message about conflicts, make sure you are in Nicola's directory where the containers live.
+
+7. Check if everything is running smoothly
+8. delete docker-compose.yml from VM
 
     ```bash
     rm docker-compose.yml
