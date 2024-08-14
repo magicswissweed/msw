@@ -1,5 +1,5 @@
 import {initializeApp} from "firebase/app";
-import {getAuth} from "firebase/auth";
+import {browserLocalPersistence, getAuth, setPersistence} from "firebase/auth";
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
@@ -19,4 +19,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-export const firebaseAuth = getAuth(app);
+const auth = getAuth(app);
+
+setPersistence(auth, browserLocalPersistence);
+export const firebaseAuth = auth;
