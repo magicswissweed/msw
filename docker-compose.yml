@@ -1,12 +1,10 @@
 version: '3'
 
 services:
-  postgres:
+  msw-postgres:
+    container_name: msw-postgres
     image: postgres:14.1-alpine
     restart: always
-    networks:
-      mswServiceGradleNet:
-        ipv4_address: 10.9.0.20
     environment:
       POSTGRES_USER: 'develop'
       POSTGRES_PASSWORD: 'develop'
@@ -15,12 +13,4 @@ services:
     volumes:
       - ./localdev/data/create-multiple-postgresql-databases.sh:/docker-entrypoint-initdb.d/create-multiple-postgresql-databases.sh
     ports:
-      - '7010:5432'
-
-networks:
-  mswServiceGradleNet:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 10.9.0.0/16
+      - '5432:5432'

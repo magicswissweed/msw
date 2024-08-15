@@ -15,9 +15,12 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT }}
-  GAR_LOCATION: europe-west6
-  GAR_REPOSITORY: msw-backend
-  IMAGE: msw-backend
+  GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+  FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+  GAR_LOCATION: ${{ vars.GAR_LOCATION }}
+  GAR_REPOSITORY_BACKEND: ${{ vars.GAR_REPOSITORY_BACKEND }}
+  GAR_REPOSITORY_FRONTEND: ${{ vars.GAR_REPOSITORY_FRONTEND }}
 
 jobs:
   verify:
@@ -34,7 +37,7 @@ jobs:
       - id: auth
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          credentials_json: ${{ env.GCP_SERVICE_ACCOUNT }}
 
       - name: Docker configuration
         run: gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://$GAR_LOCATION-docker.pkg.dev
@@ -55,17 +58,31 @@ jobs:
           chmod +x ./gradlew
           ./gradlew test
 
-      - name: 🖨️ Copy Jar File
-        run: mv backend/build/libs/$(ls backend/build/libs | grep -v plain) backend/app.jar
+      - name: 🖨️ Prepare Backend Docker Build
+        run: |
+          mv backend/build/libs/$(ls backend/build/libs | grep -v plain) backend/app.jar
 
-      - name: 🐳 Build Docker Image
+      - name: 🐳 Build Backend Docker Image
         run: |
           docker build \
-            --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY/$GITHUB_SHA" \
+            --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY_BACKEND/$GITHUB_SHA" \
             --build-arg JAR_FILE=app.jar \
             backend
 
-      - name: 🚀 Push Image to GCP Artifact Registry
-        if: github.ref == 'refs/heads/master'
+      - name: 🐳 Build Frontend Docker Image
         run: |
-          docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY/$GITHUB_SHA"
+          docker build \
+          --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY_FRONTEND/$GITHUB_SHA" \
+          frontend
+
+      - name: 🚀 Push Backend Image to GCP Artifact Registry
+        # TODO: only push if master branch
+        #        if: github.ref == 'refs/heads/master'
+        run: |
+          docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY_BACKEND/$GITHUB_SHA"
+
+      - name: 🚀 Push Frontend Image to GCP Artifact Registry
+        # TODO: only push if master branch
+        #        if: github.ref == 'refs/heads/master'
+        run: |
+          docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY_FRONTEND/$GITHUB_SHA"
