@@ -17,6 +17,10 @@
   flex-flow: row wrap;
   color: #1c9bc9;
 
+  @include medium {
+    flex-direction: column;
+  }
+
   @include small {
     flex-direction: column;
     width: 100%;
