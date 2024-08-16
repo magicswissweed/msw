@@ -19,7 +19,7 @@ interface SpotProps {
 export const Spot = (props: SpotProps) => {
 
     // @ts-ignore
-    const {token} = useUserAuth();
+    const {token, user} = useUserAuth();
 
     return <>
         <details key={props.location.name} className="spot">
@@ -54,9 +54,11 @@ export const Spot = (props: SpotProps) => {
                     }
 
                 </div>
-                <div className="icon" onClick={() => onDeleteSpot(location)}>
-                    <img alt="Delete this spot from your dashboard." src={delete_icon}/>
-                </div>
+                {user &&
+                    <div className="icon" onClick={() => onDeleteSpot(location)}>
+                        <img alt="Delete this spot from your dashboard." src={delete_icon}/>
+                    </div>
+                }
                 <div className="collapsible-icon icon">
                     <img alt="extend forecast" src={arrow_down}/>
                 </div>
