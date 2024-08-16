@@ -58,7 +58,7 @@ export const Spot = (props: SpotProps) => {
         </>;
 
         let lastMeasurementsContent = <>
-            <h2>Forecast</h2>
+            <h2>Last 40 days</h2>
             <MswLastMeasurementsGraph location={location} isMini={false}/>
         </>;
 
