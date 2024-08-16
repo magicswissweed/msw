@@ -1,3 +1,5 @@
+@import "../ReactiveMixins";
+
 .form {
   background-color: #efefef;
   display: flex;
@@ -12,6 +14,10 @@
 .box-container {
   width: 50%;
   margin: auto;
+
+  @include small {
+    width: 90%;
+  }
 }
 
 .box {
