@@ -18,13 +18,9 @@ $spot-margin-l-r: 10px;
   width: $icons-container-width;
 }
 
-.is-private-icon {
-  padding-top: 10px;
-  flex: 1;
-}
-
 .icon {
   flex: 1;
+  align-content: center;
 
   img {
     width: 40%;
@@ -35,25 +31,23 @@ $spot-margin-l-r: 10px;
   display: none;
 }
 
-details > summary div.collapsibleIcon {
+details > summary div.collapsible-icon {
   transition: all 1s;
   align-self: center;
 }
 
-details[open] summary div.collapsibleIcon {
+details[open] summary div.collapsible-icon {
   transform: rotate(180deg);
 }
 
-.collapsibleIcon {
-  align-content: center;
+.collapsible-icon {
+  img {
+    cursor: pointer;
+  }
 
   @include small {
     display: none
   }
-}
-
-.collapsibleIcon > img {
-  cursor: pointer;
 }
 
 summary::-webkit-details-marker {
@@ -93,8 +87,4 @@ summary::-webkit-details-marker {
     flex-direction: column;
     row-gap: 20px;
   }
-}
-
-.delete-spot-btn {
-  margin: 20px auto auto;
 }
