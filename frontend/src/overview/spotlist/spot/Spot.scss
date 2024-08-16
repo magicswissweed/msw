@@ -1,46 +1,55 @@
 @import "../../../ReactiveMixins";
 
+$icons-container-width: 40px;
+$spot-margin-l-r: 10px;
+
 .spot {
   display: flex;
-  padding: 20px 10px;
-  margin: 20px 10px;
+  padding: 0;
+  margin: 20px $spot-margin-l-r;
   color: #000000;
   background-color: #ececec;
   border-radius: 20px;
 }
 
-.right-side-icons-container {
-  margin: 0 10px;
-  flex: 0.06;
+.icons-container {
   display: flex;
   flex-direction: column;
+  width: $icons-container-width;
 }
 
 .is-private-icon {
-  margin: 0 10px;
+  padding-top: 10px;
   flex: 1;
 }
 
-.is-private-icon > img {
-  width: 100%;
+.icon {
+  flex: 1;
+
+  img {
+    width: 40%;
+  }
 }
 
 .public {
   display: none;
 }
 
-details > summary span.collapsibleIcon {
+details > summary div.collapsibleIcon {
   transition: all 1s;
   align-self: center;
 }
 
-details[open] summary span.collapsibleIcon {
+details[open] summary div.collapsibleIcon {
   transform: rotate(180deg);
 }
 
 .collapsibleIcon {
-  flex: 0.03;
   align-content: center;
+
+  @include small {
+    display: none
+  }
 }
 
 .collapsibleIcon > img {
@@ -54,6 +63,10 @@ summary::-webkit-details-marker {
 .collapsibleContent {
   margin-top: 20px;
   margin-left: -30px;
+
+  @include small {
+    display: none;
+  }
 }
 
 .spotname {
@@ -74,6 +87,7 @@ summary::-webkit-details-marker {
   justify-content: center;
   font-size: 130%;
   font-weight: bold;
+  margin: 20px 0 20px $icons-container-width;
 
   @include small() {
     flex-direction: column;
@@ -83,10 +97,4 @@ summary::-webkit-details-marker {
 
 .delete-spot-btn {
   margin: 20px auto auto;
-}
-
-@include small() {
-  .hiddenOnMobile {
-    display: none;
-  }
 }

@@ -1,7 +1,7 @@
 import './SpotList.scss';
 import React, {useEffect, useState} from 'react';
 import {ApiSpotInformation, SpotsApi} from '../../gen/msw-api-ts';
-import {getCollapsibleIcon, Spot} from './spot/Spot';
+import {Spot} from './spot/Spot';
 import {authConfiguration} from '../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../user/UserAuthContext';
 
@@ -67,8 +67,6 @@ export const SpotList = (props: SpotListProps) => {
             <div className="tableHeaderCol">Flow/Temp</div>
             <div className="tableHeaderCol doubleCol">Forecast</div>
         </div>
-        {/* only to have the same columns as in the spots */}
-        {getCollapsibleIcon(true)}
     </div>;
 
     return <>

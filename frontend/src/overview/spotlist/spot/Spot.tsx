@@ -39,14 +39,17 @@ export const Spot = (props: SpotProps) => {
                 <MswMeasurement location={location}/>
                 <MswMiniGraph location={location}/>
             </div>
-            <div className="right-side-icons-container hiddenOnMobile">
-                <div className="is-private-icon">
+            <div className="icons-container">
+                <div className="is-private-icon icon">
                     <img className={location.isPublic ? "public" : ""}
                          alt="This is a private spot. Only you can see it."
                          title="This is a private spot. Only you can see it."
                          src={lock}/>
                 </div>
-                {getCollapsibleIcon(false)}
+                <div className="icon"></div>
+                <div className="collapsibleIcon icon">
+                    <img alt="extend forecast" src={arrow_down}/>
+                </div>
             </div>
         </>
     }
@@ -66,7 +69,7 @@ export const Spot = (props: SpotProps) => {
             <button className="msw-button delete-spot-btn" onClick={() => onDeleteSpot(location)}>Delete Spot</button>
         </>;
         return <>
-            <div className="collapsibleContent hiddenOnMobile">
+            <div className="collapsibleContent">
                 {location.forecast ? forecastContent : lastMeasurementsContent}
                 {!location.isPublic && privateSpotInteractions}
             </div>
@@ -78,16 +81,4 @@ export const Spot = (props: SpotProps) => {
         await new SpotsApi(config).deletePrivateSpot(location.id!)
         document.location.reload();
     }
-}
-
-export function getCollapsibleIcon(isHidden: Boolean) {
-    let className = "collapsibleIcon";
-    if (isHidden) {
-        className += " hide";
-    }
-    return <>
-      <span className={className}>
-        <img alt="extend forecast" src={arrow_down}/>
-      </span>
-    </>;
 }
