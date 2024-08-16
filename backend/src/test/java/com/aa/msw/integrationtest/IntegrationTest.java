@@ -1,6 +1,6 @@
 package com.aa.msw.integrationtest;
 
-import com.aa.msw.config.PublicSpotListConfiguration;
+import com.aa.msw.helper.PublicSpotListConfiguration;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Before;
