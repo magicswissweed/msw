@@ -76,13 +76,11 @@ jobs:
           frontend
 
       - name: 🚀 Push Backend Image to GCP Artifact Registry
-        # TODO: only push if master branch
-        #        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         run: |
           docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY_BACKEND/$GITHUB_SHA"
 
       - name: 🚀 Push Frontend Image to GCP Artifact Registry
-        # TODO: only push if master branch
-        #        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master'
         run: |
           docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$GAR_REPOSITORY_FRONTEND/$GITHUB_SHA"
