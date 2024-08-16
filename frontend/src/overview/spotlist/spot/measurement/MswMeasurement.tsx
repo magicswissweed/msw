@@ -18,7 +18,8 @@ export class MswMeasurement extends Component<MeasurementsProps> {
     render() {
         return <>
             <div className="measurements"
-                 title={'Measured at: ' + this.convertTimeStampToDisplayableString(this.location.currentSample!.timestamp!)}>
+                 title={'Measured at: ' + this.convertTimeStampToDisplayableString(this.location.currentSample!.timestamp!)}
+                 tabIndex={0}>
                 <div className="measurement_row meas flow">
                     {this.getFlow()}
                 </div>

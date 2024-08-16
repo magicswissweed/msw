@@ -12,6 +12,26 @@
   }
 }
 
+@include small {
+  @media (pointer: coarse), (hover: none) {
+    [title] {
+      position: relative;
+      display: inline-flex;
+      justify-content: center;
+    }
+    [title]:focus::after {
+      content: attr(title);
+      position: absolute;
+      top: 90%;
+      color: #000;
+      width: fit-content;
+      padding: 3px;
+      font-weight: normal;
+      font-size: 16px;
+    }
+  }
+}
+
 .timestamp {
   color: gray;
 
