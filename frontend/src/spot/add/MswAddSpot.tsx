@@ -64,18 +64,21 @@ export const MswAddSpot = () => {
                         <Form.Group className="mb-3" controlId="formBasicSpotType">
                             <Form>
                                 <Form.Check
-                                    checked
+                                    inline
                                     type="radio"
                                     label="Riversurf"
                                     name="radioTypeGroup"
                                     id="riversurf"
+                                    checked={type == ApiSpotSpotTypeEnum.RiverSurf}
                                     onChange={() => setType(ApiSpotSpotTypeEnum.RiverSurf)}
                                 />
                                 <Form.Check
+                                    inline
                                     type="radio"
                                     label="Bungeesurf"
                                     name="radioTypeGroup"
                                     id="bungeesurf"
+                                    checked={type == ApiSpotSpotTypeEnum.BungeeSurf}
                                     onChange={() => setType(ApiSpotSpotTypeEnum.BungeeSurf)}
                                 />
                             </Form>
