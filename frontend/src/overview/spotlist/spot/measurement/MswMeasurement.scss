@@ -1,13 +1,23 @@
+@import "../../../../ReactiveMixins";
+
 .measurements {
   align-items: center;
   display: flex;
   flex-direction: column;
   flex: 1;
   row-gap: 7px;
+
+  @include small {
+    flex-direction: row;
+  }
 }
 
 .timestamp {
   color: gray;
+
+  @include small {
+    display: none;
+  }
 }
 
 .measurement_row {

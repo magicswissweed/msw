@@ -17,11 +17,8 @@ export class MswMeasurement extends Component<MeasurementsProps> {
 
     render() {
         return <>
-            <div className="measurements">
-                <div className="measurement_row timestamp">
-                    {this.convertTimeStampToDisplayableString(this.location.currentSample!.timestamp!)}
-                </div>
-
+            <div className="measurements"
+                 title={'Measured at: ' + this.convertTimeStampToDisplayableString(this.location.currentSample!.timestamp!)}>
                 <div className="measurement_row meas flow">
                     {this.getFlow()}
                 </div>
@@ -32,7 +29,6 @@ export class MswMeasurement extends Component<MeasurementsProps> {
                         <div className="unit">°C</div>
                     </div>
                 }
-
             </div>
         </>;
     }
