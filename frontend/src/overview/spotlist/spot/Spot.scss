@@ -1,4 +1,9 @@
 @import "../../../ReactiveMixins";
+@import "../../../index";
+
+.details-title {
+  color: $msw-blue;
+}
 
 .spot {
   display: flex;
