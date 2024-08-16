@@ -1,6 +1,5 @@
 @import "../ReactiveMixins";
-
-$mswBlue: #3bbae8;
+@import "../index";
 
 .Footer {
   margin-top: 30px;
@@ -9,7 +8,7 @@ $mswBlue: #3bbae8;
   flex-wrap: wrap;
   justify-content: space-between;
   color: white;
-  background-color: $mswBlue;
+  background-color: $msw-blue;
 
   @include small {
     flex-direction: column;

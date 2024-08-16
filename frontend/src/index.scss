@@ -1,12 +1,13 @@
-$msw-blue: #1c9bc9;
+$msw-blue: #3bbae8;
+$msw-blue-secondary: #2473db;
 
 .msw-button {
   background: white;
-  color: blue;
+  color: $msw-blue-secondary;
   font-weight: normal;
   font-family: Arial, sans-serif;
   font-size: 15px !important;
-  border: 1px solid blue;
+  border: 1px solid $msw-blue-secondary;
   border-radius: 3px;
   text-decoration: none;
   padding: 3px;
