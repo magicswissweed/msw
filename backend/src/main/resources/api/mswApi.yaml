@@ -170,6 +170,20 @@ paths:
       responses:
         '200':
           description: Registration was successful.
+  /stations:
+    get:
+      summary: Get a list of stations from BAFU
+      operationId: getStations
+      tags:
+        - station
+      responses:
+        '200':
+          description: Returns a list of stations from BAFU.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiStationList'
+
 
 components:
   schemas:
@@ -280,3 +294,15 @@ components:
         flow:
           type: number
           format: double
+    ApiStationList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ApiStation'
+    ApiStation:
+      type: object
+      required: [ id, label ]
+      properties:
+        id:
+          type: integer
+        label:
+          type: string

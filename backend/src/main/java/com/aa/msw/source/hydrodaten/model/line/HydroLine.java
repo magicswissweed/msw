@@ -1,4 +1,4 @@
-package com.aa.msw.source.hydrodaten.model;
+package com.aa.msw.source.hydrodaten.model.line;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

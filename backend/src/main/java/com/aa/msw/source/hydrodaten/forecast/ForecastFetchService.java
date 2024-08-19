@@ -3,8 +3,8 @@ package com.aa.msw.source.hydrodaten.forecast;
 import com.aa.msw.database.helpers.id.ForecastId;
 import com.aa.msw.model.Forecast;
 import com.aa.msw.source.hydrodaten.AbstractLineFetchService;
-import com.aa.msw.source.hydrodaten.model.HydroLine;
-import com.aa.msw.source.hydrodaten.model.HydroResponse;
+import com.aa.msw.source.hydrodaten.model.line.HydroLine;
+import com.aa.msw.source.hydrodaten.model.line.HydroResponse;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

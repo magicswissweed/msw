@@ -1,12 +1,13 @@
 import './MswAddSpot.scss'
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent, useEffect, useState} from "react";
 import {Button, Form} from 'react-bootstrap';
-import {ApiSpot, ApiSpotSpotTypeEnum, SpotsApi} from '../../gen/msw-api-ts';
+import {ApiSpot, ApiSpotSpotTypeEnum, ApiStation, SpotsApi, StationApi} from '../../gen/msw-api-ts';
 import {authConfiguration} from '../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../user/UserAuthContext';
 import {useNavigate} from 'react-router-dom';
 import {AxiosResponse} from "axios";
 import {v4 as uuid} from 'uuid';
+import {Typeahead} from "react-bootstrap-typeahead";
 
 export const MswAddSpot = () => {
     const navigate = useNavigate();
@@ -16,9 +17,22 @@ export const MswAddSpot = () => {
     const [stationId, setStationId] = useState<number | undefined>(undefined);
     const [minFlow, setMinFlow] = useState<number | undefined>(undefined);
     const [maxFlow, setMaxFlow] = useState<number | undefined>(undefined);
+    const [stations, setStations] = useState<ApiStation[]>([])
+
+    useEffect(() => {
+        // no await, so that frontend doesn't block
+        fetchStations()
+    }, []);
+
 
     // @ts-ignore
     const {token} = useUserAuth();
+
+    async function fetchStations(): Promise<void> {
+        return await new StationApi()
+            .getStations()
+            .then((response) => setStations(response.data));
+    }
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -81,16 +95,17 @@ export const MswAddSpot = () => {
                             </Form>
                         </Form.Group>
 
-                        <Form.Label htmlFor="formBasicStationId">The stationId of the Spot
+                        <Form.Label htmlFor="formBasicStationId">The measuring station
                             (from <a href="https://www.hydrodaten.admin.ch/">hydrodaten.admin.ch</a>)</Form.Label>
                         <Form.Group className="mb-3" controlId="formBasicStationId">
-                            <Form.Control
-                                required
-                                type="number"
-                                placeholder="The id from BAFU's station"
-                                // @ts-ignore
-                                onChange={(e) => setStationId(e.target.value)}
-                            />
+                            <Typeahead
+                                inputProps={{ required: true }}
+                                id="station-autocomplete"
+                                labelKey="label"
+                                onChange={(station) => setStationId((station.pop() as ApiStation).id)}
+                                options={stations}
+                                placeholder="Station">
+                            </Typeahead>
                         </Form.Group>
 
                         <Form.Label htmlFor="formBasicMinFlow">Minimum Flow for Spot to Work</Form.Label>
