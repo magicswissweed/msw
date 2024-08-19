@@ -68,6 +68,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
             firstDayMidnightDate.setHours(24, 0, 0, 0),
             firstDayMidnightDate.setHours(24, 0, 0, 0),
             firstDayMidnightDate.setHours(24, 0, 0, 0),
+            firstDayMidnightDate.setHours(24, 0, 0, 0),
         ]
 
         let showXAxis = true;
