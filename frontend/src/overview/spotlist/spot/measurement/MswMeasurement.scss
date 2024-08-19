@@ -36,5 +36,8 @@
 .unit {
   font-size: 70%;
   display: inline;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
