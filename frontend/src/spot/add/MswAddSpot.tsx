@@ -18,6 +18,7 @@ export const MswAddSpot = () => {
     const [minFlow, setMinFlow] = useState<number | undefined>(undefined);
     const [maxFlow, setMaxFlow] = useState<number | undefined>(undefined);
     const [stations, setStations] = useState<ApiStation[]>([])
+    const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
 
     useEffect(() => {
         // no await, so that frontend doesn't block
@@ -46,12 +47,13 @@ export const MswAddSpot = () => {
             minFlow: minFlow!,
             maxFlow: maxFlow!,
         };
-        // TODO: position should not be 0, but riversurfspots.length + 1, or bungeesurfSpots.length + 1
+        setIsSubmitButtonDisabled(true);
         let response: AxiosResponse<void, any> = await new SpotsApi(config).addPrivateSpot({spot: apiSpot, position: 0})
         if (response.status === 200) {
             navigate('/');
         } else {
             alert('Something went wrong. Please check your entered data.');
+            setIsSubmitButtonDisabled(false);
         }
     }
 
@@ -78,18 +80,21 @@ export const MswAddSpot = () => {
                         <Form.Group className="mb-3" controlId="formBasicSpotType">
                             <Form>
                                 <Form.Check
-                                    checked
+                                    inline
                                     type="radio"
                                     label="Riversurf"
                                     name="radioTypeGroup"
                                     id="riversurf"
+                                    checked={type == ApiSpotSpotTypeEnum.RiverSurf}
                                     onChange={() => setType(ApiSpotSpotTypeEnum.RiverSurf)}
                                 />
                                 <Form.Check
+                                    inline
                                     type="radio"
                                     label="Bungeesurf"
                                     name="radioTypeGroup"
                                     id="bungeesurf"
+                                    checked={type == ApiSpotSpotTypeEnum.BungeeSurf}
                                     onChange={() => setType(ApiSpotSpotTypeEnum.BungeeSurf)}
                                 />
                             </Form>
@@ -131,7 +136,7 @@ export const MswAddSpot = () => {
                         </Form.Group>
 
                         <div className="d-grid gap-2">
-                            <Button variant="primary" type="submit">
+                            <Button disabled={isSubmitButtonDisabled} variant="primary" type="submit">
                                 Save
                             </Button>
                         </div>

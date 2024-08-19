@@ -1,4 +1,4 @@
-package com.aa.msw.config;
+package com.aa.msw.helper;
 
 import com.aa.msw.database.helpers.id.SpotId;
 import com.aa.msw.database.repository.dao.SpotDao;
@@ -7,9 +7,6 @@ import com.aa.msw.model.SpotTypeEnum;
 import com.aa.msw.source.InputDataFetcherService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.event.ContextStartedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,8 +33,6 @@ public class PublicSpotListConfiguration {
         this.inputDataFetcherService = inputDataFetcherService;
     }
 
-    @ManagedOperation
-    @EventListener(ContextStartedEvent.class)
     @Transactional
     public void persistPublicSpots() {
         if (spotDao.getPublicRiverSurfSpots().size() != PUBLIC_RIVER_SURF_SPOTS.size() ||
