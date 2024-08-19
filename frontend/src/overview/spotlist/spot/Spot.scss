@@ -14,6 +14,7 @@ $spot-margin-l-r: 10px;
 
 .icons-container {
   display: flex;
+  align-content: center;
   flex-direction: column;
   width: $icons-container-width;
 }
@@ -76,10 +77,14 @@ summary::-webkit-details-marker {
   justify-content: center;
   font-size: 130%;
   font-weight: bold;
-  margin: 20px 0 20px $icons-container-width;
+  margin: 20px 0;
 
   @include small() {
     flex-direction: column;
     row-gap: 20px;
   }
+}
+
+.drag-drop-icon {
+   color: #1F7099; // TODO: use msw-blue (on another branch currently)
 }

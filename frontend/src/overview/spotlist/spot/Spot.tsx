@@ -13,7 +13,8 @@ import {authConfiguration} from '../../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../../user/UserAuthContext';
 
 interface SpotProps {
-    location: ApiSpotInformation
+    location: ApiSpotInformation,
+    dragHandleProps: any
 }
 
 export const Spot = (props: SpotProps) => {
@@ -34,6 +35,11 @@ export const Spot = (props: SpotProps) => {
         let link = "https://www.hydrodaten.admin.ch/de/seen-und-fluesse/stationen-und-daten/" + location.stationId;
 
         return <>
+            <div className='icons-container'>
+                <div className={'icon drag-drop-icon'} {...props.dragHandleProps}>
+                    ☰
+                </div>
+            </div>
             <div className="spotContainer">
                 <a href={link} target="_blank" rel="noreferrer">
                     {location.name}

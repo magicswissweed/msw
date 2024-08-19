@@ -1,9 +1,10 @@
 import './SpotList.scss';
 import React, {useEffect, useState} from 'react';
+import {DragDropContext, Draggable, Droppable, DropResult} from 'react-beautiful-dnd';
 import {ApiSpotInformation, SpotsApi} from '../../gen/msw-api-ts';
-import {Spot} from './spot/Spot';
 import {authConfiguration} from '../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../user/UserAuthContext';
+import {Spot} from "./spot/Spot";
 
 interface SpotListProps {
     title: string,
@@ -12,7 +13,6 @@ interface SpotListProps {
 
 export const SpotList = (props: SpotListProps) => {
     const [locations, setLocations] = useState<Array<ApiSpotInformation>>(props.locations);
-    const [draggingItem, setDraggingItem] = useState<ApiSpotInformation | null>(null);
 
     // @ts-ignore
     const {user, token} = useUserAuth();
@@ -21,20 +21,7 @@ export const SpotList = (props: SpotListProps) => {
         setLocations(props.locations);
     }, [props.locations]);
 
-    const handleDragStart = (e: React.DragEvent<HTMLDivElement>, item: ApiSpotInformation) => {
-        setDraggingItem(item);
-        e.dataTransfer.setData('text/plain', '');
-    };
-
-    const handleDragEnd = () => {
-        setDraggingItem(null);
-    };
-
-    const handleDragOver = (e: { preventDefault: () => void; }) => {
-        e.preventDefault();
-    };
-
-    const handleDrop = async (e: React.DragEvent<HTMLDivElement>, targetItem: any) => {
+    const handleDrop = async (result: DropResult) => {
         async function saveSpotsOrdering() {
             let config = await authConfiguration(token);
             await new SpotsApi(config).orderSpots(
@@ -43,21 +30,17 @@ export const SpotList = (props: SpotListProps) => {
                     .map(loc => loc.id!));
         }
 
-        if (!draggingItem) return;
+        if (!result.destination) return;
 
-        const tempLocations = locations;
+        const reorderedItems = Array.from(locations);
+        const [removed] = reorderedItems.splice(result.source.index, 1);
+        reorderedItems.splice(result.destination.index, 0, removed);
 
-        const currentIndex = tempLocations.indexOf(draggingItem);
-        const targetIndex = tempLocations.indexOf(targetItem);
+        setLocations(reorderedItems);
 
-        if (currentIndex !== -1 && targetIndex !== -1) {
-            tempLocations.splice(currentIndex, 1);
-            tempLocations.splice(targetIndex, 0, draggingItem);
-            setLocations(tempLocations);
-
-            if (user) {
-                saveSpotsOrdering();
-            }
+        if (user) {
+            // no await, because we don't want the frontend to be blocked
+            saveSpotsOrdering();
         }
     };
 
@@ -73,23 +56,31 @@ export const SpotList = (props: SpotListProps) => {
         <div className="spotsContainer">
             <h2>{props.title}</h2>
             {tableHeader}
-            <div className="sortable-list">
-                {locations.map((location: ApiSpotInformation) => (
-                    <div
-                        className=
-                            {`item ${location === draggingItem ?
-                                'dragging' : ''
-                            }`}
-                        draggable="true"
-                        onDragStart={(e) => handleDragStart(e, location)}
-                        onDragEnd={handleDragEnd}
-                        onDragOver={handleDragOver}
-                        onDrop={(e) => handleDrop(e, location)}
-                    >
-                        <Spot location={location}/>
-                    </div>
-                ))}
-            </div>
+            <DragDropContext onDragEnd={handleDrop}>
+                <Droppable droppableId="locations-wrapper">
+                    {(droppableProvided: any) => (
+                        <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
+                            {locations.map((location: ApiSpotInformation, index: number) => (
+                                <Draggable key={location.id} draggableId={location.id!} index={index}>
+                                    {(draggableProvided: any, _snapshot: any) => (
+                                        <div
+                                            ref={draggableProvided.innerRef}
+                                            {...draggableProvided.draggableProps}
+                                        >
+                                            <Spot
+                                                location={location}
+                                                dragHandleProps={draggableProvided.dragHandleProps}
+                                                {...draggableProvided.draggableProps}
+                                                snapshot={_snapshot} />
+                                        </div>
+                                    )}
+                                </Draggable>
+                            ))}
+                            {droppableProvided.placeholder}
+                        </div>
+                    )}
+                </Droppable>
+            </DragDropContext>
         </div>
     </>;
 }
