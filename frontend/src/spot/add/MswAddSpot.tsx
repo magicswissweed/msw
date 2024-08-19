@@ -20,6 +20,8 @@ export const MswAddSpot = () => {
     // @ts-ignore
     const {token} = useUserAuth();
 
+    const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
+
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         let config = await authConfiguration(token);
@@ -33,11 +35,13 @@ export const MswAddSpot = () => {
             maxFlow: maxFlow!,
         };
         // TODO: position should not be 0, but riversurfspots.length + 1, or bungeesurfSpots.length + 1
+        setIsSubmitButtonDisabled(true);
         let response: AxiosResponse<void, any> = await new SpotsApi(config).addPrivateSpot({spot: apiSpot, position: 0})
         if (response.status === 200) {
             navigate('/');
         } else {
             alert('Something went wrong. Please check your entered data.');
+            setIsSubmitButtonDisabled(false);
         }
     }
 
@@ -116,7 +120,7 @@ export const MswAddSpot = () => {
                         </Form.Group>
 
                         <div className="d-grid gap-2">
-                            <Button variant="primary" type="submit">
+                            <Button disabled={isSubmitButtonDisabled} variant="primary" type="submit">
                                 Save
                             </Button>
                         </div>
