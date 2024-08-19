@@ -19,6 +19,7 @@ export const MswAddSpot = () => {
     const [maxFlow, setMaxFlow] = useState<number | undefined>(undefined);
     const [stations, setStations] = useState<ApiStation[]>([])
     const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
+    const [stationSelectionError, setStationSelectionError] = useState('');
 
     useEffect(() => {
         // no await, so that frontend doesn't block
@@ -37,6 +38,13 @@ export const MswAddSpot = () => {
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
+        if (!stationId) {
+            setStationSelectionError('Please select a valid option.');
+            return;
+        } else {
+            setStationSelectionError('');
+        }
+
         let config = await authConfiguration(token);
         const apiSpot: ApiSpot = {
             id: uuid(),
@@ -104,13 +112,18 @@ export const MswAddSpot = () => {
                             (from <a href="https://www.hydrodaten.admin.ch/">hydrodaten.admin.ch</a>)</Form.Label>
                         <Form.Group className="mb-3" controlId="formBasicStationId">
                             <Typeahead
+                                allowNew={false}
                                 inputProps={{ required: true }}
                                 id="station-autocomplete"
                                 labelKey="label"
-                                onChange={(station) => setStationId((station.pop() as ApiStation).id)}
+                                onChange={(station) => {
+                                    setStationId((station.pop() as ApiStation).id);
+                                    setStationSelectionError('');
+                                }}
                                 options={stations}
                                 placeholder="Station">
                             </Typeahead>
+                            {stationSelectionError && <div style={{ color: 'red' }}>{stationSelectionError}</div>}
                         </Form.Group>
 
                         <Form.Label htmlFor="formBasicMinFlow">Minimum Flow for Spot to Work</Form.Label>
