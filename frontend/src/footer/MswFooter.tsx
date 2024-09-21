@@ -6,20 +6,19 @@ export class MswFooter extends Component {
         return <>
             <footer>
                 <div className="Footer">
-                    <div className="Footer_item">
-                        Source:{" "}
-                        <a href="https://www.hydrodaten.admin.ch">
-                            BAFU
-                        </a>
-                    </div>
-                    <div className="Footer_item">
-                        <p>Created by: Nicola K&#252;ng and Aaron Studer</p>
-                    </div>
-                    <div className="Footer_item">
-                        <a href="https://github.com/nkueng/MagicSwissWeed/issues">
-                            Feedback
-                        </a>
-                    </div>
+                  <ul className='Footer_list'>
+                    <li>Source:{" "} 
+                      <a href="https://www.hydrodaten.admin.ch">
+                          BAFU
+                      </a>
+                    </li>
+                    <li>Created by Nicola K&#252;ng and Aaron Studer</li>
+                    <li>
+                      <a href="mailto:magicswissweed@gmail.com?subject=Feedback">
+                        Feedback
+                      </a>
+                    </li>
+                  </ul>
                 </div>
             </footer>
         </>;
