@@ -68,6 +68,12 @@ summary::-webkit-details-marker {
 .spotname a {
   flex: 1;
   text-overflow: ellipsis;
+  color: #000000;
+  text-decoration: none;
+}
+
+.spotname a:hover {
+  text-decoration: underline;
 }
 
 .spotContainer {
