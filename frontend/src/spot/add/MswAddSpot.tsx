@@ -1,4 +1,5 @@
-import './MswAddSpot.scss'
+import './MswAddSpot.scss';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 import React, {FormEvent, useEffect, useState} from "react";
 import {Button, Form} from 'react-bootstrap';
 import {ApiSpot, ApiSpotSpotTypeEnum, ApiStation, SpotsApi, StationApi} from '../../gen/msw-api-ts';
