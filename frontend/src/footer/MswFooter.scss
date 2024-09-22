@@ -4,29 +4,33 @@ $mswBlue: #3bbae8;
 
 .Footer {
   margin-top: 30px;
-  padding: 1.25rem 1.875rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  padding: 1.25rem;
   color: white;
   background-color: $mswBlue;
 
-  @include small {
-    flex-direction: column;
+  .Footer_list {
+    list-style: none;
+    padding: 0;
+    margin: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include small {
+      flex-direction: column;
+    }
+
+    @include medium {
+      flex-direction: column;
+    }
+
+    li {
+      margin: 1rem;
+      min-width: 14rem;
+    }
+
+    a {
+      color: white;
+    }
   }
-
-  @include medium {
-    flex-direction: column;
-  }
 }
-
-.Footer a {
-  color: white;
-}
-
-.Footer_item {
-  margin: auto;
-  padding: 1rem;
-  min-width: 12.5rem;
-}
-
