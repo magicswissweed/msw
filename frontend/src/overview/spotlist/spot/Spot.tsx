@@ -53,12 +53,12 @@ export const Spot = (props: SpotProps) => {
 
     function getCollapsibleContent(location: ApiSpotInformation) {
         let forecastContent = <>
-            <h2>Forecast</h2>
+            <h2 className="details-title">Forecast</h2>
             <MswForecastGraph location={location} isMini={false}/>
         </>;
 
         let lastMeasurementsContent = <>
-            <h2>Forecast</h2>
+            <h2 className="details-title">Last 40 days</h2>
             <MswLastMeasurementsGraph location={location} isMini={false}/>
         </>;
 

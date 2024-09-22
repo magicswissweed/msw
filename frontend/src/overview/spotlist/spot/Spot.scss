@@ -1,4 +1,9 @@
 @import "../../../ReactiveMixins";
+@import "../../../index";
+
+.details-title {
+  color: $msw-blue;
+}
 
 .spot {
   display: flex;
@@ -62,9 +67,13 @@ summary::-webkit-details-marker {
 
 .spotname a {
   flex: 1;
-  text-decoration: none;
-  color: #000000;
   text-overflow: ellipsis;
+  color: #000000;
+  text-decoration: none;
+}
+
+.spotname a:hover {
+  text-decoration: underline;
 }
 
 details.spot[open] summary.spotname {
