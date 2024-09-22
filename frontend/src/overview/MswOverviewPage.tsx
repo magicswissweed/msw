@@ -6,7 +6,7 @@ import {SpotList} from './spotlist/SpotList'
 import {ApiSpotInformationList, SpotsApi} from '../gen/msw-api-ts';
 import {MswLoader} from '../loader/MswLoader';
 import {AxiosResponse} from 'axios';
-import {useUserAuth} from '../user/UserAuthContext';
+import {useUserAuth, wasUserLoggedInBefore} from '../user/UserAuthContext';
 import {authConfiguration} from '../api/config/AuthConfiguration';
 
 interface MswOverviewPageState {
@@ -39,12 +39,18 @@ export const MswOverviewPage = () => {
 
     // initial loading
     useEffect(() => {
-        fetchData(false);
+        if (!wasUserLoggedInBefore()) {
+            fetchData(false);
+        }
     }, []);
 
     // load on user change
     useEffect(() => {
-        fetchData(user != undefined);
+        if (!wasUserLoggedInBefore()) {
+            fetchData(false);
+        } else if (user) {
+            fetchData(true);
+        }
     }, [user])
 
     return <>

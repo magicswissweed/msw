@@ -76,6 +76,16 @@ summary::-webkit-details-marker {
   text-decoration: underline;
 }
 
+details.spot[open] summary.spotname {
+  .forecastContainer {
+    display: none;
+  }
+
+  .measurements {
+    flex-direction: row;
+  }
+}
+
 .spotContainer {
   flex: 1;
   display: flex;

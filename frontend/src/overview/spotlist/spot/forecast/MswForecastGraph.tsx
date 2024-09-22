@@ -68,6 +68,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
             firstDayMidnightDate.setHours(24, 0, 0, 0),
             firstDayMidnightDate.setHours(24, 0, 0, 0),
             firstDayMidnightDate.setHours(24, 0, 0, 0),
+            firstDayMidnightDate.setHours(24, 0, 0, 0),
         ]
 
         let showXAxis = true;
@@ -86,7 +87,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
         }
 
         return <>
-            <ResponsiveContainer className="graph" width="100%" aspect={2}>
+            <ResponsiveContainer className="graph" width="100%" aspect={this.isMini ? 3 : 2}>
                 <ComposedChart data={normalizedGraphData}>
                     <ReferenceArea y1={this.location.minFlow}
                                    y2={this.location.maxFlow}
