@@ -109,7 +109,7 @@ export const MswAddSpot = () => {
                         </Form.Group>
 
                         <Form.Label htmlFor="formBasicStationId">The measuring station
-                            (from <a href="https://www.hydrodaten.admin.ch/">hydrodaten.admin.ch</a>)</Form.Label>
+                            (from <a href="https://www.hydrodaten.admin.ch/" target="_blank" rel="noopener noreferrer">hydrodaten.admin.ch</a>)</Form.Label>
                         <Form.Group className="mb-3" controlId="formBasicStationId">
                             <Typeahead
                                 allowNew={false}
