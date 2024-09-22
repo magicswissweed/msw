@@ -36,9 +36,11 @@ export const Spot = (props: SpotProps) => {
 
         return <>
             <div className='icons-container'>
+              {user &&
                 <div className={'icon drag-drop-icon'} {...props.dragHandleProps}>
                     ☰
                 </div>
+              }
             </div>
             <div className="spotContainer">
                 <a href={link} target="_blank" rel="noreferrer">
