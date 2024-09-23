@@ -22,7 +22,7 @@ import jakarta.annotation.Generated;
  * ApiSpotInformationList
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-07-09T18:59:26.968547600+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-09-23T19:27:47.425596+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiSpotInformationList {
 
   @Valid

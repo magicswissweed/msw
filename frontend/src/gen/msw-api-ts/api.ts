@@ -146,7 +146,7 @@ export interface ApiSpot {
      * @type {string}
      * @memberof ApiSpot
      */
-    'id'?: string;
+    'id': string;
     /**
      * 
      * @type {string}
@@ -203,7 +203,7 @@ export interface ApiSpotInformation {
      * @type {string}
      * @memberof ApiSpotInformation
      */
-    'id'?: string;
+    'id': string;
     /**
      * 
      * @type {string}
@@ -297,7 +297,7 @@ export const ForecastApiAxiosParamCreator = function (configuration?: Configurat
         getForecast: async (stationId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'stationId' is not null or undefined
             assertParamExists('getForecast', 'stationId', stationId)
-            const localVarPath = `/forecast/{stationId}`
+            const localVarPath = `/api/v1/forecast/{stationId}`
                 .replace(`{${"stationId"}}`, encodeURIComponent(String(stationId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -405,7 +405,7 @@ export const SampleApiAxiosParamCreator = function (configuration?: Configuratio
         getCurrentSample: async (stationId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'stationId' is not null or undefined
             assertParamExists('getCurrentSample', 'stationId', stationId)
-            const localVarPath = `/sample/current/{stationId}`
+            const localVarPath = `/api/v1/sample/current/{stationId}`
                 .replace(`{${"stationId"}}`, encodeURIComponent(String(stationId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -439,7 +439,7 @@ export const SampleApiAxiosParamCreator = function (configuration?: Configuratio
         getLast40DaysSamples: async (stationId: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'stationId' is not null or undefined
             assertParamExists('getLast40DaysSamples', 'stationId', stationId)
-            const localVarPath = `/sample/last40Days/{stationId}`
+            const localVarPath = `/api/v1/sample/last40Days/{stationId}`
                 .replace(`{${"stationId"}}`, encodeURIComponent(String(stationId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -582,7 +582,7 @@ export const SpotsApiAxiosParamCreator = function (configuration?: Configuration
         addPrivateSpot: async (addPrivateSpotRequest: AddPrivateSpotRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'addPrivateSpotRequest' is not null or undefined
             assertParamExists('addPrivateSpot', 'addPrivateSpotRequest', addPrivateSpotRequest)
-            const localVarPath = `/spots/add`;
+            const localVarPath = `/api/v1/spots/add`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -618,7 +618,7 @@ export const SpotsApiAxiosParamCreator = function (configuration?: Configuration
         deletePrivateSpot: async (spotId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'spotId' is not null or undefined
             assertParamExists('deletePrivateSpot', 'spotId', spotId)
-            const localVarPath = `/spots/delete/{spotId}`
+            const localVarPath = `/api/v1/spots/delete/{spotId}`
                 .replace(`{${"spotId"}}`, encodeURIComponent(String(spotId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -649,7 +649,7 @@ export const SpotsApiAxiosParamCreator = function (configuration?: Configuration
          * @throws {RequiredError}
          */
         getAllSpots: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/spots/all`;
+            const localVarPath = `/api/v1/spots/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -679,7 +679,7 @@ export const SpotsApiAxiosParamCreator = function (configuration?: Configuration
          * @throws {RequiredError}
          */
         getPublicSpots: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/spots/public`;
+            const localVarPath = `/api/v1/spots/public`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -712,7 +712,7 @@ export const SpotsApiAxiosParamCreator = function (configuration?: Configuration
         orderSpots: async (requestBody: Array<string>, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'requestBody' is not null or undefined
             assertParamExists('orderSpots', 'requestBody', requestBody)
-            const localVarPath = `/spots/order`;
+            const localVarPath = `/api/v1/spots/order`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -953,7 +953,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @throws {RequiredError}
          */
         registerUser: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/user/register`;
+            const localVarPath = `/api/v1/user/register`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
