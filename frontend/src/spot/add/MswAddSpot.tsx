@@ -61,7 +61,7 @@ export const MswAddSpot = () => {
         if (response.status === 200) {
             navigate('/');
         } else {
-            alert('Something went wrong. Please check your entered data.');
+            alert("Sorry, it looks like we can't add that spot. Maybe the flow is not measured at this station?");
             setIsSubmitButtonDisabled(false);
         }
     }
