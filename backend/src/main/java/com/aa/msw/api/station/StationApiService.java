@@ -1,6 +1,8 @@
 package com.aa.msw.api.station;
 
+import com.aa.msw.database.exceptions.NoSampleAvailableException;
 import com.aa.msw.gen.api.ApiStation;
+import com.aa.msw.source.InputDataFetcherService;
 import com.aa.msw.source.hydrodaten.stations.StationFetchService;
 import org.springframework.stereotype.Service;
 
@@ -11,16 +13,31 @@ import java.util.List;
 public class StationApiService {
 
     private final StationFetchService stationFetchService;
+    private final InputDataFetcherService inputDataFetcherService;
     private List<ApiStation> stations = new ArrayList<>();
 
-    public StationApiService(StationFetchService stationFetchService) {
+    public StationApiService(StationFetchService stationFetchService, InputDataFetcherService inputDataFetcherService) {
         this.stationFetchService = stationFetchService;
+        this.inputDataFetcherService = inputDataFetcherService;
     }
 
     public List<ApiStation> getStations() {
-        if(stations.size() == 0) {
-            stations = stationFetchService.fetchStations();
+        if(stations.isEmpty()) {
+            stations = stationFetchService
+                    .fetchStations()
+                    .stream()
+                    .filter(this::isValidStation)
+                    .toList();
         }
         return stations;
+    }
+
+    private boolean isValidStation(ApiStation apiStation) {
+        try {
+            inputDataFetcherService.fetchForStationId(apiStation.getId());
+        } catch (NoSampleAvailableException e) {
+            return false;
+        }
+        return true;
     }
 }
