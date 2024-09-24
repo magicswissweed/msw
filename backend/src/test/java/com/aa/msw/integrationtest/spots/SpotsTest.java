@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import static org.hamcrest.Matchers.hasSize;
 
 public class SpotsTest extends IntegrationTest {
-    public static final String ALL_SPOTS_URL = "/spots/all";
+    public static final String ALL_SPOTS_URL = "/api/v1/spots/all";
 
     @Test
     public void shouldBeAbleToFetchAllSpots() {
