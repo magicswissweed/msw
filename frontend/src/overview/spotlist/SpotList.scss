@@ -1,29 +1,10 @@
 @import "../../ReactiveMixins";
 @import "./spot/Spot";
 
-.tableHeader {
-  flex: 1;
-  display: flex;
-  margin: 0 $icons-container-width;
-}
-
-.tableHeaderCol {
-  flex: 1;
-}
-
-.tableHeaderContainer {
-  margin: 0 $spot-margin-l-r;
-  display: flex;
-}
-
 .spotsContainer {
   flex: 1;
   width: 700px;
   margin: 0 auto auto auto;
-}
-
-.doubleCol {
-  flex: 2;
 }
 
 .hide {
@@ -49,9 +30,6 @@
 }
 
 @include small {
-  .tableHeaderContainer {
-    display: none;
-  }
 
   .spotsContainer {
     width: 100%;
