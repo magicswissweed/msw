@@ -19,7 +19,12 @@ import {ApiForecast, ApiForecastLineEntry, ApiSpotInformation} from '../../../..
 
 interface MswForecastGraphProps {
     location: ApiSpotInformation,
-    isMini: boolean
+    aspectRatio: number,
+    withLegend?: boolean | undefined,
+    withYAxis?: boolean | undefined
+    withXAxis?: boolean | undefined;
+    withMinMaxReferenceLines?: boolean | undefined;
+    withTooltip?: boolean | undefined;
 }
 
 const DATA_KEY_MEDIAN = "median";
@@ -39,12 +44,22 @@ const TEMPORARY_DATA_KEY_FLOW = "flow";
 export class MswForecastGraph extends Component<MswForecastGraphProps> {
 
     private readonly location: ApiSpotInformation;
-    private readonly isMini: boolean;
+    private readonly aspectRatio: number;
+    private readonly withLegend: boolean;
+    private readonly withYAxis: boolean;
+    private readonly withXAxis: boolean;
+    private readonly withMinMaxReferenceLines: boolean;
+    private readonly withTooltip: boolean;
 
     constructor(props: MswForecastGraphProps) {
         super(props);
         this.location = props.location;
-        this.isMini = props.isMini;
+        this.aspectRatio = props.aspectRatio;
+        this.withLegend = props.withLegend === true;
+        this.withYAxis = props.withYAxis === true;
+        this.withXAxis = props.withXAxis === true;
+        this.withMinMaxReferenceLines = props.withMinMaxReferenceLines === true;
+        this.withTooltip = props.withTooltip === true;
     }
 
     render() {
@@ -71,23 +86,14 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
             firstDayMidnightDate.setHours(24, 0, 0, 0),
         ]
 
-        let showXAxis = true;
-        let showMinMaxReferenceLines = true;
-        let showTooltip = true;
-        let showYAxis = true;
-        let showLegend = true;
-
-
-        if (this.isMini) {
-            showXAxis = false;
-            showMinMaxReferenceLines = false;
-            showTooltip = false;
-            showYAxis = false;
-            showLegend = false;
-        }
+        let showXAxis = this.withXAxis;
+        let showMinMaxReferenceLines = this.withMinMaxReferenceLines;
+        let showTooltip = this.withTooltip;
+        let showYAxis = this.withYAxis;
+        let showLegend = this.withLegend;
 
         return <>
-            <ResponsiveContainer className="graph" width="100%" aspect={this.isMini ? 3 : 2}>
+            <ResponsiveContainer className="graph" width="100%" aspect={this.aspectRatio}>
                 <ComposedChart data={normalizedGraphData}>
                     <ReferenceArea y1={this.location.minFlow}
                                    y2={this.location.maxFlow}

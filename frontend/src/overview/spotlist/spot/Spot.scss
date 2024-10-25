@@ -17,6 +17,29 @@ $spot-margin-l-r: 10px;
   border-radius: 20px;
 }
 
+.spot-overview {
+  display: flex;
+}
+
+.spot-desktop {
+  @include small {
+    display: none;
+  }
+}
+
+.spot-mobile {
+  .forecastContainer {
+    display: none;
+  }
+
+  @include small (){
+    display: flex;
+  }
+
+  display: none;
+  flex-direction: column;
+}
+
 .icons-container {
   display: flex;
   align-content: center;
@@ -27,6 +50,8 @@ $spot-margin-l-r: 10px;
 .icon {
   flex: 1;
   align-content: center;
+
+  margin: 5px 0;
 
   img {
     width: 40%;
@@ -57,11 +82,8 @@ summary::-webkit-details-marker {
 }
 
 .collapsibleContent {
+  display: flex;
   margin: 20px 10px;
-
-  @include small {
-    display: none;
-  }
 }
 
 .spotname {
@@ -105,5 +127,5 @@ details.spot[open] summary.spotname {
 }
 
 .drag-drop-icon {
-   color: #1F7099; // TODO: use msw-blue (on another branch currently)
+   color: $msw-blue-secondary;
 }

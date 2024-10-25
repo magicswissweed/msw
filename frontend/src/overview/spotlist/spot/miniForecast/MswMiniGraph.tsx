@@ -19,7 +19,7 @@ export class MswMiniGraph extends Component<MswMiniForecastProps> {
     render() {
         let content;
         if (this.location.forecast) {
-            content = <MswForecastGraph location={this.location} isMini={true}/>;
+            content = <MswForecastGraph location={this.location} aspectRatio={3}/>;
         } else {
             content = <MswLastMeasurementsGraph location={this.location} isMini={true}/>
         }
