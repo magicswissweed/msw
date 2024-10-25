@@ -5,6 +5,7 @@
  */
 package com.aa.msw.gen.api;
 
+import com.aa.msw.gen.api.ApiStation;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,34 +34,46 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-08-19T16:05:36.774085700+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
-@Tag(name = "user", description = "the user API")
-public interface UserApi {
+@Tag(name = "station", description = "the station API")
+public interface StationApi {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
     }
 
     /**
-     * POST /user/register : Register new User.
+     * GET /stations : Get a list of stations from BAFU
      *
-     * @return Registration was successful. (status code 200)
+     * @return Returns a list of stations from BAFU. (status code 200)
      */
     @Operation(
-        operationId = "registerUser",
-        summary = "Register new User.",
-        tags = { "user" },
+        operationId = "getStations",
+        summary = "Get a list of stations from BAFU",
+        tags = { "station" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Registration was successful.")
+            @ApiResponse(responseCode = "200", description = "Returns a list of stations from BAFU.", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ApiStation.class)))
+            })
         }
     )
     @RequestMapping(
-        method = RequestMethod.POST,
-        value = "/user/register"
+        method = RequestMethod.GET,
+        value = "/stations",
+        produces = { "application/json" }
     )
     
-    default ResponseEntity<Void> registerUser(
+    default ResponseEntity<List<ApiStation>> getStations(
         
     ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ { \"id\" : 0, \"label\" : \"label\" }, { \"id\" : 0, \"label\" : \"label\" } ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

@@ -146,7 +146,7 @@ export interface ApiSpot {
      * @type {string}
      * @memberof ApiSpot
      */
-    'id'?: string;
+    'id': string;
     /**
      * 
      * @type {string}
@@ -203,7 +203,7 @@ export interface ApiSpotInformation {
      * @type {string}
      * @memberof ApiSpotInformation
      */
-    'id'?: string;
+    'id': string;
     /**
      * 
      * @type {string}
@@ -279,6 +279,25 @@ export interface ApiSpotInformationList {
      * @memberof ApiSpotInformationList
      */
     'bungeeSurfSpots': Array<ApiSpotInformation>;
+}
+/**
+ * 
+ * @export
+ * @interface ApiStation
+ */
+export interface ApiStation {
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiStation
+     */
+    'id': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiStation
+     */
+    'label': string;
 }
 
 /**
@@ -935,6 +954,107 @@ export class SpotsApi extends BaseAPI {
      */
     public orderSpots(requestBody: Array<string>, options?: RawAxiosRequestConfig) {
         return SpotsApiFp(this.configuration).orderSpots(requestBody, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * StationApi - axios parameter creator
+ * @export
+ */
+export const StationApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get a list of stations from BAFU
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStations: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/stations`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * StationApi - functional programming interface
+ * @export
+ */
+export const StationApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = StationApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get a list of stations from BAFU
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getStations(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ApiStation>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStations(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['StationApi.getStations']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * StationApi - factory interface
+ * @export
+ */
+export const StationApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = StationApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get a list of stations from BAFU
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStations(options?: any): AxiosPromise<Array<ApiStation>> {
+            return localVarFp.getStations(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * StationApi - object-oriented interface
+ * @export
+ * @class StationApi
+ * @extends {BaseAPI}
+ */
+export class StationApi extends BaseAPI {
+    /**
+     * 
+     * @summary Get a list of stations from BAFU
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StationApi
+     */
+    public getStations(options?: RawAxiosRequestConfig) {
+        return StationApiFp(this.configuration).getStations(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

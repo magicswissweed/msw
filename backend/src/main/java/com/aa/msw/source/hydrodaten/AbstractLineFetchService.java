@@ -1,8 +1,8 @@
 package com.aa.msw.source.hydrodaten;
 
 import com.aa.msw.source.AbstractFetchService;
-import com.aa.msw.source.hydrodaten.model.HydroLine;
-import com.aa.msw.source.hydrodaten.model.HydroResponse;
+import com.aa.msw.source.hydrodaten.model.line.HydroLine;
+import com.aa.msw.source.hydrodaten.model.line.HydroResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

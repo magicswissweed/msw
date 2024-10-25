@@ -3,7 +3,7 @@ package com.aa.msw.source.hydrodaten.historical.lastfourty;
 import com.aa.msw.database.helpers.id.SampleId;
 import com.aa.msw.model.Sample;
 import com.aa.msw.source.hydrodaten.AbstractLineFetchService;
-import com.aa.msw.source.hydrodaten.model.HydroResponse;
+import com.aa.msw.source.hydrodaten.model.line.HydroResponse;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

@@ -1,12 +1,14 @@
-import './MswAddSpot.scss'
-import React, {FormEvent, useState} from "react";
+import './MswAddSpot.scss';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import React, {FormEvent, useEffect, useState} from "react";
 import {Button, Form} from 'react-bootstrap';
-import {ApiSpot, ApiSpotSpotTypeEnum, SpotsApi} from '../../gen/msw-api-ts';
+import {ApiSpot, ApiSpotSpotTypeEnum, ApiStation, SpotsApi, StationApi} from '../../gen/msw-api-ts';
 import {authConfiguration} from '../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../user/UserAuthContext';
 import {useNavigate} from 'react-router-dom';
 import {AxiosResponse} from "axios";
 import {v4 as uuid} from 'uuid';
+import {Typeahead} from "react-bootstrap-typeahead";
 
 export const MswAddSpot = () => {
     const navigate = useNavigate();
@@ -16,14 +18,34 @@ export const MswAddSpot = () => {
     const [stationId, setStationId] = useState<number | undefined>(undefined);
     const [minFlow, setMinFlow] = useState<number | undefined>(undefined);
     const [maxFlow, setMaxFlow] = useState<number | undefined>(undefined);
+    const [stations, setStations] = useState<ApiStation[]>([])
+    const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
+    const [stationSelectionError, setStationSelectionError] = useState('');
+
+    useEffect(() => {
+        // no await, so that frontend doesn't block
+        fetchStations()
+    }, []);
+
 
     // @ts-ignore
     const {token} = useUserAuth();
 
-    const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
+    async function fetchStations(): Promise<void> {
+        return await new StationApi()
+            .getStations()
+            .then((response) => setStations(response.data));
+    }
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
+        if (!stationId) {
+            setStationSelectionError('Please select a valid option.');
+            return;
+        } else {
+            setStationSelectionError('');
+        }
+
         let config = await authConfiguration(token);
         const apiSpot: ApiSpot = {
             id: uuid(),
@@ -34,13 +56,12 @@ export const MswAddSpot = () => {
             minFlow: minFlow!,
             maxFlow: maxFlow!,
         };
-        // TODO: position should not be 0, but riversurfspots.length + 1, or bungeesurfSpots.length + 1
         setIsSubmitButtonDisabled(true);
         let response: AxiosResponse<void, any> = await new SpotsApi(config).addPrivateSpot({spot: apiSpot, position: 0})
         if (response.status === 200) {
             navigate('/');
         } else {
-            alert('Something went wrong. Please check your entered data.');
+            alert("Sorry, it looks like we can't add that spot. Maybe the flow is not measured at this station?");
             setIsSubmitButtonDisabled(false);
         }
     }
@@ -88,16 +109,22 @@ export const MswAddSpot = () => {
                             </Form>
                         </Form.Group>
 
-                        <Form.Label htmlFor="formBasicStationId">The stationId of the Spot
-                            (from <a href="https://www.hydrodaten.admin.ch/">hydrodaten.admin.ch</a>)</Form.Label>
+                        <Form.Label htmlFor="formBasicStationId">The measuring station
+                            (from <a href="https://www.hydrodaten.admin.ch/" target="_blank" rel="noopener noreferrer">hydrodaten.admin.ch</a>)</Form.Label>
                         <Form.Group className="mb-3" controlId="formBasicStationId">
-                            <Form.Control
-                                required
-                                type="number"
-                                placeholder="The id from BAFU's station"
-                                // @ts-ignore
-                                onChange={(e) => setStationId(e.target.value)}
-                            />
+                            <Typeahead
+                                allowNew={false}
+                                inputProps={{ required: true }}
+                                id="station-autocomplete"
+                                labelKey="label"
+                                onChange={(station) => {
+                                    setStationId((station.pop() as ApiStation).id);
+                                    setStationSelectionError('');
+                                }}
+                                options={stations}
+                                placeholder="Station">
+                            </Typeahead>
+                            {stationSelectionError && <div style={{ color: 'red' }}>{stationSelectionError}</div>}
                         </Form.Group>
 
                         <Form.Label htmlFor="formBasicMinFlow">Minimum Flow for Spot to Work</Form.Label>
