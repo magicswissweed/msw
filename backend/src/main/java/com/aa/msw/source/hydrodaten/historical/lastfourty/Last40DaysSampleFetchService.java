@@ -26,6 +26,7 @@ public class Last40DaysSampleFetchService extends AbstractLineFetchService {
         Map<OffsetDateTime, Double> line = mapLine(hydroResponse.plot().data().get(1));
 
         return line.entrySet().stream()
+                .filter(entry -> entry.getValue() != null)
                 .map(entry -> new Sample(
                         new SampleId(),
                         stationId,

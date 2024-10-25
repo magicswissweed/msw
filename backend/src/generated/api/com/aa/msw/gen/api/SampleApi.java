@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-08-19T16:05:36.774085700+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-09-23T19:27:47.425596+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
 @Tag(name = "sample", description = "the sample API")
 public interface SampleApi {
@@ -42,7 +42,7 @@ public interface SampleApi {
     }
 
     /**
-     * GET /sample/current/{stationId} : Get current Flow and Temperature of a specific Station
+     * GET /api/v1/sample/current/{stationId} : Get current Flow and Temperature of a specific Station
      *
      * @param stationId The id of the station to get the sample from. (required)
      * @return Returns the last measured Sample from the station. (status code 200)
@@ -59,7 +59,7 @@ public interface SampleApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/sample/current/{stationId}",
+        value = "/api/v1/sample/current/{stationId}",
         produces = { "application/json" }
     )
     
@@ -81,7 +81,7 @@ public interface SampleApi {
 
 
     /**
-     * GET /sample/last40Days/{stationId} : Get Samples from last 40 Days for this station.
+     * GET /api/v1/sample/last40Days/{stationId} : Get Samples from last 40 Days for this station.
      *
      * @param stationId The id of the station to get the sample from. (required)
      * @return Returns the Samples from the last 40 Days for the station. (status code 200)
@@ -98,7 +98,7 @@ public interface SampleApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/sample/last40Days/{stationId}",
+        value = "/api/v1/sample/last40Days/{stationId}",
         produces = { "application/json" }
     )
     

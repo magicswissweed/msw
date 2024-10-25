@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-08-19T16:05:36.774085700+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-09-23T19:27:47.425596+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
 @Tag(name = "spots", description = "the spots API")
 public interface SpotsApi {
@@ -44,7 +44,7 @@ public interface SpotsApi {
     }
 
     /**
-     * POST /spots/add : Add a new private Spot.
+     * POST /api/v1/spots/add : Add a new private Spot.
      *
      * @param addPrivateSpotRequest Add a new private Spot. (required)
      * @return Added private Spot successfully. (status code 200)
@@ -59,7 +59,7 @@ public interface SpotsApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/spots/add",
+        value = "/api/v1/spots/add",
         consumes = { "application/json" }
     )
     
@@ -72,7 +72,7 @@ public interface SpotsApi {
 
 
     /**
-     * DELETE /spots/delete/{spotId} : Remove a private Spot.
+     * DELETE /api/v1/spots/delete/{spotId} : Remove a private Spot.
      *
      * @param spotId The id of the spot to delete. (required)
      * @return Removed private Spot successfully. (status code 200)
@@ -87,7 +87,7 @@ public interface SpotsApi {
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/spots/delete/{spotId}"
+        value = "/api/v1/spots/delete/{spotId}"
     )
     
     default ResponseEntity<Void> deletePrivateSpot(
@@ -99,7 +99,7 @@ public interface SpotsApi {
 
 
     /**
-     * GET /spots/all : Get Public and Private SpotInformation-List including Current Sample and Forecast for logged in user.
+     * GET /api/v1/spots/all : Get Public and Private SpotInformation-List including Current Sample and Forecast for logged in user.
      *
      * @return Returns a List with Data for the Spots. (status code 200)
      */
@@ -115,7 +115,7 @@ public interface SpotsApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/spots/all",
+        value = "/api/v1/spots/all",
         produces = { "application/json" }
     )
     
@@ -137,7 +137,7 @@ public interface SpotsApi {
 
 
     /**
-     * GET /spots/public : Get SpotInformation-List including Current Sample and Forecast for non-logged-in user.
+     * GET /api/v1/spots/public : Get SpotInformation-List including Current Sample and Forecast for non-logged-in user.
      *
      * @return Returns a List with Data for the Spots. (status code 200)
      */
@@ -153,7 +153,7 @@ public interface SpotsApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/spots/public",
+        value = "/api/v1/spots/public",
         produces = { "application/json" }
     )
     
@@ -175,7 +175,7 @@ public interface SpotsApi {
 
 
     /**
-     * PATCH /spots/order : Change the order of the spots
+     * PATCH /api/v1/spots/order : Change the order of the spots
      *
      * @param UUID The new order of the spots. (required)
      * @return Ordered spots successfully (status code 200)
@@ -190,7 +190,7 @@ public interface SpotsApi {
     )
     @RequestMapping(
         method = RequestMethod.PATCH,
-        value = "/spots/order",
+        value = "/api/v1/spots/order",
         consumes = { "application/json" }
     )
     

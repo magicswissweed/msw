@@ -6,7 +6,7 @@ info:
 servers:
   - url: 'http://localhost:8080/'
 paths:
-  /sample/current/{stationId}:
+  /api/v1/sample/current/{stationId}:
     get:
       summary: Get current Flow and Temperature of a specific Station
       security:
@@ -28,7 +28,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiSample'
-  /sample/last40Days/{stationId}:
+  /api/v1/sample/last40Days/{stationId}:
     get:
       summary: Get Samples from last 40 Days for this station.
       security:
@@ -50,7 +50,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiLast40DaysSamples'
-  /forecast/{stationId}:
+  /api/v1/forecast/{stationId}:
     get:
       summary: Get Forecast for specific Station
       security:
@@ -72,7 +72,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiForecast'
-  /spots/public:
+  /api/v1/spots/public:
     get:
       summary: Get SpotInformation-List including Current Sample and Forecast for non-logged-in user.
       operationId: getPublicSpots
@@ -85,7 +85,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiSpotInformationList'
-  /spots/all:
+  /api/v1/spots/all:
     get:
       summary: Get Public and Private SpotInformation-List including Current Sample and Forecast for logged in user.
       security:
@@ -100,7 +100,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiSpotInformationList'
-  /spots/add:
+  /api/v1/spots/add:
     post:
       summary: Add a new private Spot.
       security:
@@ -124,7 +124,7 @@ paths:
       responses:
         '200':
           description: Added private Spot successfully.
-  /spots/delete/{spotId}:
+  /api/v1/spots/delete/{spotId}:
     delete:
       summary: Remove a private Spot.
       security:
@@ -143,7 +143,7 @@ paths:
       responses:
         '200':
           description: Removed private Spot successfully.
-  /spots/order:
+  /api/v1/spots/order:
     patch:
       summary: Change the order of the spots
       security:
@@ -161,7 +161,7 @@ paths:
       responses:
         '200':
           description: Ordered spots successfully
-  /user/register:
+  /api/v1/user/register:
     post:
       summary: Register new User.
       operationId: registerUser

@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-08-19T16:05:36.774085700+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-09-23T19:27:47.425596+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
 @Tag(name = "user", description = "the user API")
 public interface UserApi {
@@ -41,7 +41,7 @@ public interface UserApi {
     }
 
     /**
-     * POST /user/register : Register new User.
+     * POST /api/v1/user/register : Register new User.
      *
      * @return Registration was successful. (status code 200)
      */
@@ -55,7 +55,7 @@ public interface UserApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/user/register"
+        value = "/api/v1/user/register"
     )
     
     default ResponseEntity<Void> registerUser(

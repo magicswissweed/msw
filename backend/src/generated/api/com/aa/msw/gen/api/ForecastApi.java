@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-08-19T16:05:36.774085700+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-09-23T19:27:47.425596+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
 @Tag(name = "forecast", description = "the forecast API")
 public interface ForecastApi {
@@ -42,7 +42,7 @@ public interface ForecastApi {
     }
 
     /**
-     * GET /forecast/{stationId} : Get Forecast for specific Station
+     * GET /api/v1/forecast/{stationId} : Get Forecast for specific Station
      *
      * @param stationId The id of the station to get the sample from. (required)
      * @return Returns the forecast for the station. (status code 200)
@@ -59,7 +59,7 @@ public interface ForecastApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/forecast/{stationId}",
+        value = "/api/v1/forecast/{stationId}",
         produces = { "application/json" }
     )
     
