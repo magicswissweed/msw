@@ -21,27 +21,29 @@ export const SpotList = (props: SpotListProps) => {
         setLocations(props.locations);
     }, [props.locations]);
 
-    const handleDrop = async (result: DropResult) => {
-        async function saveSpotsOrdering() {
-            let config = await authConfiguration(token);
-            await new SpotsApi(config).orderSpots(
-                locations
-                    .filter(loc => loc.id)
-                    .map(loc => loc.id!));
+
+    async function saveSpotsOrdering(locations: Array<ApiSpotInformation>) {
+        let config = await authConfiguration(token);
+        await new SpotsApi(config).orderSpots(
+            locations
+                .filter(loc => loc.id)
+                .map(loc => loc.id!));
+    }
+
+    useEffect(() => {
+        if (user) {
+            // no await, because we don't want the frontend to be blocked
+            saveSpotsOrdering(locations);
         }
+    },[locations])
 
+    const handleDrop = async (result: DropResult) => {
         if (!result.destination) return;
-
         const reorderedItems = Array.from(locations);
         const [removed] = reorderedItems.splice(result.source.index, 1);
         reorderedItems.splice(result.destination.index, 0, removed);
 
         setLocations(reorderedItems);
-
-        if (user) {
-            // no await, because we don't want the frontend to be blocked
-            saveSpotsOrdering();
-        }
     };
 
     return <>
