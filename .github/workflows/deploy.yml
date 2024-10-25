@@ -1,0 +1,28 @@
+name: Deploy via SSH
+
+on:
+  workflow_dispatch:
+    inputs:
+      docker_image_name:
+        description: "The Docker image name to deploy - equals the git commit id on the master"
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Run deployment script on remote server
+      uses: appleboy/ssh-action@v1.1.0
+      with:
+        host: ssh.ponteshare.ch
+        username: studi
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: 1910
+        script: |
+          cd /opt/ponte-services/magicswissweed
+          sudo ./deploy.sh ${{ github.event.inputs.docker_image_name }}
