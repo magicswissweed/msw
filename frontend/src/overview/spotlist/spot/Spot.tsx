@@ -1,5 +1,5 @@
 import './Spot.scss'
-import React from 'react';
+import React, {useState} from 'react';
 import {ApiSpotInformation, SpotsApi} from '../../../gen/msw-api-ts';
 import {MswMeasurement} from './measurement/MswMeasurement';
 import {MswMiniGraph} from './miniForecast/MswMiniGraph';
@@ -11,6 +11,8 @@ import globe from '../../../assets/globe.svg';
 import {MswLastMeasurementsGraph} from './historical/MswLastMeasurementsGraph';
 import {authConfiguration} from '../../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../../user/UserAuthContext';
+import Modal from 'react-bootstrap/Modal';
+import {Button} from "react-bootstrap";
 
 interface SpotProps {
     location: ApiSpotInformation,
@@ -18,9 +20,15 @@ interface SpotProps {
 }
 
 export const Spot = (props: SpotProps) => {
-
     // @ts-ignore
     const {token, user} = useUserAuth();
+
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
+    const handleDeleteSpotAndCloseModal = (location: ApiSpotInformation) => deleteSpot(location).then(handleCancelConfirmationModal);
+    const handleCancelConfirmationModal = () => setShowConfirmationModal(false);
+    const handleShowConfirmationModal = () => setShowConfirmationModal(true);
+
 
     return <>
         <details key={props.location.name} className="spot">
@@ -63,10 +71,24 @@ export const Spot = (props: SpotProps) => {
 
                 </div>
                 {user &&
-                    <div className="icon" onClick={() => onDeleteSpot(location)}>
+                    <div className="icon" onClick={() => handleShowConfirmationModal()}>
                         <img alt="Delete this spot from your dashboard." src={delete_icon}/>
                     </div>
                 }
+                <Modal show={showConfirmationModal} onHide={handleCancelConfirmationModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Are you sure?</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>You won't be able to retrieve this spot. If you need it again you will have to add a new one.</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCancelConfirmationModal}>
+                            Cancel
+                        </Button>
+                        <Button variant="primary" onClick={() => handleDeleteSpotAndCloseModal(location)}>
+                            Delete Spot
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
                 <div className="collapsible-icon icon">
                     <img alt="extend forecast" src={arrow_down}/>
                 </div>
@@ -92,7 +114,7 @@ export const Spot = (props: SpotProps) => {
         </>;
     }
 
-    async function onDeleteSpot(location: ApiSpotInformation) {
+    async function deleteSpot(location: ApiSpotInformation) {
         let config = await authConfiguration(token);
         await new SpotsApi(config).deletePrivateSpot(location.id!)
         document.location.reload();
