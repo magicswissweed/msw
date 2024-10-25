@@ -170,7 +170,7 @@ paths:
       responses:
         '200':
           description: Registration was successful.
-  /stations:
+  /api/v1/stations:
     get:
       summary: Get a list of stations from BAFU
       operationId: getStations

@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-08-19T16:05:36.774085700+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-25T12:08:09.674660+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
 @Tag(name = "station", description = "the station API")
 public interface StationApi {
@@ -42,7 +42,7 @@ public interface StationApi {
     }
 
     /**
-     * GET /stations : Get a list of stations from BAFU
+     * GET /api/v1/stations : Get a list of stations from BAFU
      *
      * @return Returns a list of stations from BAFU. (status code 200)
      */
@@ -58,7 +58,7 @@ public interface StationApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/stations",
+        value = "/api/v1/stations",
         produces = { "application/json" }
     )
     

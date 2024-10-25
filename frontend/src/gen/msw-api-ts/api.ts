@@ -972,7 +972,7 @@ export const StationApiAxiosParamCreator = function (configuration?: Configurati
          * @throws {RequiredError}
          */
         getStations: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/stations`;
+            const localVarPath = `/api/v1/stations`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
