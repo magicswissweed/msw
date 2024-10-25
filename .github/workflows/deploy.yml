@@ -25,5 +25,5 @@ jobs:
         port: 1910
         script: |
           cd /opt/ponte-services/magicswissweed
-          ./deploy.sh ${{ github.event.inputs.docker_image_name }}
+          sudo ./deploy.sh ${{ github.event.inputs.docker_image_name }}
 
