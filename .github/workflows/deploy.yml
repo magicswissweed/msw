@@ -25,5 +25,4 @@ jobs:
         port: 1910
         script: |
           cd /opt/ponte-services/magicswissweed
-          sudo ./deploy.sh ${{ github.event.inputs.docker_image_name }}
-
+          echo ${{ secrets.SSH_PASSWORD }} | sudo -S ./deploy.sh ${{ github.event.inputs.docker_image_name }}
