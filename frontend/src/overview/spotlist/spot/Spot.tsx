@@ -7,7 +7,7 @@ import {MswForecastGraph} from './forecast/MswForecastGraph';
 import arrow_down from '../../../assets/arrow_down.png';
 import lock from '../../../assets/lock.svg';
 import delete_icon from '../../../assets/delete_icon.svg';
-import group from '../../../assets/group.svg';
+import globe from '../../../assets/globe.svg';
 import {MswLastMeasurementsGraph} from './historical/MswLastMeasurementsGraph';
 import {authConfiguration} from '../../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../../user/UserAuthContext';
@@ -55,7 +55,7 @@ export const Spot = (props: SpotProps) => {
                         <img className={"public"}
                              alt="This is a public spot. Everyone can see it."
                              title="This is a public spot. Everyone can see it."
-                             src={group}/> :
+                             src={globe}/> :
                         <img alt="This is a private spot. Only you can see it."
                              title="This is a private spot. Only you can see it."
                              src={lock}/>
