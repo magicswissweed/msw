@@ -31,12 +31,18 @@ export const Spot = (props: SpotProps) => {
 
 
     return <>
-        <details key={props.location.name} className="spot">
+        <details key={props.location.name} className="spot spot-desktop">
             <summary className="spotname">
                 {getSpotSummaryContent(props.location)}
             </summary>
             {getCollapsibleContent(props.location)}
         </details>
+        <div className="spot spot-mobile">
+            <div className={"spot-overview"}>
+                {getSpotSummaryContent(props.location)}
+            </div>
+            {getCollapsibleContent(props.location, false, true, false, true, true)}
+        </div>
     </>;
 
     function getSpotSummaryContent(location: ApiSpotInformation) {
@@ -96,14 +102,23 @@ export const Spot = (props: SpotProps) => {
         </>
     }
 
-    function getCollapsibleContent(location: ApiSpotInformation) {
+    function getCollapsibleContent(location: ApiSpotInformation,
+                                   withLegend: boolean = true,
+                                   withXAxis: boolean = true,
+                                   withYAxis: boolean = true,
+                                   withMinMaxReferenceLines: boolean = true,
+                                   withTooltip: boolean = true) {
         let forecastContent = <>
-            <h2 className="details-title">Forecast</h2>
-            <MswForecastGraph location={location} isMini={false}/>
+            <MswForecastGraph location={location}
+                              aspectRatio={2}
+                              withLegend={withLegend}
+                              withXAxis={withXAxis}
+                              withYAxis={withYAxis}
+                              withMinMaxReferenceLines={withMinMaxReferenceLines}
+                              withTooltip={withTooltip}/>
         </>;
 
         let lastMeasurementsContent = <>
-            <h2 className="details-title">Last 40 days</h2>
             <MswLastMeasurementsGraph location={location} isMini={false}/>
         </>;
 
