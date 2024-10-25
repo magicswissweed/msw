@@ -11,6 +11,7 @@ import com.aa.msw.gen.jooq.tables.UserToSpotTable;
 import com.aa.msw.gen.jooq.tables.daos.UserToSpotTableDao;
 import com.aa.msw.gen.jooq.tables.records.UserToSpotTableRecord;
 import com.aa.msw.model.Spot;
+import com.aa.msw.model.SpotTypeEnum;
 import com.aa.msw.model.UserSpot;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
@@ -38,7 +39,18 @@ public class UserToSpotRepository extends AbstractRepository<UserToSpotId, UserT
     @Transactional
     public void addPrivateSpot(Spot spot, int position) {
         spotDao.persist(spot);
+        increasePositionOfAllSpotsOfTypeByOne(spot.type());
         persistUserToSpot(spot, position);
+    }
+
+    private void increasePositionOfAllSpotsOfTypeByOne(SpotTypeEnum type) {
+        List<UserToSpot> userToSpots = getUserToSpotOrderedOfType(type);
+
+        for(int i = 0; i < userToSpots.size(); i++) {
+            UserToSpot userToSpot = userToSpots.get(i);
+            userToSpot.setPosition(i + 1);
+            update(userToSpot);
+        }
     }
 
     @Transactional
@@ -56,14 +68,24 @@ public class UserToSpotRepository extends AbstractRepository<UserToSpotId, UserT
     @Override
     @Transactional
     public List<UserSpot> getUserSpotsOrdered() {
-        return dsl.selectFrom(TABLE)
-                .where(TABLE.USER_ID.eq(UserContext.getCurrentUser().userId().getId()))
-                .orderBy(TABLE.POSITION)
-                .fetch(this::mapRecord)
+        return getUserToSpotOrdered()
                 .stream()
                 .map(userToSpot -> new UserSpot(userToSpot.position(), spotDao.get(userToSpot.spotId())))
                 .sorted(Comparator.comparingInt(UserSpot::position))
                 .collect(Collectors.toList());
+    }
+
+    private List<UserToSpot> getUserToSpotOrdered() {
+        return dsl.selectFrom(TABLE)
+                .where(TABLE.USER_ID.eq(UserContext.getCurrentUser().userId().getId()))
+                .orderBy(TABLE.POSITION)
+                .fetch(this::mapRecord);
+    }
+
+    private List<UserToSpot> getUserToSpotOrderedOfType(SpotTypeEnum type) {
+        return getUserToSpotOrdered().stream()
+                .filter(userToSpot -> spotDao.get(userToSpot.spotId()).type() == type)
+                .toList();
     }
 
     @Override

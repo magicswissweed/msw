@@ -1,8 +1,10 @@
 @import "../../ReactiveMixins";
+@import "./spot/Spot";
 
 .tableHeader {
   flex: 1;
   display: flex;
+  margin: 0 $icons-container-width;
 }
 
 .tableHeaderCol {
@@ -10,8 +12,7 @@
 }
 
 .tableHeaderContainer {
-  padding: 0 10px;
-  margin: 0 10px;
+  margin: 0 $spot-margin-l-r;
   display: flex;
 }
 
@@ -37,6 +38,10 @@
 .collapsibleIcon > img {
   width: 100%;
   cursor: pointer;
+}
+
+.spotsContainer > h2 {
+  text-decoration: underline;
 }
 
 .item.dragging {

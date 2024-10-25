@@ -17,19 +17,17 @@ const root = ReactDOM.createRoot(
 
 root.render(
     <UserAuthContextProvider>
-        <React.StrictMode>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Navigate replace to="/spots"/>}/>
-                    <Route path="/login" element={<MswLogin/>}/>
-                    <Route path="/signup" element={<MswSignUp/>}/>
-                    <Route path="/forgot-password" element={<MswForgotPassword/>}/>
-                    <Route path="/spots" element={<MswOverviewPage/>}/>
-                    <Route path="/spots/add" element={<MswAddSpot/>}/>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Navigate replace to="/spots"/>}/>
+                <Route path="/login" element={<MswLogin/>}/>
+                <Route path="/signup" element={<MswSignUp/>}/>
+                <Route path="/forgot-password" element={<MswForgotPassword/>}/>
+                <Route path="/spots" element={<MswOverviewPage/>}/>
+                <Route path="/spots/add" element={<MswAddSpot/>}/>
 
-                    <Route path="*" element={<ErrorNotFound/>}/>
-                </Routes>
-            </BrowserRouter>
-        </React.StrictMode>
+                <Route path="*" element={<ErrorNotFound/>}/>
+            </Routes>
+        </BrowserRouter>
     </UserAuthContextProvider>,
 );
