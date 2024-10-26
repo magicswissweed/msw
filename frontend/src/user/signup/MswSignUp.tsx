@@ -1,24 +1,32 @@
 import './MswSignUp.scss';
-import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import React, {useRef, useState} from "react";
 import {Button, Form} from "react-bootstrap";
 import {useUserAuth} from "../UserAuthContext";
 import {MswLogin} from "../login/MswLogin";
+import Modal from "react-bootstrap/Modal";
 
 const MswSignup = () => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const [password, setPassword] = useState("");
+    // @ts-ignore
     const {signUp} = useUserAuth();
-    let navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const [showSignupModal, setShowSignupModal] = useState(false);
+    const handleShowSignupModal = () => setShowSignupModal(true);
+    const handleCloseSignupModal = () => setShowSignupModal(false);
+
+    const handleSignupAndCloseModal = (e: { preventDefault: () => void; }) => handleSubmit(e);
+
+    const formRef = useRef<HTMLFormElement | null>(null);
+
+    const handleSubmit = async (e: { preventDefault: any; }) => {
+        e.preventDefault()
         setError("");
         try {
             await signUp(email, password);
-            navigate("/");
-        } catch (err) {
+            handleCloseSignupModal();
+        } catch (err: any) {
             if (err.message.includes('auth/email-already-in-use')) {
                 setError('<p>This email is already registered. Please try to log in.</p>');
             } else if (err.message.includes('auth/weak-password')) {
@@ -31,15 +39,16 @@ const MswSignup = () => {
 
     return (
         <>
-            <div className="form">
-                <div className="box-container">
-                    <div className="p-4 box">
-                        <h2 className="mb-3">Signup</h2>
+            <button className="msw-button" onClick={handleShowSignupModal}>Sign up</button>
+            <Modal show={showSignupModal} onHide={handleCloseSignupModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Sign up</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="form">
+                        {error && <p className="error-message" dangerouslySetInnerHTML={{__html: error}}></p>}
 
-                        {error && <p className="error-message" dangerouslySetInnerHTML={{ __html: error }}></p>}
-
-                        <Form onSubmit={handleSubmit}>
-
+                        <Form ref={formRef} onSubmit={handleSignupAndCloseModal}>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Control
                                     type="email"
@@ -57,20 +66,23 @@ const MswSignup = () => {
                                     required
                                 />
                             </Form.Group>
-
-                            <div className="d-grid gap-2">
-                                <Button variant="primary" type="Submit">
-                                    Sign up
-                                </Button>
-                            </div>
                         </Form>
                     </div>
                     <div className="p-4 box mt-3 text-center">
                         Already have an account?
-                        <MswLogin></MswLogin>
+                        <MswLogin />
                     </div>
-                </div>
-            </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseSignupModal}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary"
+                            onClick={() => formRef.current && formRef.current.requestSubmit()}>
+                        Sign up
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 };
