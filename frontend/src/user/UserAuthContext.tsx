@@ -52,7 +52,7 @@ export function UserAuthContextProvider({children}) {
         </userAuthContext.Provider>
     );
 
-    function logIn(email: string, password: string) {
+    async function logIn(email: string, password: string) {
         return signInWithEmailAndPassword(firebaseAuth, email, password);
     }
 
@@ -67,11 +67,10 @@ export function UserAuthContextProvider({children}) {
         await sendPasswordResetEmail(firebaseAuth, email);
     }
 
-    function logOut() {
-        return signOut(firebaseAuth).then(() => {
-            setCookie(userWasLoggedInCookieName, "");
-            document.location.reload();
-        });
+    async function logOut() {
+        await signOut(firebaseAuth);
+        setCookie(userWasLoggedInCookieName, "");
+        document.location.reload();
     }
 
     function googleSignIn() {

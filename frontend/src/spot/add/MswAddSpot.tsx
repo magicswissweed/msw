@@ -75,7 +75,7 @@ export const MswAddSpot = () => {
 
     return <>
         <button className="add-spot msw-button" onClick={() => handleShowAddSpotModal()}>Add Spot</button>
-        <Modal id="add-spot-form" show={showAddSpotModal} onHide={handleCancelAddSpotModal}>
+        <Modal show={showAddSpotModal} onHide={handleCancelAddSpotModal}>
             <Modal.Header closeButton>
                 <Modal.Title>Add new private Spot</Modal.Title>
             </Modal.Header>
@@ -163,7 +163,7 @@ export const MswAddSpot = () => {
                 <Button variant="secondary" onClick={handleCancelAddSpotModal}>
                     Cancel
                 </Button>
-                <Button disabled={isSubmitButtonDisabled} variant="primary" type="submit" form="add-spot-form" onClick={() => formRef.current && formRef.current.requestSubmit()}>
+                <Button disabled={isSubmitButtonDisabled} variant="primary" type="submit" onClick={() => formRef.current && formRef.current.requestSubmit()}>
                     Add Spot
                 </Button>
             </Modal.Footer>
