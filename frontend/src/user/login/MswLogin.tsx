@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import {Alert, Button, Form} from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import {useUserAuth} from "../UserAuthContext";
+import MswSignUp from "../signup/MswSignUp";
 
 export const MswLogin = () => {
     const [email, setEmail] = useState<string>("");
@@ -11,20 +12,21 @@ export const MswLogin = () => {
     const [error, setError] = useState<string>("");
     // @ts-ignore
     const {logIn} = useUserAuth();
+
     const [showLoginModal, setShowLoginModal] = useState(false);
+    const handleCloseLoginModal = () => setShowLoginModal(false);
     const handleShowLoginModal = () => setShowLoginModal(true);
-    const handleLoginAndCloseModal = (e: { preventDefault: () => void; }) => {
-        e.preventDefault();
-        handleSubmit().then(handleCancelLoginModal);
-    }
-    const handleCancelLoginModal = () => setShowLoginModal(false);
+
+    const handleLoginAndCloseModal = (e: { preventDefault: () => void; }) => handleSubmit(e);
 
     const formRef = useRef<HTMLFormElement | null>(null);
 
-    async function handleSubmit () {
+    async function handleSubmit(e: { preventDefault: any; }) {
+        e.preventDefault();
         setError("");
         try {
             await logIn(email, password);
+            handleCloseLoginModal();
         } catch (err: any) {
             if (err.message.includes('auth/invalid-credential')) {
                 setError('Wrong email or password.');
@@ -50,8 +52,8 @@ export const MswLogin = () => {
 
     return (
         <>
-            <button className="msw-button" onClick={() => handleShowLoginModal()}>Login</button>
-            <Modal show={showLoginModal} onHide={handleCancelLoginModal}>
+            <button className="msw-button" onClick={handleShowLoginModal}>Login</button>
+            <Modal show={showLoginModal} onHide={handleCloseLoginModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Login</Modal.Title>
                 </Modal.Header>
@@ -88,11 +90,11 @@ export const MswLogin = () => {
                         {/*</div>*/}
                     </div>
                     <div className="p-4 box mt-3 text-center">
-                        Don't have an account? <Link to="/signup">Sign up</Link>
+                        Don't have an account? <MswSignUp />
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCancelLoginModal}>
+                    <Button variant="secondary" onClick={handleCloseLoginModal}>
                         Cancel
                     </Button>
                     <Button variant="primary"

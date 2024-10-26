@@ -1,9 +1,9 @@
 import './MswHeader.scss'
 import React from 'react';
-import {Link} from 'react-router-dom';
 import {useUserAuth} from '../user/UserAuthContext';
 import {MswAddSpot} from "../spot/add/MswAddSpot";
 import {MswLogin} from "../user/login/MswLogin";
+import MswSignUp from "../user/signup/MswSignUp";
 
 export const MswHeader = () => {
     // @ts-ignore
@@ -12,13 +12,13 @@ export const MswHeader = () => {
     let loginOrLogout: JSX.Element;
     if (user) {
         loginOrLogout = <>
-            <MswAddSpot></MswAddSpot>
+            <MswAddSpot />
             <button className="logout msw-button" onClick={logOut}>Logout</button>
         </>
     } else {
         loginOrLogout = <>
-            <MswLogin></MswLogin>
-            <Link className="signup msw-button" to="/signup">Sign up</Link>
+            <MswLogin />
+            <MswSignUp />
         </>
     }
 
