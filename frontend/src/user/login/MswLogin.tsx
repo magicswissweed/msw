@@ -1,23 +1,31 @@
 import './MswLogin.scss';
-import React, {useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import React, {useRef, useState} from "react";
+import {Link} from "react-router-dom";
 import {Alert, Button, Form} from "react-bootstrap";
+import Modal from "react-bootstrap/Modal";
 import {useUserAuth} from "../UserAuthContext";
 
 export const MswLogin = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const {logIn, googleSignIn} = useUserAuth();
-    const navigate = useNavigate();
-
-    const handleSubmit = async (e) => {
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [error, setError] = useState<string>("");
+    // @ts-ignore
+    const {logIn} = useUserAuth();
+    const [showLoginModal, setShowLoginModal] = useState(false);
+    const handleShowLoginModal = () => setShowLoginModal(true);
+    const handleLoginAndCloseModal = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
+        handleSubmit().then(handleCancelLoginModal);
+    }
+    const handleCancelLoginModal = () => setShowLoginModal(false);
+
+    const formRef = useRef<HTMLFormElement | null>(null);
+
+    async function handleSubmit () {
         setError("");
         try {
-            await logIn(email, password)
-            navigate("/spots")
-        } catch (err) {
+            await logIn(email, password);
+        } catch (err: any) {
             if (err.message.includes('auth/invalid-credential')) {
                 setError('Wrong email or password.');
             } else if (err.message.includes('auth/invalid-email')) {
@@ -28,7 +36,7 @@ export const MswLogin = () => {
                 setError(err.message);
             }
         }
-    };
+    }
 
     // const handleGoogleSignIn = async (e) => {
     //     e.preventDefault();
@@ -42,15 +50,16 @@ export const MswLogin = () => {
 
     return (
         <>
-            <div className="form">
-                <div className="box-container">
-                    <div className="p-4 box">
-                        <h2 className="mb-3">Login</h2>
-
+            <button className="msw-button" onClick={() => handleShowLoginModal()}>Login</button>
+            <Modal show={showLoginModal} onHide={handleCancelLoginModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Login</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="form">
                         {error && <Alert variant="danger">{error}</Alert>}
 
-                        <Form onSubmit={handleSubmit}>
-
+                        <Form ref={formRef} onSubmit={handleLoginAndCloseModal}>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Control
                                     type="email"
@@ -69,12 +78,6 @@ export const MswLogin = () => {
                                 />
                             </Form.Group>
 
-                            <div className="d-grid gap-2">
-                                <Button variant="primary" type="Submit">
-                                    Log In
-                                </Button>
-                            </div>
-
                             <Link className="forgot-password" to="/forgot-password">Forgot Password</Link>
                         </Form>
                         {/*<div className="google-button-container">*/}
@@ -87,8 +90,17 @@ export const MswLogin = () => {
                     <div className="p-4 box mt-3 text-center">
                         Don't have an account? <Link to="/signup">Sign up</Link>
                     </div>
-                </div>
-            </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCancelLoginModal}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary"
+                            onClick={() => formRef.current && formRef.current.requestSubmit()}>
+                        Login
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </>
     );
 };

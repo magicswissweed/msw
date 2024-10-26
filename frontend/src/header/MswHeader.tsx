@@ -3,6 +3,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {useUserAuth} from '../user/UserAuthContext';
 import {MswAddSpot} from "../spot/add/MswAddSpot";
+import {MswLogin} from "../user/login/MswLogin";
 
 export const MswHeader = () => {
     // @ts-ignore
@@ -16,7 +17,7 @@ export const MswHeader = () => {
         </>
     } else {
         loginOrLogout = <>
-            <Link className="login msw-button" to="/login">Log in</Link>
+            <MswLogin></MswLogin>
             <Link className="signup msw-button" to="/signup">Sign up</Link>
         </>
     }
