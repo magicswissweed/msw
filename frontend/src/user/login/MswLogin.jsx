@@ -1,4 +1,3 @@
-import '../user.scss';
 import './MswLogin.scss';
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
@@ -31,15 +30,15 @@ export const MswLogin = () => {
         }
     };
 
-    const handleGoogleSignIn = async (e) => {
-        e.preventDefault();
-        try {
-            await googleSignIn();
-            navigate("/spots");
-        } catch (error) {
-            console.log(error.message);
-        }
-    };
+    // const handleGoogleSignIn = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         await googleSignIn();
+    //         navigate("/spots");
+    //     } catch (error) {
+    //         console.log(error.message);
+    //     }
+    // };
 
     return (
         <>
