@@ -2,6 +2,7 @@ import './MswHeader.scss'
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {useUserAuth} from '../user/UserAuthContext';
+import {MswAddSpot} from "../spot/add/MswAddSpot";
 
 export const MswHeader = () => {
     // @ts-ignore
@@ -10,13 +11,13 @@ export const MswHeader = () => {
     let loginOrLogout: JSX.Element;
     if (user) {
         loginOrLogout = <>
-            <Link className="add-spot msw-button" to={'/spots/add'}>Add Spot</Link>
-            <button id="login-Button" className="logout msw-button" onClick={logOut}>Logout</button>
+            <MswAddSpot></MswAddSpot>
+            <button className="logout msw-button" onClick={logOut}>Logout</button>
         </>
     } else {
         loginOrLogout = <>
-            <Link id="login-Button" className="login msw-button" to="/login">Log in</Link>
-            <Link id="login-Button" className="signup msw-button" to="/signup">Sign up</Link>
+            <Link className="login msw-button" to="/login">Log in</Link>
+            <Link className="signup msw-button" to="/signup">Sign up</Link>
         </>
     }
 
