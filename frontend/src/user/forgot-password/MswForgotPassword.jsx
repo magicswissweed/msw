@@ -1,8 +1,8 @@
 import './MswForgotPassword.scss';
 import React, {useState} from "react";
 import {Button, Form} from "react-bootstrap";
-import {Link} from "react-router-dom";
 import {useUserAuth} from "../UserAuthContext";
+import {MswLogin} from "../login/MswLogin";
 
 export function MswForgotPassword() {
     const [email, setEmail] = useState("");
@@ -43,7 +43,10 @@ export function MswForgotPassword() {
                     {showSuccessMsg &&
                         <p className="success-msg text-center">We sent you an email. Please check your inbox.</p>}
 
-                    <Link className="link-to-login" to="/login">Back to Login</Link>
+                    <div>
+                        <p>Back to Login:</p>
+                        <MswLogin></MswLogin>
+                    </div>
                 </div>
             </div>
         </div>
