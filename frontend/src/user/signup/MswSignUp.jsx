@@ -1,8 +1,9 @@
 import './MswSignUp.scss';
 import React, {useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {Button, Form} from "react-bootstrap";
 import {useUserAuth} from "../UserAuthContext";
+import {MswLogin} from "../login/MswLogin";
 
 const MswSignup = () => {
     const [email, setEmail] = useState("");
@@ -19,7 +20,7 @@ const MswSignup = () => {
             navigate("/");
         } catch (err) {
             if (err.message.includes('auth/email-already-in-use')) {
-                setError('<p>This email is already registered. Please try to log in <a href="/login">here</a>.</p>');
+                setError('<p>This email is already registered. Please try to log in.</p>');
             } else if (err.message.includes('auth/weak-password')) {
                 setError('Password should have at least 6 Characters.')
             } else {
@@ -65,7 +66,8 @@ const MswSignup = () => {
                         </Form>
                     </div>
                     <div className="p-4 box mt-3 text-center">
-                        Already have an account? <Link to="/login">Log In</Link>
+                        Already have an account?
+                        <MswLogin></MswLogin>
                     </div>
                 </div>
             </div>
