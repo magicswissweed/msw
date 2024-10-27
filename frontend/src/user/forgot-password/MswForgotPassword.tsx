@@ -58,10 +58,7 @@ export function MswForgotPassword(props: MswForgotPasswordProps) {
                     {showSuccessMsg &&
                         <p className="success-msg text-center">We sent you an email. Please check your inbox.</p>}
 
-                    <div>
-                        <p>Back to Login:</p>
-                        <button className="msw-button" onClick={onOpenLoginModal}>Back to Login</button>
-                    </div>
+                    <p className="msw-button-as-link text-center" onClick={onOpenLoginModal}>Back to Login</p>
                 </div>
             </Modal.Body>
             <Modal.Footer>

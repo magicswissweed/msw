@@ -14,3 +14,12 @@ $msw-blue-secondary: #2473db;
   min-width: 60px;
   margin: 10px
 }
+
+.msw-button-as-link {
+  color: black;
+  text-decoration: underline;
+}
+
+.msw-button-as-link:hover {
+  cursor: pointer;
+}
