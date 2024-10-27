@@ -1,23 +1,28 @@
 import './MswLogin.scss';
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Link} from "react-router-dom";
 import {Alert, Button, Form} from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import {useUserAuth} from "../UserAuthContext";
-import MswSignUp from "../signup/MswSignUp";
 
-export const MswLogin = () => {
+interface MswLoginModalProps {
+    isOpen: boolean,
+    closeModal: () => void,
+    openSignupModal: () => void
+}
+
+export const MswLoginModal = (props: MswLoginModalProps) => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string>("");
     // @ts-ignore
     const {logIn} = useUserAuth();
 
-    const [showLoginModal, setShowLoginModal] = useState(false);
-    const handleCloseLoginModal = () => setShowLoginModal(false);
-    const handleShowLoginModal = () => setShowLoginModal(true);
+    const [showLoginModal, setShowLoginModal] = useState(props.isOpen);
 
-    const handleLoginAndCloseModal = (e: { preventDefault: () => void; }) => handleSubmit(e);
+    useEffect(() => {
+        setShowLoginModal(props.isOpen);
+    }, [props.isOpen]);
 
     const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -26,7 +31,7 @@ export const MswLogin = () => {
         setError("");
         try {
             await logIn(email, password);
-            handleCloseLoginModal();
+            props.closeModal();
         } catch (err: any) {
             if (err.message.includes('auth/invalid-credential')) {
                 setError('Wrong email or password.');
@@ -38,6 +43,11 @@ export const MswLogin = () => {
                 setError(err.message);
             }
         }
+    }
+
+    function onOpenSignupModal() {
+        props.closeModal();
+        props.openSignupModal();
     }
 
     // const handleGoogleSignIn = async (e) => {
@@ -52,8 +62,7 @@ export const MswLogin = () => {
 
     return (
         <>
-            <button className="msw-button" onClick={handleShowLoginModal}>Login</button>
-            <Modal show={showLoginModal} onHide={handleCloseLoginModal}>
+            <Modal show={showLoginModal} onHide={props.closeModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Login</Modal.Title>
                 </Modal.Header>
@@ -61,7 +70,7 @@ export const MswLogin = () => {
                     <div className="form">
                         {error && <Alert variant="danger">{error}</Alert>}
 
-                        <Form ref={formRef} onSubmit={handleLoginAndCloseModal}>
+                        <Form ref={formRef} onSubmit={handleSubmit}>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Control
                                     type="email"
@@ -90,11 +99,12 @@ export const MswLogin = () => {
                         {/*</div>*/}
                     </div>
                     <div className="p-4 box mt-3 text-center">
-                        Don't have an account? <MswSignUp />
+                        Don't have an account?
+                        <button className="msw-button" onClick={onOpenSignupModal}>Sign up</button>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseLoginModal}>
+                    <Button variant="secondary" onClick={props.closeModal}>
                         Cancel
                     </Button>
                     <Button variant="primary"

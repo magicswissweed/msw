@@ -2,7 +2,6 @@ import './MswForgotPassword.scss';
 import React, {useState} from "react";
 import {Button, Form} from "react-bootstrap";
 import {useUserAuth} from "../UserAuthContext";
-import {MswLogin} from "../login/MswLogin";
 
 export function MswForgotPassword() {
     const [email, setEmail] = useState("");
@@ -45,7 +44,7 @@ export function MswForgotPassword() {
 
                     <div>
                         <p>Back to Login:</p>
-                        <MswLogin></MswLogin>
+                        {/* <MswLoginModal></MswLoginModal> // TODO: fix this*/}
                     </div>
                 </div>
             </div>
