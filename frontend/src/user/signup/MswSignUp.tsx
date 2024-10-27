@@ -1,22 +1,27 @@
 import './MswSignUp.scss';
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Button, Form} from "react-bootstrap";
 import {useUserAuth} from "../UserAuthContext";
-import {MswLogin} from "../login/MswLogin";
 import Modal from "react-bootstrap/Modal";
 
-const MswSignup = () => {
+interface MswSignUpProps {
+    isOpen: boolean,
+    closeModal: () => void,
+    openLoginModal: () => void
+}
+
+const MswSignup = (props: MswSignUpProps) => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const [password, setPassword] = useState("");
     // @ts-ignore
     const {signUp} = useUserAuth();
 
-    const [showSignupModal, setShowSignupModal] = useState(false);
-    const handleShowSignupModal = () => setShowSignupModal(true);
-    const handleCloseSignupModal = () => setShowSignupModal(false);
+    const [showSignupModal, setShowSignupModal] = useState(props.isOpen);
 
-    const handleSignupAndCloseModal = (e: { preventDefault: () => void; }) => handleSubmit(e);
+    useEffect(() => {
+        setShowSignupModal(props.isOpen);
+    }, [props.isOpen]);
 
     const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -25,7 +30,7 @@ const MswSignup = () => {
         setError("");
         try {
             await signUp(email, password);
-            handleCloseSignupModal();
+            props.closeModal();
         } catch (err: any) {
             if (err.message.includes('auth/email-already-in-use')) {
                 setError('<p>This email is already registered. Please try to log in.</p>');
@@ -37,10 +42,14 @@ const MswSignup = () => {
         }
     };
 
+    function onOpenLoginModal() {
+        props.closeModal();
+        props.openLoginModal();
+    }
+
     return (
         <>
-            <button className="msw-button" onClick={handleShowSignupModal}>Sign up</button>
-            <Modal show={showSignupModal} onHide={handleCloseSignupModal}>
+            <Modal show={showSignupModal} onHide={props.closeModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Sign up</Modal.Title>
                 </Modal.Header>
@@ -48,7 +57,7 @@ const MswSignup = () => {
                     <div className="form">
                         {error && <p className="error-message" dangerouslySetInnerHTML={{__html: error}}></p>}
 
-                        <Form ref={formRef} onSubmit={handleSignupAndCloseModal}>
+                        <Form ref={formRef} onSubmit={handleSubmit}>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Control
                                     type="email"
@@ -70,11 +79,11 @@ const MswSignup = () => {
                     </div>
                     <div className="p-4 box mt-3 text-center">
                         Already have an account?
-                        <MswLogin />
+                        <button className="msw-button" onClick={onOpenLoginModal}>Log in</button>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseSignupModal}>
+                    <Button variant="secondary" onClick={props.closeModal}>
                         Cancel
                     </Button>
                     <Button variant="primary"
