@@ -94,7 +94,7 @@ export const MswLoginModal = (props: MswLoginModalProps) => {
                                 />
                             </Form.Group>
 
-                            <button className="msw-button" onClick={onOpenForgotPasswordModal}>Forgot Password</button>
+                            <p className="msw-button-as-link text-center" onClick={onOpenForgotPasswordModal}>Forgot Password</p>
                         </Form>
                         {/*<div className="google-button-container">*/}
                         {/*    <GoogleButton*/}
@@ -105,7 +105,7 @@ export const MswLoginModal = (props: MswLoginModalProps) => {
                     </div>
                     <div className="p-4 box mt-3 text-center">
                         Don't have an account?
-                        <button className="msw-button" onClick={onOpenSignupModal}>Sign up</button>
+                        <p className="msw-button-as-link" onClick={onOpenSignupModal}>Sign up</p>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>

@@ -79,7 +79,7 @@ const MswSignup = (props: MswSignUpProps) => {
                     </div>
                     <div className="p-4 box mt-3 text-center">
                         Already have an account?
-                        <button className="msw-button" onClick={onOpenLoginModal}>Log in</button>
+                        <p className="msw-button-as-link" onClick={onOpenLoginModal}>Log in</p>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
