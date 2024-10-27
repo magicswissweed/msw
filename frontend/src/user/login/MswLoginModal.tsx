@@ -1,6 +1,5 @@
 import './MswLogin.scss';
 import React, {useEffect, useRef, useState} from "react";
-import {Link} from "react-router-dom";
 import {Alert, Button, Form} from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import {useUserAuth} from "../UserAuthContext";
@@ -8,7 +7,8 @@ import {useUserAuth} from "../UserAuthContext";
 interface MswLoginModalProps {
     isOpen: boolean,
     closeModal: () => void,
-    openSignupModal: () => void
+    openSignupModal: () => void,
+    openForgotPasswordModal: () => void
 }
 
 export const MswLoginModal = (props: MswLoginModalProps) => {
@@ -50,6 +50,11 @@ export const MswLoginModal = (props: MswLoginModalProps) => {
         props.openSignupModal();
     }
 
+    function onOpenForgotPasswordModal() {
+        props.closeModal();
+        props.openForgotPasswordModal();
+    }
+
     // const handleGoogleSignIn = async (e) => {
     //     e.preventDefault();
     //     try {
@@ -89,7 +94,7 @@ export const MswLoginModal = (props: MswLoginModalProps) => {
                                 />
                             </Form.Group>
 
-                            <Link className="forgot-password" to="/forgot-password">Forgot Password</Link>
+                            <button className="msw-button" onClick={onOpenForgotPasswordModal}>Forgot Password</button>
                         </Form>
                         {/*<div className="google-button-container">*/}
                         {/*    <GoogleButton*/}

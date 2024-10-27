@@ -1,0 +1,78 @@
+import './MswForgotPassword.scss';
+import React, {useEffect, useRef, useState} from "react";
+import {Button, Form} from "react-bootstrap";
+import {useUserAuth} from "../UserAuthContext";
+import Modal from "react-bootstrap/Modal";
+
+interface MswForgotPasswordProps {
+    isOpen: boolean,
+    closeModal: () => void,
+    openLoginModal: () => void
+}
+
+export function MswForgotPassword(props: MswForgotPasswordProps) {
+    const [email, setEmail] = useState("");
+    const [showSuccessMsg, setShowSuccessMsg] = useState(false);
+
+    // @ts-ignore
+    const {sendForgotPasswordEmail} = useUserAuth();
+
+    const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(props.isOpen);
+
+    useEffect(() => {
+        setShowForgotPasswordModal(props.isOpen);
+    }, [props.isOpen]);
+
+    const formRef = useRef<HTMLFormElement | null>(null);
+
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+        e.preventDefault();
+        sendForgotPasswordEmail(email);
+        setShowSuccessMsg(true);
+    };
+
+    function onOpenLoginModal() {
+        props.closeModal();
+        props.openLoginModal();
+    }
+
+    return <>
+        <Modal show={showForgotPasswordModal} onHide={props.closeModal}>
+            <Modal.Header closeButton>
+                <Modal.Title>Reset password</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <div className="form">
+                    <Form ref={formRef} onSubmit={handleSubmit}>
+
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Control
+                                type="email"
+                                placeholder="Email address"
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
+                    </Form>
+
+                    {showSuccessMsg &&
+                        <p className="success-msg text-center">We sent you an email. Please check your inbox.</p>}
+
+                    <div>
+                        <p>Back to Login:</p>
+                        <button className="msw-button" onClick={onOpenLoginModal}>Back to Login</button>
+                    </div>
+                </div>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={props.closeModal}>
+                    Cancel
+                </Button>
+                <Button variant="primary"
+                        onClick={() => formRef.current && formRef.current.requestSubmit()}>
+                    Reset password
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    </>;
+}

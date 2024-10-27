@@ -4,6 +4,7 @@ import {useUserAuth} from '../user/UserAuthContext';
 import {MswAddSpot} from "../spot/add/MswAddSpot";
 import {MswLoginModal} from "../user/login/MswLoginModal";
 import MswSignUpModal from "../user/signup/MswSignUp";
+import {MswForgotPassword} from "../user/forgot-password/MswForgotPassword";
 
 export const MswHeader = () => {
     // @ts-ignore
@@ -11,24 +12,9 @@ export const MswHeader = () => {
 
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showSignupModal, setShowSignupModal] = useState(false);
+    const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
     let loginOrLogout: JSX.Element;
-
-    function openLoginModal() {
-        setShowLoginModal(true);
-    }
-
-    function closeLoginModal() {
-        setShowLoginModal(false);
-    }
-
-    function openSignupModal() {
-        setShowSignupModal(true);
-    }
-
-    function closeSignupModal() {
-        setShowSignupModal(false);
-    }
 
     if (user) {
         loginOrLogout = <>
@@ -37,10 +23,18 @@ export const MswHeader = () => {
         </>
     } else {
         loginOrLogout = <>
-            <button className="msw-button" onClick={openLoginModal}>Login</button>
-            <button className="msw-button" onClick={openSignupModal}>Sign up</button>
-            <MswLoginModal isOpen={showLoginModal} closeModal={closeLoginModal} openSignupModal={openSignupModal} />
-            <MswSignUpModal isOpen={showSignupModal} closeModal={closeSignupModal} openLoginModal={openLoginModal}/>
+            <button className="msw-button" onClick={() => setShowLoginModal(true)}>Login</button>
+            <button className="msw-button" onClick={() => setShowSignupModal(true)}>Sign up</button>
+            <MswLoginModal isOpen={showLoginModal}
+                           closeModal={() => setShowLoginModal(false)}
+                           openSignupModal={() => setShowSignupModal(true)}
+                           openForgotPasswordModal={() => setShowForgotPasswordModal(true)} />
+            <MswSignUpModal isOpen={showSignupModal}
+                            closeModal={() => setShowSignupModal(false)}
+                            openLoginModal={() => setShowLoginModal(true)}/>
+            <MswForgotPassword isOpen={showForgotPasswordModal}
+                               closeModal={() => setShowForgotPasswordModal(false)}
+                               openLoginModal={() => setShowLoginModal(true)}/>
         </>
     }
 
