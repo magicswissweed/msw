@@ -45,7 +45,7 @@ export const MswHeader = () => {
             </div>
             <div className="title">
                 <h1>MagicSwissWeed</h1>
-                <p>Current surfing conditions in Switzerland</p>
+                <p>Know when the rivers flow</p>
             </div>
         </header>
     </>;
