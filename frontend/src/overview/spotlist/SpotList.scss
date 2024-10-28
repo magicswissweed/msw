@@ -5,6 +5,17 @@
   flex: 1;
   width: 700px;
   margin: 0 auto auto auto;
+
+  h2 {
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  @include small {
+    width: 100%;
+    padding: 5px;
+  }
+
 }
 
 .hide {
@@ -16,19 +27,11 @@
   flex: 0.03;
 }
 
-.collapsibleIcon > img {
+.collapsibleIcon>img {
   width: 100%;
   cursor: pointer;
 }
 
 .item.dragging {
   opacity: 0.6;
-}
-
-@include small {
-
-  .spotsContainer {
-    width: 100%;
-    padding: 5px;
-  }
 }
