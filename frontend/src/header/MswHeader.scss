@@ -9,17 +9,8 @@
   }
 }
 
-.title > h1 {
-  text-transform: uppercase;
+.title>h1 {
   font-weight: 800;
-}
-
-.title {
-  font-family: Arial, sans-serif;
-  background-image: url(../../public/ripples-snip.jpg);
-  background-repeat: repeat;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 h1 {
@@ -45,7 +36,10 @@ p {
   justify-content: right;
 }
 
-.login, .logout, .signup, .add-spot {
+.login,
+.logout,
+.signup,
+.add-spot {
   margin-left: 0;
   flex: 1;
 }
