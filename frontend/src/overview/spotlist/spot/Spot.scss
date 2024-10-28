@@ -32,7 +32,7 @@ $spot-margin-l-r: 10px;
     display: none;
   }
 
-  @include small (){
+  @include small () {
     display: flex;
   }
 
@@ -58,7 +58,7 @@ $spot-margin-l-r: 10px;
   }
 }
 
-details > summary div.collapsible-icon {
+details>summary div.collapsible-icon {
   transition: all 1s;
   align-self: center;
 }
@@ -90,11 +90,14 @@ summary::-webkit-details-marker {
   display: flex;
 }
 
-.spotname a, .spotContainer a {
+.spotname a,
+.spotContainer a {
   flex: 1;
   text-overflow: ellipsis;
   color: #000000;
   text-decoration: none;
+  text-transform: uppercase;
+
 }
 
 .spotname a:hover {
@@ -127,5 +130,5 @@ details.spot[open] summary.spotname {
 }
 
 .drag-drop-icon {
-   color: $msw-blue-secondary;
+  color: $msw-blue-secondary;
 }
