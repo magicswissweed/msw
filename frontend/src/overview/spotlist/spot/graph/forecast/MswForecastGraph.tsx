@@ -55,22 +55,9 @@ export class MswForecastGraph extends Component<MswGraphProps> {
             </>
         }
 
-        let normalizedGraphData: any[] = this.normalizeGraphData(this.location.forecast!);
+        let normalizedGraphData: NormalizedDataItem[] = this.normalizeGraphData(this.location.forecast!);
 
-        const from = normalizedGraphData[0].datetime;
-        const to = normalizedGraphData[normalizedGraphData.length - 1].datetime;
-        let firstDayMidnight = new Date(from).setHours(0, 0, 0, 1);
-        let firstDayMidnightDate = new Date(firstDayMidnight);
-        const ticks = [
-            firstDayMidnight,
-            firstDayMidnightDate.setHours(24, 0, 0, 0),
-            firstDayMidnightDate.setHours(24, 0, 0, 0),
-            firstDayMidnightDate.setHours(24, 0, 0, 0),
-            firstDayMidnightDate.setHours(24, 0, 0, 0),
-            firstDayMidnightDate.setHours(24, 0, 0, 0),
-            firstDayMidnightDate.setHours(24, 0, 0, 0),
-            firstDayMidnightDate.setHours(24, 0, 0, 0),
-        ]
+        const ticks = this.getTicks(normalizedGraphData)
 
         return <>
             <ResponsiveContainer className="graph" width="100%" aspect={this.aspectRatio}>
@@ -106,7 +93,7 @@ export class MswForecastGraph extends Component<MswGraphProps> {
                           activeDot={{stroke: '#029ca3', strokeWidth: 1, r: 4}}/>
                     {getMeasuredLine()}
                     {getCartesianGrid()}
-                    {getXAxis(from, to, ticks, this.withXAxis, v => new Date(v).toLocaleString('de-CH', {weekday: 'short'}))}
+                    {getXAxis(ticks, this.withXAxis, v => new Date(v).toLocaleString('de-CH', {weekday: 'short'}))}
 
                     {this.withMinMaxReferenceLines && getMinMaxReferenceLines(this.location)}
                     {this.withTooltip && getTooltip()}
@@ -115,6 +102,15 @@ export class MswForecastGraph extends Component<MswGraphProps> {
                 </ComposedChart>
             </ResponsiveContainer>
         </>
+    }
+
+    private getTicks(normalizedGraphData: NormalizedDataItem[]) {
+        const nrOfTicks = 8;
+        const oneDayInMs = 24 * 60 * 60 * 1000;
+        let firstDayMidnight = new Date(normalizedGraphData[0].datetime).setHours(0, 0, 0, 1);
+        return Array.from(
+            { length: nrOfTicks },
+            (_, i) => firstDayMidnight + i * oneDayInMs);
     }
 
     private getLegend() {
