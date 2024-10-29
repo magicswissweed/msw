@@ -3,28 +3,36 @@ import React, {useEffect, useState} from "react";
 import {MswHeader} from '../header/MswHeader';
 import {MswFooter} from '../footer/MswFooter';
 import {SpotList} from './spotlist/SpotList'
-import {ApiSpotInformationList, SpotsApi} from '../gen/msw-api-ts';
+import {ApiSpotInformation, ApiSpotInformationList, SpotsApi} from '../gen/msw-api-ts';
 import {MswLoader} from '../loader/MswLoader';
 import {AxiosResponse} from 'axios';
 import {useUserAuth, wasUserLoggedInBefore} from '../user/UserAuthContext';
 import {authConfiguration} from '../api/config/AuthConfiguration';
-
-interface MswOverviewPageState {
-    data: ApiSpotInformationList | null
-}
+import {locationsService} from "../service/LocationsService";
 
 function isNotEmpty(array: Array<any> | undefined) {
     return array && array.length > 0;
 }
 
 export const MswOverviewPage = () => {
-    const [state, setState] = useState<MswOverviewPageState>({data: null});
+    const [locations, setLocations] = useState<Array<ApiSpotInformation>>([]);
 
     // @ts-ignore
     const {user, token} = useUserAuth();
+
+    useEffect(() => {
+        const updateLocations = (newLocations: ApiSpotInformation[]) => setLocations(newLocations);
+        locationsService.subscribe(updateLocations);
+
+        return () => locationsService.unsubscribe(updateLocations);
+    }, []);
+
     const writeSpotsToState = (res: AxiosResponse<ApiSpotInformationList, any>) => {
         if (res && res.data && res.data.riverSurfSpots && res.data.bungeeSurfSpots) {
-            setState({data: res.data});
+            res.data.riverSurfSpots.forEach(l => l.spotType = "RIVER_SURF");
+            res.data.bungeeSurfSpots.forEach(l => l.spotType = "BUNGEE_SURF");
+            let allLocations = res.data.bungeeSurfSpots.concat(res.data.riverSurfSpots);
+            locationsService.setLocations(allLocations);
         }
     };
 
@@ -56,18 +64,20 @@ export const MswOverviewPage = () => {
     return <>
         <div className="App">
             <MswHeader/>
-            {state.data ? getContent(state.data) : <MswLoader/>}
+            {locations.length > 0 ? getContent() : <MswLoader/>}
             <MswFooter/>
         </div>
     </>;
 
-    function getContent(data: ApiSpotInformationList) {
+    function getContent() {
+        let riverSurfLocations = locations.filter(l => l.spotType === "RIVER_SURF");
+        let bungeeSurfLocations = locations.filter(l => l.spotType === "BUNGEE_SURF");
         return <>
             <div className="surfspots">
-                {isNotEmpty(data.riverSurfSpots) &&
-                    <SpotList title="Riversurf" locations={data.riverSurfSpots!}/>}
-                {isNotEmpty(data.bungeeSurfSpots) &&
-                    <SpotList title="Bungeesurf" locations={data.bungeeSurfSpots!}/>}
+                {isNotEmpty(riverSurfLocations) &&
+                    <SpotList title="Riversurf" locations={riverSurfLocations}/>}
+                {isNotEmpty(bungeeSurfLocations) &&
+                    <SpotList title="Bungeesurf" locations={bungeeSurfLocations}/>}
             </div>
         </>;
     }

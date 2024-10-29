@@ -13,6 +13,7 @@ import {authConfiguration} from '../../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../../user/UserAuthContext';
 import Modal from 'react-bootstrap/Modal';
 import {Button} from "react-bootstrap";
+import {locationsService} from "../../../service/LocationsService";
 
 interface SpotProps {
     location: ApiSpotInformation,
@@ -137,7 +138,7 @@ export const Spot = (props: SpotProps) => {
 
     async function deleteSpot(location: ApiSpotInformation) {
         let config = await authConfiguration(token);
-        await new SpotsApi(config).deletePrivateSpot(location.id!)
-        document.location.reload();
+        new SpotsApi(config).deletePrivateSpot(location.id!); // no await to not be blocking
+        locationsService.deleteLocation(location.id!);
     }
 }

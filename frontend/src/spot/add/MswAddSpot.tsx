@@ -66,7 +66,7 @@ export const MswAddSpot = () => {
         setIsSubmitButtonDisabled(true);
         let response: AxiosResponse<void, any> = await new SpotsApi(config).addPrivateSpot({spot: apiSpot, position: 0})
         if (response.status === 200) {
-            navigate('/');
+            navigate('/'); // TODO: use locationsService
         } else {
             alert("Sorry, it looks like we can't add that spot. Maybe the flow is not measured at this station?");
             setIsSubmitButtonDisabled(false);
