@@ -1,6 +1,6 @@
 import '../base-graph/MswGraph.scss'
 import {ComposedChart, Legend, ResponsiveContainer,} from 'recharts';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {ApiSample, ApiSpotInformation, SampleApi} from '../../../../../gen/msw-api-ts';
 import {authConfiguration} from '../../../../../api/config/AuthConfiguration';
 import {AxiosResponse} from 'axios';
@@ -47,7 +47,9 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     withMinMaxReferenceLines = props.withMinMaxReferenceLines === true;
     withTooltip = props.withTooltip === true;
 
-    fetchLast40DaysSamples();
+    useEffect(() => {
+        fetchLast40DaysSamples();
+    }, []);
 
     async function fetchLast40DaysSamples() {
         let config = await authConfiguration(token);
