@@ -1,6 +1,6 @@
-import './MswMiniForecast.scss'
+import './MswMiniGraph.scss'
 import React, {Component} from 'react';
-import {ApiSpotInformation} from '../../../../gen/msw-api-ts';
+import {ApiSpotInformation} from '../../../../../gen/msw-api-ts';
 import {MswForecastGraph} from '../forecast/MswForecastGraph';
 import {MswLastMeasurementsGraph} from '../historical/MswLastMeasurementsGraph';
 
@@ -21,7 +21,7 @@ export class MswMiniGraph extends Component<MswMiniForecastProps> {
         if (this.location.forecast) {
             content = <MswForecastGraph location={this.location} aspectRatio={3}/>;
         } else {
-            content = <MswLastMeasurementsGraph location={this.location} isMini={true}/>
+            content = <MswLastMeasurementsGraph location={this.location} aspectRatio={3}/>
         }
 
         let className = "forecastContainer";

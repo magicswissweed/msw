@@ -13,15 +13,11 @@ import {
     YAxis,
 } from 'recharts';
 import {useState} from 'react';
-import {ApiSample, ApiSpotInformation, SampleApi} from '../../../../gen/msw-api-ts';
-import {authConfiguration} from '../../../../api/config/AuthConfiguration';
+import {ApiSample, ApiSpotInformation, SampleApi} from '../../../../../gen/msw-api-ts';
+import {authConfiguration} from '../../../../../api/config/AuthConfiguration';
 import {AxiosResponse} from 'axios';
-import {useUserAuth} from '../../../../user/UserAuthContext';
-
-interface MswLastMeasurementsGraphProps {
-    location: ApiSpotInformation,
-    isMini: boolean
-}
+import {useUserAuth} from '../../../../../user/UserAuthContext';
+import {MswGraphProps} from "../forecast/MswForecastGraph";
 
 interface MswLastMeasurementsState {
     samples: ApiSample[]
@@ -33,17 +29,27 @@ const LINE_NAME_MEASURED = "Gemessen";
 
 type NormalizedDataItem = { datetime: Date, [lineName: string]: unknown; };
 
-export const MswLastMeasurementsGraph = (props: MswLastMeasurementsGraphProps) => {
+export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     const [state, setState] = useState<MswLastMeasurementsState>({samples: []});
 
     // @ts-ignore
     const {token} = useUserAuth();
 
     let location: ApiSpotInformation;
-    let isMini: boolean;
+    let aspectRatio: number;
+    let withLegend: boolean;
+    let withXAxis: boolean;
+    let withYAxis: boolean;
+    let withMinMaxReferenceLines: boolean;
+    let withTooltip: boolean;
 
     location = props.location;
-    isMini = props.isMini;
+    aspectRatio = props.aspectRatio;
+    withLegend = props.withLegend === true;
+    withXAxis = props.withXAxis === true;
+    withYAxis = props.withYAxis === true;
+    withMinMaxReferenceLines = props.withMinMaxReferenceLines === true;
+    withTooltip = props.withTooltip === true;
 
     fetchLast40DaysSamples();
 
@@ -65,28 +71,13 @@ export const MswLastMeasurementsGraph = (props: MswLastMeasurementsGraphProps) =
 
     let normalizedGraphData: any[] = normalizeGraphDataLine(state.samples, DATA_KEY_MEASURED);
 
-    let showXAxis = true;
-    let showMinMaxReferenceLines = true;
-    let showTooltip = true;
-    let showYAxis = true;
-    let showLegend = true;
-
-
-    if (isMini) {
-        showXAxis = false;
-        showMinMaxReferenceLines = false;
-        showTooltip = false;
-        showYAxis = false;
-        showLegend = false;
-    }
-
     const ticks = getTicks();
 
     const from = ticks[0];
     const to = ticks[ticks.length - 1];
 
     return <>
-        <ResponsiveContainer className="graph" width="100%" aspect={2}>
+        <ResponsiveContainer className="graph" width="100%" aspect={aspectRatio}>
             <LineChart data={normalizedGraphData}>
                 <ReferenceArea y1={location.minFlow}
                                y2={location.maxFlow}
@@ -108,12 +99,12 @@ export const MswLastMeasurementsGraph = (props: MswLastMeasurementsGraphProps) =
                     ticks={ticks}
                     tickFormatter={v => new Date(v).getDate() + "."}
                     minTickGap={1}
-                    hide={!showXAxis}/>
+                    hide={!withXAxis}/>
 
-                {showMinMaxReferenceLines && getMinMaxReferenceLines()}
-                {showTooltip && getTooltip()}
-                {showYAxis && getYAxis(location.minFlow!, location.maxFlow!)}
-                {showLegend && getLegend()}
+                {withMinMaxReferenceLines && getMinMaxReferenceLines()}
+                {withTooltip && getTooltip()}
+                {withYAxis && getYAxis(location.minFlow!, location.maxFlow!)}
+                {withLegend && getLegend()}
             </LineChart>
         </ResponsiveContainer>
     </>
