@@ -1,43 +1,29 @@
-import './MswForecastGraph.scss'
-import {
-    Area,
-    CartesianGrid,
-    ComposedChart,
-    Label,
-    Legend,
-    Line,
-    ReferenceArea,
-    ReferenceDot,
-    ReferenceLine,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from 'recharts';
+import '../base-graph/MswGraph.scss'
+import {Area, ComposedChart, Legend, Line, ReferenceDot, ResponsiveContainer,} from 'recharts';
 import React, {Component} from 'react';
 import {ApiForecast, ApiForecastLineEntry, ApiSpotInformation} from '../../../../../gen/msw-api-ts';
+import {
+    DATA_KEY_MEASURED,
+    DATA_KEY_MEDIAN,
+    getCartesianGrid,
+    getCurrentTimeReferenceLine,
+    getMeasuredLine,
+    getMinMaxReferenceLines,
+    getReferenceArea,
+    getTooltip,
+    getXAxis,
+    getYAxis,
+    LINE_NAME_MEASURED,
+    LINE_NAME_MEDIAN,
+    MswGraphProps,
+    NormalizedDataItem,
+    normalizeGraphDataLine
+} from "../base-graph/MswGraph";
 
-export interface MswGraphProps {
-    location: ApiSpotInformation,
-    aspectRatio: number,
-    withLegend?: boolean | undefined,
-    withYAxis?: boolean | undefined
-    withXAxis?: boolean | undefined;
-    withMinMaxReferenceLines?: boolean | undefined;
-    withTooltip?: boolean | undefined;
-}
-
-const DATA_KEY_MEDIAN = "median";
-const DATA_KEY_MEASURED = "measured";
 const DATA_KEY_25_PERCENTILE = "twentyFivePercentile";
 const DATA_KEY_75_PERCENTILE = "seventyFivePercentile";
 const DATA_KEY_MINIMUM = "minimum";
 const DATA_KEY_MAXIMUM = "maximum";
-
-const LINE_NAME_MEASURED = "Gemessen";
-let LINE_NAME_MEDIAN = "Median";
-
-type NormalizedDataItem = { datetime: Date, [lineName: string]: unknown; };
 
 const TEMPORARY_DATA_KEY_FLOW = "flow";
 
@@ -89,11 +75,8 @@ export class MswForecastGraph extends Component<MswGraphProps> {
         return <>
             <ResponsiveContainer className="graph" width="100%" aspect={this.aspectRatio}>
                 <ComposedChart data={normalizedGraphData}>
-                    <ReferenceArea y1={this.location.minFlow}
-                                   y2={this.location.maxFlow}
-                                   ifOverflow="extendDomain"
-                                   fill="green"/>
-                    <ReferenceLine x={Date.now()} stroke="#666666"/>
+                    {getReferenceArea(this.location)}
+                    {getCurrentTimeReferenceLine()}
                     <ReferenceDot x={new Date(this.location.forecast!.timestamp!).getTime()}
                                   y={this.location.forecast.median!
                                       .filter((v) => new Date(v.timestamp!).getMonth() === new Date(this.location.forecast!.timestamp!).getMonth())
@@ -121,81 +104,21 @@ export class MswForecastGraph extends Component<MswGraphProps> {
                           dot={false}
                           name={LINE_NAME_MEDIAN}
                           activeDot={{stroke: '#029ca3', strokeWidth: 1, r: 4}}/>
-                    <Line type="monotone"
-                          dataKey={DATA_KEY_MEASURED}
-                          stroke="green"
-                          dot={false}
-                          name={LINE_NAME_MEASURED}
-                          activeDot={{stroke: 'green', strokeWidth: 1, r: 4}}/>
-                    <CartesianGrid/>
-                    <XAxis
-                        type="number"
-                        dataKey="datetime"
-                        domain={[from, to]}
-                        scale="time"
-                        ticks={ticks}
-                        tickFormatter={v => new Date(v).toLocaleString('de-CH', {weekday: 'short'})}
-                        minTickGap={1}
-                        hide={!this.withXAxis}/>
+                    {getMeasuredLine()}
+                    {getCartesianGrid()}
+                    {getXAxis(from, to, ticks, this.withXAxis, v => new Date(v).toLocaleString('de-CH', {weekday: 'short'}))}
 
-                    {this.withMinMaxReferenceLines && this.getMinMaxReferenceLines()}
-                    {this.withTooltip && this.getTooltip()}
-                    {this.withYAxis && this.getYAxis(this.location.minFlow!, this.location.maxFlow!)}
-                    {/* payload is only necessary to get rid of unneccessary double legend entry because forecastFlow0 and forecastFlow1 are both named Min/Max */}
+                    {this.withMinMaxReferenceLines && getMinMaxReferenceLines(this.location)}
+                    {this.withTooltip && getTooltip()}
+                    {this.withYAxis && getYAxis(this.location.minFlow!, this.location.maxFlow!)}
                     {this.withLegend && this.getLegend()}
                 </ComposedChart>
             </ResponsiveContainer>
         </>
     }
 
-    private getMinMaxReferenceLines() {
-        return <>
-            <ReferenceLine y={this.location.minFlow}>
-                <Label value={this.location.minFlow} position="insideRight"/>
-            </ReferenceLine>
-            <ReferenceLine y={this.location.maxFlow}>
-                <Label value={this.location.maxFlow} position="insideRight"/>
-            </ReferenceLine>
-        </>;
-    }
-
-    private getTooltip() {
-        // @ts-ignore
-        const MswTooltip = ({active, payload, label}) => {
-            if (active && payload && payload.length) {
-
-                let flowStr: string = "";
-                let color: string = "black";
-                for (let payloadItem of payload) {
-                    if (payloadItem.dataKey === DATA_KEY_MEASURED) {
-                        flowStr = "Measured: " + payloadItem.value;
-                        color = payloadItem.stroke;
-                    } else if (payloadItem.dataKey === DATA_KEY_MEDIAN) {
-                        flowStr = "Median: " + payloadItem.value;
-                        color = payloadItem.stroke;
-                    }
-                }
-
-                return (
-                    <div className="tooltip">
-                        <p className="tooltip_timestamp">{label.getDate() + "." + (label.getMonth() + 1) + ". " + label.getHours() + ":00"}</p>
-                        <p className="tooltip_value" style={{color: color}}>{flowStr}</p>
-                    </div>
-                );
-            }
-
-            return null;
-        };
-
-        // @ts-ignore
-        return <Tooltip content={MswTooltip}/>;
-    }
-
-    private getYAxis(min: number, max: number) {
-        return <YAxis domain={[min, max]}/>;
-    }
-
     private getLegend() {
+        {/* payload is only necessary to get rid of unneccessary double legend entry because forecastFlow0 and forecastFlow1 are both named Min/Max */}
         return <Legend
             payload={[
                 {type: "line", value: LINE_NAME_MEASURED, color: "green"},
@@ -209,7 +132,7 @@ export class MswForecastGraph extends Component<MswGraphProps> {
     private normalizeGraphData(forecast: ApiForecast): NormalizedDataItem[] {
         let normalizedData: NormalizedDataItem[] = [];
 
-        normalizedData.push(...this.normalizeGraphDataLine(forecast.measuredData!, DATA_KEY_MEASURED));
+        normalizedData.push(...normalizeGraphDataLine(forecast.measuredData!, DATA_KEY_MEASURED));
         normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.median!), DATA_KEY_MEDIAN);
         normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.twentyFivePercentile!), DATA_KEY_25_PERCENTILE);
         normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.seventyFivePercentile!), DATA_KEY_75_PERCENTILE);
@@ -238,17 +161,7 @@ export class MswForecastGraph extends Component<MswGraphProps> {
     }
 
     private getSimpleGraphDataLine(forecastLine: ApiForecastLineEntry[]): NormalizedDataItem[] {
-        return this.normalizeGraphDataLine(forecastLine, TEMPORARY_DATA_KEY_FLOW);
-    }
-
-    private normalizeGraphDataLine(forecastLine: ApiForecastLineEntry[], name: string): NormalizedDataItem[] {
-        let normalizedData: any[] = [];
-        for (let forecastLinePoint of forecastLine) {
-            let obj: NormalizedDataItem = {datetime: new Date(forecastLinePoint.timestamp!)};
-            obj[name] = forecastLinePoint.flow;
-            normalizedData.push(obj);
-        }
-        return normalizedData;
+        return normalizeGraphDataLine(forecastLine, TEMPORARY_DATA_KEY_FLOW);
     }
 
     private mergeDataLines(left: NormalizedDataItem[], right: NormalizedDataItem[], dataKey: string) {
