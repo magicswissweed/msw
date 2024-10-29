@@ -15,9 +15,9 @@ import {
     YAxis,
 } from 'recharts';
 import React, {Component} from 'react';
-import {ApiForecast, ApiForecastLineEntry, ApiSpotInformation} from '../../../../gen/msw-api-ts';
+import {ApiForecast, ApiForecastLineEntry, ApiSpotInformation} from '../../../../../gen/msw-api-ts';
 
-interface MswForecastGraphProps {
+export interface MswGraphProps {
     location: ApiSpotInformation,
     aspectRatio: number,
     withLegend?: boolean | undefined,
@@ -41,7 +41,7 @@ type NormalizedDataItem = { datetime: Date, [lineName: string]: unknown; };
 
 const TEMPORARY_DATA_KEY_FLOW = "flow";
 
-export class MswForecastGraph extends Component<MswForecastGraphProps> {
+export class MswForecastGraph extends Component<MswGraphProps> {
 
     private readonly location: ApiSpotInformation;
     private readonly aspectRatio: number;
@@ -51,7 +51,7 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
     private readonly withMinMaxReferenceLines: boolean;
     private readonly withTooltip: boolean;
 
-    constructor(props: MswForecastGraphProps) {
+    constructor(props: MswGraphProps) {
         super(props);
         this.location = props.location;
         this.aspectRatio = props.aspectRatio;
@@ -85,12 +85,6 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
             firstDayMidnightDate.setHours(24, 0, 0, 0),
             firstDayMidnightDate.setHours(24, 0, 0, 0),
         ]
-
-        let showXAxis = this.withXAxis;
-        let showMinMaxReferenceLines = this.withMinMaxReferenceLines;
-        let showTooltip = this.withTooltip;
-        let showYAxis = this.withYAxis;
-        let showLegend = this.withLegend;
 
         return <>
             <ResponsiveContainer className="graph" width="100%" aspect={this.aspectRatio}>
@@ -142,13 +136,13 @@ export class MswForecastGraph extends Component<MswForecastGraphProps> {
                         ticks={ticks}
                         tickFormatter={v => new Date(v).toLocaleString('de-CH', {weekday: 'short'})}
                         minTickGap={1}
-                        hide={!showXAxis}/>
+                        hide={!this.withXAxis}/>
 
-                    {showMinMaxReferenceLines && this.getMinMaxReferenceLines()}
-                    {showTooltip && this.getTooltip()}
-                    {showYAxis && this.getYAxis(this.location.minFlow!, this.location.maxFlow!)}
+                    {this.withMinMaxReferenceLines && this.getMinMaxReferenceLines()}
+                    {this.withTooltip && this.getTooltip()}
+                    {this.withYAxis && this.getYAxis(this.location.minFlow!, this.location.maxFlow!)}
                     {/* payload is only necessary to get rid of unneccessary double legend entry because forecastFlow0 and forecastFlow1 are both named Min/Max */}
-                    {showLegend && this.getLegend()}
+                    {this.withLegend && this.getLegend()}
                 </ComposedChart>
             </ResponsiveContainer>
         </>

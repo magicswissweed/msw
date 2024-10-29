@@ -2,13 +2,13 @@ import './Spot.scss'
 import React, {useState} from 'react';
 import {ApiSpotInformation, SpotsApi} from '../../../gen/msw-api-ts';
 import {MswMeasurement} from './measurement/MswMeasurement';
-import {MswMiniGraph} from './miniForecast/MswMiniGraph';
-import {MswForecastGraph} from './forecast/MswForecastGraph';
+import {MswMiniGraph} from './graph/miniGraph/MswMiniGraph';
+import {MswForecastGraph} from './graph/forecast/MswForecastGraph';
 import arrow_down from '../../../assets/arrow_down.png';
 import lock from '../../../assets/lock.svg';
 import delete_icon from '../../../assets/delete_icon.svg';
 import globe from '../../../assets/globe.svg';
-import {MswLastMeasurementsGraph} from './historical/MswLastMeasurementsGraph';
+import {MswLastMeasurementsGraph} from './graph/historical/MswLastMeasurementsGraph';
 import {authConfiguration} from '../../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../../user/UserAuthContext';
 import Modal from 'react-bootstrap/Modal';
@@ -119,7 +119,13 @@ export const Spot = (props: SpotProps) => {
         </>;
 
         let lastMeasurementsContent = <>
-            <MswLastMeasurementsGraph location={location} isMini={false}/>
+            <MswLastMeasurementsGraph location={location}
+                                      aspectRatio={2}
+                                      withLegend={withLegend}
+                                      withXAxis={withXAxis}
+                                      withYAxis={withYAxis}
+                                      withMinMaxReferenceLines={withMinMaxReferenceLines}
+                                      withTooltip={withTooltip}/>
         </>;
 
         return <>
