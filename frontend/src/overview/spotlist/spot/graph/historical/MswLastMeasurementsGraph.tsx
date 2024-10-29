@@ -17,6 +17,7 @@ import {
     getYAxis,
     LINE_NAME_MEASURED,
     MswGraphProps,
+    NormalizedDataItem,
     normalizeGraphDataLine
 } from "../base-graph/MswGraph";
 
@@ -64,12 +65,9 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
         </>
     }
 
-    let normalizedGraphData: any[] = normalizeGraphDataLine(state.samples, DATA_KEY_MEASURED);
+    let normalizedGraphData: NormalizedDataItem[] = normalizeGraphDataLine(state.samples, DATA_KEY_MEASURED);
 
-    const ticks = getTicks();
-
-    const from = ticks[0];
-    const to = ticks[ticks.length - 1];
+    const ticks: number[] = getTicks();
 
     return <>
         <ResponsiveContainer className="graph" width="100%" aspect={aspectRatio}>
@@ -78,7 +76,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
                 {getCurrentTimeReferenceLine()}
                 {getMeasuredLine()}
                 {getCartesianGrid()}
-                {getXAxis(from, to, ticks, withXAxis, v => new Date(v).getDate() + ".")}
+                {getXAxis(ticks, withXAxis, v => new Date(v).getDate() + "." + (new Date(v).getMonth()+1) + ".")}
 
                 {withMinMaxReferenceLines && getMinMaxReferenceLines(location)}
                 {withTooltip && getTooltip()}
@@ -89,17 +87,14 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     </>
 
     function getTicks() {
-        let nrOfTicks = 10;
-        let nrOfDays = 50;
+        const nrOfTicks = 6;
+        const nrOfDays = 50;
+        const oneDayInMs = 24 * 60 * 60 * 1000;
 
-        let oneDay = 24 * 60 * 60 * 1000;
-
-        let ticks: number[] = [];
-        for (let i = 0; i < nrOfTicks; i++) {
-            ticks[i] = Date.now() - oneDay * (i - 1) * (nrOfDays / nrOfTicks);
-        }
-
-        return ticks;
+        return Array.from(
+            { length: nrOfTicks },
+            (_, i) => Date.now() - oneDayInMs * i * (nrOfDays / nrOfTicks)
+        );
     }
 
     function getLegend() {

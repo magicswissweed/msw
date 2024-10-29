@@ -101,7 +101,10 @@ export function getCartesianGrid() {
     return <CartesianGrid/>;
 }
 
-export function getXAxis(from: number, to: number, ticks: number[], withXAxis: boolean, tickFormatter: (v: any) => string) {
+export function getXAxis(ticks: number[], withXAxis: boolean, tickFormatter: (v: any) => string) {
+    const from = ticks[0];
+    const to = ticks[ticks.length - 1];
+
     return <XAxis
         type="number"
         dataKey="datetime"
