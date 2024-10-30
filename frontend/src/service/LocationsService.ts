@@ -1,10 +1,30 @@
-import {ApiSpotInformation} from "../gen/msw-api-ts";
+import {ApiSpotInformation, ApiSpotInformationList, ApiSpotSpotTypeEnum, SpotsApi} from "../gen/msw-api-ts";
+import {AxiosResponse} from "axios";
+import {authConfiguration} from "../api/config/AuthConfiguration";
 
 type SubscriberCallback = (locations: Array<ApiSpotInformation>) => void;
 
 class LocationService {
     private locations: Array<ApiSpotInformation> = [];
     private subscribers: Array<SubscriberCallback> = [];
+
+    private writeSpotsToState = (res: AxiosResponse<ApiSpotInformationList, any>) => {
+        if (res && res.data && res.data.riverSurfSpots && res.data.bungeeSurfSpots) {
+            res.data.riverSurfSpots.forEach(l => l.spotType = ApiSpotSpotTypeEnum.RiverSurf);
+            res.data.bungeeSurfSpots.forEach(l => l.spotType = ApiSpotSpotTypeEnum.BungeeSurf);
+            let allLocations = res.data.bungeeSurfSpots.concat(res.data.riverSurfSpots);
+            this.setLocations(allLocations);
+        }
+    };
+
+    async fetchData(token: any, showAllSpots: boolean) {
+        if (showAllSpots) {
+            let config = await authConfiguration(token);
+            new SpotsApi(config).getAllSpots().then(this.writeSpotsToState);
+        } else {
+            new SpotsApi().getPublicSpots().then(this.writeSpotsToState);
+        }
+    }
 
     setLocations(locations: Array<ApiSpotInformation>): void {
         this.locations = locations;

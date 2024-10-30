@@ -3,20 +3,22 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import React, {useEffect, useRef, useState} from "react";
 import {Button, Form} from 'react-bootstrap';
 import {ApiSpot, ApiSpotSpotTypeEnum, ApiStation, SpotsApi, StationApi} from '../../gen/msw-api-ts';
-import {authConfiguration} from '../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../user/UserAuthContext';
-import {useNavigate} from 'react-router-dom';
 import {AxiosResponse} from "axios";
 import {v4 as uuid} from 'uuid';
 import {Typeahead} from "react-bootstrap-typeahead";
 import Modal from "react-bootstrap/Modal";
+import {authConfiguration} from "../../api/config/AuthConfiguration";
+import {locationsService} from "../../service/LocationsService";
 
 export const MswAddSpot = () => {
-    const navigate = useNavigate();
 
     const [showAddSpotModal, setShowAddSpotModal] = useState(false);
     const handleShowAddSpotModal = () => setShowAddSpotModal(true);
-    const handleAddSpotAndCloseModal = () => addSpot().then(handleCancelAddSpotModal);
+    const handleAddSpotAndCloseModal = (e: { preventDefault: any; }) => {
+        e.preventDefault();
+        addSpot().then(() => setIsSubmitButtonDisabled(false));
+    }
     const handleCancelAddSpotModal = () => setShowAddSpotModal(false);
 
     const [spotName, setSpotName] = useState("");
@@ -29,8 +31,7 @@ export const MswAddSpot = () => {
     const [stationSelectionError, setStationSelectionError] = useState('');
 
     useEffect(() => {
-        // no await, so that frontend doesn't block
-        fetchStations()
+        new StationApi().getStations().then((response) => setStations(response.data));
     }, []);
 
 
@@ -38,12 +39,6 @@ export const MswAddSpot = () => {
     const {token} = useUserAuth();
 
     const formRef = useRef<HTMLFormElement | null>(null);
-
-    async function fetchStations(): Promise<void> {
-        return await new StationApi()
-            .getStations()
-            .then((response) => setStations(response.data));
-    }
 
     async function addSpot() {
         if (!stationId) {
@@ -53,6 +48,7 @@ export const MswAddSpot = () => {
             setStationSelectionError('');
         }
 
+        setIsSubmitButtonDisabled(true);
         let config = await authConfiguration(token);
         const apiSpot: ApiSpot = {
             id: uuid(),
@@ -63,13 +59,11 @@ export const MswAddSpot = () => {
             minFlow: minFlow!,
             maxFlow: maxFlow!,
         };
-        setIsSubmitButtonDisabled(true);
         let response: AxiosResponse<void, any> = await new SpotsApi(config).addPrivateSpot({spot: apiSpot, position: 0})
         if (response.status === 200) {
-            navigate('/'); // TODO: use locationsService
+            locationsService.fetchData(token, true).then(handleCancelAddSpotModal);
         } else {
             alert("Sorry, it looks like we can't add that spot. Maybe the flow is not measured at this station?");
-            setIsSubmitButtonDisabled(false);
         }
     }
 
@@ -102,7 +96,7 @@ export const MswAddSpot = () => {
                                     label="Riversurf"
                                     name="radioTypeGroup"
                                     id="riversurf"
-                                    checked={type == ApiSpotSpotTypeEnum.RiverSurf}
+                                    checked={type === ApiSpotSpotTypeEnum.RiverSurf}
                                     onChange={() => setType(ApiSpotSpotTypeEnum.RiverSurf)}
                                 />
                                 <Form.Check
@@ -111,7 +105,7 @@ export const MswAddSpot = () => {
                                     label="Bungeesurf"
                                     name="radioTypeGroup"
                                     id="bungeesurf"
-                                    checked={type == ApiSpotSpotTypeEnum.BungeeSurf}
+                                    checked={type === ApiSpotSpotTypeEnum.BungeeSurf}
                                     onChange={() => setType(ApiSpotSpotTypeEnum.BungeeSurf)}
                                 />
                             </Form>
