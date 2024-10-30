@@ -58,9 +58,9 @@ export const Spot = (props: SpotProps) => {
               }
             </div>
             <div className="spotContainer">
-                <a href={link} target="_blank" rel="noreferrer">
-                    {location.name}
-                </a>
+                <div className="spot-title">
+                    <a href={link} target="_blank" rel="noreferrer">{location.name}</a>
+                </div>
                 <MswMeasurement location={location}/>
                 <MswMiniGraph location={location}/>
             </div>
