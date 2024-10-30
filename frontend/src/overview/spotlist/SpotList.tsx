@@ -55,16 +55,9 @@ export const SpotList = (props: SpotListProps) => {
                         <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
                             {locations.map((location: ApiSpotInformation, index: number) => (
                                 <Draggable key={location.id} draggableId={location.id!} index={index}>
-                                    {(draggableProvided: any, _snapshot: any) => (
-                                        <div
-                                            ref={draggableProvided.innerRef}
-                                            {...draggableProvided.draggableProps}
-                                        >
-                                            <Spot
-                                                location={location}
-                                                dragHandleProps={draggableProvided.dragHandleProps}
-                                                {...draggableProvided.draggableProps}
-                                                snapshot={_snapshot} />
+                                    {(draggableProvided: any) => (
+                                        <div className="draggable-container" ref={draggableProvided.innerRef} {...draggableProvided.draggableProps}>
+                                            <Spot location={location} dragHandleProps={draggableProvided.dragHandleProps} />
                                         </div>
                                     )}
                                 </Draggable>
