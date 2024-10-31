@@ -1,6 +1,6 @@
 import './SpotList.scss';
 import React, {useEffect, useState} from 'react';
-import {DragDropContext, Draggable, Droppable, DropResult} from 'react-beautiful-dnd';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {ApiSpotInformation, SpotsApi} from '../../gen/msw-api-ts';
 import {authConfiguration} from '../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../user/UserAuthContext';
@@ -37,7 +37,7 @@ export const SpotList = (props: SpotListProps) => {
         }
     },[locations])
 
-    const handleDrop = async (result: DropResult) => {
+    const handleDrop = async (result: any) => {
         if (!result.destination) return;
         const reorderedItems = Array.from(locations);
         const [removed] = reorderedItems.splice(result.source.index, 1);
