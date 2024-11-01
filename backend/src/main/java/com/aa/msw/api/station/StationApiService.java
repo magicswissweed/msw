@@ -19,6 +19,7 @@ public class StationApiService {
     public StationApiService(StationFetchService stationFetchService, InputDataFetcherService inputDataFetcherService) {
         this.stationFetchService = stationFetchService;
         this.inputDataFetcherService = inputDataFetcherService;
+        this.getStations();
     }
 
     public List<ApiStation> getStations() {
