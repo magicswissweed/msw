@@ -1,5 +1,6 @@
 import './MswHeader.scss'
 import React, {useState} from 'react';
+import { Button } from 'react-bootstrap';
 import {useUserAuth} from '../user/UserAuthContext';
 import {MswAddSpot} from "../spot/add/MswAddSpot";
 import {MswLoginModal} from "../user/login/MswLoginModal";
@@ -19,12 +20,13 @@ export const MswHeader = () => {
     if (user) {
         loginOrLogout = <>
             <MswAddSpot/>
-            <button className="logout msw-button" onClick={logOut}>Logout</button>
+            <Button variant='outline-primary' size='sm' onClick={logOut}>Logout</Button>
         </>
     } else {
         loginOrLogout = <>
-            <button className="msw-button" onClick={() => setShowLoginModal(true)}>Login</button>
-            <button className="msw-button" onClick={() => setShowSignupModal(true)}>Sign up</button>
+            <Button variant='outline-primary me-2' size='sm' onClick={() => setShowLoginModal(true)}>Login</Button>
+            <Button variant='outline-primary' size='sm' onClick={() => setShowSignupModal(true)}>Sign Up</Button>
+
             <MswLoginModal isOpen={showLoginModal}
                            closeModal={() => setShowLoginModal(false)}
                            openSignupModal={() => setShowSignupModal(true)}
@@ -40,7 +42,7 @@ export const MswHeader = () => {
 
     return <>
         <header className="App-header">
-            <div className="loginOrLogoutContainer">
+            <div className="loginOrLogoutContainer m-2">
                 {loginOrLogout}
             </div>
             <div className="title">

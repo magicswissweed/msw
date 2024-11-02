@@ -88,7 +88,7 @@ summary::-webkit-details-marker {
   display: flex;
 }
 
-.spot-title > a {
+.spot-title>a {
   flex: 1;
   text-overflow: ellipsis;
   color: #000000;
@@ -132,5 +132,5 @@ details.spot[open] summary.spotname {
 }
 
 .drag-drop-icon {
-  color: $msw-blue-secondary;
+  color: $msw-blue;
 }
