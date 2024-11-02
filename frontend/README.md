@@ -1,53 +1,34 @@
-# Getting Started with Create React App
+# Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Service
+We are using a service to manage the currently displayed locations (-> LocationsService.ts).
 
-## Available Scripts
+There are several advantages for this approach:
+1. Single source of truth.
+   - The service always holds the current state.
+   - If we want to read the locations we can fetch them from here.
+   - If we want to change the locations we change them through the service
+     - The service then propagates the changes to its subscribers.
+2. We can change the locations (which are set from a parent component) from inside a child-component.
+    - For example after adding a spot, we can tell the service to refetch the current locations.
+3. With this approach we don't need page reloads if the spots changed.
+   - Instead, we can use the react-mechanisms to propagate the spots after fetching them.
 
-In the project directory, you can run:
+If there are other blobs of data in the future, using a service is recommended.
 
-### `npm start`
+## Calls to backend
+### Unauthenticated Calls
+For unauthenticated calls, we can just use the generated api (here: SpotsApi)
+```typescript
+new SpotsApi().getPublicSpots()
+    .then(this.writeSpotsToState);
+```
+### Authenticated Calls
+For authenticated calls we have to add the users token to the request.
+We can do that by adding the token to a configuration and then handing the configuration over to the generated Api.
+```typescript
+let config = await authConfiguration(token);
+new SpotsApi(config).getAllSpots()
+    .then(this.writeSpotsToState);
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more
-information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will
-remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right
-into your project so you have full control over them. All of the commands except `eject` will still work, but they will
-point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you
-shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t
-customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in
-the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

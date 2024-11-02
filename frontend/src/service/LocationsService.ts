@@ -26,13 +26,9 @@ class LocationService {
         }
     }
 
-    setLocations(locations: Array<ApiSpotInformation>): void {
+    private setLocations(locations: Array<ApiSpotInformation>): void {
         this.locations = locations;
         this.notifySubscribers();
-    }
-
-    getLocations(): Array<ApiSpotInformation> {
-        return this.locations;
     }
 
     deleteLocation(id: string): void {
