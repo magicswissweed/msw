@@ -88,10 +88,10 @@ export const Spot = (props: SpotProps) => {
                     </Modal.Header>
                     <Modal.Body>You won't be able to retrieve this spot. If you need it again you will have to add a new one.</Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={handleCancelConfirmationModal}>
+                        <Button variant="outline-dark" onClick={handleCancelConfirmationModal}>
                             Cancel
                         </Button>
-                        <Button variant="primary" onClick={() => handleDeleteSpotAndCloseModal(location)}>
+                        <Button variant="danger" onClick={() => handleDeleteSpotAndCloseModal(location)}>
                             Delete Spot
                         </Button>
                     </Modal.Footer>
