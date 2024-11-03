@@ -90,7 +90,7 @@ public abstract class AbstractRepository<ID extends DbSyncedId,
         }
     }
 
-    protected DOMAIN update(DOMAIN domain) {
+    public DOMAIN update(DOMAIN domain) {
         RECORD record = mapDomain(domain);
         record.update();
         afterPersist(domain);

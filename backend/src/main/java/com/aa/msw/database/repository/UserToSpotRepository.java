@@ -43,6 +43,15 @@ public class UserToSpotRepository extends AbstractRepository<UserToSpotId, UserT
         persistUserToSpot(spot, position);
     }
 
+    @Override
+    @Transactional
+    public void updatePrivateSpot(Spot updatedSpot) {
+        Spot existingSpot = spotDao.get(updatedSpot.getId());
+        if (!existingSpot.isPublic() && userHasSpot(existingSpot.getId())){
+            spotDao.update(updatedSpot);
+        }
+    }
+
     private void increasePositionOfAllSpotsOfTypeByOne(SpotTypeEnum type) {
         List<UserToSpot> userToSpots = getUserToSpotOrderedOfType(type);
 
@@ -73,6 +82,14 @@ public class UserToSpotRepository extends AbstractRepository<UserToSpotId, UserT
                 .map(userToSpot -> new UserSpot(userToSpot.position(), spotDao.get(userToSpot.spotId())))
                 .sorted(Comparator.comparingInt(UserSpot::position))
                 .collect(Collectors.toList());
+    }
+
+    private boolean userHasSpot(SpotId id) {
+        return !dsl.selectFrom(TABLE)
+                .where(TABLE.USER_ID.eq(UserContext.getCurrentUser().userId().getId()))
+                .and(TABLE.SPOT_ID.eq(id.getId()))
+                .fetch(this::mapRecord)
+                .isEmpty();
     }
 
     private List<UserToSpot> getUserToSpotOrdered() {

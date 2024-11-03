@@ -97,10 +97,23 @@ public class SpotsApiService {
     }
 
     public void addPrivateSpot(Spot spot, int position) throws NoSampleAvailableException {
-        List<Sample> samples = inputDataFetcherService.fetchForStationId(spot.stationId());
-        sampleDao.persistSamplesIfNotExist(samples);
-
+        fetchSamplesAndPersistIfExists(spot.stationId());
         userToSpotDao.addPrivateSpot(spot, position);
+        fetchDataForAllStations();
+    }
+
+    public void editPrivateSpot(Spot updatedSpot) throws NoSampleAvailableException {
+        fetchSamplesAndPersistIfExists(updatedSpot.stationId());
+        userToSpotDao.updatePrivateSpot(updatedSpot);
+        fetchDataForAllStations();
+    }
+
+    private void fetchSamplesAndPersistIfExists(Integer stationId) throws NoSampleAvailableException {
+        List<Sample> samples = inputDataFetcherService.fetchForStationId(stationId);
+        sampleDao.persistSamplesIfNotExist(samples);
+    }
+
+    private void fetchDataForAllStations() {
         inputDataFetcherService.updateStationIds();
         try {
             inputDataFetcherService.fetchDataAndWriteToDb();

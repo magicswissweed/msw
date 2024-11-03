@@ -19,4 +19,6 @@ public interface UserToSpotDao extends Dao<UserToSpotId, UserToSpot> {
     void deletePrivateSpot(SpotId spotId);
 
     List<UserSpot> getUserSpotsOrdered();
+
+    void updatePrivateSpot(Spot updatedSpot);
 }
