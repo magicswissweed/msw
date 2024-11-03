@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -112,12 +113,17 @@ public class UserToSpotRepository extends AbstractRepository<UserToSpotId, UserT
         publicSpots.addAll(spotDao.getPublicBungeeSurfSpots());
         publicSpots.addAll(spotDao.getPublicRiverSurfSpots());
 
-        List<Spot> mappedSpotIds = getUserSpotsOrdered().stream().map(UserSpot::spot).toList();
-
         for (Spot publicSpot : publicSpots) {
-            if (!mappedSpotIds.contains(publicSpot)) {
-                persistUserToSpot(publicSpot, 0);
-            }
+            Spot privateSpot = new Spot(
+                    new SpotId(UUID.randomUUID(), false),
+                    false,
+                    publicSpot.type(),
+                    publicSpot.name(),
+                    publicSpot.stationId(),
+                    publicSpot.minFlow(),
+                    publicSpot.maxFlow());
+            spotDao.persist(privateSpot);
+            persistUserToSpot(privateSpot, 0);
         }
     }
 
