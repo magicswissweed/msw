@@ -100,7 +100,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiSpotInformationList'
-  /api/v1/spots/add:
+  /api/v1/spot:
     post:
       summary: Add a new private Spot.
       security:
@@ -109,7 +109,7 @@ paths:
       tags:
         - spots
       requestBody:
-        description: Add a new private Spot.
+        description: The new private Spot.
         required: true
         content:
           application/json:
@@ -124,9 +124,38 @@ paths:
       responses:
         '200':
           description: Added private Spot successfully.
-  /api/v1/spots/delete/{spotId}:
+  /api/v1/spot/{spotId}:
+    patch:
+      summary: Edit a private spot.
+      security:
+        - bearerAuth: [ ]
+      operationId: editPrivateSpot
+      parameters:
+        - name: spotId
+          description: The id of the spot to edit.
+          in: path
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        description: The updated private spot.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ spot ]
+              properties:
+                spot:
+                  $ref: '#/components/schemas/ApiSpot'
+      tags:
+        - spots
+      responses:
+        '200':
+          description: Edited private spot successfully.
     delete:
-      summary: Remove a private Spot.
+      summary: Remove a private spot.
       security:
         - bearerAuth: [ ]
       operationId: deletePrivateSpot
@@ -142,7 +171,7 @@ paths:
         - spots
       responses:
         '200':
-          description: Removed private Spot successfully.
+          description: Removed private spot successfully.
   /api/v1/spots/order:
     patch:
       summary: Change the order of the spots
