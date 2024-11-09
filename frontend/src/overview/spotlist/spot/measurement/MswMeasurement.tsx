@@ -69,27 +69,10 @@ export class MswMeasurement extends Component<MeasurementsProps> {
     private getTemp() {
         let temp: number = this.location.currentSample!.temperature ?? 0;
         return <>
-              <div className={this.getTempColor(temp)}>{temp}</div>
+              <div>{temp}</div> 
               <div className="unit">°C</div>
         </>;
       }
-
-    private getTempColor(_temp: number) {
-      if (_temp < 8) {
-        return "temp_0";
-      }
-      if (_temp < 13) {
-        return "temp_1";
-      }
-      if (_temp < 18) {
-        return "temp_2";
-      }
-      if (_temp < 23) {
-        return "temp_3";
-      }
-      return "temp_4";
-    
-    }
 
     private convertTimeStampToDisplayableString(timestampString: string) {
         let date = new Date(timestampString);
