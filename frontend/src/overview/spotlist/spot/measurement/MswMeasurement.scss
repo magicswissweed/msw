@@ -54,9 +54,16 @@
   font-weight: bold;
   display: flex;
   align-content: center;
-  font-size: 120%;
-  align-items: center;
+  align-items: baseline;
   column-gap: 2px;
+}
+
+.flow {
+  font-size: 120%;
+}
+
+.temp {
+  font-size: 90%;
 }
 
 .unit {
