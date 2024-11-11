@@ -40,5 +40,5 @@ out/
 ### VS Code ###
 .vscode/
 /deployment/**
-!deployment/HOW_TO_DEPLOY.md
+!deployment/README.md
 !deployment/public-spots.sql
