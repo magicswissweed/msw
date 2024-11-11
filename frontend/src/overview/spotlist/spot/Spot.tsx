@@ -4,10 +4,11 @@ import {ApiSpotInformation, SpotsApi} from '../../../gen/msw-api-ts';
 import {MswMeasurement} from './measurement/MswMeasurement';
 import {MswMiniGraph} from './graph/miniGraph/MswMiniGraph';
 import {MswForecastGraph} from './graph/forecast/MswForecastGraph';
-import arrow_down from '../../../assets/arrow_down.png';
+import arrow_down from '../../../assets/arrow_down.svg';
 import lock from '../../../assets/lock.svg';
-import delete_icon from '../../../assets/delete_icon.svg';
+import delete_icon from '../../../assets/trash.svg';
 import globe from '../../../assets/globe.svg';
+import drag_drop_icon from '../../../assets/drag_drop_icon.svg';
 import {MswLastMeasurementsGraph} from './graph/historical/MswLastMeasurementsGraph';
 import {authConfiguration} from '../../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../../user/UserAuthContext';
@@ -52,8 +53,8 @@ export const Spot = (props: SpotProps) => {
         return <>
             <div className='icons-container'>
               {user &&
-                <div className={'icon drag-drop-icon'} {...props.dragHandleProps}>
-                    ☰
+                <div className={'icon drag-drop-icon arrow-icon'} {...props.dragHandleProps}>
+                  <img alt="Sort the spots on your dashboard." src={drag_drop_icon}/>
                 </div>
               }
             </div>
@@ -96,7 +97,7 @@ export const Spot = (props: SpotProps) => {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-                <div className="collapsible-icon icon">
+                <div className="collapsible-icon icon arrow-icon">
                     <img alt="extend forecast" src={arrow_down}/>
                 </div>
             </div>
