@@ -10,39 +10,53 @@
 
 ## Deployment
 
-1. connect to VM by clicking on 'SSH':
-    - <https://console.cloud.google.com/compute/instancesDetail/zones/europe-west8-c/instances/msw-instance-medium?project=magicswissweed-msw>
+<details>
+    <summary>Ponteshare</summary>
 
-2. Switch to Nicola's directory (where the Docker containers live)
+  1. Copy full SHA of <a href="https://github.com/AaronOderStudi/msw/commits/master/">last relevant commit</a>
+  2. <a href="https://github.com/AaronOderStudi/msw/actions/workflows/deploy.yml">`Run workflow`</a> and provide SHA as argument
+  3. Wait a few minutes for the <a href="https://magicswissweed.ponteshare.ch">result</a> to show
 
-    ```bash
-    cd ../nickueng
-    ```
+</details>
 
-3. modify the file `docker-compose-deployment.yml` (that you have locally, not checked in because of secrets)
-    - change the version of the backend- and frontend-images to your desired version (check Artifact Registry for existing images or have them built by filing a pull request on GitHub)
-4. upload the file docker-compose-deployment.yml to the VM
-    - use the button 'Upload File' in the console
-5. rename docker-compose-deployment.yml to docker-compose.yml
+<details>
+    <summary>Google Cloud</summary>
+
+  1. connect to VM by clicking on 'SSH':
+      - <a href="https://console.cloud.google.com/compute/instancesDetail/zones/europe-west8-c/instances/msw-instance-medium?project=magicswissweed-msw">https://console.cloud.google.com/compute/instancesDetail/zones/europe-west8-c/instances/msw-instance-medium?project=magicswissweed-msw</a>
+
+  2. Switch to Nicola's directory (where the Docker containers live)
 
       ```bash
-      mv docker-compose-deployment.yml docker-compose.yml
+      cd ../nickueng
       ```
 
-6. build the containers (updating existing ones)
+  3. modify the file `docker-compose-deployment.yml` (that you have locally, not checked in because of secrets)
+      - change the version of the backend- and frontend-images to your desired version (check Artifact Registry for existing images or have them built by filing a pull request on GitHub)
+  4. upload the file docker-compose-deployment.yml to the VM
+      - use the button 'Upload File' in the console
+  5. rename docker-compose-deployment.yml to docker-compose.yml
 
-    ```bash
-    docker compose up -d
-    ```
+        ```bash
+        mv docker-compose-deployment.yml docker-compose.yml
+        ```
 
-    If you get an error message about conflicts, make sure you are in Nicola's directory where the containers live.
+  6. build the containers (updating existing ones)
 
-7. Check if everything is running smoothly
-8. delete docker-compose.yml from VM
+      ```bash
+      docker compose up -d
+      ```
 
-    ```bash
-    rm docker-compose.yml
-    ```
+      If you get an error message about conflicts, make sure you are in Nicola's directory where the containers live.
+
+  7. Check if everything is running smoothly
+  8. delete docker-compose.yml from VM
+
+      ```bash
+      rm docker-compose.yml
+      ```
+
+</details>
 
 ## Adding public Spots
 
