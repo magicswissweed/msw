@@ -54,17 +54,16 @@
   font-weight: bold;
   display: flex;
   align-content: center;
-  font-size: 120%;
-  align-items: center;
+  align-items: baseline;
   column-gap: 2px;
 }
 
 .flow {
-  color: $msw-blue-secondary;
+  font-size: 120%;
 }
 
 .temp {
-  color: $msw-blue;
+  font-size: 90%;
 }
 
 .unit {
@@ -73,4 +72,22 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* colors for flow */
+.flow_bad {
+  color: #e2576f;
+}
+
+.flow_good {
+  color: #409073;
+}
+
+// for future use
+.flow_ok {
+  color: #f8cd4c;
+}
+
+.flow_danger {
+  color: #e2576f;
 }
