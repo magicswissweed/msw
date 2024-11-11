@@ -3,6 +3,7 @@
 You need the mermaid-plugin to see the graphs...
 
 ## Structure
+
 ```mermaid
 ---
 title: Usual Flow of incoming request all the way to the database.
@@ -18,12 +19,13 @@ flowchart TD
     Repository(<...>Repository) -. implements .-> Dao
 ```
 
-## How to change an existing API:
-1. Make changes in mswApi.yaml
-2. generate backend- and frontend-api
+## How to change an existing API
+
+1. Make changes in `mswApi.yaml`
+2. generate backend- and frontend-API
     - using the following gradle tasks:
-      - for frontend: "openApiGenerateReact"
-      - for backend: "openApiGenerateSpring"
+      - for frontend: `openApiGenerateReact`
+      - for backend: `openApiGenerateSpring`
     - Note: Always generate both, otherwise they won't fit together.
 3. Check in the generated code and implement your feature :)
-4. Deploy backend and frontend together, otherwise the apis won't fit together.
+4. Deploy backend and frontend together, otherwise the APIs won't fit together.

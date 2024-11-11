@@ -27,3 +27,9 @@
   npm install
   npm start
 ```
+
+## More Information
+
+- [Frontend](frontend/README.md)
+- [Backend](backend/README.md)
+- [Deployment](deployment/README.md)
