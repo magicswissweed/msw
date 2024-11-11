@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- You need to have the file 'docker-compose-deployment.yml' locally (it's git-ignored in the directory this readme is
+- You need to have the file `docker-compose-deployment.yml` locally (it's git-ignored in the directory this readme is
   in)
   - File is needed to orchestrate the docker images on the VM
   - It's not checked in, because it contains secrets
@@ -44,8 +44,8 @@
     rm docker-compose.yml
     ```
 
-
 ## Adding public Spots
+
 1. connect to the database
     - Easiest way is to connect with a tool provided by your IDE.
     - But there are a lot of ways to achieve this
