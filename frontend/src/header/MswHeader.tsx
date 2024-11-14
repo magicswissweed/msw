@@ -20,12 +20,12 @@ export const MswHeader = () => {
     if (user) {
         loginOrLogout = <>
             <MswAddSpot/>
-            <Button variant='outline-primary' size='sm' onClick={logOut}>Logout</Button>
+            <Button variant='msw-outline' size='sm' onClick={logOut}>Logout</Button>
         </>
     } else {
         loginOrLogout = <>
-            <Button variant='outline-primary me-2' size='sm' onClick={() => setShowLoginModal(true)}>Login</Button>
-            <Button variant='outline-primary' size='sm' onClick={() => setShowSignupModal(true)}>Sign Up</Button>
+            <Button variant='msw-outline me-2' size='sm' onClick={() => setShowLoginModal(true)}>Login</Button>
+            <Button variant='msw-outline' size='sm' onClick={() => setShowSignupModal(true)}>Sign Up</Button>
 
             <MswLoginModal isOpen={showLoginModal}
                            closeModal={() => setShowLoginModal(false)}
