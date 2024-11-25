@@ -1,5 +1,5 @@
 import '../base-graph/MswGraph.scss'
-import {ComposedChart, Legend, ResponsiveContainer,} from 'recharts';
+import {ComposedChart, Legend, ResponsiveContainer, YAxis} from 'recharts';
 import {useEffect, useState} from 'react';
 import {ApiSample, ApiSpotInformation, SampleApi} from '../../../../../gen/msw-api-ts';
 import {authConfiguration} from '../../../../../api/config/AuthConfiguration';
@@ -14,7 +14,6 @@ import {
     getReferenceArea,
     getTooltip,
     getXAxis,
-    getYAxis,
     LINE_NAME_MEASURED,
     MswGraphProps,
     NormalizedDataItem,
@@ -82,7 +81,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
 
                 {withMinMaxReferenceLines && getMinMaxReferenceLines(location)}
                 {withTooltip && getTooltip()}
-                {withYAxis && getYAxis(location.minFlow!, location.maxFlow!)}
+                {withYAxis && <YAxis/>}
                 {withLegend && getLegend()}
             </ComposedChart>
         </ResponsiveContainer>

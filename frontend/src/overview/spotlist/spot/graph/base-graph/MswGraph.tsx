@@ -63,10 +63,6 @@ export function getTooltip() {
     return <Tooltip content={MswTooltip}/>;
 }
 
-export function getYAxis(min: number, max: number) {
-    return <YAxis domain={[min, max]}/>;
-}
-
 export function normalizeGraphDataLine(line: ApiSample[] | ApiForecastLineEntry[], name: string): NormalizedDataItem[] {
     let normalizedData: any[] = [];
     for (let linePoint of line) {
@@ -105,13 +101,16 @@ export function getXAxis(ticks: number[], withXAxis: boolean, tickFormatter: (v:
     const from = ticks[0];
     const to = ticks[ticks.length - 1];
 
-    return <XAxis
-        type="number"
-        dataKey="datetime"
-        domain={[from, to]}
-        scale="time"
-        ticks={ticks}
-        tickFormatter={tickFormatter}
-        minTickGap={1}
-        hide={!withXAxis}/>;
+    return (
+        <XAxis
+            type="number"
+            dataKey="datetime"
+            domain={[from, to]}
+            scale="time"
+            ticks={ticks}
+            tickFormatter={tickFormatter}
+            minTickGap={1}
+            hide={!withXAxis}
+        />
+    );
 }

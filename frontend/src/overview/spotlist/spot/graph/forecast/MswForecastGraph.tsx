@@ -1,5 +1,5 @@
 import '../base-graph/MswGraph.scss'
-import {Area, ComposedChart, Legend, Line, ReferenceDot, ResponsiveContainer,} from 'recharts';
+import {Area, ComposedChart, Legend, Line, ReferenceDot, ResponsiveContainer, YAxis} from 'recharts';
 import React, {Component} from 'react';
 import {ApiForecast, ApiForecastLineEntry, ApiSpotInformation} from '../../../../../gen/msw-api-ts';
 import {
@@ -12,7 +12,6 @@ import {
     getReferenceArea,
     getTooltip,
     getXAxis,
-    getYAxis,
     LINE_NAME_MEASURED,
     LINE_NAME_MEDIAN,
     MswGraphProps,
@@ -57,7 +56,7 @@ export class MswForecastGraph extends Component<MswGraphProps> {
 
         let normalizedGraphData: NormalizedDataItem[] = this.normalizeGraphData(this.location.forecast!);
 
-        const ticks = this.getTicks(normalizedGraphData)
+        const ticks = this.getTicks(normalizedGraphData);
 
         return <>
             <ResponsiveContainer className="graph" width="100%" aspect={this.aspectRatio}>
@@ -68,7 +67,8 @@ export class MswForecastGraph extends Component<MswGraphProps> {
                                   y={this.location.forecast.median!
                                       .filter((v) => new Date(v.timestamp!).getMonth() === new Date(this.location.forecast!.timestamp!).getMonth())
                                       .filter((v) => new Date(v.timestamp!).getDay() === new Date(this.location.forecast!.timestamp!).getDay())
-                                      .filter((v) => new Date(v.timestamp!).getHours() === new Date(this.location.forecast!.timestamp!).getHours())[0].flow
+                                      .filter((v) => new Date(v.timestamp!).getHours() === new Date(this.location.forecast!.timestamp!).getHours())[0]
+                                      .flow
                                   }
                                   stroke="gold"
                                   r={6}
@@ -97,7 +97,7 @@ export class MswForecastGraph extends Component<MswGraphProps> {
 
                     {this.withMinMaxReferenceLines && getMinMaxReferenceLines(this.location)}
                     {this.withTooltip && getTooltip()}
-                    {this.withYAxis && getYAxis(this.location.minFlow!, this.location.maxFlow!)}
+                    {this.withYAxis && <YAxis/>}
                     {this.withLegend && this.getLegend()}
                 </ComposedChart>
             </ResponsiveContainer>
