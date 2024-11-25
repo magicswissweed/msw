@@ -109,8 +109,9 @@ export class MswForecastGraph extends Component<MswGraphProps> {
         const oneDayInMs = 24 * 60 * 60 * 1000;
         let firstDayMidnight = new Date(normalizedGraphData[0].datetime).setHours(0, 0, 0, 1);
         return Array.from(
-            { length: nrOfTicks },
-            (_, i) => firstDayMidnight + i * oneDayInMs);
+          { length: nrOfTicks },
+          (_, i) => firstDayMidnight + i * oneDayInMs
+        );
     }
 
     private getLegend() {
@@ -119,9 +120,10 @@ export class MswForecastGraph extends Component<MswGraphProps> {
             payload={[
                 {type: "line", value: LINE_NAME_MEASURED, color: "green"},
                 {type: "line", value: LINE_NAME_MEDIAN, color: "blue"},
-                {type: "square", value: "25.-75. Perzentil", color: "#1e9196"},
-                {type: "square", value: "Min / Max", color: "#75d4d9"},
+                {type: "square", value: "25.-75. percentile", color: "#1e9196"},
+                {type: "square", value: "min / max", color: "#75d4d9"},
             ]}
+            wrapperStyle={{ textTransform: 'uppercase' }}
         />;
     }
 

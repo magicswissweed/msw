@@ -43,7 +43,7 @@ export const Spot = (props: SpotProps) => {
             <div className={"spot-overview"}>
                 {getSpotSummaryContent(props.location)}
             </div>
-            {getCollapsibleContent(props.location, false, true, false, true, true)}
+            {getCollapsibleContent(props.location, false, true, true, true, true)}
         </div>
     </>;
 

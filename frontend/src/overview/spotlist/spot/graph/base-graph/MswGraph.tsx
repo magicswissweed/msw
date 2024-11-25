@@ -5,8 +5,8 @@ import {CartesianGrid, Label, Line, ReferenceArea, ReferenceLine, Tooltip, XAxis
 export const DATA_KEY_MEDIAN = "median";
 export const DATA_KEY_MEASURED = "measured";
 
-export const LINE_NAME_MEASURED = "Gemessen";
-export let LINE_NAME_MEDIAN = "Median";
+export const LINE_NAME_MEASURED = "measured";
+export let LINE_NAME_MEDIAN = "median";
 
 export interface MswGraphProps {
     location: ApiSpotInformation,

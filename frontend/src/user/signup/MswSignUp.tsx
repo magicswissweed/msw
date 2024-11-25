@@ -79,14 +79,14 @@ const MswSignup = (props: MswSignUpProps) => {
                     </div>
                     <div className="p-4 box mt-3 text-center">
                         Already have an account?
-                        <Button variant="link text-primary" onClick={onOpenLoginModal}>Log In</Button>
+                        <Button variant="link" onClick={onOpenLoginModal}>Log In</Button>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="outline-dark" onClick={props.closeModal}>
                         Cancel
                     </Button>
-                    <Button variant="primary"
+                    <Button variant="msw"
                             onClick={() => formRef.current && formRef.current.requestSubmit()}>
                         Sign Up
                     </Button>
