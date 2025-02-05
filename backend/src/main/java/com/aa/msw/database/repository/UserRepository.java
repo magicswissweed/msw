@@ -31,6 +31,7 @@ public class UserRepository extends AbstractRepository<UserId, User, UserTableRe
     }
 
     @Override
+    @Transactional
     public User getUser(UserExtId externalId) throws NoSuchUserException {
         try {
             return dsl.selectFrom(TABLE)
