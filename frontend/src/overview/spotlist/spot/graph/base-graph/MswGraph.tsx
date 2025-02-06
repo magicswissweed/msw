@@ -1,6 +1,6 @@
-import {ApiForecastLineEntry, ApiSample, ApiSpotInformation} from "../../../../../gen/msw-api-ts";
+import {ApiLineEntry, ApiSample, ApiSpotInformation} from "../../../../../gen/msw-api-ts";
 import React from "react";
-import {CartesianGrid, Label, Line, ReferenceArea, ReferenceLine, Tooltip, XAxis, YAxis} from 'recharts';
+import {CartesianGrid, Label, Line, ReferenceArea, ReferenceLine, Tooltip, XAxis} from 'recharts';
 
 export const DATA_KEY_MEDIAN = "median";
 export const DATA_KEY_MEASURED = "measured";
@@ -63,7 +63,7 @@ export function getTooltip() {
     return <Tooltip content={MswTooltip}/>;
 }
 
-export function normalizeGraphDataLine(line: ApiSample[] | ApiForecastLineEntry[], name: string): NormalizedDataItem[] {
+export function normalizeGraphDataLine(line: ApiSample[] | ApiLineEntry[], name: string): NormalizedDataItem[] {
     let normalizedData: any[] = [];
     for (let linePoint of line) {
         let obj: NormalizedDataItem = {datetime: new Date(linePoint.timestamp!)};

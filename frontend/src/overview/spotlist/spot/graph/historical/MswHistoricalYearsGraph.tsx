@@ -1,18 +1,14 @@
 import '../base-graph/MswGraph.scss'
-import {Area, ComposedChart, Legend, Line, ReferenceDot, ResponsiveContainer, YAxis} from 'recharts';
+import {Area, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, YAxis} from 'recharts';
 import React, {Component} from 'react';
-import {ApiForecast, ApiLineEntry, ApiSpotInformation} from '../../../../../gen/msw-api-ts';
+import {ApiHistoricalYears, ApiLineEntry, ApiSpotInformation} from '../../../../../gen/msw-api-ts';
 import {
-    DATA_KEY_MEASURED,
     DATA_KEY_MEDIAN,
     getCartesianGrid,
     getCurrentTimeReferenceLine,
-    getMeasuredLine,
     getMinMaxReferenceLines,
     getReferenceArea,
-    getTooltip,
     getXAxis,
-    LINE_NAME_MEASURED,
     LINE_NAME_MEDIAN,
     MswGraphProps,
     NormalizedDataItem,
@@ -23,10 +19,13 @@ const DATA_KEY_25_PERCENTILE = "twentyFivePercentile";
 const DATA_KEY_75_PERCENTILE = "seventyFivePercentile";
 const DATA_KEY_MINIMUM = "minimum";
 const DATA_KEY_MAXIMUM = "maximum";
+const DATA_KEY_CURRENT_YEAR = "currentYear";
 
 const TEMPORARY_DATA_KEY_FLOW = "flow";
 
-export class MswForecastGraph extends Component<MswGraphProps> {
+export let LINE_NAME_CURRENT_YEAR = "Current year";
+
+export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
 
     private readonly location: ApiSpotInformation;
     private readonly aspectRatio: number;
@@ -48,13 +47,13 @@ export class MswForecastGraph extends Component<MswGraphProps> {
     }
 
     render() {
-        if (!this.location.forecast) {
+        if (!this.location.historical) {
             return <>
-                <div>Detailed Forecast not possible at the moment...</div>
+                <div>Detailed Graph not possible at the moment...</div>
             </>
         }
 
-        let normalizedGraphData: NormalizedDataItem[] = this.normalizeGraphData(this.location.forecast!);
+        let normalizedGraphData: NormalizedDataItem[] = this.normalizeGraphData(this.location.historical!);
 
         const ticks = this.getTicks(normalizedGraphData);
 
@@ -63,86 +62,108 @@ export class MswForecastGraph extends Component<MswGraphProps> {
                 <ComposedChart data={normalizedGraphData}>
                     {getReferenceArea(this.location)}
                     {getCurrentTimeReferenceLine()}
-                    <ReferenceDot x={new Date(this.location.forecast!.timestamp!).getTime()}
-                                  y={this.location.forecast.median!
-                                      .filter((v) => new Date(v.timestamp!).getMonth() === new Date(this.location.forecast!.timestamp!).getMonth())
-                                      .filter((v) => new Date(v.timestamp!).getDay() === new Date(this.location.forecast!.timestamp!).getDay())
-                                      .filter((v) => new Date(v.timestamp!).getHours() === new Date(this.location.forecast!.timestamp!).getHours())[0]
-                                      .flow
-                                  }
-                                  stroke="gold"
-                                  r={6}
-                    />
 
                     <Area
                         dataKey="minMaxRange"
+                        name="Min - Max"
                         strokeWidth={0}
                         fill="#75d4d9"
                     />
                     <Area
-                        dataKey="percentileRange"
+                        dataKey="firstToThirdQuartile"
+                        name="25. - 75. percentile"
                         strokeWidth={0}
                         fill="#1e9196"
                     />
 
                     <Line type="monotone"
-                          dataKey={DATA_KEY_MEDIAN}
+                          dataKey="medianRounded"
                           stroke="blue"
                           dot={false}
                           name={LINE_NAME_MEDIAN}
                           activeDot={{stroke: '#029ca3', strokeWidth: 1, r: 4}}/>
-                    {getMeasuredLine()}
+
+                    <Line type="monotone"
+                          dataKey="currentYearRounded"
+                          stroke="green"
+                          dot={false}
+                          name={LINE_NAME_CURRENT_YEAR}
+                          activeDot={{stroke: 'green', strokeWidth: 1, r: 4}}/>
+
                     {getCartesianGrid()}
-                    {getXAxis(ticks, this.withXAxis, v => new Date(v).toLocaleString('de-CH', {weekday: 'short'}))}
+                    {getXAxis(ticks, this.withXAxis, v => new Date(v).toLocaleString('de-CH', {month: 'short'}))}
 
                     {this.withMinMaxReferenceLines && getMinMaxReferenceLines(this.location)}
-                    {this.withTooltip && getTooltip()}
-                    {this.withYAxis && <YAxis/>}
+                    {this.withTooltip && this.getHistoricalTooltip()}
+                    {this.withYAxis && <YAxis domain={[0, this.location.maxFlow!]}/>}
                     {this.withLegend && this.getLegend()}
                 </ComposedChart>
             </ResponsiveContainer>
         </>
     }
 
+    private getHistoricalTooltip() {
+        // @ts-ignore
+        const MswTooltip = ({active, payload, label}) => {
+            if (active && payload && payload.length) {
+
+                let flowStr: string = "";
+                let color: string = "black";
+                for (let payloadItem of payload) {
+                    if (payloadItem.dataKey === "medianRounded") {
+                        flowStr = "Median: " + payloadItem.value;
+                        color = payloadItem.stroke;
+                    }
+                }
+
+                return (
+                    <div className="tooltip">
+                        <p className="tooltip_timestamp">{label.getDate() + "." + (label.getMonth() + 1) + ". " + label.getHours() + ":00"}</p>
+                        <p className="tooltip_value" style={{color: color}}>{flowStr}</p>
+                    </div>
+                );
+            }
+
+            return null;
+        };
+
+        // @ts-ignore
+        return <Tooltip content={MswTooltip}/>;
+    }
+
+    // TODO: this is really bad. please fix it... I don't have the nerves atm :)
     private getTicks(normalizedGraphData: NormalizedDataItem[]) {
-        const nrOfTicks = 8;
-        const oneDayInMs = 24 * 60 * 60 * 1000;
+        const nrOfTicks = 13;
+        const oneMonthInMs = 31 * 24 * 60 * 60 * 1000;
         let firstDayMidnight = new Date(normalizedGraphData[0].datetime).setHours(0, 0, 0, 1);
         return Array.from(
           { length: nrOfTicks },
-          (_, i) => firstDayMidnight + i * oneDayInMs
+          (_, i) => firstDayMidnight + i * oneMonthInMs
         );
     }
 
     private getLegend() {
-        /* payload is only necessary to get rid of unneccessary double legend entry because forecastFlow0 and forecastFlow1 are both named Min/Max */
         return <Legend
-            payload={[
-                {type: "line", value: LINE_NAME_MEASURED, color: "green"},
-                {type: "line", value: LINE_NAME_MEDIAN, color: "blue"},
-                {type: "square", value: "25.-75. percentile", color: "#1e9196"},
-                {type: "square", value: "min / max", color: "#75d4d9"},
-            ]}
             wrapperStyle={{ textTransform: 'uppercase' }}
         />;
     }
 
-    private normalizeGraphData(forecast: ApiForecast): NormalizedDataItem[] {
+    private normalizeGraphData(historicalYearsData: ApiHistoricalYears): NormalizedDataItem[] {
         let normalizedData: NormalizedDataItem[] = [];
 
-        normalizedData.push(...normalizeGraphDataLine(forecast.measuredData!, DATA_KEY_MEASURED));
-        normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.median!), DATA_KEY_MEDIAN);
-        normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.twentyFivePercentile!), DATA_KEY_25_PERCENTILE);
-        normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.seventyFivePercentile!), DATA_KEY_75_PERCENTILE);
-        normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.min!), DATA_KEY_MINIMUM);
-        normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(forecast.max!), DATA_KEY_MAXIMUM);
+        normalizedData.push(...normalizeGraphDataLine(historicalYearsData.currentYear!, DATA_KEY_CURRENT_YEAR));
+        normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(historicalYearsData.median!), DATA_KEY_MEDIAN);
+        normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(historicalYearsData.twentyFivePercentile!), DATA_KEY_25_PERCENTILE);
+        normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(historicalYearsData.seventyFivePercentile!), DATA_KEY_75_PERCENTILE);
+        normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(historicalYearsData.min!), DATA_KEY_MINIMUM);
+        normalizedData = this.mergeDataLines(normalizedData, this.getSimpleGraphDataLine(historicalYearsData.max!), DATA_KEY_MAXIMUM);
 
         // area for percentiles
         normalizedData = normalizedData.map((d) => ({
             ...d,
-            percentileRange:
+            firstToThirdQuartile:
                 d[DATA_KEY_25_PERCENTILE] !== undefined && d[DATA_KEY_75_PERCENTILE] !== undefined
-                    ? [d[DATA_KEY_25_PERCENTILE], d[DATA_KEY_75_PERCENTILE]]
+                    ? [Math.round(d[DATA_KEY_25_PERCENTILE] as number), Math.round(d[DATA_KEY_75_PERCENTILE] as number)]
                     : [],
         }));
 
@@ -151,15 +172,29 @@ export class MswForecastGraph extends Component<MswGraphProps> {
             ...d,
             minMaxRange:
                 d[DATA_KEY_MINIMUM] !== undefined && d[DATA_KEY_MAXIMUM] !== undefined
-                    ? [d[DATA_KEY_MINIMUM], d[DATA_KEY_MAXIMUM]]
+                    ? [Math.round(d[DATA_KEY_MINIMUM] as number), Math.round(d[DATA_KEY_MAXIMUM] as number)]
                     : [],
+        }));
+
+        normalizedData = normalizedData.map((d) => ({
+            ...d,
+            medianRounded:
+                Math.round(d[DATA_KEY_MEDIAN] as number)
+        }));
+
+        normalizedData = normalizedData.map((d) => ({
+            ...d,
+            currentYearRounded:
+                d[DATA_KEY_CURRENT_YEAR] != undefined
+                    ? Math.round(d[DATA_KEY_CURRENT_YEAR] as number)
+                    : undefined
         }));
 
         return normalizedData;
     }
 
-    private getSimpleGraphDataLine(forecastLine: ApiLineEntry[]): NormalizedDataItem[] {
-        return normalizeGraphDataLine(forecastLine, TEMPORARY_DATA_KEY_FLOW);
+    private getSimpleGraphDataLine(line: ApiLineEntry[]): NormalizedDataItem[] {
+        return normalizeGraphDataLine(line, TEMPORARY_DATA_KEY_FLOW);
     }
 
     private mergeDataLines(left: NormalizedDataItem[], right: NormalizedDataItem[], dataKey: string) {
