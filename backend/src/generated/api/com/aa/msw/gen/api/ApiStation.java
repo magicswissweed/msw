@@ -18,7 +18,7 @@ import jakarta.annotation.Generated;
  * ApiStation
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-25T12:08:09.674660+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-06T14:57:46.262524+01:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiStation {
 
   private Integer id;

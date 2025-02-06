@@ -4,8 +4,6 @@ import com.aa.msw.database.exceptions.NoSampleAvailableException;
 import com.aa.msw.gen.api.ApiStation;
 import com.aa.msw.source.InputDataFetcherService;
 import com.aa.msw.source.hydrodaten.stations.StationFetchService;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,11 +19,6 @@ public class StationApiService {
     public StationApiService(StationFetchService stationFetchService, InputDataFetcherService inputDataFetcherService) {
         this.stationFetchService = stationFetchService;
         this.inputDataFetcherService = inputDataFetcherService;
-    }
-
-    @EventListener(ApplicationReadyEvent.class)
-    public void fetchData() {
-        this.getStations();
     }
 
     public List<ApiStation> getStations() {
