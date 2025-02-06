@@ -9,6 +9,7 @@ $icons-container-width: 40px;
 
 .spot {
   display: flex;
+  flex-direction: column;
   padding: 0;
   color: #000000;
   background-color: #ececec;
