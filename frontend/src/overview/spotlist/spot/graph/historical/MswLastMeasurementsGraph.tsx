@@ -46,9 +46,10 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     withMinMaxReferenceLines = props.withMinMaxReferenceLines === true;
     withTooltip = props.withTooltip === true;
 
-    useEffect(() => {
-        fetchLast40DaysSamples();
-    }, []);
+    // eslint-disable-next-line
+    // needed (also the empty array), because otherwise the backend would get polled endlessly
+    // eslint-disable-next-line
+    useEffect(() => { fetchLast40DaysSamples() }, []);
 
     async function fetchLast40DaysSamples() {
         let config = await authConfiguration(token);
@@ -60,7 +61,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
             });
     }
 
-    if (state.samples.length == 0) {
+    if (state.samples.length === 0) {
         return <>
             <div>Detailed Graph not possible at the moment...</div>
         </>

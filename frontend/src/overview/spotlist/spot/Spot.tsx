@@ -3,29 +3,37 @@ import React, {useState} from 'react';
 import {ApiSpotInformation, SpotsApi} from '../../../gen/msw-api-ts';
 import {MswMeasurement} from './measurement/MswMeasurement';
 import {MswMiniGraph} from './graph/miniGraph/MswMiniGraph';
-import {MswForecastGraph} from './graph/forecast/MswForecastGraph';
 import arrow_down from '../../../assets/arrow_down.svg';
 import lock from '../../../assets/lock.svg';
 import delete_icon from '../../../assets/trash.svg';
 import globe from '../../../assets/globe.svg';
 import drag_drop_icon from '../../../assets/drag_drop_icon.svg';
-import {MswLastMeasurementsGraph} from './graph/historical/MswLastMeasurementsGraph';
 import {authConfiguration} from '../../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../../user/UserAuthContext';
 import Modal from 'react-bootstrap/Modal';
-import {Button} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 import {locationsService} from "../../../service/LocationsService";
+import {MswHistoricalYearsGraph} from "./graph/historical/MswHistoricalYearsGraph";
+import {MswForecastGraph} from "./graph/forecast/MswForecastGraph";
+import {MswLastMeasurementsGraph} from "./graph/historical/MswLastMeasurementsGraph";
 
 interface SpotProps {
     location: ApiSpotInformation,
     dragHandleProps: any
 }
 
+const GraphTypeEnum = {
+    Forecast: 'FORECAST',
+    Historical: 'HISTORICAL'
+} as const;
+type GraphTypeEnum = typeof GraphTypeEnum[keyof typeof GraphTypeEnum];
+
 export const Spot = (props: SpotProps) => {
     // @ts-ignore
     const {token, user} = useUserAuth();
 
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const [showGraphOfType, setShowGraphOfType] = useState<GraphTypeEnum>(GraphTypeEnum.Forecast);
 
     const handleDeleteSpotAndCloseModal = (location: ApiSpotInformation) => deleteSpot(location).then(handleCancelConfirmationModal);
     const handleCancelConfirmationModal = () => setShowConfirmationModal(false);
@@ -121,18 +129,58 @@ export const Spot = (props: SpotProps) => {
         </>;
 
         let lastMeasurementsContent = <>
-            <MswLastMeasurementsGraph location={location}
-                                      aspectRatio={2}
-                                      withLegend={withLegend}
-                                      withXAxis={withXAxis}
-                                      withYAxis={withYAxis}
-                                      withMinMaxReferenceLines={withMinMaxReferenceLines}
-                                      withTooltip={withTooltip}/>
+            <div className="last40days-container">
+                <p>Forecast unavailable - showing last 40 days</p>
+                <MswLastMeasurementsGraph location={location}
+                                          aspectRatio={2}
+                                          withLegend={withLegend}
+                                          withXAxis={withXAxis}
+                                          withYAxis={withYAxis}
+                                          withMinMaxReferenceLines={withMinMaxReferenceLines}
+                                          withTooltip={withTooltip}/>
+            </div>
+        </>;
+
+        let historicalYearsContent = <>
+            <MswHistoricalYearsGraph location={location}
+                                     aspectRatio={2}
+                                     withLegend={withLegend}
+                                     withXAxis={withXAxis}
+                                     withYAxis={withYAxis}
+                                     withMinMaxReferenceLines={withMinMaxReferenceLines}
+                                     withTooltip={withTooltip}/>
         </>;
 
         return <>
+            <Form>
+                {['radio'].map((type) => (
+                    <div key={`inline-${type}`} className="mb-3">
+                        <Form.Check
+                            inline
+                            checked={showGraphOfType === GraphTypeEnum.Forecast}
+                            label="forecast"
+                            type="radio"
+                            name={`forecastOrHistoricalRadioGroup-${location.id}`}
+                            id={`inline-${type}-1-${location.id}`}
+                            onChange={() => setShowGraphOfType(GraphTypeEnum.Forecast)}
+                        />
+                        <Form.Check
+                            inline
+                            checked={showGraphOfType === GraphTypeEnum.Historical}
+                            label="Historical data"
+                            type="radio"
+                            name={`forecastOrHistoricalRadioGroup-${location.id}`}
+                            id={`inline-${type}-2-${location.id}`}
+                            onChange={() => setShowGraphOfType(GraphTypeEnum.Historical)}
+                        />
+                    </div>
+                ))}
+            </Form>
+
             <div className="collapsibleContent">
-                {location.forecast ? forecastContent : lastMeasurementsContent}
+                {showGraphOfType === GraphTypeEnum.Forecast ?
+                    (location.forecast ? forecastContent : lastMeasurementsContent) :
+                    historicalYearsContent}
             </div>
         </>;
     }
