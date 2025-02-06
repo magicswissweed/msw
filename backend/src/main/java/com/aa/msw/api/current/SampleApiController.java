@@ -34,7 +34,7 @@ public class SampleApiController implements SampleApi {
     @Override
     public ResponseEntity<List<ApiSample>> getLast40DaysSamples(Integer stationId) {
         try {
-            return ResponseEntity.ok(sampleApiService.getHistoricalSamples(stationId));
+            return ResponseEntity.ok(sampleApiService.getLast40DaysSamples(stationId));
         } catch (IOException | URISyntaxException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

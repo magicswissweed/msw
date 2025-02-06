@@ -1,4 +1,4 @@
-package com.aa.msw.api.forecast;
+package com.aa.msw.api.graph.forecast;
 
 import com.aa.msw.gen.api.ApiForecast;
 import com.aa.msw.gen.api.ForecastApi;

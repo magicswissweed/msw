@@ -3,6 +3,7 @@ package com.aa.msw.gen.api;
 import java.net.URI;
 import java.util.Objects;
 import com.aa.msw.gen.api.ApiForecast;
+import com.aa.msw.gen.api.ApiHistoricalYears;
 import com.aa.msw.gen.api.ApiSample;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -22,7 +23,7 @@ import jakarta.annotation.Generated;
  * ApiSpotInformation
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-25T12:08:09.674660+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-06T14:57:46.262524+01:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiSpotInformation {
 
   private UUID id;
@@ -78,6 +79,8 @@ public class ApiSpotInformation {
 
   private ApiForecast forecast;
 
+  private ApiHistoricalYears historical;
+
   public ApiSpotInformation() {
     super();
   }
@@ -85,7 +88,7 @@ public class ApiSpotInformation {
   /**
    * Constructor with only required parameters
    */
-  public ApiSpotInformation(UUID id, String name, Integer stationId, SpotTypeEnum spotType, Boolean isPublic, Integer minFlow, Integer maxFlow, ApiSample currentSample, ApiForecast forecast) {
+  public ApiSpotInformation(UUID id, String name, Integer stationId, SpotTypeEnum spotType, Boolean isPublic, Integer minFlow, Integer maxFlow, ApiSample currentSample, ApiForecast forecast, ApiHistoricalYears historical) {
     this.id = id;
     this.name = name;
     this.stationId = stationId;
@@ -95,6 +98,7 @@ public class ApiSpotInformation {
     this.maxFlow = maxFlow;
     this.currentSample = currentSample;
     this.forecast = forecast;
+    this.historical = historical;
   }
 
   public ApiSpotInformation id(UUID id) {
@@ -277,6 +281,26 @@ public class ApiSpotInformation {
     this.forecast = forecast;
   }
 
+  public ApiSpotInformation historical(ApiHistoricalYears historical) {
+    this.historical = historical;
+    return this;
+  }
+
+  /**
+   * Get historical
+   * @return historical
+  */
+  @NotNull @Valid 
+  @Schema(name = "historical", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("historical")
+  public ApiHistoricalYears getHistorical() {
+    return historical;
+  }
+
+  public void setHistorical(ApiHistoricalYears historical) {
+    this.historical = historical;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -294,12 +318,13 @@ public class ApiSpotInformation {
         Objects.equals(this.minFlow, apiSpotInformation.minFlow) &&
         Objects.equals(this.maxFlow, apiSpotInformation.maxFlow) &&
         Objects.equals(this.currentSample, apiSpotInformation.currentSample) &&
-        Objects.equals(this.forecast, apiSpotInformation.forecast);
+        Objects.equals(this.forecast, apiSpotInformation.forecast) &&
+        Objects.equals(this.historical, apiSpotInformation.historical);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, stationId, spotType, isPublic, minFlow, maxFlow, currentSample, forecast);
+    return Objects.hash(id, name, stationId, spotType, isPublic, minFlow, maxFlow, currentSample, forecast, historical);
   }
 
   @Override
@@ -315,6 +340,7 @@ public class ApiSpotInformation {
     sb.append("    maxFlow: ").append(toIndentedString(maxFlow)).append("\n");
     sb.append("    currentSample: ").append(toIndentedString(currentSample)).append("\n");
     sb.append("    forecast: ").append(toIndentedString(forecast)).append("\n");
+    sb.append("    historical: ").append(toIndentedString(historical)).append("\n");
     sb.append("}");
     return sb.toString();
   }

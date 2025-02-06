@@ -36,7 +36,7 @@ public class SampleApiService {
         return mapSample(sampleDao.getCurrentSample(stationId));
     }
 
-    public List<ApiSample> getHistoricalSamples(Integer stationId) throws IOException, URISyntaxException {
+    public List<ApiSample> getLast40DaysSamples(Integer stationId) throws IOException, URISyntaxException {
         return last40DaysSampleFetchService.fetchLast40DaysSamples(stationId)
                 .stream()
                 .map(sample -> new ApiSample()

@@ -1,7 +1,8 @@
 package com.aa.msw.api.spots;
 
 import com.aa.msw.api.current.SampleApiService;
-import com.aa.msw.api.forecast.ForecastApiService;
+import com.aa.msw.api.graph.forecast.ForecastApiService;
+import com.aa.msw.api.graph.historical.HistoricalYearsApiService;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.exceptions.NoSampleAvailableException;
 import com.aa.msw.database.exceptions.NoSuchUserException;
@@ -32,14 +33,16 @@ public class SpotsApiService {
     private final SpotDao spotDao;
     private final UserToSpotDao userToSpotDao;
     private final InputDataFetcherService inputDataFetcherService;
+    private final HistoricalYearsApiService historicalYearsApiService;
 
-    public SpotsApiService(SampleApiService sampleApiService, ForecastApiService forecastApiService, SampleDao sampleDao, SpotDao spotDao, UserToSpotDao userToSpotDao, InputDataFetcherService inputDataFetcherService) {
+    public SpotsApiService(SampleApiService sampleApiService, ForecastApiService forecastApiService, SampleDao sampleDao, SpotDao spotDao, UserToSpotDao userToSpotDao, InputDataFetcherService inputDataFetcherService, HistoricalYearsApiService historicalYearsApiService) {
         this.sampleApiService = sampleApiService;
         this.forecastApiService = forecastApiService;
         this.sampleDao = sampleDao;
         this.spotDao = spotDao;
         this.userToSpotDao = userToSpotDao;
         this.inputDataFetcherService = inputDataFetcherService;
+        this.historicalYearsApiService = historicalYearsApiService;
     }
 
     public ApiSpotInformationList getPublicSpots() throws NoDataAvailableException {
@@ -91,6 +94,7 @@ public class SpotsApiService {
                             .stationId(spot.stationId())
                             .currentSample(sampleApiService.getCurrentSample(spot.stationId()))
                             .forecast(currentForecast)
+                            .historical(historicalYearsApiService.getApiHistoricalYearsData(spot.stationId()))
             );
         }
         return spotInformationList;

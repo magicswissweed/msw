@@ -5,11 +5,9 @@ import java.util.Objects;
 import com.aa.msw.gen.api.ApiLineEntry;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -21,17 +19,11 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * ApiForecast
+ * ApiHistoricalYears
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-06T14:57:46.262524+01:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
-public class ApiForecast {
-
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime timestamp;
-
-  @Valid
-  private List<@Valid ApiLineEntry> measuredData = new ArrayList<>();
+public class ApiHistoricalYears {
 
   @Valid
   private List<@Valid ApiLineEntry> median = new ArrayList<>();
@@ -48,77 +40,31 @@ public class ApiForecast {
   @Valid
   private List<@Valid ApiLineEntry> min = new ArrayList<>();
 
-  public ApiForecast() {
+  @Valid
+  private List<@Valid ApiLineEntry> currentYear = new ArrayList<>();
+
+  public ApiHistoricalYears() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public ApiForecast(OffsetDateTime timestamp, List<@Valid ApiLineEntry> measuredData, List<@Valid ApiLineEntry> median, List<@Valid ApiLineEntry> twentyFivePercentile, List<@Valid ApiLineEntry> seventyFivePercentile, List<@Valid ApiLineEntry> max, List<@Valid ApiLineEntry> min) {
-    this.timestamp = timestamp;
-    this.measuredData = measuredData;
+  public ApiHistoricalYears(List<@Valid ApiLineEntry> median, List<@Valid ApiLineEntry> twentyFivePercentile, List<@Valid ApiLineEntry> seventyFivePercentile, List<@Valid ApiLineEntry> max, List<@Valid ApiLineEntry> min, List<@Valid ApiLineEntry> currentYear) {
     this.median = median;
     this.twentyFivePercentile = twentyFivePercentile;
     this.seventyFivePercentile = seventyFivePercentile;
     this.max = max;
     this.min = min;
+    this.currentYear = currentYear;
   }
 
-  public ApiForecast timestamp(OffsetDateTime timestamp) {
-    this.timestamp = timestamp;
-    return this;
-  }
-
-  /**
-   * Get timestamp
-   * @return timestamp
-  */
-  @NotNull @Valid 
-  @Schema(name = "timestamp", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("timestamp")
-  public OffsetDateTime getTimestamp() {
-    return timestamp;
-  }
-
-  public void setTimestamp(OffsetDateTime timestamp) {
-    this.timestamp = timestamp;
-  }
-
-  public ApiForecast measuredData(List<@Valid ApiLineEntry> measuredData) {
-    this.measuredData = measuredData;
-    return this;
-  }
-
-  public ApiForecast addMeasuredDataItem(ApiLineEntry measuredDataItem) {
-    if (this.measuredData == null) {
-      this.measuredData = new ArrayList<>();
-    }
-    this.measuredData.add(measuredDataItem);
-    return this;
-  }
-
-  /**
-   * Get measuredData
-   * @return measuredData
-  */
-  @NotNull @Valid 
-  @Schema(name = "measuredData", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("measuredData")
-  public List<@Valid ApiLineEntry> getMeasuredData() {
-    return measuredData;
-  }
-
-  public void setMeasuredData(List<@Valid ApiLineEntry> measuredData) {
-    this.measuredData = measuredData;
-  }
-
-  public ApiForecast median(List<@Valid ApiLineEntry> median) {
+  public ApiHistoricalYears median(List<@Valid ApiLineEntry> median) {
     this.median = median;
     return this;
   }
 
-  public ApiForecast addMedianItem(ApiLineEntry medianItem) {
+  public ApiHistoricalYears addMedianItem(ApiLineEntry medianItem) {
     if (this.median == null) {
       this.median = new ArrayList<>();
     }
@@ -141,12 +87,12 @@ public class ApiForecast {
     this.median = median;
   }
 
-  public ApiForecast twentyFivePercentile(List<@Valid ApiLineEntry> twentyFivePercentile) {
+  public ApiHistoricalYears twentyFivePercentile(List<@Valid ApiLineEntry> twentyFivePercentile) {
     this.twentyFivePercentile = twentyFivePercentile;
     return this;
   }
 
-  public ApiForecast addTwentyFivePercentileItem(ApiLineEntry twentyFivePercentileItem) {
+  public ApiHistoricalYears addTwentyFivePercentileItem(ApiLineEntry twentyFivePercentileItem) {
     if (this.twentyFivePercentile == null) {
       this.twentyFivePercentile = new ArrayList<>();
     }
@@ -169,12 +115,12 @@ public class ApiForecast {
     this.twentyFivePercentile = twentyFivePercentile;
   }
 
-  public ApiForecast seventyFivePercentile(List<@Valid ApiLineEntry> seventyFivePercentile) {
+  public ApiHistoricalYears seventyFivePercentile(List<@Valid ApiLineEntry> seventyFivePercentile) {
     this.seventyFivePercentile = seventyFivePercentile;
     return this;
   }
 
-  public ApiForecast addSeventyFivePercentileItem(ApiLineEntry seventyFivePercentileItem) {
+  public ApiHistoricalYears addSeventyFivePercentileItem(ApiLineEntry seventyFivePercentileItem) {
     if (this.seventyFivePercentile == null) {
       this.seventyFivePercentile = new ArrayList<>();
     }
@@ -197,12 +143,12 @@ public class ApiForecast {
     this.seventyFivePercentile = seventyFivePercentile;
   }
 
-  public ApiForecast max(List<@Valid ApiLineEntry> max) {
+  public ApiHistoricalYears max(List<@Valid ApiLineEntry> max) {
     this.max = max;
     return this;
   }
 
-  public ApiForecast addMaxItem(ApiLineEntry maxItem) {
+  public ApiHistoricalYears addMaxItem(ApiLineEntry maxItem) {
     if (this.max == null) {
       this.max = new ArrayList<>();
     }
@@ -225,12 +171,12 @@ public class ApiForecast {
     this.max = max;
   }
 
-  public ApiForecast min(List<@Valid ApiLineEntry> min) {
+  public ApiHistoricalYears min(List<@Valid ApiLineEntry> min) {
     this.min = min;
     return this;
   }
 
-  public ApiForecast addMinItem(ApiLineEntry minItem) {
+  public ApiHistoricalYears addMinItem(ApiLineEntry minItem) {
     if (this.min == null) {
       this.min = new ArrayList<>();
     }
@@ -253,6 +199,34 @@ public class ApiForecast {
     this.min = min;
   }
 
+  public ApiHistoricalYears currentYear(List<@Valid ApiLineEntry> currentYear) {
+    this.currentYear = currentYear;
+    return this;
+  }
+
+  public ApiHistoricalYears addCurrentYearItem(ApiLineEntry currentYearItem) {
+    if (this.currentYear == null) {
+      this.currentYear = new ArrayList<>();
+    }
+    this.currentYear.add(currentYearItem);
+    return this;
+  }
+
+  /**
+   * Get currentYear
+   * @return currentYear
+  */
+  @NotNull @Valid 
+  @Schema(name = "currentYear", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("currentYear")
+  public List<@Valid ApiLineEntry> getCurrentYear() {
+    return currentYear;
+  }
+
+  public void setCurrentYear(List<@Valid ApiLineEntry> currentYear) {
+    this.currentYear = currentYear;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -261,32 +235,30 @@ public class ApiForecast {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ApiForecast apiForecast = (ApiForecast) o;
-    return Objects.equals(this.timestamp, apiForecast.timestamp) &&
-        Objects.equals(this.measuredData, apiForecast.measuredData) &&
-        Objects.equals(this.median, apiForecast.median) &&
-        Objects.equals(this.twentyFivePercentile, apiForecast.twentyFivePercentile) &&
-        Objects.equals(this.seventyFivePercentile, apiForecast.seventyFivePercentile) &&
-        Objects.equals(this.max, apiForecast.max) &&
-        Objects.equals(this.min, apiForecast.min);
+    ApiHistoricalYears apiHistoricalYears = (ApiHistoricalYears) o;
+    return Objects.equals(this.median, apiHistoricalYears.median) &&
+        Objects.equals(this.twentyFivePercentile, apiHistoricalYears.twentyFivePercentile) &&
+        Objects.equals(this.seventyFivePercentile, apiHistoricalYears.seventyFivePercentile) &&
+        Objects.equals(this.max, apiHistoricalYears.max) &&
+        Objects.equals(this.min, apiHistoricalYears.min) &&
+        Objects.equals(this.currentYear, apiHistoricalYears.currentYear);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestamp, measuredData, median, twentyFivePercentile, seventyFivePercentile, max, min);
+    return Objects.hash(median, twentyFivePercentile, seventyFivePercentile, max, min, currentYear);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ApiForecast {\n");
-    sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
-    sb.append("    measuredData: ").append(toIndentedString(measuredData)).append("\n");
+    sb.append("class ApiHistoricalYears {\n");
     sb.append("    median: ").append(toIndentedString(median)).append("\n");
     sb.append("    twentyFivePercentile: ").append(toIndentedString(twentyFivePercentile)).append("\n");
     sb.append("    seventyFivePercentile: ").append(toIndentedString(seventyFivePercentile)).append("\n");
     sb.append("    max: ").append(toIndentedString(max)).append("\n");
     sb.append("    min: ").append(toIndentedString(min)).append("\n");
+    sb.append("    currentYear: ").append(toIndentedString(currentYear)).append("\n");
     sb.append("}");
     return sb.toString();
   }
