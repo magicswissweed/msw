@@ -11,29 +11,24 @@ import drag_drop_icon from '../../../assets/drag_drop_icon.svg';
 import {authConfiguration} from '../../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../../user/UserAuthContext';
 import Modal from 'react-bootstrap/Modal';
-import {Button, Form} from "react-bootstrap";
+import {Button} from "react-bootstrap";
 import {locationsService} from "../../../service/LocationsService";
 import {MswHistoricalYearsGraph} from "./graph/historical/MswHistoricalYearsGraph";
 import {MswForecastGraph} from "./graph/forecast/MswForecastGraph";
 import {MswLastMeasurementsGraph} from "./graph/historical/MswLastMeasurementsGraph";
+import {GraphTypeEnum} from "../../MswOverviewPage";
 
 interface SpotProps {
     location: ApiSpotInformation,
-    dragHandleProps: any
+    dragHandleProps: any,
+    showGraphOfType: GraphTypeEnum
 }
-
-const GraphTypeEnum = {
-    Forecast: 'FORECAST',
-    Historical: 'HISTORICAL'
-} as const;
-type GraphTypeEnum = typeof GraphTypeEnum[keyof typeof GraphTypeEnum];
 
 export const Spot = (props: SpotProps) => {
     // @ts-ignore
     const {token, user} = useUserAuth();
 
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-    const [showGraphOfType, setShowGraphOfType] = useState<GraphTypeEnum>(GraphTypeEnum.Forecast);
 
     const handleDeleteSpotAndCloseModal = (location: ApiSpotInformation) => deleteSpot(location).then(handleCancelConfirmationModal);
     const handleCancelConfirmationModal = () => setShowConfirmationModal(false);
@@ -71,7 +66,7 @@ export const Spot = (props: SpotProps) => {
                     <a href={link} target="_blank" rel="noreferrer">{location.name}</a>
                 </div>
                 <MswMeasurement location={location}/>
-                <MswMiniGraph location={location}/>
+                <MswMiniGraph location={location} showGraphOfType={props.showGraphOfType}/>
             </div>
             <div className="icons-container">
                 <div className="icon">
@@ -152,33 +147,8 @@ export const Spot = (props: SpotProps) => {
         </>;
 
         return <>
-            <Form>
-                {['radio'].map((type) => (
-                    <div key={`inline-${type}`} className="mb-3">
-                        <Form.Check
-                            inline
-                            checked={showGraphOfType === GraphTypeEnum.Forecast}
-                            label="forecast"
-                            type="radio"
-                            name={`forecastOrHistoricalRadioGroup-${location.id}`}
-                            id={`inline-${type}-1-${location.id}`}
-                            onChange={() => setShowGraphOfType(GraphTypeEnum.Forecast)}
-                        />
-                        <Form.Check
-                            inline
-                            checked={showGraphOfType === GraphTypeEnum.Historical}
-                            label="Historical data"
-                            type="radio"
-                            name={`forecastOrHistoricalRadioGroup-${location.id}`}
-                            id={`inline-${type}-2-${location.id}`}
-                            onChange={() => setShowGraphOfType(GraphTypeEnum.Historical)}
-                        />
-                    </div>
-                ))}
-            </Form>
-
             <div className="collapsibleContent">
-                {showGraphOfType === GraphTypeEnum.Forecast ?
+                {props.showGraphOfType === GraphTypeEnum.Forecast ?
                     (location.forecast ? forecastContent : lastMeasurementsContent) :
                     historicalYearsContent}
             </div>
