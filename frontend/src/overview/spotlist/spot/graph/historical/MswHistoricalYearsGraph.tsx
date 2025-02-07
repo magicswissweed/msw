@@ -1,5 +1,5 @@
 import '../base-graph/MswGraph.scss'
-import {Area, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, YAxis} from 'recharts';
+import {Area, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
 import React, {Component} from 'react';
 import {ApiHistoricalYears, ApiLineEntry, ApiSpotInformation} from '../../../../../gen/msw-api-ts';
 import {
@@ -8,7 +8,6 @@ import {
     getCurrentTimeReferenceLine,
     getMinMaxReferenceLines,
     getReferenceArea,
-    getXAxis,
     LINE_NAME_MEDIAN,
     MswGraphProps,
     NormalizedDataItem,
@@ -55,8 +54,6 @@ export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
 
         let normalizedGraphData: NormalizedDataItem[] = this.normalizeGraphData(this.location.historical!);
 
-        const ticks = this.getTicks(normalizedGraphData);
-
         return <>
             <ResponsiveContainer className="graph" width="100%" aspect={this.aspectRatio}>
                 <ComposedChart data={normalizedGraphData}>
@@ -91,7 +88,16 @@ export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
                           activeDot={{stroke: 'green', strokeWidth: 1, r: 4}}/>
 
                     {getCartesianGrid()}
-                    {getXAxis(ticks, this.withXAxis, v => new Date(v).toLocaleString('de-CH', {month: 'short'}))}
+                    <XAxis
+                        type="number"
+                        dataKey="datetime"
+                        domain={[new Date(2025, 0, 1).getTime(), new Date(2025, 11, 31).getTime()]} // Full year
+                        scale="time"
+                        ticks={this.getTicks()}
+                        tickFormatter={v => new Date(v).toLocaleString('de-CH', {month: 'short'})}
+                        minTickGap={1}
+                        hide={!this.withXAxis}
+                    />
 
                     {this.withMinMaxReferenceLines && getMinMaxReferenceLines(this.location)}
                     {this.withTooltip && this.getHistoricalTooltip()}
@@ -131,14 +137,11 @@ export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
         return <Tooltip content={MswTooltip}/>;
     }
 
-    // TODO: this is really bad. please fix it... I don't have the nerves atm :)
-    private getTicks(normalizedGraphData: NormalizedDataItem[]) {
-        const nrOfTicks = 13;
-        const oneMonthInMs = 31 * 24 * 60 * 60 * 1000;
-        let firstDayMidnight = new Date(normalizedGraphData[0].datetime).setHours(0, 0, 0, 1);
+    private getTicks() {
+        const nrOfTicks = 12;
         return Array.from(
           { length: nrOfTicks },
-          (_, i) => firstDayMidnight + i * oneMonthInMs
+          (_, i) => new Date(2025, i, 1).getTime()
         );
     }
 
