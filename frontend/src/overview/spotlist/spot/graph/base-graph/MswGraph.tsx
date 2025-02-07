@@ -1,6 +1,6 @@
 import {ApiForecastLineEntry, ApiSample, ApiSpotInformation} from "../../../../../gen/msw-api-ts";
 import React from "react";
-import {CartesianGrid, Label, Line, ReferenceArea, ReferenceLine, Tooltip, XAxis, YAxis} from 'recharts';
+import {CartesianGrid, Label, Line, ReferenceArea, ReferenceLine, Tooltip, XAxis} from 'recharts';
 
 export const DATA_KEY_MEDIAN = "median";
 export const DATA_KEY_MEASURED = "measured";
@@ -111,6 +111,7 @@ export function getXAxis(ticks: number[], withXAxis: boolean, tickFormatter: (v:
             tickFormatter={tickFormatter}
             minTickGap={1}
             hide={!withXAxis}
+            tick={{ dx: 20 }}
         />
     );
 }
