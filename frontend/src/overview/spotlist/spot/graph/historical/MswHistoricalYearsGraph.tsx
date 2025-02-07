@@ -97,6 +97,7 @@ export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
                         tickFormatter={v => new Date(v).toLocaleString('de-CH', {month: 'short'})}
                         minTickGap={1}
                         hide={!this.withXAxis}
+                        tick={{ dx: 20 }}
                     />
 
                     {this.withMinMaxReferenceLines && getMinMaxReferenceLines(this.location)}
