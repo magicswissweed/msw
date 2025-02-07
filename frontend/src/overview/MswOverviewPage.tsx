@@ -7,7 +7,7 @@ import {ApiSpotInformation} from '../gen/msw-api-ts';
 import {MswLoader} from '../loader/MswLoader';
 import {useUserAuth, wasUserLoggedInBefore} from '../user/UserAuthContext';
 import {locationsService} from "../service/LocationsService";
-import {Form} from "react-bootstrap";
+import {Col, Form, Row} from "react-bootstrap";
 
 function isNotEmpty(array: Array<any> | undefined) {
     return array && array.length > 0;
@@ -68,28 +68,25 @@ export const MswOverviewPage = () => {
                     <SpotList title="Bungeesurf" locations={bungeeSurfLocations} showGraphOfType={showGraphOfType}/>}
             </div>
             <Form>
-                {['radio'].map((type) => (
-                    <div key={`inline-${type}`} className="mb-3">
+                <Row className="align-items-center">
+                    <Col className="text-end">Forecast</Col>
+                    <Col xs="auto">
                         <Form.Check
-                            inline
-                            checked={showGraphOfType === GraphTypeEnum.Forecast}
-                            label="forecast"
-                            type="radio"
-                            name={`forecastOrHistoricalRadioGroup`}
-                            id={`inline-${type}-1`}
-                            onChange={() => setShowGraphOfType(GraphTypeEnum.Forecast)}
-                        />
-                        <Form.Check
-                            inline
+                            className={showGraphOfType === GraphTypeEnum.Forecast ? "light-blue-switch" : "dark-blue-switch"}
+                            type="switch"
+                            id="graph-toggle"
                             checked={showGraphOfType === GraphTypeEnum.Historical}
-                            label="Historical data"
-                            type="radio"
-                            name={`forecastOrHistoricalRadioGroup`}
-                            id={`inline-${type}-2`}
-                            onChange={() => setShowGraphOfType(GraphTypeEnum.Historical)}
+                            onChange={() => {
+                                if(showGraphOfType === GraphTypeEnum.Forecast) {
+                                    setShowGraphOfType(GraphTypeEnum.Historical)
+                                } else {
+                                    setShowGraphOfType(GraphTypeEnum.Forecast)
+                                }
+                            }}
                         />
-                    </div>
-                ))}
+                    </Col>
+                    <Col className="text-start">Historical</Col>
+                </Row>
             </Form>
         </>;
     }
