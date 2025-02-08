@@ -226,6 +226,12 @@ export interface ApiSpot {
      * @memberof ApiSpot
      */
     'maxFlow': number;
+    /**
+     * 
+     * @type {ApiStation}
+     * @memberof ApiSpot
+     */
+    'station': ApiStation;
 }
 
 export const ApiSpotSpotTypeEnum = {
@@ -283,6 +289,12 @@ export interface ApiSpotInformation {
      * @memberof ApiSpotInformation
      */
     'maxFlow': number;
+    /**
+     * 
+     * @type {ApiStation}
+     * @memberof ApiSpotInformation
+     */
+    'station': ApiStation;
     /**
      * 
      * @type {ApiSample}
@@ -347,6 +359,18 @@ export interface ApiStation {
      * @memberof ApiStation
      */
     'label': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiStation
+     */
+    'latitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiStation
+     */
+    'longitude': number;
 }
 
 /**
