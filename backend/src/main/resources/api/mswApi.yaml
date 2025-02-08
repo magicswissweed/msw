@@ -201,7 +201,7 @@ components:
             $ref: '#/components/schemas/ApiSpotInformation'
     ApiSpot:
       type: object
-      required: [ id, name, stationId, spotType, isPublic, minFlow, maxFlow ]
+      required: [ id, name, stationId, spotType, isPublic, minFlow, maxFlow, station ]
       properties:
         id:
           type: string
@@ -221,6 +221,8 @@ components:
           type: integer
         maxFlow:
           type: integer
+        station:
+          $ref: '#/components/schemas/ApiStation'
     ApiSpotInformation:
       allOf:
         - $ref: '#/components/schemas/ApiSpot'
@@ -330,9 +332,15 @@ components:
         $ref: '#/components/schemas/ApiStation'
     ApiStation:
       type: object
-      required: [ id, label ]
+      required: [ id, label, latitude, longitude ]
       properties:
         id:
           type: integer
         label:
           type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double

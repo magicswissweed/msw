@@ -3,6 +3,7 @@ package com.aa.msw.api.spots;
 import com.aa.msw.api.current.SampleApiService;
 import com.aa.msw.api.graph.forecast.ForecastApiService;
 import com.aa.msw.api.graph.historical.HistoricalYearsApiService;
+import com.aa.msw.api.station.StationApiService;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.exceptions.NoSampleAvailableException;
 import com.aa.msw.database.exceptions.NoSuchUserException;
@@ -13,10 +14,8 @@ import com.aa.msw.database.repository.dao.UserToSpotDao;
 import com.aa.msw.gen.api.ApiForecast;
 import com.aa.msw.gen.api.ApiSpotInformation;
 import com.aa.msw.gen.api.ApiSpotInformationList;
-import com.aa.msw.model.Sample;
-import com.aa.msw.model.Spot;
-import com.aa.msw.model.SpotTypeEnum;
-import com.aa.msw.model.UserSpot;
+import com.aa.msw.gen.api.ApiStation;
+import com.aa.msw.model.*;
 import com.aa.msw.source.InputDataFetcherService;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +23,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class SpotsApiService {
@@ -34,8 +34,9 @@ public class SpotsApiService {
     private final UserToSpotDao userToSpotDao;
     private final InputDataFetcherService inputDataFetcherService;
     private final HistoricalYearsApiService historicalYearsApiService;
+    private final StationApiService stationApiService;
 
-    public SpotsApiService(SampleApiService sampleApiService, ForecastApiService forecastApiService, SampleDao sampleDao, SpotDao spotDao, UserToSpotDao userToSpotDao, InputDataFetcherService inputDataFetcherService, HistoricalYearsApiService historicalYearsApiService) {
+    public SpotsApiService(SampleApiService sampleApiService, ForecastApiService forecastApiService, SampleDao sampleDao, SpotDao spotDao, UserToSpotDao userToSpotDao, InputDataFetcherService inputDataFetcherService, HistoricalYearsApiService historicalYearsApiService, StationApiService stationApiService) {
         this.sampleApiService = sampleApiService;
         this.forecastApiService = forecastApiService;
         this.sampleDao = sampleDao;
@@ -43,6 +44,7 @@ public class SpotsApiService {
         this.userToSpotDao = userToSpotDao;
         this.inputDataFetcherService = inputDataFetcherService;
         this.historicalYearsApiService = historicalYearsApiService;
+        this.stationApiService = stationApiService;
     }
 
     public ApiSpotInformationList getPublicSpots() throws NoDataAvailableException {
@@ -84,18 +86,27 @@ public class SpotsApiService {
                 // (unfortunately not every station has a forecast)
             }
 
-            spotInformationList.add(
-                    new ApiSpotInformation()
-                            .id(spot.spotId().getId())
-                            .name(spot.name())
-                            .isPublic(spot.isPublic())
-                            .minFlow(spot.minFlow())
-                            .maxFlow(spot.maxFlow())
-                            .stationId(spot.stationId())
-                            .currentSample(sampleApiService.getCurrentSample(spot.stationId()))
-                            .forecast(currentForecast)
-                            .historical(historicalYearsApiService.getApiHistoricalYearsData(spot.stationId()))
-            );
+            try {
+                Station station = stationApiService.getStation(spot.stationId());
+                ApiStation apiStation = new ApiStation(station.stationId(), station.label(), station.latitude(), station.longitude());
+
+                spotInformationList.add(
+                        new ApiSpotInformation()
+                                .id(spot.spotId().getId())
+                                .name(spot.name())
+                                .isPublic(spot.isPublic())
+                                .minFlow(spot.minFlow())
+                                .maxFlow(spot.maxFlow())
+                                .stationId(spot.stationId())
+                                .currentSample(sampleApiService.getCurrentSample(spot.stationId()))
+                                .forecast(currentForecast)
+                                .historical(historicalYearsApiService.getApiHistoricalYearsData(spot.stationId()))
+                                .station(apiStation)
+                );
+            } catch (NoSuchElementException e) {
+                // ignore for the moment and do not add this ApiSpotInformation to the list
+                break;
+            }
         }
         return spotInformationList;
     }

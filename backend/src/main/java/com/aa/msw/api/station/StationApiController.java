@@ -20,7 +20,7 @@ public class StationApiController implements StationApi {
     public ResponseEntity<List<ApiStation>> getStations() {
         return ResponseEntity.ok(
                 stationApiService.getStations().stream()
-                        .map(s -> new ApiStation(s.stationId(), s.label()))
+                        .map(s -> new ApiStation(s.stationId(), s.label(), s.latitude(), s.longitude()))
                         .toList()
         );
     }

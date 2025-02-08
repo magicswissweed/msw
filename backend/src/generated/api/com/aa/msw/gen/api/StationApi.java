@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-06T14:57:46.262524+01:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-08T14:41:30.765988+01:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
 @Tag(name = "station", description = "the station API")
 public interface StationApi {
@@ -68,7 +68,7 @@ public interface StationApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"id\" : 0, \"label\" : \"label\" }, { \"id\" : 0, \"label\" : \"label\" } ]";
+                    String exampleString = "[ { \"latitude\" : 5.637376656633329, \"id\" : 5, \"label\" : \"label\", \"longitude\" : 2.3021358869347655 }, { \"latitude\" : 5.637376656633329, \"id\" : 5, \"label\" : \"label\", \"longitude\" : 2.3021358869347655 } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
