@@ -1,4 +1,4 @@
-package com.aa.msw.source.existenz.model;
+package com.aa.msw.source.existenz.sample.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

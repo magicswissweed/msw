@@ -18,6 +18,10 @@ public class StationApiController implements StationApi {
 
     @Override
     public ResponseEntity<List<ApiStation>> getStations() {
-        return ResponseEntity.ok(stationApiService.getStations());
+        return ResponseEntity.ok(
+                stationApiService.getStations().stream()
+                        .map(s -> new ApiStation(s.stationId(), s.label()))
+                        .toList()
+        );
     }
 }
