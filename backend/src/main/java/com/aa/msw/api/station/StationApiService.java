@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class StationApiService {
@@ -30,6 +31,12 @@ public class StationApiService {
                     .toList();
         }
         return stations;
+    }
+
+    public Station getStation(Integer id) throws NoSuchElementException {
+        return getStations().stream()
+                .filter(s -> s.stationId().equals(id))
+                .findFirst().orElseThrow();
     }
 
     private boolean isValidStation(Station station) {

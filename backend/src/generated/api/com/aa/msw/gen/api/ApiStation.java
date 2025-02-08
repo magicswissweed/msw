@@ -18,12 +18,16 @@ import jakarta.annotation.Generated;
  * ApiStation
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-06T14:57:46.262524+01:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-08T14:41:30.765988+01:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiStation {
 
   private Integer id;
 
   private String label;
+
+  private Double latitude;
+
+  private Double longitude;
 
   public ApiStation() {
     super();
@@ -32,9 +36,11 @@ public class ApiStation {
   /**
    * Constructor with only required parameters
    */
-  public ApiStation(Integer id, String label) {
+  public ApiStation(Integer id, String label, Double latitude, Double longitude) {
     this.id = id;
     this.label = label;
+    this.latitude = latitude;
+    this.longitude = longitude;
   }
 
   public ApiStation id(Integer id) {
@@ -77,6 +83,46 @@ public class ApiStation {
     this.label = label;
   }
 
+  public ApiStation latitude(Double latitude) {
+    this.latitude = latitude;
+    return this;
+  }
+
+  /**
+   * Get latitude
+   * @return latitude
+  */
+  @NotNull 
+  @Schema(name = "latitude", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("latitude")
+  public Double getLatitude() {
+    return latitude;
+  }
+
+  public void setLatitude(Double latitude) {
+    this.latitude = latitude;
+  }
+
+  public ApiStation longitude(Double longitude) {
+    this.longitude = longitude;
+    return this;
+  }
+
+  /**
+   * Get longitude
+   * @return longitude
+  */
+  @NotNull 
+  @Schema(name = "longitude", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("longitude")
+  public Double getLongitude() {
+    return longitude;
+  }
+
+  public void setLongitude(Double longitude) {
+    this.longitude = longitude;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -87,12 +133,14 @@ public class ApiStation {
     }
     ApiStation apiStation = (ApiStation) o;
     return Objects.equals(this.id, apiStation.id) &&
-        Objects.equals(this.label, apiStation.label);
+        Objects.equals(this.label, apiStation.label) &&
+        Objects.equals(this.latitude, apiStation.latitude) &&
+        Objects.equals(this.longitude, apiStation.longitude);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, label);
+    return Objects.hash(id, label, latitude, longitude);
   }
 
   @Override
@@ -101,6 +149,8 @@ public class ApiStation {
     sb.append("class ApiStation {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    label: ").append(toIndentedString(label)).append("\n");
+    sb.append("    latitude: ").append(toIndentedString(latitude)).append("\n");
+    sb.append("    longitude: ").append(toIndentedString(longitude)).append("\n");
     sb.append("}");
     return sb.toString();
   }
