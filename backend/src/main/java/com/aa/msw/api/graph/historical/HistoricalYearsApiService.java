@@ -3,8 +3,8 @@ package com.aa.msw.api.graph.historical;
 import com.aa.msw.api.graph.AbstractGraphLineApiService;
 import com.aa.msw.api.station.StationApiService;
 import com.aa.msw.gen.api.ApiHistoricalYears;
-import com.aa.msw.gen.api.ApiStation;
 import com.aa.msw.model.HistoricalYearsData;
+import com.aa.msw.model.Station;
 import com.aa.msw.source.hydrodaten.historical.years.HistoricalYearsDataFetchService;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -36,10 +36,10 @@ public class HistoricalYearsApiService extends AbstractGraphLineApiService {
         //  and the data only changes once per year (or maybe if theres a new station)
         try {
             if(historicalYearsData == null) {
-                List<ApiStation> stations = stationApiService.getStations();
-                this.historicalYearsData = historicalYearsDataFetchService.fetchHistoricalYearsData(
-                                stations.stream().map(ApiStation::getId).collect(Collectors.toSet()))
-                        .stream().collect(Collectors.toMap(HistoricalYearsData::stationId, h -> h));
+                List<Station> stations = stationApiService.getStations();
+                List<HistoricalYearsData> historicalYearsDataList = historicalYearsDataFetchService.fetchHistoricalYearsData(
+                                stations.stream().map(Station::stationId).collect(Collectors.toSet()));
+                this.historicalYearsData = historicalYearsDataList.stream().collect(Collectors.toMap(HistoricalYearsData::stationId, h -> h));
             }
         } catch (URISyntaxException e) {
             // nop
