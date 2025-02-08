@@ -58,6 +58,7 @@ export const MswAddSpot = () => {
             isPublic: false,
             minFlow: minFlow!,
             maxFlow: maxFlow!,
+            station: stations.filter(s => s.id === stationId).pop()!
         };
         let response: AxiosResponse<void, any> = await new SpotsApi(config).addPrivateSpot({spot: apiSpot, position: 0})
         if (response.status === 200) {
