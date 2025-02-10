@@ -8,6 +8,7 @@ import {MswLoader} from '../loader/MswLoader';
 import {useUserAuth, wasUserLoggedInBefore} from '../user/UserAuthContext';
 import {locationsService} from "../service/LocationsService";
 import {Col, Form, Row} from "react-bootstrap";
+import {MswSpotMap} from "./spot-map/MswSpotMap";
 
 function isNotEmpty(array: Array<any> | undefined) {
     return array && array.length > 0;
@@ -72,7 +73,6 @@ export const MswOverviewPage = () => {
                     <Col className="text-end">Forecast</Col>
                     <Col xs="auto">
                         <Form.Check
-                            className={showGraphOfType === GraphTypeEnum.Forecast ? "light-blue-switch" : "dark-blue-switch"}
                             type="switch"
                             id="graph-toggle"
                             checked={showGraphOfType === GraphTypeEnum.Historical}
@@ -88,6 +88,7 @@ export const MswOverviewPage = () => {
                     <Col className="text-start">Historical</Col>
                 </Row>
             </Form>
+            <MswSpotMap riverSurfLocations={riverSurfLocations} bungeeSurfLocations={bungeeSurfLocations}/>
         </>;
     }
 }
