@@ -62,13 +62,13 @@ export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
 
                     <Area
                         dataKey="minMaxRange"
-                        name="Min - Max"
+                        name="Min-Max"
                         strokeWidth={0}
                         fill="#75d4d9"
                     />
                     <Area
                         dataKey="firstToThirdQuartile"
-                        name="25. - 75. percentile"
+                        name="25.-75. Percentile"
                         strokeWidth={0}
                         fill="#1e9196"
                     />
@@ -148,8 +148,14 @@ export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
 
     private getLegend() {
         return <Legend
-            wrapperStyle={{ textTransform: 'uppercase' }}
-        />;
+                    payload={[
+                        {type: "line", value: LINE_NAME_CURRENT_YEAR, color: "green"},
+                        {type: "line", value: LINE_NAME_MEDIAN, color: "blue"},
+                        {type: "square", value: "25.-75. percentile", color: "#1e9196"},
+                        {type: "square", value: "min-max", color: "#75d4d9"},
+                    ]}
+                    wrapperStyle={{ textTransform: 'uppercase' }}
+                />;
     }
 
     private normalizeGraphData(historicalYearsData: ApiHistoricalYears): NormalizedDataItem[] {

@@ -121,7 +121,7 @@ export class MswForecastGraph extends Component<MswGraphProps> {
                 {type: "line", value: LINE_NAME_MEASURED, color: "green"},
                 {type: "line", value: LINE_NAME_MEDIAN, color: "blue"},
                 {type: "square", value: "25.-75. percentile", color: "#1e9196"},
-                {type: "square", value: "min / max", color: "#75d4d9"},
+                {type: "square", value: "min-max", color: "#75d4d9"},
             ]}
             wrapperStyle={{ textTransform: 'uppercase' }}
         />;
