@@ -12,13 +12,29 @@
 
 ## Run the backend
 
-1. Run the 'docker-compose.yml' to start the database.
+1. Run the [docker-compose.yml](docker-compose.yml) to start the database.
 
     ```bash
       docker compose up
     ```
 
-2. Run the [backend](backend/src/main/java/com/aa/msw/MswApplication.java) using the Run Configuration (built in feature of IntelliJ IDEA), for VS Code, check [this Java extension](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack).
+2. Connect to database via plugin (psql) with
+    - name: msw
+    - username: develop
+    - password: develop
+  
+    and run the following commands to populate the database:
+
+    ```sql
+      INSERT INTO public.spot_table (id, type, stationid, name, minflow, maxflow, ispublic) VALUES ('815cf49f-8c7c-4801-8b2d-62fb874486dd', 'BUNGEE_SURF', 2473, 'St. Gallen', 130, 1300, true);
+      INSERT INTO public.spot_table (id, type, stationid, name, minflow, maxflow, ispublic) VALUES ('02dd6d9d-1a1c-4835-b81c-1a038aacd9ab', 'BUNGEE_SURF', 2243, 'Zürich', 75, 350, true);
+      INSERT INTO public.spot_table (id, type, stationid, name, minflow, maxflow, ispublic) VALUES ('76e9b6c6-ea60-4769-aa6b-1c4262fbf883', 'BUNGEE_SURF', 2152, 'Luzern', 80, 350, true);
+      INSERT INTO public.spot_table (id, type, stationid, name, minflow, maxflow, ispublic) VALUES ('f0a29af1-4e12-4431-974c-f2e39e42ff51', 'BUNGEE_SURF', 2091, 'Basel', 850, 2500, true);
+      INSERT INTO public.spot_table (id, type, stationid, name, minflow, maxflow, ispublic) VALUES ('134463b8-1c0d-43d6-be3f-8693d283a418', 'BUNGEE_SURF', 2135, 'Bern', 80, 360, true);
+      INSERT INTO public.spot_table (id, type, stationid, name, minflow, maxflow, ispublic) VALUES ('134463b8-1c0d-43d6-be3f-8693d283a419', 'RIVER_SURF', 2018, 'Your own Surfspot', 200, 400, true);
+    ```
+
+3. Run the [backend](backend/src/main/java/com/aa/msw/MswApplication.java) using the Run Configuration (built in feature of IntelliJ IDEA), for VS Code, check [this Java extension](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack).
 
 ## Start the frontend
 
@@ -27,3 +43,9 @@
   npm install
   npm start
 ```
+
+## More Information
+
+- [Frontend](frontend/README.md)
+- [Backend](backend/README.md)
+- [Deployment](deployment/README.md)

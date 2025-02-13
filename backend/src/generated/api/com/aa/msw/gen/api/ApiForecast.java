@@ -2,7 +2,7 @@ package com.aa.msw.gen.api;
 
 import java.net.URI;
 import java.util.Objects;
-import com.aa.msw.gen.api.ApiForecastLineEntry;
+import com.aa.msw.gen.api.ApiLineEntry;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.time.OffsetDateTime;
@@ -24,29 +24,29 @@ import jakarta.annotation.Generated;
  * ApiForecast
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-11-03T14:23:50.566280+01:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-13T09:30:38.823222Z[Atlantic/Canary]", comments = "Generator version: 7.5.0")
 public class ApiForecast {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime timestamp;
 
   @Valid
-  private List<@Valid ApiForecastLineEntry> measuredData = new ArrayList<>();
+  private List<@Valid ApiLineEntry> measuredData = new ArrayList<>();
 
   @Valid
-  private List<@Valid ApiForecastLineEntry> median = new ArrayList<>();
+  private List<@Valid ApiLineEntry> median = new ArrayList<>();
 
   @Valid
-  private List<@Valid ApiForecastLineEntry> twentyFivePercentile = new ArrayList<>();
+  private List<@Valid ApiLineEntry> twentyFivePercentile = new ArrayList<>();
 
   @Valid
-  private List<@Valid ApiForecastLineEntry> seventyFivePercentile = new ArrayList<>();
+  private List<@Valid ApiLineEntry> seventyFivePercentile = new ArrayList<>();
 
   @Valid
-  private List<@Valid ApiForecastLineEntry> max = new ArrayList<>();
+  private List<@Valid ApiLineEntry> max = new ArrayList<>();
 
   @Valid
-  private List<@Valid ApiForecastLineEntry> min = new ArrayList<>();
+  private List<@Valid ApiLineEntry> min = new ArrayList<>();
 
   public ApiForecast() {
     super();
@@ -55,7 +55,7 @@ public class ApiForecast {
   /**
    * Constructor with only required parameters
    */
-  public ApiForecast(OffsetDateTime timestamp, List<@Valid ApiForecastLineEntry> measuredData, List<@Valid ApiForecastLineEntry> median, List<@Valid ApiForecastLineEntry> twentyFivePercentile, List<@Valid ApiForecastLineEntry> seventyFivePercentile, List<@Valid ApiForecastLineEntry> max, List<@Valid ApiForecastLineEntry> min) {
+  public ApiForecast(OffsetDateTime timestamp, List<@Valid ApiLineEntry> measuredData, List<@Valid ApiLineEntry> median, List<@Valid ApiLineEntry> twentyFivePercentile, List<@Valid ApiLineEntry> seventyFivePercentile, List<@Valid ApiLineEntry> max, List<@Valid ApiLineEntry> min) {
     this.timestamp = timestamp;
     this.measuredData = measuredData;
     this.median = median;
@@ -85,12 +85,12 @@ public class ApiForecast {
     this.timestamp = timestamp;
   }
 
-  public ApiForecast measuredData(List<@Valid ApiForecastLineEntry> measuredData) {
+  public ApiForecast measuredData(List<@Valid ApiLineEntry> measuredData) {
     this.measuredData = measuredData;
     return this;
   }
 
-  public ApiForecast addMeasuredDataItem(ApiForecastLineEntry measuredDataItem) {
+  public ApiForecast addMeasuredDataItem(ApiLineEntry measuredDataItem) {
     if (this.measuredData == null) {
       this.measuredData = new ArrayList<>();
     }
@@ -105,20 +105,20 @@ public class ApiForecast {
   @NotNull @Valid 
   @Schema(name = "measuredData", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("measuredData")
-  public List<@Valid ApiForecastLineEntry> getMeasuredData() {
+  public List<@Valid ApiLineEntry> getMeasuredData() {
     return measuredData;
   }
 
-  public void setMeasuredData(List<@Valid ApiForecastLineEntry> measuredData) {
+  public void setMeasuredData(List<@Valid ApiLineEntry> measuredData) {
     this.measuredData = measuredData;
   }
 
-  public ApiForecast median(List<@Valid ApiForecastLineEntry> median) {
+  public ApiForecast median(List<@Valid ApiLineEntry> median) {
     this.median = median;
     return this;
   }
 
-  public ApiForecast addMedianItem(ApiForecastLineEntry medianItem) {
+  public ApiForecast addMedianItem(ApiLineEntry medianItem) {
     if (this.median == null) {
       this.median = new ArrayList<>();
     }
@@ -133,20 +133,20 @@ public class ApiForecast {
   @NotNull @Valid 
   @Schema(name = "median", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("median")
-  public List<@Valid ApiForecastLineEntry> getMedian() {
+  public List<@Valid ApiLineEntry> getMedian() {
     return median;
   }
 
-  public void setMedian(List<@Valid ApiForecastLineEntry> median) {
+  public void setMedian(List<@Valid ApiLineEntry> median) {
     this.median = median;
   }
 
-  public ApiForecast twentyFivePercentile(List<@Valid ApiForecastLineEntry> twentyFivePercentile) {
+  public ApiForecast twentyFivePercentile(List<@Valid ApiLineEntry> twentyFivePercentile) {
     this.twentyFivePercentile = twentyFivePercentile;
     return this;
   }
 
-  public ApiForecast addTwentyFivePercentileItem(ApiForecastLineEntry twentyFivePercentileItem) {
+  public ApiForecast addTwentyFivePercentileItem(ApiLineEntry twentyFivePercentileItem) {
     if (this.twentyFivePercentile == null) {
       this.twentyFivePercentile = new ArrayList<>();
     }
@@ -161,20 +161,20 @@ public class ApiForecast {
   @NotNull @Valid 
   @Schema(name = "twentyFivePercentile", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("twentyFivePercentile")
-  public List<@Valid ApiForecastLineEntry> getTwentyFivePercentile() {
+  public List<@Valid ApiLineEntry> getTwentyFivePercentile() {
     return twentyFivePercentile;
   }
 
-  public void setTwentyFivePercentile(List<@Valid ApiForecastLineEntry> twentyFivePercentile) {
+  public void setTwentyFivePercentile(List<@Valid ApiLineEntry> twentyFivePercentile) {
     this.twentyFivePercentile = twentyFivePercentile;
   }
 
-  public ApiForecast seventyFivePercentile(List<@Valid ApiForecastLineEntry> seventyFivePercentile) {
+  public ApiForecast seventyFivePercentile(List<@Valid ApiLineEntry> seventyFivePercentile) {
     this.seventyFivePercentile = seventyFivePercentile;
     return this;
   }
 
-  public ApiForecast addSeventyFivePercentileItem(ApiForecastLineEntry seventyFivePercentileItem) {
+  public ApiForecast addSeventyFivePercentileItem(ApiLineEntry seventyFivePercentileItem) {
     if (this.seventyFivePercentile == null) {
       this.seventyFivePercentile = new ArrayList<>();
     }
@@ -189,20 +189,20 @@ public class ApiForecast {
   @NotNull @Valid 
   @Schema(name = "seventyFivePercentile", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("seventyFivePercentile")
-  public List<@Valid ApiForecastLineEntry> getSeventyFivePercentile() {
+  public List<@Valid ApiLineEntry> getSeventyFivePercentile() {
     return seventyFivePercentile;
   }
 
-  public void setSeventyFivePercentile(List<@Valid ApiForecastLineEntry> seventyFivePercentile) {
+  public void setSeventyFivePercentile(List<@Valid ApiLineEntry> seventyFivePercentile) {
     this.seventyFivePercentile = seventyFivePercentile;
   }
 
-  public ApiForecast max(List<@Valid ApiForecastLineEntry> max) {
+  public ApiForecast max(List<@Valid ApiLineEntry> max) {
     this.max = max;
     return this;
   }
 
-  public ApiForecast addMaxItem(ApiForecastLineEntry maxItem) {
+  public ApiForecast addMaxItem(ApiLineEntry maxItem) {
     if (this.max == null) {
       this.max = new ArrayList<>();
     }
@@ -217,20 +217,20 @@ public class ApiForecast {
   @NotNull @Valid 
   @Schema(name = "max", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("max")
-  public List<@Valid ApiForecastLineEntry> getMax() {
+  public List<@Valid ApiLineEntry> getMax() {
     return max;
   }
 
-  public void setMax(List<@Valid ApiForecastLineEntry> max) {
+  public void setMax(List<@Valid ApiLineEntry> max) {
     this.max = max;
   }
 
-  public ApiForecast min(List<@Valid ApiForecastLineEntry> min) {
+  public ApiForecast min(List<@Valid ApiLineEntry> min) {
     this.min = min;
     return this;
   }
 
-  public ApiForecast addMinItem(ApiForecastLineEntry minItem) {
+  public ApiForecast addMinItem(ApiLineEntry minItem) {
     if (this.min == null) {
       this.min = new ArrayList<>();
     }
@@ -245,11 +245,11 @@ public class ApiForecast {
   @NotNull @Valid 
   @Schema(name = "min", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("min")
-  public List<@Valid ApiForecastLineEntry> getMin() {
+  public List<@Valid ApiLineEntry> getMin() {
     return min;
   }
 
-  public void setMin(List<@Valid ApiForecastLineEntry> min) {
+  public void setMin(List<@Valid ApiLineEntry> min) {
     this.min = min;
   }
 

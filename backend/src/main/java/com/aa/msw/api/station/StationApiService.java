@@ -1,28 +1,28 @@
 package com.aa.msw.api.station;
 
 import com.aa.msw.database.exceptions.NoSampleAvailableException;
-import com.aa.msw.gen.api.ApiStation;
+import com.aa.msw.model.Station;
 import com.aa.msw.source.InputDataFetcherService;
 import com.aa.msw.source.hydrodaten.stations.StationFetchService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class StationApiService {
 
     private final StationFetchService stationFetchService;
     private final InputDataFetcherService inputDataFetcherService;
-    private List<ApiStation> stations = new ArrayList<>();
+    private List<Station> stations = new ArrayList<>();
 
     public StationApiService(StationFetchService stationFetchService, InputDataFetcherService inputDataFetcherService) {
         this.stationFetchService = stationFetchService;
         this.inputDataFetcherService = inputDataFetcherService;
-        this.getStations();
     }
 
-    public List<ApiStation> getStations() {
+    public List<Station> getStations() {
         if(stations.isEmpty()) {
             stations = stationFetchService
                     .fetchStations()
@@ -33,9 +33,15 @@ public class StationApiService {
         return stations;
     }
 
-    private boolean isValidStation(ApiStation apiStation) {
+    public Station getStation(Integer id) throws NoSuchElementException {
+        return getStations().stream()
+                .filter(s -> s.stationId().equals(id))
+                .findFirst().orElseThrow();
+    }
+
+    private boolean isValidStation(Station station) {
         try {
-            inputDataFetcherService.fetchForStationId(apiStation.getId());
+            inputDataFetcherService.fetchForStationId(station.stationId());
         } catch (NoSampleAvailableException e) {
             return false;
         }

@@ -9,6 +9,7 @@ $icons-container-width: 40px;
 
 .spot {
   display: flex;
+  flex-direction: column;
   padding: 0;
   color: #000000;
   background-color: #ececec;
@@ -52,13 +53,14 @@ $icons-container-width: 40px;
   margin: 5px 0;
 
   img {
-    width: 40%;
+    width: 60%;
   }
 }
 
 details>summary div.collapsible-icon {
   transition: all 1s;
   align-self: center;
+  width: 100%;
 }
 
 details[open] summary div.collapsible-icon {
@@ -86,6 +88,7 @@ summary::-webkit-details-marker {
 
 .spotname {
   display: flex;
+  width: 100%;
 }
 
 .spot-title>a {
@@ -131,6 +134,12 @@ details.spot[open] summary.spotname {
   }
 }
 
-.drag-drop-icon {
-  color: $msw-blue;
+.arrow-icon {
+  img {
+    width: 40%;
+  }
+}
+
+.last40days-container {
+  width: 100%;
 }

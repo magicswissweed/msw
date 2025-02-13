@@ -230,7 +230,7 @@ components:
             $ref: '#/components/schemas/ApiSpotInformation'
     ApiSpot:
       type: object
-      required: [ id, name, stationId, spotType, isPublic, minFlow, maxFlow ]
+      required: [ id, name, stationId, spotType, isPublic, minFlow, maxFlow, station ]
       properties:
         id:
           type: string
@@ -250,16 +250,20 @@ components:
           type: integer
         maxFlow:
           type: integer
+        station:
+          $ref: '#/components/schemas/ApiStation'
     ApiSpotInformation:
       allOf:
         - $ref: '#/components/schemas/ApiSpot'
         - type: object
-          required: [ currentSample, forecast ]
+          required: [ currentSample, forecast, historical ]
           properties:
             currentSample:
               $ref: '#/components/schemas/ApiSample'
             forecast:
               $ref: '#/components/schemas/ApiForecast'
+            historical:
+              $ref: '#/components/schemas/ApiHistoricalYears'
     SpotOrderList:
       type: array
       required: [ type, format ]
@@ -292,28 +296,56 @@ components:
         measuredData:
           type: array
           items:
-            $ref: '#/components/schemas/ApiForecastLineEntry'
+            $ref: '#/components/schemas/ApiLineEntry'
         median:
           type: array
           items:
-            $ref: '#/components/schemas/ApiForecastLineEntry'
+            $ref: '#/components/schemas/ApiLineEntry'
         twentyFivePercentile:
           type: array
           items:
-            $ref: '#/components/schemas/ApiForecastLineEntry'
+            $ref: '#/components/schemas/ApiLineEntry'
         seventyFivePercentile:
           type: array
           items:
-            $ref: '#/components/schemas/ApiForecastLineEntry'
+            $ref: '#/components/schemas/ApiLineEntry'
         max:
           type: array
           items:
-            $ref: '#/components/schemas/ApiForecastLineEntry'
+            $ref: '#/components/schemas/ApiLineEntry'
         min:
           type: array
           items:
-            $ref: '#/components/schemas/ApiForecastLineEntry'
-    ApiForecastLineEntry:
+            $ref: '#/components/schemas/ApiLineEntry'
+    ApiHistoricalYears:
+      type: object
+      required: [ median, twentyFivePercentile, seventyFivePercentile, max, min, currentYear ]
+      properties:
+        median:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiLineEntry'
+        twentyFivePercentile:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiLineEntry'
+        seventyFivePercentile:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiLineEntry'
+        max:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiLineEntry'
+        min:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiLineEntry'
+        currentYear:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiLineEntry'
+    ApiLineEntry:
       type: object
       required: [ timestamp, flow ]
       properties:
@@ -329,9 +361,15 @@ components:
         $ref: '#/components/schemas/ApiStation'
     ApiStation:
       type: object
-      required: [ id, label ]
+      required: [ id, label, latitude, longitude ]
       properties:
         id:
           type: integer
         label:
           type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double

@@ -1,11 +1,11 @@
-package com.aa.msw.source.existenz;
+package com.aa.msw.source.existenz.sample;
 
 import com.aa.msw.database.helpers.id.SampleId;
 import com.aa.msw.model.Sample;
 import com.aa.msw.source.AbstractFetchService;
 import com.aa.msw.source.existenz.exception.IncorrectDataReceivedException;
-import com.aa.msw.source.existenz.model.ExistenzResponse;
-import com.aa.msw.source.existenz.model.ExistenzSample;
+import com.aa.msw.source.existenz.sample.model.ExistenzResponseSample;
+import com.aa.msw.source.existenz.sample.model.ExistenzSample;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
@@ -71,7 +71,7 @@ public class SampleFetchService extends AbstractFetchService {
         return samples;
     }
 
-    private ExistenzResponse fetchData(String url) throws IOException, URISyntaxException {
+    private ExistenzResponseSample fetchData(String url) throws IOException, URISyntaxException {
         String response = fetchAsString(url);
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(response, new TypeReference<>() {

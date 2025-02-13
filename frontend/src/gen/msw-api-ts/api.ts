@@ -56,57 +56,100 @@ export interface ApiForecast {
     'timestamp': string;
     /**
      * 
-     * @type {Array<ApiForecastLineEntry>}
+     * @type {Array<ApiLineEntry>}
      * @memberof ApiForecast
      */
-    'measuredData': Array<ApiForecastLineEntry>;
+    'measuredData': Array<ApiLineEntry>;
     /**
      * 
-     * @type {Array<ApiForecastLineEntry>}
+     * @type {Array<ApiLineEntry>}
      * @memberof ApiForecast
      */
-    'median': Array<ApiForecastLineEntry>;
+    'median': Array<ApiLineEntry>;
     /**
      * 
-     * @type {Array<ApiForecastLineEntry>}
+     * @type {Array<ApiLineEntry>}
      * @memberof ApiForecast
      */
-    'twentyFivePercentile': Array<ApiForecastLineEntry>;
+    'twentyFivePercentile': Array<ApiLineEntry>;
     /**
      * 
-     * @type {Array<ApiForecastLineEntry>}
+     * @type {Array<ApiLineEntry>}
      * @memberof ApiForecast
      */
-    'seventyFivePercentile': Array<ApiForecastLineEntry>;
+    'seventyFivePercentile': Array<ApiLineEntry>;
     /**
      * 
-     * @type {Array<ApiForecastLineEntry>}
+     * @type {Array<ApiLineEntry>}
      * @memberof ApiForecast
      */
-    'max': Array<ApiForecastLineEntry>;
+    'max': Array<ApiLineEntry>;
     /**
      * 
-     * @type {Array<ApiForecastLineEntry>}
+     * @type {Array<ApiLineEntry>}
      * @memberof ApiForecast
      */
-    'min': Array<ApiForecastLineEntry>;
+    'min': Array<ApiLineEntry>;
 }
 /**
  * 
  * @export
- * @interface ApiForecastLineEntry
+ * @interface ApiHistoricalYears
  */
-export interface ApiForecastLineEntry {
+export interface ApiHistoricalYears {
+    /**
+     * 
+     * @type {Array<ApiLineEntry>}
+     * @memberof ApiHistoricalYears
+     */
+    'median': Array<ApiLineEntry>;
+    /**
+     * 
+     * @type {Array<ApiLineEntry>}
+     * @memberof ApiHistoricalYears
+     */
+    'twentyFivePercentile': Array<ApiLineEntry>;
+    /**
+     * 
+     * @type {Array<ApiLineEntry>}
+     * @memberof ApiHistoricalYears
+     */
+    'seventyFivePercentile': Array<ApiLineEntry>;
+    /**
+     * 
+     * @type {Array<ApiLineEntry>}
+     * @memberof ApiHistoricalYears
+     */
+    'max': Array<ApiLineEntry>;
+    /**
+     * 
+     * @type {Array<ApiLineEntry>}
+     * @memberof ApiHistoricalYears
+     */
+    'min': Array<ApiLineEntry>;
+    /**
+     * 
+     * @type {Array<ApiLineEntry>}
+     * @memberof ApiHistoricalYears
+     */
+    'currentYear': Array<ApiLineEntry>;
+}
+/**
+ * 
+ * @export
+ * @interface ApiLineEntry
+ */
+export interface ApiLineEntry {
     /**
      * 
      * @type {string}
-     * @memberof ApiForecastLineEntry
+     * @memberof ApiLineEntry
      */
     'timestamp': string;
     /**
      * 
      * @type {number}
-     * @memberof ApiForecastLineEntry
+     * @memberof ApiLineEntry
      */
     'flow': number;
 }
@@ -183,6 +226,12 @@ export interface ApiSpot {
      * @memberof ApiSpot
      */
     'maxFlow': number;
+    /**
+     * 
+     * @type {ApiStation}
+     * @memberof ApiSpot
+     */
+    'station': ApiStation;
 }
 
 export const ApiSpotSpotTypeEnum = {
@@ -242,6 +291,12 @@ export interface ApiSpotInformation {
     'maxFlow': number;
     /**
      * 
+     * @type {ApiStation}
+     * @memberof ApiSpotInformation
+     */
+    'station': ApiStation;
+    /**
+     * 
      * @type {ApiSample}
      * @memberof ApiSpotInformation
      */
@@ -252,6 +307,12 @@ export interface ApiSpotInformation {
      * @memberof ApiSpotInformation
      */
     'forecast': ApiForecast;
+    /**
+     * 
+     * @type {ApiHistoricalYears}
+     * @memberof ApiSpotInformation
+     */
+    'historical': ApiHistoricalYears;
 }
 
 export const ApiSpotInformationSpotTypeEnum = {
@@ -298,6 +359,18 @@ export interface ApiStation {
      * @memberof ApiStation
      */
     'label': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiStation
+     */
+    'latitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ApiStation
+     */
+    'longitude': number;
 }
 /**
  * 

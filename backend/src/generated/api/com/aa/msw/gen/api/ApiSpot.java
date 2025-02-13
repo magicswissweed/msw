@@ -2,6 +2,7 @@ package com.aa.msw.gen.api;
 
 import java.net.URI;
 import java.util.Objects;
+import com.aa.msw.gen.api.ApiStation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -20,7 +21,7 @@ import jakarta.annotation.Generated;
  * ApiSpot
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-11-03T14:23:50.566280+01:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-13T09:30:38.823222Z[Atlantic/Canary]", comments = "Generator version: 7.5.0")
 public class ApiSpot {
 
   private UUID id;
@@ -72,6 +73,8 @@ public class ApiSpot {
 
   private Integer maxFlow;
 
+  private ApiStation station;
+
   public ApiSpot() {
     super();
   }
@@ -79,7 +82,7 @@ public class ApiSpot {
   /**
    * Constructor with only required parameters
    */
-  public ApiSpot(UUID id, String name, Integer stationId, SpotTypeEnum spotType, Boolean isPublic, Integer minFlow, Integer maxFlow) {
+  public ApiSpot(UUID id, String name, Integer stationId, SpotTypeEnum spotType, Boolean isPublic, Integer minFlow, Integer maxFlow, ApiStation station) {
     this.id = id;
     this.name = name;
     this.stationId = stationId;
@@ -87,6 +90,7 @@ public class ApiSpot {
     this.isPublic = isPublic;
     this.minFlow = minFlow;
     this.maxFlow = maxFlow;
+    this.station = station;
   }
 
   public ApiSpot id(UUID id) {
@@ -229,6 +233,26 @@ public class ApiSpot {
     this.maxFlow = maxFlow;
   }
 
+  public ApiSpot station(ApiStation station) {
+    this.station = station;
+    return this;
+  }
+
+  /**
+   * Get station
+   * @return station
+  */
+  @NotNull @Valid 
+  @Schema(name = "station", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("station")
+  public ApiStation getStation() {
+    return station;
+  }
+
+  public void setStation(ApiStation station) {
+    this.station = station;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -244,12 +268,13 @@ public class ApiSpot {
         Objects.equals(this.spotType, apiSpot.spotType) &&
         Objects.equals(this.isPublic, apiSpot.isPublic) &&
         Objects.equals(this.minFlow, apiSpot.minFlow) &&
-        Objects.equals(this.maxFlow, apiSpot.maxFlow);
+        Objects.equals(this.maxFlow, apiSpot.maxFlow) &&
+        Objects.equals(this.station, apiSpot.station);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, stationId, spotType, isPublic, minFlow, maxFlow);
+    return Objects.hash(id, name, stationId, spotType, isPublic, minFlow, maxFlow, station);
   }
 
   @Override
@@ -263,6 +288,7 @@ public class ApiSpot {
     sb.append("    isPublic: ").append(toIndentedString(isPublic)).append("\n");
     sb.append("    minFlow: ").append(toIndentedString(minFlow)).append("\n");
     sb.append("    maxFlow: ").append(toIndentedString(maxFlow)).append("\n");
+    sb.append("    station: ").append(toIndentedString(station)).append("\n");
     sb.append("}");
     return sb.toString();
   }

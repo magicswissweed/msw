@@ -5,10 +5,12 @@ import {ApiSpotInformation, SpotsApi} from '../../gen/msw-api-ts';
 import {authConfiguration} from '../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../user/UserAuthContext';
 import {Spot} from "./spot/Spot";
+import {GraphTypeEnum} from "../MswOverviewPage";
 
 interface SpotListProps {
     title: string,
-    locations: Array<ApiSpotInformation>
+    locations: Array<ApiSpotInformation>,
+    showGraphOfType: GraphTypeEnum
 }
 
 export const SpotList = (props: SpotListProps) => {
@@ -57,7 +59,7 @@ export const SpotList = (props: SpotListProps) => {
                                 <Draggable key={location.id} draggableId={location.id!} index={index}>
                                     {(draggableProvided: any) => (
                                         <div className="draggable-container" ref={draggableProvided.innerRef} {...draggableProvided.draggableProps}>
-                                            <Spot location={location} dragHandleProps={draggableProvided.dragHandleProps} />
+                                            <Spot location={location} dragHandleProps={draggableProvided.dragHandleProps} showGraphOfType={props.showGraphOfType} />
                                         </div>
                                     )}
                                 </Draggable>

@@ -58,6 +58,7 @@ export const MswAddSpot = () => {
             isPublic: false,
             minFlow: minFlow!,
             maxFlow: maxFlow!,
+            station: stations.filter(s => s.id === stationId).pop()!
         };
         let response: AxiosResponse<void, any> = await new SpotsApi(config).addPrivateSpot({spot: apiSpot, position: 0})
         if (response.status === 200) {
@@ -68,7 +69,7 @@ export const MswAddSpot = () => {
     }
 
     return <>
-        <Button variant='outline-primary me-2' size='sm' onClick={() => handleShowAddSpotModal()}>Add Spot</Button>
+        <Button variant='msw-outline me-2' size='sm' onClick={() => handleShowAddSpotModal()}>Add Spot</Button>
         <Modal show={showAddSpotModal} onHide={handleCancelAddSpotModal}>
             <Modal.Header closeButton>
                 <Modal.Title>Add new private Spot</Modal.Title>
@@ -157,7 +158,7 @@ export const MswAddSpot = () => {
                 <Button variant="outline-dark" onClick={handleCancelAddSpotModal}>
                     Cancel
                 </Button>
-                <Button disabled={isSubmitButtonDisabled} variant="primary" type="submit" onClick={() => formRef.current && formRef.current.requestSubmit()}>
+                <Button disabled={isSubmitButtonDisabled} variant="msw" type="submit" onClick={() => formRef.current && formRef.current.requestSubmit()}>
                     Add Spot
                 </Button>
             </Modal.Footer>

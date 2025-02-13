@@ -3,21 +3,25 @@ import React, {useState} from 'react';
 import {ApiSpotInformation, SpotsApi} from '../../../gen/msw-api-ts';
 import {MswMeasurement} from './measurement/MswMeasurement';
 import {MswMiniGraph} from './graph/miniGraph/MswMiniGraph';
-import {MswForecastGraph} from './graph/forecast/MswForecastGraph';
-import arrow_down from '../../../assets/arrow_down.png';
+import arrow_down from '../../../assets/arrow_down.svg';
 import lock from '../../../assets/lock.svg';
-import delete_icon from '../../../assets/delete_icon.svg';
+import delete_icon from '../../../assets/trash.svg';
 import globe from '../../../assets/globe.svg';
-import {MswLastMeasurementsGraph} from './graph/historical/MswLastMeasurementsGraph';
+import drag_drop_icon from '../../../assets/drag_drop_icon.svg';
 import {authConfiguration} from '../../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../../user/UserAuthContext';
 import Modal from 'react-bootstrap/Modal';
 import {Button} from "react-bootstrap";
 import {locationsService} from "../../../service/LocationsService";
+import {MswHistoricalYearsGraph} from "./graph/historical/MswHistoricalYearsGraph";
+import {MswForecastGraph} from "./graph/forecast/MswForecastGraph";
+import {MswLastMeasurementsGraph} from "./graph/historical/MswLastMeasurementsGraph";
+import {GraphTypeEnum} from "../../MswOverviewPage";
 
 interface SpotProps {
     location: ApiSpotInformation,
-    dragHandleProps: any
+    dragHandleProps: any,
+    showGraphOfType: GraphTypeEnum
 }
 
 export const Spot = (props: SpotProps) => {
@@ -42,7 +46,7 @@ export const Spot = (props: SpotProps) => {
             <div className={"spot-overview"}>
                 {getSpotSummaryContent(props.location)}
             </div>
-            {getCollapsibleContent(props.location, false, true, false, true, true)}
+            {getCollapsibleContent(props.location, false, true, true, true, true)}
         </div>
     </>;
 
@@ -52,8 +56,8 @@ export const Spot = (props: SpotProps) => {
         return <>
             <div className='icons-container'>
               {user &&
-                <div className={'icon drag-drop-icon'} {...props.dragHandleProps}>
-                    ☰
+                <div className={'icon drag-drop-icon arrow-icon'} {...props.dragHandleProps}>
+                  <img alt="Sort the spots on your dashboard." src={drag_drop_icon}/>
                 </div>
               }
             </div>
@@ -62,7 +66,7 @@ export const Spot = (props: SpotProps) => {
                     <a href={link} target="_blank" rel="noreferrer">{location.name}</a>
                 </div>
                 <MswMeasurement location={location}/>
-                <MswMiniGraph location={location}/>
+                <MswMiniGraph location={location} showGraphOfType={props.showGraphOfType}/>
             </div>
             <div className="icons-container">
                 <div className="icon">
@@ -96,7 +100,7 @@ export const Spot = (props: SpotProps) => {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-                <div className="collapsible-icon icon">
+                <div className="collapsible-icon icon arrow-icon">
                     <img alt="extend forecast" src={arrow_down}/>
                 </div>
             </div>
@@ -120,18 +124,33 @@ export const Spot = (props: SpotProps) => {
         </>;
 
         let lastMeasurementsContent = <>
-            <MswLastMeasurementsGraph location={location}
-                                      aspectRatio={2}
-                                      withLegend={withLegend}
-                                      withXAxis={withXAxis}
-                                      withYAxis={withYAxis}
-                                      withMinMaxReferenceLines={withMinMaxReferenceLines}
-                                      withTooltip={withTooltip}/>
+            <div className="last40days-container">
+                <p>Forecast unavailable - showing last 40 days</p>
+                <MswLastMeasurementsGraph location={location}
+                                          aspectRatio={2}
+                                          withLegend={withLegend}
+                                          withXAxis={withXAxis}
+                                          withYAxis={withYAxis}
+                                          withMinMaxReferenceLines={withMinMaxReferenceLines}
+                                          withTooltip={withTooltip}/>
+            </div>
+        </>;
+
+        let historicalYearsContent = <>
+            <MswHistoricalYearsGraph location={location}
+                                     aspectRatio={2}
+                                     withLegend={withLegend}
+                                     withXAxis={withXAxis}
+                                     withYAxis={withYAxis}
+                                     withMinMaxReferenceLines={withMinMaxReferenceLines}
+                                     withTooltip={withTooltip}/>
         </>;
 
         return <>
             <div className="collapsibleContent">
-                {location.forecast ? forecastContent : lastMeasurementsContent}
+                {props.showGraphOfType === GraphTypeEnum.Forecast ?
+                    (location.forecast ? forecastContent : lastMeasurementsContent) :
+                    historicalYearsContent}
             </div>
         </>;
     }

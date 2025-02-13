@@ -1,39 +1,44 @@
 $msw-blue: #3bbae8;
 $msw-blue-secondary: #2473db;
 
-/* bootstrap customizations */
-$primary: $msw-blue;
-$secondary: $msw-blue-secondary;
-
-/* import bootstrap to set changes */
-@import '~bootstrap/scss/bootstrap';
-
-/* custom styles */
-.btn-primary {
-
-  // white font in primary-colored buttons
-  color: white;
-
-  // recreate color change of outline buttons for primary
-  &:hover {
-    color: $msw-blue;
-    border-color: $msw-blue;
-    background-color: white;
-  }
-}
-
-.btn-outline-primary {
-
-  // white font in outline primary-colored buttons on hover
-  &:hover {
-    color: white;
-  }
-}
-
 body {
   font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
 }
 
 a {
+  color: $msw-blue;
+}
+
+.btn-msw {
+  background-color: $msw-blue;
+  color: white;
+
+  &:hover {
+    background-color: white;
+    color: $msw-blue;
+    border-color: $msw-blue;
+  }
+}
+
+.btn-msw-outline {
+  background-color: white;
+  color: $msw-blue;
+  border-color: $msw-blue;
+
+  &:hover {
+    background-color: $msw-blue;
+    color: white;
+  }
+}
+
+.btn-danger {
+  &:hover {
+    background-color: white;
+    color: #dc3545;
+    border-color: #dc3545;
+  }
+}
+
+.btn-link {
   color: $msw-blue;
 }

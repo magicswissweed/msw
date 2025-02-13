@@ -59,7 +59,7 @@ export function MswForgotPassword(props: MswForgotPasswordProps) {
                         <p className="success-msg text-center">We sent you an email. Please check your inbox.</p>}
 
                     <div className='text-center'>
-                        <Button variant="link text-primary" onClick={onOpenLoginModal}>Back to Login</Button>
+                        <Button variant="link" onClick={onOpenLoginModal}>Back to Login</Button>
                     </div>
                 </div>
             </Modal.Body>
@@ -67,7 +67,7 @@ export function MswForgotPassword(props: MswForgotPasswordProps) {
                 <Button variant="outline-dark" onClick={props.closeModal}>
                     Cancel
                 </Button>
-                <Button variant="primary"
+                <Button variant="msw"
                         onClick={() => formRef.current && formRef.current.requestSubmit()}>
                     Reset password
                 </Button>

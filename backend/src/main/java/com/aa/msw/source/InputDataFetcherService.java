@@ -6,7 +6,7 @@ import com.aa.msw.database.repository.dao.SampleDao;
 import com.aa.msw.database.repository.dao.SpotDao;
 import com.aa.msw.model.Forecast;
 import com.aa.msw.model.Sample;
-import com.aa.msw.source.existenz.SampleFetchService;
+import com.aa.msw.source.existenz.sample.SampleFetchService;
 import com.aa.msw.source.hydrodaten.forecast.ForecastFetchService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

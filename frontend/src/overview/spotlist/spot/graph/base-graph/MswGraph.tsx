@@ -1,12 +1,12 @@
-import {ApiForecastLineEntry, ApiSample, ApiSpotInformation} from "../../../../../gen/msw-api-ts";
+import {ApiLineEntry, ApiSample, ApiSpotInformation} from "../../../../../gen/msw-api-ts";
 import React from "react";
-import {CartesianGrid, Label, Line, ReferenceArea, ReferenceLine, Tooltip, XAxis, YAxis} from 'recharts';
+import {CartesianGrid, Label, Line, ReferenceArea, ReferenceLine, Tooltip, XAxis} from 'recharts';
 
 export const DATA_KEY_MEDIAN = "median";
 export const DATA_KEY_MEASURED = "measured";
 
-export const LINE_NAME_MEASURED = "Gemessen";
-export let LINE_NAME_MEDIAN = "Median";
+export const LINE_NAME_MEASURED = "measured";
+export let LINE_NAME_MEDIAN = "median";
 
 export interface MswGraphProps {
     location: ApiSpotInformation,
@@ -63,11 +63,7 @@ export function getTooltip() {
     return <Tooltip content={MswTooltip}/>;
 }
 
-export function getYAxis(min: number, max: number) {
-    return <YAxis domain={[min, max]}/>;
-}
-
-export function normalizeGraphDataLine(line: ApiSample[] | ApiForecastLineEntry[], name: string): NormalizedDataItem[] {
+export function normalizeGraphDataLine(line: ApiSample[] | ApiLineEntry[], name: string): NormalizedDataItem[] {
     let normalizedData: any[] = [];
     for (let linePoint of line) {
         let obj: NormalizedDataItem = {datetime: new Date(linePoint.timestamp!)};
@@ -105,13 +101,17 @@ export function getXAxis(ticks: number[], withXAxis: boolean, tickFormatter: (v:
     const from = ticks[0];
     const to = ticks[ticks.length - 1];
 
-    return <XAxis
-        type="number"
-        dataKey="datetime"
-        domain={[from, to]}
-        scale="time"
-        ticks={ticks}
-        tickFormatter={tickFormatter}
-        minTickGap={1}
-        hide={!withXAxis}/>;
+    return (
+        <XAxis
+            type="number"
+            dataKey="datetime"
+            domain={[from, to]}
+            scale="time"
+            ticks={ticks}
+            tickFormatter={tickFormatter}
+            minTickGap={1}
+            hide={!withXAxis}
+            tick={{ dx: 20 }}
+        />
+    );
 }

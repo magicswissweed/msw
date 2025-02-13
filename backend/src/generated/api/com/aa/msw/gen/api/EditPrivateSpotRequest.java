@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
  */
 
 @JsonTypeName("editPrivateSpot_request")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-11-03T14:23:50.566280+01:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-13T09:30:38.823222Z[Atlantic/Canary]", comments = "Generator version: 7.5.0")
 public class EditPrivateSpotRequest {
 
   private ApiSpot spot;

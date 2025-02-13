@@ -1,7 +1,7 @@
 import '../base-graph/MswGraph.scss'
-import {Area, ComposedChart, Legend, Line, ReferenceDot, ResponsiveContainer,} from 'recharts';
+import {Area, ComposedChart, Legend, Line, ReferenceDot, ResponsiveContainer, YAxis} from 'recharts';
 import React, {Component} from 'react';
-import {ApiForecast, ApiForecastLineEntry, ApiSpotInformation} from '../../../../../gen/msw-api-ts';
+import {ApiForecast, ApiLineEntry, ApiSpotInformation} from '../../../../../gen/msw-api-ts';
 import {
     DATA_KEY_MEASURED,
     DATA_KEY_MEDIAN,
@@ -12,7 +12,6 @@ import {
     getReferenceArea,
     getTooltip,
     getXAxis,
-    getYAxis,
     LINE_NAME_MEASURED,
     LINE_NAME_MEDIAN,
     MswGraphProps,
@@ -57,7 +56,7 @@ export class MswForecastGraph extends Component<MswGraphProps> {
 
         let normalizedGraphData: NormalizedDataItem[] = this.normalizeGraphData(this.location.forecast!);
 
-        const ticks = this.getTicks(normalizedGraphData)
+        const ticks = this.getTicks(normalizedGraphData);
 
         return <>
             <ResponsiveContainer className="graph" width="100%" aspect={this.aspectRatio}>
@@ -68,7 +67,8 @@ export class MswForecastGraph extends Component<MswGraphProps> {
                                   y={this.location.forecast.median!
                                       .filter((v) => new Date(v.timestamp!).getMonth() === new Date(this.location.forecast!.timestamp!).getMonth())
                                       .filter((v) => new Date(v.timestamp!).getDay() === new Date(this.location.forecast!.timestamp!).getDay())
-                                      .filter((v) => new Date(v.timestamp!).getHours() === new Date(this.location.forecast!.timestamp!).getHours())[0].flow
+                                      .filter((v) => new Date(v.timestamp!).getHours() === new Date(this.location.forecast!.timestamp!).getHours())[0]
+                                      .flow
                                   }
                                   stroke="gold"
                                   r={6}
@@ -97,7 +97,7 @@ export class MswForecastGraph extends Component<MswGraphProps> {
 
                     {this.withMinMaxReferenceLines && getMinMaxReferenceLines(this.location)}
                     {this.withTooltip && getTooltip()}
-                    {this.withYAxis && getYAxis(this.location.minFlow!, this.location.maxFlow!)}
+                    {this.withYAxis && <YAxis/>}
                     {this.withLegend && this.getLegend()}
                 </ComposedChart>
             </ResponsiveContainer>
@@ -109,19 +109,21 @@ export class MswForecastGraph extends Component<MswGraphProps> {
         const oneDayInMs = 24 * 60 * 60 * 1000;
         let firstDayMidnight = new Date(normalizedGraphData[0].datetime).setHours(0, 0, 0, 1);
         return Array.from(
-            { length: nrOfTicks },
-            (_, i) => firstDayMidnight + i * oneDayInMs);
+          { length: nrOfTicks },
+          (_, i) => firstDayMidnight + i * oneDayInMs
+        );
     }
 
     private getLegend() {
-        {/* payload is only necessary to get rid of unneccessary double legend entry because forecastFlow0 and forecastFlow1 are both named Min/Max */}
+        /* payload is only necessary to get rid of unneccessary double legend entry because forecastFlow0 and forecastFlow1 are both named Min/Max */
         return <Legend
             payload={[
                 {type: "line", value: LINE_NAME_MEASURED, color: "green"},
                 {type: "line", value: LINE_NAME_MEDIAN, color: "blue"},
-                {type: "square", value: "25.-75. Perzentil", color: "#1e9196"},
-                {type: "square", value: "Min / Max", color: "#75d4d9"},
+                {type: "square", value: "25.-75. percentile", color: "#1e9196"},
+                {type: "square", value: "min-max", color: "#75d4d9"},
             ]}
+            wrapperStyle={{ textTransform: 'uppercase' }}
         />;
     }
 
@@ -156,7 +158,7 @@ export class MswForecastGraph extends Component<MswGraphProps> {
         return normalizedData;
     }
 
-    private getSimpleGraphDataLine(forecastLine: ApiForecastLineEntry[]): NormalizedDataItem[] {
+    private getSimpleGraphDataLine(forecastLine: ApiLineEntry[]): NormalizedDataItem[] {
         return normalizeGraphDataLine(forecastLine, TEMPORARY_DATA_KEY_FLOW);
     }
 
@@ -164,7 +166,7 @@ export class MswForecastGraph extends Component<MswGraphProps> {
         let output: NormalizedDataItem[] = [];
 
         left.forEach(leftItem => {
-            let filteredRight = right.filter(rightItem => leftItem.datetime.getTime() == rightItem.datetime.getTime());
+            let filteredRight = right.filter(rightItem => leftItem.datetime.getTime() === rightItem.datetime.getTime());
             let leftItemIsContainedInRightList: boolean = filteredRight.length > 0;
             if (leftItemIsContainedInRightList) {
                 leftItem[dataKey] = filteredRight[0][TEMPORARY_DATA_KEY_FLOW];
@@ -173,7 +175,7 @@ export class MswForecastGraph extends Component<MswGraphProps> {
         });
 
         right.forEach(rightItem => {
-            let filteredOutput = output.filter(outputItem => rightItem.datetime.getTime() == outputItem.datetime.getTime());
+            let filteredOutput = output.filter(outputItem => rightItem.datetime.getTime() === outputItem.datetime.getTime());
             let rightItemIsContainedInOutputList: boolean = filteredOutput.length > 0;
             if (!rightItemIsContainedInOutputList) {
                 let obj: NormalizedDataItem = {datetime: rightItem.datetime};

@@ -7,13 +7,22 @@ import {ApiSpotInformation} from '../gen/msw-api-ts';
 import {MswLoader} from '../loader/MswLoader';
 import {useUserAuth, wasUserLoggedInBefore} from '../user/UserAuthContext';
 import {locationsService} from "../service/LocationsService";
+import {Col, Form, Row} from "react-bootstrap";
+import {MswSpotMap} from "./spot-map/MswSpotMap";
 
 function isNotEmpty(array: Array<any> | undefined) {
     return array && array.length > 0;
 }
 
+export const GraphTypeEnum = {
+    Forecast: 'FORECAST',
+    Historical: 'HISTORICAL'
+} as const;
+export type GraphTypeEnum = typeof GraphTypeEnum[keyof typeof GraphTypeEnum];
+
 export const MswOverviewPage = () => {
     const [locations, setLocations] = useState<Array<ApiSpotInformation>>([]);
+    const [showGraphOfType, setShowGraphOfType] = useState<GraphTypeEnum>(GraphTypeEnum.Forecast);
 
     // @ts-ignore
     const {user, token} = useUserAuth();
@@ -55,10 +64,31 @@ export const MswOverviewPage = () => {
         return <>
             <div className="surfspots">
                 {isNotEmpty(riverSurfLocations) &&
-                    <SpotList title="Riversurf" locations={riverSurfLocations}/>}
+                    <SpotList title="Riversurf" locations={riverSurfLocations} showGraphOfType={showGraphOfType}/>}
                 {isNotEmpty(bungeeSurfLocations) &&
-                    <SpotList title="Bungeesurf" locations={bungeeSurfLocations}/>}
+                    <SpotList title="Bungeesurf" locations={bungeeSurfLocations} showGraphOfType={showGraphOfType}/>}
             </div>
+            <Form>
+                <Row className="align-items-center">
+                    <Col className="text-end">Forecast</Col>
+                    <Col xs="auto">
+                        <Form.Check
+                            type="switch"
+                            id="graph-toggle"
+                            checked={showGraphOfType === GraphTypeEnum.Historical}
+                            onChange={() => {
+                                if(showGraphOfType === GraphTypeEnum.Forecast) {
+                                    setShowGraphOfType(GraphTypeEnum.Historical)
+                                } else {
+                                    setShowGraphOfType(GraphTypeEnum.Forecast)
+                                }
+                            }}
+                        />
+                    </Col>
+                    <Col className="text-start">Historical</Col>
+                </Row>
+            </Form>
+            <MswSpotMap riverSurfLocations={riverSurfLocations} bungeeSurfLocations={bungeeSurfLocations}/>
         </>;
     }
 }

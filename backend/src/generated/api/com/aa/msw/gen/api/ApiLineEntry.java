@@ -17,30 +17,30 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * ApiForecastLineEntry
+ * ApiLineEntry
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-11-03T14:23:50.566280+01:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
-public class ApiForecastLineEntry {
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-13T09:30:38.823222Z[Atlantic/Canary]", comments = "Generator version: 7.5.0")
+public class ApiLineEntry {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime timestamp;
 
   private Double flow;
 
-  public ApiForecastLineEntry() {
+  public ApiLineEntry() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public ApiForecastLineEntry(OffsetDateTime timestamp, Double flow) {
+  public ApiLineEntry(OffsetDateTime timestamp, Double flow) {
     this.timestamp = timestamp;
     this.flow = flow;
   }
 
-  public ApiForecastLineEntry timestamp(OffsetDateTime timestamp) {
+  public ApiLineEntry timestamp(OffsetDateTime timestamp) {
     this.timestamp = timestamp;
     return this;
   }
@@ -60,7 +60,7 @@ public class ApiForecastLineEntry {
     this.timestamp = timestamp;
   }
 
-  public ApiForecastLineEntry flow(Double flow) {
+  public ApiLineEntry flow(Double flow) {
     this.flow = flow;
     return this;
   }
@@ -88,9 +88,9 @@ public class ApiForecastLineEntry {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ApiForecastLineEntry apiForecastLineEntry = (ApiForecastLineEntry) o;
-    return Objects.equals(this.timestamp, apiForecastLineEntry.timestamp) &&
-        Objects.equals(this.flow, apiForecastLineEntry.flow);
+    ApiLineEntry apiLineEntry = (ApiLineEntry) o;
+    return Objects.equals(this.timestamp, apiLineEntry.timestamp) &&
+        Objects.equals(this.flow, apiLineEntry.flow);
   }
 
   @Override
@@ -101,7 +101,7 @@ public class ApiForecastLineEntry {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ApiForecastLineEntry {\n");
+    sb.append("class ApiLineEntry {\n");
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("    flow: ").append(toIndentedString(flow)).append("\n");
     sb.append("}");

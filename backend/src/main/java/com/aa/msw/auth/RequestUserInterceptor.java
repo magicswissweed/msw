@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Profile("!test")
@@ -31,6 +32,7 @@ public class RequestUserInterceptor implements HandlerInterceptor {
         this.userDao = userDao;
     }
 
+    @Transactional
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
