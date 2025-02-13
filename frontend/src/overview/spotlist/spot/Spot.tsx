@@ -1,6 +1,7 @@
 import './Spot.scss'
 import React, {useState} from 'react';
-import {ApiSpotInformation, SpotsApi} from '../../../gen/msw-api-ts';
+import {ApiSpotInformation, EditPrivateSpotRequest, SpotsApi} from '../../../gen/msw-api-ts';
+import {MswEditSpot} from "../../../spot/edit/MswEditSpot";
 import {MswMeasurement} from './measurement/MswMeasurement';
 import {MswMiniGraph} from './graph/miniGraph/MswMiniGraph';
 import arrow_down from '../../../assets/arrow_down.svg';
@@ -82,8 +83,31 @@ export const Spot = (props: SpotProps) => {
 
                 </div>
                 {user &&
+                    <MswEditSpot location={location}/>
+                }
+                {/* {user &&
+                    <div className='icon' onClick={() => handleShowEditModal()}>
+                      <img alt="Edit this private spot." title="Edit this private spot." src={edit_icon}/>
+                    </div>
+                }
+                <Modal show={showEditModal} onHide={handleCancelEditModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Edit private spot</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>You won't be able to retrieve this spot. If you need it again you will have to add a new one.</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="outline-dark" onClick={handleCancelEditModal}>
+                            Cancel
+                        </Button>
+                        <Button variant="danger" onClick={() => handleEditSpotAndCloseModal(location, editPrivateSpotRequest)}>
+                            Delete Spot
+                        </Button>
+                    </Modal.Footer>
+                </Modal> */}
+
+                {user &&
                     <div className="icon" onClick={() => handleShowConfirmationModal()}>
-                        <img alt="Delete this spot from your dashboard." src={delete_icon}/>
+                        <img alt="Delete this spot from your dashboard." title="Delete this spot from your dashboard." src={delete_icon}/>
                     </div>
                 }
                 <Modal show={showConfirmationModal} onHide={handleCancelConfirmationModal}>
@@ -159,5 +183,10 @@ export const Spot = (props: SpotProps) => {
         let config = await authConfiguration(token);
         new SpotsApi(config).deletePrivateSpot(location.id!); // no await to not be blocking
         locationsService.deleteLocation(location.id!);
+    }
+
+    async function editSpot(location: ApiSpotInformation, editPrivateSpotRequest: EditPrivateSpotRequest) {
+        let config = await authConfiguration(token);
+        new SpotsApi(config).editPrivateSpot(location.id!, editPrivateSpotRequest!); // no await to not be blocking
     }
 }
