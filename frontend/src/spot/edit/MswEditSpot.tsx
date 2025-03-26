@@ -2,29 +2,33 @@ import './MswEditSpot.scss';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import React, {useEffect, useRef, useState} from "react";
 import {Button, Form} from 'react-bootstrap';
-import {ApiSpot, ApiSpotInformation, ApiSpotSpotTypeEnum, ApiStation, SpotsApi, StationApi} from '../../gen/msw-api-ts';
+import {ApiSpot, ApiSpotInformation, ApiSpotSpotTypeEnum, ApiStation, SpotsApi, StationApi, EditPrivateSpotRequest} from '../../gen/msw-api-ts';
 import {useUserAuth} from '../../user/UserAuthContext';
 import {AxiosResponse} from "axios";
+import {v4 as uuid} from 'uuid';
 import {Typeahead} from "react-bootstrap-typeahead";
 import Modal from "react-bootstrap/Modal";
 import {authConfiguration} from "../../api/config/AuthConfiguration";
 import {locationsService} from "../../service/LocationsService";
 import edit_icon from "../../assets/edit.svg";
 
+// specify the properties (inputs) for the MswEditSpot component
 interface MswEditSpotProps {
     location: ApiSpotInformation;
 }
 
 export const MswEditSpot: React.FC<MswEditSpotProps> = ({ location }) => {
-
+    // define modal states
     const [showEditSpotModal, setShowEditSpotModal] = useState(false);
     const handleShowEditSpotModal = () => setShowEditSpotModal(true);
     const handleEditSpotAndCloseModal = (e: { preventDefault: any; }) => {
-        e.preventDefault();
-        // editSpot().then(() => setIsSubmitButtonDisabled(false));
+      // TODO: this prevents page reload (needed for min/maxFlow changes to show) -> remove?
+      e.preventDefault();
+      editSpot().then(() => setIsSubmitButtonDisabled(false));
     }
     const handleCancelEditSpotModal = () => setShowEditSpotModal(false);
 
+    // define form states and use the current location data as initial values
     const [spotName, setSpotName] = useState(location.name || "");
     const [type, setType] = useState<ApiSpotSpotTypeEnum>(location.spotType || ApiSpotSpotTypeEnum.RiverSurf);
     const [stationId, setStationId] = useState<number | undefined>(location.stationId);
@@ -34,65 +38,63 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({ location }) => {
     const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
     const [stationSelectionError, setStationSelectionError] = useState('');
 
+    // initial loading of stations (needed for Typeahead)
     useEffect(() => {
         new StationApi().getStations().then((response) => setStations(response.data));
-        // fetchSpotDetails();
     }, []);
-
-    useEffect(() => {
-        setSpotName(location.name || "");
-        setType(location.spotType || ApiSpotSpotTypeEnum.RiverSurf);
-        setStationId(location.stationId);
-        setMinFlow(location.minFlow);
-        setMaxFlow(location.maxFlow);
-    }, [location]);
 
     // @ts-ignore
     const {token} = useUserAuth();
 
     const formRef = useRef<HTMLFormElement | null>(null);
 
-    // async function fetchSpotDetails() {
-    //     let config = await authConfiguration(token);
-    //     let response: AxiosResponse<ApiSpot> = await new SpotsApi(config).getPrivateSpotById({spotId});
-    //     if (response.status === 200) {
-    //         const spot = response.data;
-    //         setSpotName(spot.name);
-    //         setType(spot.spotType);
-    //         setStationId(spot.stationId);
-    //         setMinFlow(spot.minFlow);
-    //         setMaxFlow(spot.maxFlow);
-    //     } else {
-    //         alert("Sorry, it looks like we can't fetch the spot details.");
-    //     }
-    // }
+    async function editSpot() {
+        // set potential error message if no station is selected
+        if (!stationId) {
+            setStationSelectionError('Please select a valid option.');
+            return;
+        } else {
+            setStationSelectionError('');
+        }
 
-    // async function editSpot() {
-    //     if (!stationId) {
-    //         setStationSelectionError('Please select a valid option.');
-    //         return;
-    //     } else {
-    //         setStationSelectionError('');
-    //     }
+        setIsSubmitButtonDisabled(true);
+        let config = await authConfiguration(token);
 
-    //     setIsSubmitButtonDisabled(true);
-    //     let config = await authConfiguration(token);
-    //     const apiSpot: ApiSpot = {
-    //         id: spotId,
-    //         name: spotName,
-    //         stationId: stationId!,
-    //         spotType: type,
-    //         isPublic: false,
-    //         minFlow: minFlow!,
-    //         maxFlow: maxFlow!,
-    //     };
-    //     let response: AxiosResponse<void, any> = await new SpotsApi(config).updatePrivateSpot({spotId, spot: apiSpot})
-    //     if (response.status === 200) {
-    //         locationsService.fetchData(token, true).then(handleCancelEditSpotModal);
-    //     } else {
-    //         alert("Sorry, it looks like we can't update that spot. Maybe the flow is not measured at this station?");
-    //     }
-    // }
+        // make formerly public spot private
+        if (location.isPublic) {
+            // assign new unique id to the spot
+            location.id = uuid();
+        }
+
+        // create new spot object with the updated values
+        const apiSpot: ApiSpot = {
+            id: location.id,
+            name: spotName,
+            stationId: stationId!,
+            spotType: type,
+            isPublic: false,
+            minFlow: minFlow!,
+            maxFlow: maxFlow!,
+            station: stations.filter(s => s.id === stationId).pop()!
+        };
+
+        // wrap spot object in request object and send to API
+        const editPrivateSpotRequest: EditPrivateSpotRequest = {
+            spot: apiSpot
+        };
+        let response: AxiosResponse<void, any> = await new SpotsApi(config).editPrivateSpot(location.id, editPrivateSpotRequest)
+        if (response.status === 200) {
+            // close the modal
+            handleCancelEditSpotModal();
+            // refresh data via the service
+            await locationsService.fetchData(token, true);
+            // TODO: is there a better way to enforce changes in min/maxFlow other than a reload?
+            // window.location.reload();
+        } else {
+            // TODO: filter all spots where flow is not measured
+            alert("Sorry, it looks like we can't update that spot. Maybe the flow is not measured at this station?");
+        }
+    }
 
     return <>
         <div className="icon" onClick={() => handleShowEditSpotModal()}>
@@ -149,9 +151,16 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({ location }) => {
                                 inputProps={{required: true}}
                                 id="station-autocomplete"
                                 labelKey="label"
-                                onChange={(station) => {
-                                    setStationId((station.pop() as ApiStation).id);
-                                    setStationSelectionError('');
+                                onChange={(selected) => {
+                                    // distinguish between a valid selection and no selection
+                                    if (selected && selected.length > 0) {
+                                        const station = selected[0] as ApiStation; // Safely access the first selected item
+                                        setStationId(station.id); // Update the stationId state
+                                        setStationSelectionError(''); // Clear any selection error
+                                    } else {
+                                        setStationId(undefined); // Clear the stationId if no selection
+                                        setStationSelectionError('Please select a valid option.'); // set an error
+                                    }
                                 }}
                                 options={stations}
                                 placeholder="Station"
