@@ -34,9 +34,11 @@ public class StationApiService {
         Set<Station> stationsFromDb = stationDao.getStations();
         if(stationsFromDb.isEmpty()) {
             Set<Station> fetchedStations = fetchStations();
-            stationDao.deleteAll();
-            persistStationsToDb(fetchedStations);
-            stations = fetchedStations;
+            if(!fetchedStations.isEmpty()) {
+                stationDao.deleteAll();
+                persistStationsToDb(fetchedStations);
+                stations = fetchedStations;
+            }
         } else {
             stations = stationsFromDb;
         }
