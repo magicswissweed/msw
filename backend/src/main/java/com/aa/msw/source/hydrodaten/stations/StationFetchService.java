@@ -1,6 +1,7 @@
 package com.aa.msw.source.hydrodaten.stations;
 
 
+import com.aa.msw.database.helpers.id.StationId;
 import com.aa.msw.model.Station;
 import com.aa.msw.source.AbstractFetchService;
 import com.aa.msw.source.existenz.station.ExistenzStationFetchService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +29,7 @@ public class StationFetchService extends AbstractFetchService {
         this.existenzStationFetchService = existenzStationFetchService;
     }
 
-    public List<Station> fetchStations() {
+    public Set<Station> fetchStations() {
         try {
             // The stations from existenz api including latitude and longitude
             Map<Integer, StationInformation> existenzStations = existenzStationFetchService.fetchStations().stream()
@@ -49,14 +51,15 @@ public class StationFetchService extends AbstractFetchService {
                             // that's why this case exists
                         }
                         return new Station(
+                                    new StationId(),
                                     Integer.parseInt(hydroStation.key()),
                                     hydroStation.label(),
                                     latitude,
                                     longitude);
                     })
-                    .toList();
+                    .collect(Collectors.toSet());
         } catch (Exception e) {
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
     }
 }

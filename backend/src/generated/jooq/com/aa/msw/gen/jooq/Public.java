@@ -6,8 +6,10 @@ package com.aa.msw.gen.jooq;
 
 import com.aa.msw.gen.jooq.tables.FlywaySchemaHistory;
 import com.aa.msw.gen.jooq.tables.ForecastTable;
+import com.aa.msw.gen.jooq.tables.HistoricalYearsDataTable;
 import com.aa.msw.gen.jooq.tables.SampleTable;
 import com.aa.msw.gen.jooq.tables.SpotTable;
+import com.aa.msw.gen.jooq.tables.StationTable;
 import com.aa.msw.gen.jooq.tables.UserTable;
 import com.aa.msw.gen.jooq.tables.UserToSpotTable;
 
@@ -43,6 +45,11 @@ public class Public extends SchemaImpl {
     public final ForecastTable FORECAST_TABLE = ForecastTable.FORECAST_TABLE;
 
     /**
+     * The table <code>public.historical_years_data_table</code>.
+     */
+    public final HistoricalYearsDataTable HISTORICAL_YEARS_DATA_TABLE = HistoricalYearsDataTable.HISTORICAL_YEARS_DATA_TABLE;
+
+    /**
      * The table <code>public.sample_table</code>.
      */
     public final SampleTable SAMPLE_TABLE = SampleTable.SAMPLE_TABLE;
@@ -51,6 +58,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.spot_table</code>.
      */
     public final SpotTable SPOT_TABLE = SpotTable.SPOT_TABLE;
+
+    /**
+     * The table <code>public.station_table</code>.
+     */
+    public final StationTable STATION_TABLE = StationTable.STATION_TABLE;
 
     /**
      * The table <code>public.user_table</code>.
@@ -80,8 +92,10 @@ public class Public extends SchemaImpl {
         return Arrays.asList(
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
             ForecastTable.FORECAST_TABLE,
+            HistoricalYearsDataTable.HISTORICAL_YEARS_DATA_TABLE,
             SampleTable.SAMPLE_TABLE,
             SpotTable.SPOT_TABLE,
+            StationTable.STATION_TABLE,
             UserTable.USER_TABLE,
             UserToSpotTable.USER_TO_SPOT_TABLE
         );

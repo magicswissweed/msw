@@ -6,14 +6,18 @@ package com.aa.msw.gen.jooq;
 
 import com.aa.msw.gen.jooq.tables.FlywaySchemaHistory;
 import com.aa.msw.gen.jooq.tables.ForecastTable;
+import com.aa.msw.gen.jooq.tables.HistoricalYearsDataTable;
 import com.aa.msw.gen.jooq.tables.SampleTable;
 import com.aa.msw.gen.jooq.tables.SpotTable;
+import com.aa.msw.gen.jooq.tables.StationTable;
 import com.aa.msw.gen.jooq.tables.UserTable;
 import com.aa.msw.gen.jooq.tables.UserToSpotTable;
 import com.aa.msw.gen.jooq.tables.records.FlywaySchemaHistoryRecord;
 import com.aa.msw.gen.jooq.tables.records.ForecastTableRecord;
+import com.aa.msw.gen.jooq.tables.records.HistoricalYearsDataTableRecord;
 import com.aa.msw.gen.jooq.tables.records.SampleTableRecord;
 import com.aa.msw.gen.jooq.tables.records.SpotTableRecord;
+import com.aa.msw.gen.jooq.tables.records.StationTableRecord;
 import com.aa.msw.gen.jooq.tables.records.UserTableRecord;
 import com.aa.msw.gen.jooq.tables.records.UserToSpotTableRecord;
 
@@ -37,8 +41,10 @@ public class Keys {
 
     public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY_PK = Internal.createUniqueKey(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, DSL.name("flyway_schema_history_pk"), new TableField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK }, true);
     public static final UniqueKey<ForecastTableRecord> FORECAST_TABLE_PKEY = Internal.createUniqueKey(ForecastTable.FORECAST_TABLE, DSL.name("forecast_table_pkey"), new TableField[] { ForecastTable.FORECAST_TABLE.ID }, true);
+    public static final UniqueKey<HistoricalYearsDataTableRecord> HISTORICAL_YEARS_DATA_TABLE_PKEY = Internal.createUniqueKey(HistoricalYearsDataTable.HISTORICAL_YEARS_DATA_TABLE, DSL.name("historical_years_data_table_pkey"), new TableField[] { HistoricalYearsDataTable.HISTORICAL_YEARS_DATA_TABLE.DB_ID }, true);
     public static final UniqueKey<SampleTableRecord> SAMPLE_TABLE_PKEY = Internal.createUniqueKey(SampleTable.SAMPLE_TABLE, DSL.name("sample_table_pkey"), new TableField[] { SampleTable.SAMPLE_TABLE.ID }, true);
     public static final UniqueKey<SpotTableRecord> SPOT_TABLE_PKEY = Internal.createUniqueKey(SpotTable.SPOT_TABLE, DSL.name("spot_table_pkey"), new TableField[] { SpotTable.SPOT_TABLE.ID }, true);
+    public static final UniqueKey<StationTableRecord> STATION_TABLE_PKEY = Internal.createUniqueKey(StationTable.STATION_TABLE, DSL.name("station_table_pkey"), new TableField[] { StationTable.STATION_TABLE.DB_ID }, true);
     public static final UniqueKey<UserTableRecord> USER_TABLE_PKEY = Internal.createUniqueKey(UserTable.USER_TABLE, DSL.name("user_table_pkey"), new TableField[] { UserTable.USER_TABLE.ID }, true);
     public static final UniqueKey<UserToSpotTableRecord> USER_TO_SPOT_TABLE_PKEY = Internal.createUniqueKey(UserToSpotTable.USER_TO_SPOT_TABLE, DSL.name("user_to_spot_table_pkey"), new TableField[] { UserToSpotTable.USER_TO_SPOT_TABLE.ID }, true);
 
