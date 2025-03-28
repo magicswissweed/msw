@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,13 +31,12 @@ public class HistoricalYearsApiService extends AbstractGraphLineApiService {
 
     @EventListener(ApplicationReadyEvent.class)
     public void fetchData() {
-        // fetch all available stations (including plausibility check)
         // fetch historical Years Data for all available stations and save In-Memory
         // TODO: in the future this could be saved to the db, as this would make the startup faster
         //  and the data only changes once per year (or maybe if theres a new station)
         try {
             if(historicalYearsData == null) {
-                List<Station> stations = stationApiService.getStations();
+                Set<Station> stations = stationApiService.getStations();
                 List<HistoricalYearsData> historicalYearsDataList = historicalYearsDataFetchService.fetchHistoricalYearsData(
                                 stations.stream().map(Station::stationId).collect(Collectors.toSet()));
                 this.historicalYearsData = historicalYearsDataList.stream().collect(Collectors.toMap(HistoricalYearsData::stationId, h -> h));

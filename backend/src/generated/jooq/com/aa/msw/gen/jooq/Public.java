@@ -8,6 +8,7 @@ import com.aa.msw.gen.jooq.tables.FlywaySchemaHistory;
 import com.aa.msw.gen.jooq.tables.ForecastTable;
 import com.aa.msw.gen.jooq.tables.SampleTable;
 import com.aa.msw.gen.jooq.tables.SpotTable;
+import com.aa.msw.gen.jooq.tables.StationTable;
 import com.aa.msw.gen.jooq.tables.UserTable;
 import com.aa.msw.gen.jooq.tables.UserToSpotTable;
 
@@ -53,6 +54,11 @@ public class Public extends SchemaImpl {
     public final SpotTable SPOT_TABLE = SpotTable.SPOT_TABLE;
 
     /**
+     * The table <code>public.station_table</code>.
+     */
+    public final StationTable STATION_TABLE = StationTable.STATION_TABLE;
+
+    /**
      * The table <code>public.user_table</code>.
      */
     public final UserTable USER_TABLE = UserTable.USER_TABLE;
@@ -82,6 +88,7 @@ public class Public extends SchemaImpl {
             ForecastTable.FORECAST_TABLE,
             SampleTable.SAMPLE_TABLE,
             SpotTable.SPOT_TABLE,
+            StationTable.STATION_TABLE,
             UserTable.USER_TABLE,
             UserToSpotTable.USER_TO_SPOT_TABLE
         );
