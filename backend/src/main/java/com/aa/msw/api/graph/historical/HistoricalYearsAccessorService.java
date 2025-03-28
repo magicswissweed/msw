@@ -7,6 +7,7 @@ import com.aa.msw.model.Station;
 import com.aa.msw.source.hydrodaten.historical.years.HistoricalYearsDataFetchService;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.net.URISyntaxException;
@@ -39,16 +40,21 @@ public class HistoricalYearsAccessorService {
         }
         Set<HistoricalYearsData> historicalDataFromDb = hystoricalYearsDao.getAllHistoricalYearsData();
         if(historicalDataFromDb.isEmpty()) {
-            Set<HistoricalYearsData> fetchedHistoricalYearsData = fetchHistoricalYears();
-            if(!fetchedHistoricalYearsData.isEmpty()) {
-                hystoricalYearsDao.deleteAll();
-                persistHistoricalYearsToDb(fetchedHistoricalYearsData);
-                historicalYearsData = setToMap(fetchedHistoricalYearsData);
-            }
+            fetchHistoricalYearsDataAndSaveToDb();
         } else {
             historicalYearsData = setToMap(historicalDataFromDb);
         }
         return historicalYearsData;
+    }
+
+    @Scheduled(cron = "0 0 0 * * *") // Runs at 00:00 every day
+    private void fetchHistoricalYearsDataAndSaveToDb() {
+        Set<HistoricalYearsData> fetchedHistoricalYearsData = fetchHistoricalYears();
+        if(!fetchedHistoricalYearsData.isEmpty()) {
+            hystoricalYearsDao.deleteAll();
+            persistHistoricalYearsToDb(fetchedHistoricalYearsData);
+            historicalYearsData = setToMap(fetchedHistoricalYearsData);
+        }
     }
 
     private void persistHistoricalYearsToDb(Set<HistoricalYearsData> fetchedStations) {
