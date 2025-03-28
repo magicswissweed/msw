@@ -21,5 +21,7 @@ public interface Dao<ID extends Id<?>, DOMAIN extends HasId<ID>> {
 
     DOMAIN persist(DOMAIN domain);
 
+    DOMAIN update(DOMAIN domain);
+
     Long count();
 }

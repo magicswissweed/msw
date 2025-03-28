@@ -4,10 +4,7 @@ import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.exceptions.NoSampleAvailableException;
 import com.aa.msw.database.exceptions.NoSuchUserException;
 import com.aa.msw.database.helpers.id.SpotId;
-import com.aa.msw.gen.api.AddPrivateSpotRequest;
-import com.aa.msw.gen.api.ApiSpot;
-import com.aa.msw.gen.api.ApiSpotInformationList;
-import com.aa.msw.gen.api.SpotsApi;
+import com.aa.msw.gen.api.*;
 import com.aa.msw.model.Spot;
 import com.aa.msw.model.SpotTypeEnum;
 import org.springframework.http.HttpStatus;
@@ -78,6 +75,28 @@ public class SpotsApiController implements SpotsApi {
         } catch (NoSampleAvailableException e) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> editPrivateSpot(UUID spotId, EditPrivateSpotRequest editPrivateSpotRequest) {
+        ApiSpot apiSpot = editPrivateSpotRequest.getSpot();
+
+        Spot updatedSpot = new Spot(
+                new SpotId(apiSpot.getId(), false),
+                false,
+                getSpotTypeEnum(apiSpot.getSpotType()),
+                apiSpot.getName(),
+                apiSpot.getStationId(),
+                apiSpot.getMinFlow(),
+                apiSpot.getMaxFlow()
+        );
+        try{
+            spotsApiService.editSpot(updatedSpot);
+        } catch (NoSampleAvailableException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

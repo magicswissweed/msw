@@ -7,6 +7,7 @@ package com.aa.msw.gen.api;
 
 import com.aa.msw.gen.api.AddPrivateSpotRequest;
 import com.aa.msw.gen.api.ApiSpotInformationList;
+import com.aa.msw.gen.api.EditPrivateSpotRequest;
 import java.util.UUID;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +35,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-08T14:41:30.765988+01:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-13T09:30:38.823222Z[Atlantic/Canary]", comments = "Generator version: 7.5.0")
 @Validated
 @Tag(name = "spots", description = "the spots API")
 public interface SpotsApi {
@@ -44,9 +45,9 @@ public interface SpotsApi {
     }
 
     /**
-     * POST /api/v1/spots/add : Add a new private Spot.
+     * POST /api/v1/spot : Add a new private Spot.
      *
-     * @param addPrivateSpotRequest Add a new private Spot. (required)
+     * @param addPrivateSpotRequest The new private Spot. (required)
      * @return Added private Spot successfully. (status code 200)
      */
     @Operation(
@@ -59,12 +60,12 @@ public interface SpotsApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/api/v1/spots/add",
+        value = "/api/v1/spot",
         consumes = { "application/json" }
     )
     
     default ResponseEntity<Void> addPrivateSpot(
-        @Parameter(name = "AddPrivateSpotRequest", description = "Add a new private Spot.", required = true) @Valid @RequestBody AddPrivateSpotRequest addPrivateSpotRequest
+        @Parameter(name = "AddPrivateSpotRequest", description = "The new private Spot.", required = true) @Valid @RequestBody AddPrivateSpotRequest addPrivateSpotRequest
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
@@ -72,26 +73,56 @@ public interface SpotsApi {
 
 
     /**
-     * DELETE /api/v1/spots/delete/{spotId} : Remove a private Spot.
+     * DELETE /api/v1/spot/{spotId} : Remove a private spot.
      *
      * @param spotId The id of the spot to delete. (required)
-     * @return Removed private Spot successfully. (status code 200)
+     * @return Removed private spot successfully. (status code 200)
      */
     @Operation(
         operationId = "deletePrivateSpot",
-        summary = "Remove a private Spot.",
+        summary = "Remove a private spot.",
         tags = { "spots" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Removed private Spot successfully.")
+            @ApiResponse(responseCode = "200", description = "Removed private spot successfully.")
         }
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/api/v1/spots/delete/{spotId}"
+        value = "/api/v1/spot/{spotId}"
     )
     
     default ResponseEntity<Void> deletePrivateSpot(
         @Parameter(name = "spotId", description = "The id of the spot to delete.", required = true, in = ParameterIn.PATH) @PathVariable("spotId") UUID spotId
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * PATCH /api/v1/spot/{spotId} : Edit a private spot.
+     *
+     * @param spotId The id of the spot to edit. (required)
+     * @param editPrivateSpotRequest The updated private spot. (required)
+     * @return Edited private spot successfully. (status code 200)
+     */
+    @Operation(
+        operationId = "editPrivateSpot",
+        summary = "Edit a private spot.",
+        tags = { "spots" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Edited private spot successfully.")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PATCH,
+        value = "/api/v1/spot/{spotId}",
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<Void> editPrivateSpot(
+        @Parameter(name = "spotId", description = "The id of the spot to edit.", required = true, in = ParameterIn.PATH) @PathVariable("spotId") UUID spotId,
+        @Parameter(name = "EditPrivateSpotRequest", description = "The updated private spot.", required = true) @Valid @RequestBody EditPrivateSpotRequest editPrivateSpotRequest
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 

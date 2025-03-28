@@ -4,9 +4,11 @@ import com.aa.msw.api.current.SampleApiService;
 import com.aa.msw.api.graph.forecast.ForecastApiService;
 import com.aa.msw.api.graph.historical.HistoricalYearsApiService;
 import com.aa.msw.api.station.StationApiService;
+import com.aa.msw.auth.threadlocal.UserContext;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.exceptions.NoSampleAvailableException;
 import com.aa.msw.database.exceptions.NoSuchUserException;
+import com.aa.msw.database.helpers.UserToSpot;
 import com.aa.msw.database.helpers.id.SpotId;
 import com.aa.msw.database.repository.dao.SampleDao;
 import com.aa.msw.database.repository.dao.SpotDao;
@@ -112,10 +114,47 @@ public class SpotsApiService {
     }
 
     public void addPrivateSpot(Spot spot, int position) throws NoSampleAvailableException {
-        List<Sample> samples = inputDataFetcherService.fetchForStationId(spot.stationId());
-        sampleDao.persistSamplesIfNotExist(samples);
-
+        fetchSamplesAndPersistIfExists(spot.stationId());
         userToSpotDao.addPrivateSpot(spot, position);
+        fetchDataForAllStations();
+    }
+
+    public void editSpot(Spot updatedSpot) throws NoSampleAvailableException {
+        if(spotDao.isPublicSpot(updatedSpot.spotId())) {
+            Spot newPrivateSpot = new Spot(
+                    new SpotId(), // needs new ID - not the same as the old spot
+                    updatedSpot.isPublic(),
+                    updatedSpot.type(),
+                    updatedSpot.name(),
+                    updatedSpot.stationId(),
+                    updatedSpot.minFlow(),
+                    updatedSpot.maxFlow()
+            );
+            UserToSpot oldUserToPublicSpotMapping = userToSpotDao.get(UserContext.getCurrentUser().userId(), updatedSpot.spotId());
+            deleteMapping(oldUserToPublicSpotMapping);
+            addPrivateSpot(newPrivateSpot, oldUserToPublicSpotMapping.position());
+        } else {
+            editPrivateSpot(updatedSpot);
+        }
+    }
+
+    private void deleteMapping(UserToSpot oldUserToPublicSpotMapping) {
+        userToSpotDao.delete(oldUserToPublicSpotMapping);
+    }
+
+    private void editPrivateSpot(Spot updatedSpot) throws NoSampleAvailableException {
+        fetchSamplesAndPersistIfExists(updatedSpot.stationId());
+        userToSpotDao.updatePrivateSpot(updatedSpot);
+        fetchDataForAllStations();
+    }
+
+    private void fetchSamplesAndPersistIfExists(Integer stationId) throws NoSampleAvailableException {
+        List<Sample> samples = inputDataFetcherService.fetchForStationId(stationId);
+        sampleDao.persistSamplesIfNotExist(samples);
+    }
+
+    private void fetchDataForAllStations() {
+        // TODO: refactor: only fetch new data if necessary (if the station is new and there is no data for it)
         inputDataFetcherService.updateStationIds();
         try {
             inputDataFetcherService.fetchDataAndWriteToDb();

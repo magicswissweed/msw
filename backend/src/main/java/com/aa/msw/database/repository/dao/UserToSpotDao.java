@@ -2,6 +2,7 @@ package com.aa.msw.database.repository.dao;
 
 import com.aa.msw.database.helpers.UserToSpot;
 import com.aa.msw.database.helpers.id.SpotId;
+import com.aa.msw.database.helpers.id.UserId;
 import com.aa.msw.database.helpers.id.UserToSpotId;
 import com.aa.msw.model.Spot;
 import com.aa.msw.model.UserSpot;
@@ -9,6 +10,8 @@ import com.aa.msw.model.UserSpot;
 import java.util.List;
 
 public interface UserToSpotDao extends Dao<UserToSpotId, UserToSpot> {
+
+    UserToSpot get(UserId userId, SpotId spotId);
 
     void addAllPublicSpotsToUser();
 
@@ -19,4 +22,6 @@ public interface UserToSpotDao extends Dao<UserToSpotId, UserToSpot> {
     void deletePrivateSpot(SpotId spotId);
 
     List<UserSpot> getUserSpotsOrdered();
+
+    void updatePrivateSpot(Spot updatedSpot);
 }

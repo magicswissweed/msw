@@ -17,30 +17,27 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * AddPrivateSpotRequest
+ * EditPrivateSpotRequest
  */
 
-@JsonTypeName("addPrivateSpot_request")
+@JsonTypeName("editPrivateSpot_request")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-13T09:30:38.823222Z[Atlantic/Canary]", comments = "Generator version: 7.5.0")
-public class AddPrivateSpotRequest {
+public class EditPrivateSpotRequest {
 
   private ApiSpot spot;
 
-  private Integer position;
-
-  public AddPrivateSpotRequest() {
+  public EditPrivateSpotRequest() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public AddPrivateSpotRequest(ApiSpot spot, Integer position) {
+  public EditPrivateSpotRequest(ApiSpot spot) {
     this.spot = spot;
-    this.position = position;
   }
 
-  public AddPrivateSpotRequest spot(ApiSpot spot) {
+  public EditPrivateSpotRequest spot(ApiSpot spot) {
     this.spot = spot;
     return this;
   }
@@ -60,26 +57,6 @@ public class AddPrivateSpotRequest {
     this.spot = spot;
   }
 
-  public AddPrivateSpotRequest position(Integer position) {
-    this.position = position;
-    return this;
-  }
-
-  /**
-   * Get position
-   * @return position
-  */
-  @NotNull 
-  @Schema(name = "position", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("position")
-  public Integer getPosition() {
-    return position;
-  }
-
-  public void setPosition(Integer position) {
-    this.position = position;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -88,22 +65,20 @@ public class AddPrivateSpotRequest {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AddPrivateSpotRequest addPrivateSpotRequest = (AddPrivateSpotRequest) o;
-    return Objects.equals(this.spot, addPrivateSpotRequest.spot) &&
-        Objects.equals(this.position, addPrivateSpotRequest.position);
+    EditPrivateSpotRequest editPrivateSpotRequest = (EditPrivateSpotRequest) o;
+    return Objects.equals(this.spot, editPrivateSpotRequest.spot);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(spot, position);
+    return Objects.hash(spot);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AddPrivateSpotRequest {\n");
+    sb.append("class EditPrivateSpotRequest {\n");
     sb.append("    spot: ").append(toIndentedString(spot)).append("\n");
-    sb.append("    position: ").append(toIndentedString(position)).append("\n");
     sb.append("}");
     return sb.toString();
   }

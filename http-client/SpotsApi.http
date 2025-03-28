@@ -12,7 +12,7 @@ Authorization: Bearer {{auth_token}}
 ###
 # @name Add new private Spot
 #
-POST {{base-path}}/spots/add
+POST {{base-path}}/spot
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 Content-Type: application/json
@@ -30,4 +30,22 @@ Content-Type: application/json
   "position": 0
 }
 
+###
+# @name Edit private Spot
+#
+#PATCH {{base-path}}/spot/{{spotId}}
+PATCH {{base-path}}/spot/37996bbb-546d-411d-837b-53fc56643f0f
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
 
+{
+  "spot": {
+    "id": "37996bbb-546d-411d-837b-53fc56643f0f",
+    "name": "ASDF",
+    "stationId": 2099,
+    "spotType": "RIVER_SURF",
+    "isPublic": false,
+    "minFlow": 400,
+    "maxFlow": 500
+  }
+}
