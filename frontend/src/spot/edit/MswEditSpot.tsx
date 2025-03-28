@@ -83,10 +83,10 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({ location }) => {
         };
         let response: AxiosResponse<void, any> = await new SpotsApi(config).editPrivateSpot(location.id, editPrivateSpotRequest)
         if (response.status === 200) {
-            // close the modal
-            handleCancelEditSpotModal();
-            // refresh data via the service
-            await locationsService.fetchData(token, true);
+            await locationsService.fetchData(token, true).then(() => {
+                handleCancelEditSpotModal();
+                window.location.reload();   // TODO: find better solution to bring data to charts
+            });
         } else {
             // TODO: filter all spots where flow is not measured
             alert("Sorry, it looks like we can't update that spot. Maybe the flow is not measured at this station?");
