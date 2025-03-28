@@ -5,7 +5,9 @@ import com.aa.msw.database.repository.dao.StationDao;
 import com.aa.msw.model.Station;
 import com.aa.msw.source.InputDataFetcherService;
 import com.aa.msw.source.hydrodaten.stations.StationFetchService;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.NoSuchElementException;
@@ -27,22 +29,29 @@ public class StationApiService {
         this.stationDao = stationDao;
     }
 
+    @Transactional
     public Set<Station> getStations() {
         if(!stations.isEmpty()) {
             return stations;
         }
         Set<Station> stationsFromDb = stationDao.getStations();
         if(stationsFromDb.isEmpty()) {
-            Set<Station> fetchedStations = fetchStations();
-            if(!fetchedStations.isEmpty()) {
-                stationDao.deleteAll();
-                persistStationsToDb(fetchedStations);
-                stations = fetchedStations;
-            }
+            fetchStationsAndSaveToDb();
         } else {
             stations = stationsFromDb;
         }
         return stations;
+    }
+
+    @Scheduled(cron = "0 0 23 * * *") // Runs at 23:00 every day
+    @Transactional
+    public void fetchStationsAndSaveToDb() {
+        Set<Station> fetchedStations = fetchStations();
+        if(!fetchedStations.isEmpty()) {
+            stationDao.deleteAll();
+            persistStationsToDb(fetchedStations);
+            stations = fetchedStations;
+        }
     }
 
     private void persistStationsToDb(Set<Station> fetchedStations) {
@@ -59,6 +68,7 @@ public class StationApiService {
                 .collect(Collectors.toSet());
     }
 
+    @Transactional
     public Station getStation(Integer id) throws NoSuchElementException {
         return getStations().stream()
                 .filter(s -> s.stationId().equals(id))

@@ -9,6 +9,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URISyntaxException;
 import java.util.Collections;
@@ -22,18 +23,17 @@ public class HistoricalYearsAccessorService {
     private final HistoricalYearsDataFetchService historicalYearsDataFetchService;
     private final StationApiService stationApiService;
     private final HistoricalYearsDataDao hystoricalYearsDao;
-    private final HistoricalYearsDataDao historicalYearsDataDao;
 
     private Map<Integer, HistoricalYearsData> historicalYearsData = new HashMap<>();
 
-    public HistoricalYearsAccessorService(HistoricalYearsDataFetchService historicalYearsDataFetchService, StationApiService stationApiService, HistoricalYearsDataDao hystoricalYearsDao, HistoricalYearsDataDao historicalYearsDataDao) {
+    public HistoricalYearsAccessorService(HistoricalYearsDataFetchService historicalYearsDataFetchService, StationApiService stationApiService, HistoricalYearsDataDao hystoricalYearsDao) {
         this.historicalYearsDataFetchService = historicalYearsDataFetchService;
         this.stationApiService = stationApiService;
         this.hystoricalYearsDao = hystoricalYearsDao;
-        this.historicalYearsDataDao = historicalYearsDataDao;
     }
 
     @EventListener(ApplicationReadyEvent.class)
+    @Transactional
     public Map<Integer, HistoricalYearsData> getHistoricalYearsData() {
         if(!historicalYearsData.isEmpty()) {
             return historicalYearsData;
@@ -48,7 +48,8 @@ public class HistoricalYearsAccessorService {
     }
 
     @Scheduled(cron = "0 0 0 * * *") // Runs at 00:00 every day
-    private void fetchHistoricalYearsDataAndSaveToDb() {
+    @Transactional
+    public void fetchHistoricalYearsDataAndSaveToDb() {
         Set<HistoricalYearsData> fetchedHistoricalYearsData = fetchHistoricalYears();
         if(!fetchedHistoricalYearsData.isEmpty()) {
             hystoricalYearsDao.deleteAll();
@@ -58,8 +59,8 @@ public class HistoricalYearsAccessorService {
     }
 
     private void persistHistoricalYearsToDb(Set<HistoricalYearsData> fetchedStations) {
-        for(HistoricalYearsData data : fetchedStations) {
-            historicalYearsDataDao.persist(data);
+        for (HistoricalYearsData data : fetchedStations) {
+            hystoricalYearsDao.persist(data);
         }
     }
 
