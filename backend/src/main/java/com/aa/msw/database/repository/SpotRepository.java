@@ -82,6 +82,11 @@ public class SpotRepository extends AbstractRepository<SpotId, Spot, SpotTableRe
     }
 
     @Override
+    public boolean isPublicSpot(SpotId spotId) {
+        return find(spotId).map(Spot::isPublic).orElse(false);
+    }
+
+    @Override
     public Set<Integer> getAllStationIds() {
         return new HashSet<>(
                 dsl.selectDistinct(TABLE.STATIONID).from(TABLE)

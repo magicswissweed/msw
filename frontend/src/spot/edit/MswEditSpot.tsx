@@ -2,10 +2,17 @@ import './MswEditSpot.scss';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import React, {useEffect, useRef, useState} from "react";
 import {Button, Form} from 'react-bootstrap';
-import {ApiSpot, ApiSpotInformation, ApiSpotSpotTypeEnum, ApiStation, SpotsApi, StationApi, EditPrivateSpotRequest} from '../../gen/msw-api-ts';
+import {
+    ApiSpot,
+    ApiSpotInformation,
+    ApiSpotSpotTypeEnum,
+    ApiStation,
+    EditPrivateSpotRequest,
+    SpotsApi,
+    StationApi
+} from '../../gen/msw-api-ts';
 import {useUserAuth} from '../../user/UserAuthContext';
 import {AxiosResponse} from "axios";
-import {v4 as uuid} from 'uuid';
 import {Typeahead} from "react-bootstrap-typeahead";
 import Modal from "react-bootstrap/Modal";
 import {authConfiguration} from "../../api/config/AuthConfiguration";
@@ -59,12 +66,6 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({ location }) => {
 
         setIsSubmitButtonDisabled(true);
         let config = await authConfiguration(token);
-
-        // make formerly public spot private
-        if (location.isPublic) {
-            // assign new unique id to the spot
-            location.id = uuid();
-        }
 
         // create new spot object with the updated values
         const apiSpot: ApiSpot = {

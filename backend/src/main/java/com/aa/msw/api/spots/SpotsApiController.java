@@ -91,12 +91,13 @@ public class SpotsApiController implements SpotsApi {
                 apiSpot.getMinFlow(),
                 apiSpot.getMaxFlow()
         );
-
-        try {
-            spotsApiService.editPrivateSpot(updatedSpot);
+        try{
+            spotsApiService.editSpot(updatedSpot);
         } catch (NoSampleAvailableException e) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }        return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override

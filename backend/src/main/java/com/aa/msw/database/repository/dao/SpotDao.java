@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 public interface SpotDao extends Dao<SpotId, Spot> {
+    boolean isPublicSpot(SpotId spotId);
+
     Set<Integer> getAllStationIds();
 
     List<Spot> getPublicRiverSurfSpots();
