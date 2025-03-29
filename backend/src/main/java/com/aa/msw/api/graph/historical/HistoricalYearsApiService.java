@@ -16,6 +16,9 @@ public class HistoricalYearsApiService extends AbstractGraphLineApiService {
 
     public ApiHistoricalYears getApiHistoricalYearsData(Integer stationId) {
         HistoricalYearsData historicData = historicalYearsAccessorService.getHistoricalYearsData().get(stationId);
+        if(historicData == null) {
+            return null;
+        }
         ApiHistoricalYears apiHistoricalYears = new ApiHistoricalYears();
         apiHistoricalYears.setMedian(mapApiLine(historicData.getMedian()));
         apiHistoricalYears.setTwentyFivePercentile(mapApiLine(historicData.getTwentyFivePercentile()));
