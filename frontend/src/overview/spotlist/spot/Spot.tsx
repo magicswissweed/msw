@@ -4,10 +4,11 @@ import {ApiSpotInformation, EditPrivateSpotRequest, SpotsApi} from '../../../gen
 import {MswEditSpot} from "../../../spot/edit/MswEditSpot";
 import {MswMeasurement} from './measurement/MswMeasurement';
 import {MswMiniGraph} from './graph/miniGraph/MswMiniGraph';
-import arrow_down from '../../../assets/arrow_down.svg';
-import lock from '../../../assets/lock.svg';
+import arrow_down_icon from '../../../assets/arrow_down.svg';
+import lock_icon from '../../../assets/lock.svg';
 import delete_icon from '../../../assets/trash.svg';
-import globe from '../../../assets/globe.svg';
+import globe_icon from '../../../assets/globe.svg';
+import link_icon from '../../../assets/link.svg';
 import drag_drop_icon from '../../../assets/drag_drop_icon.svg';
 import {authConfiguration} from '../../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../../user/UserAuthContext';
@@ -75,10 +76,10 @@ export const Spot = (props: SpotProps) => {
                         <img className={"public"}
                              alt="This is a public spot. Everyone can see it."
                              title="This is a public spot. Everyone can see it."
-                             src={globe}/> :
+                             src={globe_icon}/> :
                         <img alt="This is a private spot. Only you can see it."
                              title="This is a private spot. Only you can see it."
-                             src={lock}/>
+                             src={lock_icon}/>
                     }
 
                 </div>
@@ -105,7 +106,7 @@ export const Spot = (props: SpotProps) => {
                     </Modal.Footer>
                 </Modal>
                 <div className="collapsible-icon icon arrow-icon">
-                    <img alt="extend forecast" src={arrow_down}/>
+                    <img alt="extend forecast" src={arrow_down_icon}/>
                 </div>
             </div>
         </>
