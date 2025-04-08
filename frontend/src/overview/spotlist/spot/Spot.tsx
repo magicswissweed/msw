@@ -5,9 +5,7 @@ import {MswEditSpot} from "../../../spot/edit/MswEditSpot";
 import {MswMeasurement} from './measurement/MswMeasurement';
 import {MswMiniGraph} from './graph/miniGraph/MswMiniGraph';
 import arrow_down_icon from '../../../assets/arrow_down.svg';
-import lock_icon from '../../../assets/lock.svg';
 import delete_icon from '../../../assets/trash.svg';
-import globe_icon from '../../../assets/globe.svg';
 import link_icon from '../../../assets/link.svg';
 import drag_drop_icon from '../../../assets/drag_drop_icon.svg';
 import {authConfiguration} from '../../../api/config/AuthConfiguration';
@@ -65,23 +63,16 @@ export const Spot = (props: SpotProps) => {
             </div>
             <div className="spotContainer">
                 <div className="spot-title">
-                    <a href={link} target="_blank" rel="noreferrer">{location.name}</a>
+                    {location.name}
                 </div>
                 <MswMeasurement location={location}/>
                 <MswMiniGraph location={location} showGraphOfType={props.showGraphOfType}/>
             </div>
             <div className="icons-container">
                 <div className="icon">
-                    {location.isPublic ?
-                        <img className={"public"}
-                             alt="This is a public spot. Everyone can see it."
-                             title="This is a public spot. Everyone can see it."
-                             src={globe_icon}/> :
-                        <img alt="This is a private spot. Only you can see it."
-                             title="This is a private spot. Only you can see it."
-                             src={lock_icon}/>
-                    }
-
+                  <a href={link} target="_blank" rel="noreferrer">
+                    <img src={link_icon} alt="Link to the BAFU station" title="Link to the BAFU station"/>
+                  </a>
                 </div>
                 {user &&
                     <MswEditSpot location={location}/>
