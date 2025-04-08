@@ -85,26 +85,6 @@ export const Spot = (props: SpotProps) => {
                 {user &&
                     <MswEditSpot location={location}/>
                 }
-                {/* {user &&
-                    <div className='icon' onClick={() => handleShowEditModal()}>
-                      <img alt="Edit this private spot." title="Edit this private spot." src={edit_icon}/>
-                    </div>
-                }
-                <Modal show={showEditModal} onHide={handleCancelEditModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Edit private spot</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>You won't be able to retrieve this spot. If you need it again you will have to add a new one.</Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="outline-dark" onClick={handleCancelEditModal}>
-                            Cancel
-                        </Button>
-                        <Button variant="danger" onClick={() => handleEditSpotAndCloseModal(location, editPrivateSpotRequest)}>
-                            Delete Spot
-                        </Button>
-                    </Modal.Footer>
-                </Modal> */}
-
                 {user &&
                     <div className="icon" onClick={() => handleShowConfirmationModal()}>
                         <img alt="Delete this spot from your dashboard." title="Delete this spot from your dashboard." src={delete_icon}/>
