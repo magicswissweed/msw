@@ -4,10 +4,9 @@ import {ApiSpotInformation, EditPrivateSpotRequest, SpotsApi} from '../../../gen
 import {MswEditSpot} from "../../../spot/edit/MswEditSpot";
 import {MswMeasurement} from './measurement/MswMeasurement';
 import {MswMiniGraph} from './graph/miniGraph/MswMiniGraph';
-import arrow_down from '../../../assets/arrow_down.svg';
-import lock from '../../../assets/lock.svg';
+import arrow_down_icon from '../../../assets/arrow_down.svg';
 import delete_icon from '../../../assets/trash.svg';
-import globe from '../../../assets/globe.svg';
+import link_icon from '../../../assets/link.svg';
 import drag_drop_icon from '../../../assets/drag_drop_icon.svg';
 import {authConfiguration} from '../../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../../user/UserAuthContext';
@@ -64,47 +63,20 @@ export const Spot = (props: SpotProps) => {
             </div>
             <div className="spotContainer">
                 <div className="spot-title">
-                    <a href={link} target="_blank" rel="noreferrer">{location.name}</a>
+                    {location.name}
                 </div>
                 <MswMeasurement location={location}/>
                 <MswMiniGraph location={location} showGraphOfType={props.showGraphOfType}/>
             </div>
             <div className="icons-container">
                 <div className="icon">
-                    {location.isPublic ?
-                        <img className={"public"}
-                             alt="This is a public spot. Everyone can see it."
-                             title="This is a public spot. Everyone can see it."
-                             src={globe}/> :
-                        <img alt="This is a private spot. Only you can see it."
-                             title="This is a private spot. Only you can see it."
-                             src={lock}/>
-                    }
-
+                  <a href={link} target="_blank" rel="noreferrer">
+                    <img src={link_icon} alt="Link to the BAFU station" title="Link to the BAFU station"/>
+                  </a>
                 </div>
                 {user &&
                     <MswEditSpot location={location}/>
                 }
-                {/* {user &&
-                    <div className='icon' onClick={() => handleShowEditModal()}>
-                      <img alt="Edit this private spot." title="Edit this private spot." src={edit_icon}/>
-                    </div>
-                }
-                <Modal show={showEditModal} onHide={handleCancelEditModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Edit private spot</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>You won't be able to retrieve this spot. If you need it again you will have to add a new one.</Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="outline-dark" onClick={handleCancelEditModal}>
-                            Cancel
-                        </Button>
-                        <Button variant="danger" onClick={() => handleEditSpotAndCloseModal(location, editPrivateSpotRequest)}>
-                            Delete Spot
-                        </Button>
-                    </Modal.Footer>
-                </Modal> */}
-
                 {user &&
                     <div className="icon" onClick={() => handleShowConfirmationModal()}>
                         <img alt="Delete this spot from your dashboard." title="Delete this spot from your dashboard." src={delete_icon}/>
@@ -125,7 +97,7 @@ export const Spot = (props: SpotProps) => {
                     </Modal.Footer>
                 </Modal>
                 <div className="collapsible-icon icon arrow-icon">
-                    <img alt="extend forecast" src={arrow_down}/>
+                    <img alt="extend forecast" src={arrow_down_icon}/>
                 </div>
             </div>
         </>
