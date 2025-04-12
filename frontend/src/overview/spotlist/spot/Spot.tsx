@@ -157,8 +157,4 @@ export const Spot = (props: SpotProps) => {
         locationsService.deleteLocation(location.id!);
     }
 
-    async function editSpot(location: ApiSpotInformation, editPrivateSpotRequest: EditPrivateSpotRequest) {
-        let config = await authConfiguration(token);
-        new SpotsApi(config).editPrivateSpot(location.id!, editPrivateSpotRequest!); // no await to not be blocking
-    }
 }
