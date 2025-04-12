@@ -58,8 +58,12 @@ export class MswMeasurement extends Component<MeasurementsProps> {
             return "flow_good"
         }
 
-        if (this.forecastShowsTendencyToBecomeGood(_flow, forecast)) {
-            return "flow_could_become_good";
+        try {
+            if (this.forecastShowsTendencyToBecomeGood(_flow, forecast)) {
+                return "flow_could_become_good";
+            }
+        } catch (e) {
+            // if error -> red
         }
 
         return "flow_bad";
