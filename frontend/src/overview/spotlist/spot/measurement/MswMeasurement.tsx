@@ -1,6 +1,6 @@
 import './MswMeasurement.scss'
 import {Component} from 'react';
-import {ApiSpotInformation} from '../../../../gen/msw-api-ts';
+import {ApiForecast, ApiLineEntry, ApiSpotInformation} from '../../../../gen/msw-api-ts';
 
 interface MeasurementsProps {
     location: ApiSpotInformation
@@ -36,7 +36,7 @@ export class MswMeasurement extends Component<MeasurementsProps> {
     private getFlow() {
         let flow: number = this.location.currentSample!.flow;
         return <>
-            <div className={this.getFlowColor(flow)}>{flow}</div>
+            <div className={this.getFlowColor(flow, this.location.forecast)}>{flow}</div>
             <div className="unit">
                 m<sup>3</sup>/s
             </div>
@@ -53,17 +53,37 @@ export class MswMeasurement extends Component<MeasurementsProps> {
         </>;
     }
 
-    private getFlowColor(_flow: number) {
-
-        if (_flow < this.location.minFlow) {
-            return "flow_bad";
+    private getFlowColor(_flow: number, forecast: ApiForecast) {
+        if (this.isInSurfableRange(_flow)) {
+            return "flow_good"
         }
 
-        if (_flow < this.location.maxFlow) {
-            return "flow_good";
+        if (this.forecastShowsTendencyToBecomeGood(_flow, forecast)) {
+            return "flow_could_become_good";
         }
 
         return "flow_bad";
+    }
+
+    private isInSurfableRange(_flow: number) {
+        return _flow > this.location.minFlow && _flow < this.location.maxFlow;
+    }
+
+    private forecastShowsTendencyToBecomeGood(flow: number, forecast: ApiForecast) {
+        function getMinFlowInLine(min: Array<ApiLineEntry>) {
+            return Math.min(...min.map(entry => entry.flow));
+        }
+
+        function getMaxFlowInLine(max: Array<ApiLineEntry>) {
+            return Math.max(...max.map(entry => entry.flow));
+        }
+
+        let minFlowInForecast = getMinFlowInLine(forecast.min);
+        let maxFlowInForecast = getMaxFlowInLine(forecast.max);
+        return this.isInSurfableRange(minFlowInForecast) ||
+            this.isInSurfableRange(maxFlowInForecast) ||
+            (flow < this.location.minFlow && maxFlowInForecast > this.location.minFlow) ||
+            (flow > this.location.maxFlow && minFlowInForecast < this.location.maxFlow)
     }
 
     private getTemp() {
