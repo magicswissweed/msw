@@ -19,10 +19,9 @@ import java.nio.charset.StandardCharsets;
 @Service
 public class FirebaseInitialize {
 
+    private final FirebaseConfigProperties firebaseConfigProperties;
     @Value("${spring.datasource.url}")
     String databaseUrl;
-
-    private final FirebaseConfigProperties firebaseConfigProperties;
 
     public FirebaseInitialize(FirebaseConfigProperties firebaseConfigProperties) {
         this.firebaseConfigProperties = firebaseConfigProperties;

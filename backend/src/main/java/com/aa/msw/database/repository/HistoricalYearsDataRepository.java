@@ -37,7 +37,8 @@ public class HistoricalYearsDataRepository extends AbstractRepository
             return Collections.emptyMap();
         }
         try {
-            LinkedHashMap<String, Double> tempMap = objectMapper.readValue(jsonb.data(), new TypeReference<>() {});
+            LinkedHashMap<String, Double> tempMap = objectMapper.readValue(jsonb.data(), new TypeReference<>() {
+            });
 
             return tempMap.entrySet().stream()
                     .collect(Collectors.toMap(

@@ -15,7 +15,7 @@ export const MswSpotMap: React.FC<MswSpotMapProps> = (props: MswSpotMapProps) =>
     return <>
         <div className='map-including-switch-container'>
             <MswSpotMapPerCategory spots={showSpotCategory == ApiSpotSpotTypeEnum.RiverSurf ?
-                props.riverSurfLocations : props.bungeeSurfLocations} />
+                props.riverSurfLocations : props.bungeeSurfLocations}/>
 
             <Form>
                 <Row className="align-items-center">
@@ -26,7 +26,7 @@ export const MswSpotMap: React.FC<MswSpotMapProps> = (props: MswSpotMapProps) =>
                             id="graph-toggle"
                             checked={showSpotCategory === ApiSpotSpotTypeEnum.BungeeSurf}
                             onChange={() => {
-                                if(showSpotCategory === ApiSpotSpotTypeEnum.RiverSurf) {
+                                if (showSpotCategory === ApiSpotSpotTypeEnum.RiverSurf) {
                                     setShowSpotCategory(ApiSpotSpotTypeEnum.BungeeSurf)
                                 } else {
                                     setShowSpotCategory(ApiSpotSpotTypeEnum.RiverSurf)

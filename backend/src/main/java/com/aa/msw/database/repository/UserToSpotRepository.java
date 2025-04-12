@@ -47,7 +47,7 @@ public class UserToSpotRepository extends AbstractRepository<UserToSpotId, UserT
     @Transactional
     public void updatePrivateSpot(Spot updatedSpot) {
         Spot existingSpot = spotDao.get(updatedSpot.getId());
-        if (!existingSpot.isPublic() && userHasSpot(existingSpot.getId())){
+        if (!existingSpot.isPublic() && userHasSpot(existingSpot.getId())) {
             spotDao.update(updatedSpot);
         }
     }
@@ -55,7 +55,7 @@ public class UserToSpotRepository extends AbstractRepository<UserToSpotId, UserT
     private void increasePositionOfAllSpotsOfTypeByOne(SpotTypeEnum type) {
         List<UserToSpot> userToSpots = getUserToSpotOrderedOfType(type);
 
-        for(int i = 0; i < userToSpots.size(); i++) {
+        for (int i = 0; i < userToSpots.size(); i++) {
             UserToSpot userToSpot = userToSpots.get(i);
             userToSpot.setPosition(i + 1);
             update(userToSpot);

@@ -37,7 +37,7 @@ export const SpotList = (props: SpotListProps) => {
             // no await, because we don't want the frontend to be blocked
             saveSpotsOrdering(locations);
         }
-    },[locations])
+    }, [locations])
 
     const handleDrop = async (result: any) => {
         if (!result.destination) return;
@@ -58,8 +58,11 @@ export const SpotList = (props: SpotListProps) => {
                             {locations.map((location: ApiSpotInformation, index: number) => (
                                 <Draggable key={location.id} draggableId={location.id!} index={index}>
                                     {(draggableProvided: any) => (
-                                        <div className="draggable-container" ref={draggableProvided.innerRef} {...draggableProvided.draggableProps}>
-                                            <Spot location={location} dragHandleProps={draggableProvided.dragHandleProps} showGraphOfType={props.showGraphOfType} />
+                                        <div className="draggable-container"
+                                             ref={draggableProvided.innerRef} {...draggableProvided.draggableProps}>
+                                            <Spot location={location}
+                                                  dragHandleProps={draggableProvided.dragHandleProps}
+                                                  showGraphOfType={props.showGraphOfType}/>
                                         </div>
                                     )}
                                 </Draggable>

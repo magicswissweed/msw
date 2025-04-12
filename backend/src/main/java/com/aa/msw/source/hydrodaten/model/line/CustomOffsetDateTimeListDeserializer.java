@@ -15,10 +15,11 @@ import java.util.stream.Collectors;
 public class CustomOffsetDateTimeListDeserializer extends JsonDeserializer<List<OffsetDateTime>> {
     @Override
     public List<OffsetDateTime> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        List<String> dates = p.readValueAs(new TypeReference<>() {});
+        List<String> dates = p.readValueAs(new TypeReference<>() {
+        });
         return dates.stream()
                 .map(date -> {
-                    if(date.contains("T")) {
+                    if (date.contains("T")) {
                         // for example we get something like this for a forecast: "2024-12-29T00:00:00.000+01:00"
                         return OffsetDateTime.parse(date, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
                     } else {

@@ -83,19 +83,19 @@ tasks.register<GenerateTask>("openApiGenerateSpring") {
 
     // See https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/spring.md for all options
     configOptions = mapOf(
-            "interfaceOnly" to "true",
-            "useJakartaEe" to "true",
-            "sourceFolder" to "", // With the default main/src/java in generated-src, the package name does not match
-            "useTags" to "true"
+        "interfaceOnly" to "true",
+        "useJakartaEe" to "true",
+        "sourceFolder" to "", // With the default main/src/java in generated-src, the package name does not match
+        "useTags" to "true",
     )
 
     doLast {
         // OpenAPI generator generates other files, we don't need
         delete(
-                "$projectDir/$generatedApiDir/.openapi-generator",
-                "$projectDir/$generatedApiDir/.openapi-generator-ignore",
-                "$projectDir/$generatedApiDir/pom.xml",
-                "$projectDir/$generatedApiDir/README.md"
+            "$projectDir/$generatedApiDir/.openapi-generator",
+            "$projectDir/$generatedApiDir/.openapi-generator-ignore",
+            "$projectDir/$generatedApiDir/pom.xml",
+            "$projectDir/$generatedApiDir/README.md",
         )
     }
 }
@@ -108,8 +108,8 @@ tasks.register<GenerateTask>("openApiGenerateReact") {
     outputDir = "$projectDir/../frontend/src/gen/msw-api-ts"
 
     configOptions = mapOf(
-            "npmName" to "msw-api-ts",
-            "supportsES6" to "true",
+        "npmName" to "msw-api-ts",
+        "supportsES6" to "true",
     )
 }
 
@@ -154,10 +154,10 @@ tasks.openApiGenerate {
     doLast {
         // OpenAPI generator generates other files, we don't need
         delete(
-                "$projectDir/$generatedApiDir/.openapi-generator",
-                "$projectDir/$generatedApiDir/.openapi-generator-ignore",
-                "$projectDir/$generatedApiDir/pom.xml",
-                "$projectDir/$generatedApiDir/README.md"
+            "$projectDir/$generatedApiDir/.openapi-generator",
+            "$projectDir/$generatedApiDir/.openapi-generator-ignore",
+            "$projectDir/$generatedApiDir/pom.xml",
+            "$projectDir/$generatedApiDir/README.md",
         )
     }
 }

@@ -33,29 +33,30 @@ public class StationFetchService extends AbstractFetchService {
         try {
             // The stations from existenz api including latitude and longitude
             Map<Integer, StationInformation> existenzStations = existenzStationFetchService.fetchStations().stream()
-                    .collect(Collectors.toMap(StationInformation::stationId, s->s));
+                    .collect(Collectors.toMap(StationInformation::stationId, s -> s));
 
             String stationsString = fetchAsString(STATIONS_FETCH_URL);
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
-            List<HydroStation> hydroStations = objectMapper.readValue(stationsString, new TypeReference<>() {});
+            List<HydroStation> hydroStations = objectMapper.readValue(stationsString, new TypeReference<>() {
+            });
             return hydroStations.stream()
                     .map(hydroStation -> {
                         Double latitude = null;
                         Double longitude = null;
                         try {
-                             latitude = existenzStations.get(Integer.parseInt(hydroStation.key())).latitude();
-                             longitude = existenzStations.get(Integer.parseInt(hydroStation.key())).longitude();
+                            latitude = existenzStations.get(Integer.parseInt(hydroStation.key())).latitude();
+                            longitude = existenzStations.get(Integer.parseInt(hydroStation.key())).longitude();
                         } catch (Exception e) {
                             // somehow the stations returned from hydrodaten are different to the ones from existenz.
                             // that's why this case exists
                         }
                         return new Station(
-                                    new StationId(),
-                                    Integer.parseInt(hydroStation.key()),
-                                    hydroStation.label(),
-                                    latitude,
-                                    longitude);
+                                new StationId(),
+                                Integer.parseInt(hydroStation.key()),
+                                hydroStation.label(),
+                                latitude,
+                                longitude);
                     })
                     .collect(Collectors.toSet());
         } catch (Exception e) {

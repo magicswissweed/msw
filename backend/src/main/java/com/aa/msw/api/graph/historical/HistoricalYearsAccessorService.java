@@ -35,11 +35,11 @@ public class HistoricalYearsAccessorService {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public Map<Integer, HistoricalYearsData> getHistoricalYearsData() {
-        if(!historicalYearsData.isEmpty()) {
+        if (!historicalYearsData.isEmpty()) {
             return historicalYearsData;
         }
         Set<HistoricalYearsData> historicalDataFromDb = hystoricalYearsDao.getAllHistoricalYearsData();
-        if(historicalDataFromDb.isEmpty()) {
+        if (historicalDataFromDb.isEmpty()) {
             fetchHistoricalYearsDataAndSaveToDb();
         } else {
             historicalYearsData = setToMap(historicalDataFromDb);
@@ -51,7 +51,7 @@ public class HistoricalYearsAccessorService {
     @Transactional
     public void fetchHistoricalYearsDataAndSaveToDb() {
         Set<HistoricalYearsData> fetchedHistoricalYearsData = fetchHistoricalYears();
-        if(!fetchedHistoricalYearsData.isEmpty()) {
+        if (!fetchedHistoricalYearsData.isEmpty()) {
             hystoricalYearsDao.deleteAll();
             persistHistoricalYearsToDb(fetchedHistoricalYearsData);
             historicalYearsData = setToMap(fetchedHistoricalYearsData);

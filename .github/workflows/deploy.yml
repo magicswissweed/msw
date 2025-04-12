@@ -13,16 +13,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Run deployment script on remote server
-      uses: appleboy/ssh-action@v1.1.0
-      with:
-        host: ssh.ponteshare.ch
-        username: studi
-        password: ${{ secrets.SSH_PASSWORD }}
-        port: 1910
-        script: |
-          cd /opt/ponte-services/magicswissweed
-          sudo ./deploy.sh ${{ github.event.inputs.docker_image_name }}
+      - name: Run deployment script on remote server
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ssh.ponteshare.ch
+          username: studi
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: 1910
+          script: |
+            cd /opt/ponte-services/magicswissweed
+            sudo ./deploy.sh ${{ github.event.inputs.docker_image_name }}

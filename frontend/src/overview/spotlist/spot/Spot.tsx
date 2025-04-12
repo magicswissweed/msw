@@ -55,11 +55,11 @@ export const Spot = (props: SpotProps) => {
 
         return <>
             <div className='icons-container'>
-              {user &&
-                <div className={'icon drag-drop-icon arrow-icon'} {...props.dragHandleProps}>
-                  <img alt="Sort the spots on your dashboard." src={drag_drop_icon}/>
-                </div>
-              }
+                {user &&
+                    <div className={'icon drag-drop-icon arrow-icon'} {...props.dragHandleProps}>
+                        <img alt="Sort the spots on your dashboard." src={drag_drop_icon}/>
+                    </div>
+                }
             </div>
             <div className="spotContainer">
                 <div className="spot-title">
@@ -70,23 +70,25 @@ export const Spot = (props: SpotProps) => {
             </div>
             <div className="icons-container">
                 <div className="icon">
-                  <a href={link} target="_blank" rel="noreferrer">
-                    <img src={link_icon} alt="Link to the BAFU station" title="Link to the BAFU station"/>
-                  </a>
+                    <a href={link} target="_blank" rel="noreferrer">
+                        <img src={link_icon} alt="Link to the BAFU station" title="Link to the BAFU station"/>
+                    </a>
                 </div>
                 {user &&
                     <MswEditSpot location={location}/>
                 }
                 {user &&
                     <div className="icon" onClick={() => handleShowConfirmationModal()}>
-                        <img alt="Delete this spot from your dashboard." title="Delete this spot from your dashboard." src={delete_icon}/>
+                        <img alt="Delete this spot from your dashboard." title="Delete this spot from your dashboard."
+                             src={delete_icon}/>
                     </div>
                 }
                 <Modal show={showConfirmationModal} onHide={handleCancelConfirmationModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Are you sure?</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>You won't be able to retrieve this spot. If you need it again you will have to add a new one.</Modal.Body>
+                    <Modal.Body>You won't be able to retrieve this spot. If you need it again you will have to add a new
+                        one.</Modal.Body>
                     <Modal.Footer>
                         <Button variant="outline-dark" onClick={handleCancelConfirmationModal}>
                             Cancel

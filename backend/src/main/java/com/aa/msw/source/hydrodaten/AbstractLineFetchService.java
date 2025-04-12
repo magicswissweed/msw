@@ -104,5 +104,7 @@ public abstract class AbstractLineFetchService extends AbstractFetchService {
         return new TwentyFiveToSeventyFivePercentile(seventyFivePercentile, twentyFivePercentile);
     }
 
-    protected record TwentyFiveToSeventyFivePercentile(HydroLine seventyFivePercentile, HydroLine twentyFivePercentile) { }
+    protected record TwentyFiveToSeventyFivePercentile(HydroLine seventyFivePercentile,
+                                                       HydroLine twentyFivePercentile) {
+    }
 }

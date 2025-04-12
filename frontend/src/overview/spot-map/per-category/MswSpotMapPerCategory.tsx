@@ -5,7 +5,7 @@ import red_dot from "../../../assets/map/red_dot.png";
 import React from "react";
 import './MswSpotMapPerCategory.scss';
 
-const center = { lat: 47.05, lng: 8.30 }; // Luzern / ca. Mitte der Schweiz
+const center = {lat: 47.05, lng: 8.30}; // Luzern / ca. Mitte der Schweiz
 
 // If one station handles multiple spots we add a little offset, so we can see both
 const getOffsetPosition = (latitude: number, longitude: number, index: number) => {

@@ -77,7 +77,7 @@ export const MswOverviewPage = () => {
                             id="graph-toggle"
                             checked={showGraphOfType === GraphTypeEnum.Historical}
                             onChange={() => {
-                                if(showGraphOfType === GraphTypeEnum.Forecast) {
+                                if (showGraphOfType === GraphTypeEnum.Forecast) {
                                     setShowGraphOfType(GraphTypeEnum.Historical)
                                 } else {
                                     setShowGraphOfType(GraphTypeEnum.Forecast)

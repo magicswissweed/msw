@@ -120,7 +120,7 @@ public class SpotsApiService {
     }
 
     public void editSpot(Spot updatedSpot) throws NoSampleAvailableException {
-        if(spotDao.isPublicSpot(updatedSpot.spotId())) {
+        if (spotDao.isPublicSpot(updatedSpot.spotId())) {
             Spot newPrivateSpot = new Spot(
                     new SpotId(), // needs new ID - not the same as the old spot
                     updatedSpot.isPublic(),

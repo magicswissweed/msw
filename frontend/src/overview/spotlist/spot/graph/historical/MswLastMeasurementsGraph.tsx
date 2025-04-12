@@ -49,7 +49,9 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     // eslint-disable-next-line
     // needed (also the empty array), because otherwise the backend would get polled endlessly
     // eslint-disable-next-line
-    useEffect(() => { fetchLast40DaysSamples() }, []);
+    useEffect(() => {
+        fetchLast40DaysSamples()
+    }, []);
 
     async function fetchLast40DaysSamples() {
         let config = await authConfiguration(token);
@@ -78,7 +80,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
                 {getCurrentTimeReferenceLine()}
                 {getMeasuredLine()}
                 {getCartesianGrid()}
-                {getXAxis(ticks, withXAxis, v => new Date(v).getDate() + "." + (new Date(v).getMonth()+1) + ".")}
+                {getXAxis(ticks, withXAxis, v => new Date(v).getDate() + "." + (new Date(v).getMonth() + 1) + ".")}
 
                 {withMinMaxReferenceLines && getMinMaxReferenceLines(location)}
                 {withTooltip && getTooltip()}
@@ -94,7 +96,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
         const oneDayInMs = 24 * 60 * 60 * 1000;
 
         return Array.from(
-            { length: nrOfTicks },
+            {length: nrOfTicks},
             (_, i) => Date.now() - oneDayInMs * i * (nrOfDays / nrOfTicks)
         );
     }

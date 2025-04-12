@@ -31,7 +31,7 @@ $icons-container-width: 40px;
     display: none;
   }
 
-  @include small () {
+  @include small() {
     display: flex;
   }
 
@@ -57,7 +57,7 @@ $icons-container-width: 40px;
   }
 }
 
-details>summary div.collapsible-icon {
+details > summary div.collapsible-icon {
   transition: all 1s;
   align-self: center;
   width: 100%;
@@ -91,7 +91,7 @@ summary::-webkit-details-marker {
   width: 100%;
 }
 
-.spot-title>a {
+.spot-title > a {
   flex: 1;
   text-overflow: ellipsis;
   color: #000000;

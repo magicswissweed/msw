@@ -1,6 +1,6 @@
 import './MswHeader.scss'
 import React, {useState} from 'react';
-import { Button } from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import {useUserAuth} from '../user/UserAuthContext';
 import {MswAddSpot} from "../spot/add/MswAddSpot";
 import {MswLoginModal} from "../user/login/MswLoginModal";
@@ -30,7 +30,7 @@ export const MswHeader = () => {
             <MswLoginModal isOpen={showLoginModal}
                            closeModal={() => setShowLoginModal(false)}
                            openSignupModal={() => setShowSignupModal(true)}
-                           openForgotPasswordModal={() => setShowForgotPasswordModal(true)} />
+                           openForgotPasswordModal={() => setShowForgotPasswordModal(true)}/>
             <MswSignUpModal isOpen={showSignupModal}
                             closeModal={() => setShowSignupModal(false)}
                             openLoginModal={() => setShowLoginModal(true)}/>

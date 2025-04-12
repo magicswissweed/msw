@@ -94,7 +94,7 @@ export const MswLoginModal = (props: MswLoginModalProps) => {
                                 />
                             </Form.Group>
                             <div className='text-center'>
-                              <Button variant="link" onClick={onOpenForgotPasswordModal}>Forgot Password</Button>
+                                <Button variant="link" onClick={onOpenForgotPasswordModal}>Forgot Password</Button>
                             </div>
                         </Form>
                         {/*<div className="google-button-container">*/}

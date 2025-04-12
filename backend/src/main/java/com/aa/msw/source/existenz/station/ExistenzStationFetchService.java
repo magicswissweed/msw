@@ -18,6 +18,15 @@ import java.util.stream.Collectors;
 public class ExistenzStationFetchService extends AbstractFetchService {
     static String EXISTENZ_FETCH_STATIONS_URL = "https://api.existenz.ch/apiv1/hydro/locations?app=magicswissweed.ch&version=0.2.0";
 
+    private static boolean isNumber(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public List<StationInformation> fetchStations() throws IOException, URISyntaxException {
         HashMap<String, ExistenzStation> existenzStations = fetchData(EXISTENZ_FETCH_STATIONS_URL).payload();
 
@@ -28,15 +37,6 @@ public class ExistenzStationFetchService extends AbstractFetchService {
                         entry.getValue().details().latitude(),
                         entry.getValue().details().longitude()))
                 .collect(Collectors.toList());
-    }
-
-    private static boolean isNumber(String s) {
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     private ExistenzResponseStation fetchData(String url) throws IOException, URISyntaxException {

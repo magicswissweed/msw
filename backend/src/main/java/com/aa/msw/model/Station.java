@@ -8,7 +8,7 @@ public record Station(
         Integer stationId,
         String label,
         Double latitude,
-        Double longitude)implements HasId<StationId> {
+        Double longitude) implements HasId<StationId> {
     @Override
     public StationId getId() {
         return databaseId;

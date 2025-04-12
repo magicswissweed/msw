@@ -22,14 +22,14 @@ interface MswEditSpotProps {
     location: ApiSpotInformation;
 }
 
-export const MswEditSpot: React.FC<MswEditSpotProps> = ({ location }) => {
+export const MswEditSpot: React.FC<MswEditSpotProps> = ({location}) => {
     // define modal states
     const [showEditSpotModal, setShowEditSpotModal] = useState(false);
     const handleShowEditSpotModal = () => setShowEditSpotModal(true);
     const handleEditSpotAndCloseModal = (e: { preventDefault: any; }) => {
-      // TODO: this prevents page reload (needed for min/maxFlow changes to show) -> remove?
-      e.preventDefault();
-      editSpot().then(() => setIsSubmitButtonDisabled(false));
+        // TODO: this prevents page reload (needed for min/maxFlow changes to show) -> remove?
+        e.preventDefault();
+        editSpot().then(() => setIsSubmitButtonDisabled(false));
     }
     const handleCancelEditSpotModal = () => setShowEditSpotModal(false);
 

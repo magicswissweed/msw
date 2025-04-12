@@ -10,9 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CronJobDeleteOldEntries {
-    private static final Logger LOG = LoggerFactory.getLogger(RequestUserInterceptor.class);
-
     public static final int DEFAULT_RETENTION_TIME_IN_DAYS = 30;
+    private static final Logger LOG = LoggerFactory.getLogger(RequestUserInterceptor.class);
     private final SampleDao sampleDao;
     private final ForecastDao forecastDao;
 

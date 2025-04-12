@@ -97,7 +97,7 @@ export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
                         tickFormatter={v => new Date(v).toLocaleString('de-CH', {month: 'short'})}
                         minTickGap={1}
                         hide={!this.withXAxis}
-                        tick={{ dx: 20 }}
+                        tick={{dx: 20}}
                     />
 
                     {this.withMinMaxReferenceLines && getMinMaxReferenceLines(this.location)}
@@ -141,21 +141,21 @@ export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
     private getTicks() {
         const nrOfTicks = 12;
         return Array.from(
-          { length: nrOfTicks },
-          (_, i) => new Date(2025, i, 1).getTime()
+            {length: nrOfTicks},
+            (_, i) => new Date(2025, i, 1).getTime()
         );
     }
 
     private getLegend() {
         return <Legend
-                    payload={[
-                        {type: "line", value: LINE_NAME_CURRENT_YEAR, color: "green"},
-                        {type: "line", value: LINE_NAME_MEDIAN, color: "blue"},
-                        {type: "square", value: "25.-75. percentile", color: "#1e9196"},
-                        {type: "square", value: "min-max", color: "#75d4d9"},
-                    ]}
-                    wrapperStyle={{ textTransform: 'uppercase' }}
-                />;
+            payload={[
+                {type: "line", value: LINE_NAME_CURRENT_YEAR, color: "green"},
+                {type: "line", value: LINE_NAME_MEDIAN, color: "blue"},
+                {type: "square", value: "25.-75. percentile", color: "#1e9196"},
+                {type: "square", value: "min-max", color: "#75d4d9"},
+            ]}
+            wrapperStyle={{textTransform: 'uppercase'}}
+        />;
     }
 
     private normalizeGraphData(historicalYearsData: ApiHistoricalYears): NormalizedDataItem[] {

@@ -2,7 +2,8 @@
 
 ## Initial Setup
 
-1. Copy [application.properties-TEMPLATE](backend%2Fsrc%2Fmain%2Fresources%2Fapplication.properties-TEMPLATE) and rename to `application.properties`
+1. Copy [application.properties-TEMPLATE](backend%2Fsrc%2Fmain%2Fresources%2Fapplication.properties-TEMPLATE) and rename
+   to `application.properties`
     - replace the firebase keys
 2. Copy [.env.local-TEMPLATE](frontend%2F.env.local-TEMPLATE) and rename it to `.env.local`
     - replace the secret values
@@ -22,8 +23,8 @@
     - name: msw
     - username: develop
     - password: develop
-  
-    and run the following commands to populate the database:
+
+   and run the following commands to populate the database:
 
     ```sql
       INSERT INTO public.spot_table (id, type, stationid, name, minflow, maxflow, ispublic) VALUES ('815cf49f-8c7c-4801-8b2d-62fb874486dd', 'BUNGEE_SURF', 2473, 'St. Gallen', 130, 1300, true);
@@ -34,7 +35,9 @@
       INSERT INTO public.spot_table (id, type, stationid, name, minflow, maxflow, ispublic) VALUES ('134463b8-1c0d-43d6-be3f-8693d283a419', 'RIVER_SURF', 2018, 'Your own Surfspot', 200, 400, true);
     ```
 
-3. Run the [backend](backend/src/main/java/com/aa/msw/MswApplication.java) using the Run Configuration (built in feature of IntelliJ IDEA), for VS Code, check [this Java extension](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack).
+3. Run the [backend](backend/src/main/java/com/aa/msw/MswApplication.java) using the Run Configuration (built in feature
+   of IntelliJ IDEA), for VS Code,
+   check [this Java extension](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack).
 
 ## Start the frontend
 

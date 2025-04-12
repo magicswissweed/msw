@@ -31,11 +31,11 @@ public class StationApiService {
 
     @Transactional
     public Set<Station> getStations() {
-        if(!stations.isEmpty()) {
+        if (!stations.isEmpty()) {
             return stations;
         }
         Set<Station> stationsFromDb = stationDao.getStations();
-        if(stationsFromDb.isEmpty()) {
+        if (stationsFromDb.isEmpty()) {
             fetchStationsAndSaveToDb();
         } else {
             stations = stationsFromDb;
@@ -47,7 +47,7 @@ public class StationApiService {
     @Transactional
     public void fetchStationsAndSaveToDb() {
         Set<Station> fetchedStations = fetchStations();
-        if(!fetchedStations.isEmpty()) {
+        if (!fetchedStations.isEmpty()) {
             stationDao.deleteAll();
             persistStationsToDb(fetchedStations);
             stations = fetchedStations;
@@ -55,7 +55,7 @@ public class StationApiService {
     }
 
     private void persistStationsToDb(Set<Station> fetchedStations) {
-        for(Station station : fetchedStations) {
+        for (Station station : fetchedStations) {
             stationDao.persist(station);
         }
     }

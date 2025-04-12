@@ -9,4 +9,5 @@ public record ExistenzStationDetails(@JsonProperty("id") String stationId,
                                      Integer chx,
                                      Integer chy,
                                      @JsonProperty("lat") Double latitude,
-                                     @JsonProperty("lon") Double longitude) { }
+                                     @JsonProperty("lon") Double longitude) {
+}

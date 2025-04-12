@@ -8,15 +8,6 @@ class LocationService {
     private locations: Array<ApiSpotInformation> = [];
     private subscribers: Array<SubscriberCallback> = [];
 
-    private writeSpotsToState = (res: AxiosResponse<ApiSpotInformationList, any>) => {
-        if (res && res.data && res.data.riverSurfSpots && res.data.bungeeSurfSpots) {
-            res.data.riverSurfSpots.forEach(l => l.spotType = ApiSpotSpotTypeEnum.RiverSurf);
-            res.data.bungeeSurfSpots.forEach(l => l.spotType = ApiSpotSpotTypeEnum.BungeeSurf);
-            let allLocations = res.data.bungeeSurfSpots.concat(res.data.riverSurfSpots);
-            this.setLocations(allLocations);
-        }
-    };
-
     async fetchData(token: any, showAllSpots: boolean) {
         if (showAllSpots) {
             let config = await authConfiguration(token);
@@ -24,11 +15,6 @@ class LocationService {
         } else {
             new SpotsApi().getPublicSpots().then(this.writeSpotsToState);
         }
-    }
-
-    private setLocations(locations: Array<ApiSpotInformation>): void {
-        this.locations = locations;
-        this.notifySubscribers();
     }
 
     deleteLocation(id: string): void {
@@ -42,6 +28,20 @@ class LocationService {
 
     unsubscribe(callback: SubscriberCallback): void {
         this.subscribers = this.subscribers.filter((sub) => sub !== callback);
+    }
+
+    private writeSpotsToState = (res: AxiosResponse<ApiSpotInformationList, any>) => {
+        if (res && res.data && res.data.riverSurfSpots && res.data.bungeeSurfSpots) {
+            res.data.riverSurfSpots.forEach(l => l.spotType = ApiSpotSpotTypeEnum.RiverSurf);
+            res.data.bungeeSurfSpots.forEach(l => l.spotType = ApiSpotSpotTypeEnum.BungeeSurf);
+            let allLocations = res.data.bungeeSurfSpots.concat(res.data.riverSurfSpots);
+            this.setLocations(allLocations);
+        }
+    };
+
+    private setLocations(locations: Array<ApiSpotInformation>): void {
+        this.locations = locations;
+        this.notifySubscribers();
     }
 
     private notifySubscribers(): void {

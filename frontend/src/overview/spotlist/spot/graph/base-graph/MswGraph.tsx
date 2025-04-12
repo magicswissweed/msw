@@ -111,7 +111,7 @@ export function getXAxis(ticks: number[], withXAxis: boolean, tickFormatter: (v:
             tickFormatter={tickFormatter}
             minTickGap={1}
             hide={!withXAxis}
-            tick={{ dx: 20 }}
+            tick={{dx: 20}}
         />
     );
 }

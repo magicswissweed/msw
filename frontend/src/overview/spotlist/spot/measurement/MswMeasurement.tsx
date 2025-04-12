@@ -26,7 +26,7 @@ export class MswMeasurement extends Component<MeasurementsProps> {
 
                 {this.location.currentSample!.temperature &&
                     <div className="measurement_row meas temp">
-                      {this.getTemp()}
+                        {this.getTemp()}
                     </div>
                 }
             </div>
@@ -56,11 +56,11 @@ export class MswMeasurement extends Component<MeasurementsProps> {
     private getFlowColor(_flow: number) {
 
         if (_flow < this.location.minFlow) {
-          return "flow_bad";
+            return "flow_bad";
         }
 
         if (_flow < this.location.maxFlow) {
-          return "flow_good";
+            return "flow_good";
         }
 
         return "flow_bad";
@@ -69,10 +69,10 @@ export class MswMeasurement extends Component<MeasurementsProps> {
     private getTemp() {
         let temp: number = this.location.currentSample!.temperature ?? 0;
         return <>
-              <div>{temp}</div> 
-              <div className="unit">°C</div>
+            <div>{temp}</div>
+            <div className="unit">°C</div>
         </>;
-      }
+    }
 
     private convertTimeStampToDisplayableString(timestampString: string) {
         let date = new Date(timestampString);
