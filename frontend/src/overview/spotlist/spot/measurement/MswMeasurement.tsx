@@ -70,21 +70,31 @@ export class MswMeasurement extends Component<MeasurementsProps> {
     }
 
     private forecastShowsTendencyToBecomeGood(flow: number, forecast: ApiForecast) {
-        function getMinFlowInLine(min: Array<ApiLineEntry>) {
-            return Math.min(...min.map(entry => entry.flow));
+        function getMinFlowInLine(min?: Array<ApiLineEntry>) {
+            if (!min || min.length === 0) return Number.POSITIVE_INFINITY;
+            const flows = min
+                .map(entry => entry.flow)
+                .filter(f => f != undefined);
+            return flows.length > 0 ? Math.min(...flows) : Number.POSITIVE_INFINITY;
         }
 
-        function getMaxFlowInLine(max: Array<ApiLineEntry>) {
-            return Math.max(...max.map(entry => entry.flow));
+        function getMaxFlowInLine(max?: Array<ApiLineEntry>) {
+            if (!max || max.length === 0) return Number.NEGATIVE_INFINITY;
+            const flows = max
+                .map(entry => entry.flow)
+                .filter(f => f != undefined);
+            return flows.length > 0 ? Math.max(...flows) : Number.NEGATIVE_INFINITY;
         }
 
-        let minFlowInForecast = getMinFlowInLine(forecast.min);
-        let maxFlowInForecast = getMaxFlowInLine(forecast.max);
+        const minFlowInForecast = getMinFlowInLine(forecast.min);
+        const maxFlowInForecast = getMaxFlowInLine(forecast.max);
+
         return this.isInSurfableRange(minFlowInForecast) ||
             this.isInSurfableRange(maxFlowInForecast) ||
             (flow < this.location.minFlow && maxFlowInForecast > this.location.minFlow) ||
-            (flow > this.location.maxFlow && minFlowInForecast < this.location.maxFlow)
+            (flow > this.location.maxFlow && minFlowInForecast < this.location.maxFlow);
     }
+
 
     private getTemp() {
         let temp: number = this.location.currentSample!.temperature ?? 0;
