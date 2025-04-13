@@ -1,8 +1,18 @@
-import {ApiSpotInformation, ApiSpotInformationList, ApiSpotSpotTypeEnum, SpotsApi} from "../gen/msw-api-ts";
+import {
+    ApiLineEntry,
+    ApiSpotInformation,
+    ApiSpotInformationList,
+    ApiSpotSpotTypeEnum,
+    SpotsApi
+} from "../gen/msw-api-ts";
 import {AxiosResponse} from "axios";
 import {authConfiguration} from "../api/config/AuthConfiguration";
 
 type SubscriberCallback = (locations: Array<ApiSpotInformation>) => void;
+
+export enum FlowColorEnum {
+    GREEN = "green", ORANGE = "orange", RED = "red"
+}
 
 class LocationService {
     private locations: Array<ApiSpotInformation> = [];
@@ -46,6 +56,52 @@ class LocationService {
 
     private notifySubscribers(): void {
         this.subscribers.forEach((callback) => callback(this.locations));
+    }
+
+    public getFlowColorEnum(spot: ApiSpotInformation, _flow: number): FlowColorEnum {
+        if (this.isInSurfableRange(spot, _flow)) {
+            return FlowColorEnum.GREEN;
+        }
+
+        try {
+            if (this.forecastShowsTendencyToBecomeGood(spot, _flow)) {
+                return FlowColorEnum.ORANGE;
+            }
+        } catch (e) {
+            // if error -> red
+        }
+
+        return FlowColorEnum.RED;
+    }
+
+    private forecastShowsTendencyToBecomeGood(spot: ApiSpotInformation, flow: number) {
+        function getMinFlowInLine(min?: Array<ApiLineEntry>) {
+            if (!min || min.length === 0) return Number.POSITIVE_INFINITY;
+            const flows = min
+                .map(entry => entry.flow)
+                .filter(f => f != undefined);
+            return flows.length > 0 ? Math.min(...flows) : Number.POSITIVE_INFINITY;
+        }
+
+        function getMaxFlowInLine(max?: Array<ApiLineEntry>) {
+            if (!max || max.length === 0) return Number.NEGATIVE_INFINITY;
+            const flows = max
+                .map(entry => entry.flow)
+                .filter(f => f != undefined);
+            return flows.length > 0 ? Math.max(...flows) : Number.NEGATIVE_INFINITY;
+        }
+
+        const minFlowInForecast = getMinFlowInLine(spot.forecast.min);
+        const maxFlowInForecast = getMaxFlowInLine(spot.forecast.max);
+
+        return this.isInSurfableRange(spot, minFlowInForecast) ||
+            this.isInSurfableRange(spot, maxFlowInForecast) ||
+            (flow < spot.minFlow && maxFlowInForecast > spot.minFlow) ||
+            (flow > spot.maxFlow && minFlowInForecast < spot.maxFlow);
+    }
+
+    private isInSurfableRange(location: ApiSpotInformation, _flow: number) {
+        return _flow > location.minFlow && _flow < location.maxFlow;
     }
 }
 

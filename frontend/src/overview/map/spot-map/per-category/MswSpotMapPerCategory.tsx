@@ -3,6 +3,7 @@ import {GoogleMap, useLoadScript} from "@react-google-maps/api";
 import {MarkerClusterer} from "@googlemaps/markerclusterer";
 import {ApiSpotInformation} from "../../../../gen/msw-api-ts";
 import './MswSpotMapPerCategory.scss';
+import {locationsService} from "../../../../service/LocationsService";
 
 export const mapCenter = {lat: 47.05, lng: 8.30}; // Luzern / ca. Mitte der Schweiz
 
@@ -30,11 +31,11 @@ export const MswSpotMapPerCategory = ({spots}: MswSpotMapPropsPerCategory) => {
 
     const renderClusterIcon = ({markers, count, position}: any) => {
         const colors = markers.map((m: any) => m.customColor);
-        const uniqueColors = new Set(colors);
+        const uniqueColors = new Set<string>(colors);
 
-        let color = "yellow";
+        let color = "blue"; // default color for clustered spots if not all spots have the same color
         if (uniqueColors.size === 1) {
-            color = uniqueColors.has("green") ? "green" : "red";
+            color = [...uniqueColors][0];
         }
 
         return new google.maps.Marker({
@@ -59,21 +60,21 @@ export const MswSpotMapPerCategory = ({spots}: MswSpotMapPropsPerCategory) => {
     const createMarkers = (spots: ApiSpotInformation[]) => {
         return spots.map((spot, index) => {
             const position = getOffsetPosition(spot.station.latitude, spot.station.longitude, index);
-            const isGreen = spot.currentSample.flow >= spot.minFlow && spot.currentSample.flow <= spot.maxFlow;
+            const flowColorEnum = locationsService.getFlowColorEnum(spot, spot.currentSample.flow)
 
             const marker = new google.maps.Marker({
                 position,
                 icon: {
                     path: google.maps.SymbolPath.CIRCLE,
                     scale: 10,
-                    fillColor: isGreen ? "green" : "red",
+                    fillColor: flowColorEnum.toString(),
                     fillOpacity: 1,
                     strokeWeight: 1,
                     strokeColor: "white",
                 },
             });
 
-            (marker as any).customColor = isGreen ? "green" : "red";
+            (marker as any).customColor = flowColorEnum.toString();
             return marker;
         });
     };

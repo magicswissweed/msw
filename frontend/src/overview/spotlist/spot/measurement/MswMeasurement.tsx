@@ -1,6 +1,7 @@
 import './MswMeasurement.scss'
 import {Component} from 'react';
-import {ApiForecast, ApiLineEntry, ApiSpotInformation} from '../../../../gen/msw-api-ts';
+import {ApiSpotInformation} from '../../../../gen/msw-api-ts';
+import {FlowColorEnum, locationsService} from "../../../../service/LocationsService";
 
 interface MeasurementsProps {
     location: ApiSpotInformation
@@ -36,7 +37,7 @@ export class MswMeasurement extends Component<MeasurementsProps> {
     private getFlow() {
         let flow: number = this.location.currentSample!.flow;
         return <>
-            <div className={this.getFlowColor(flow, this.location.forecast)}>{flow}</div>
+            <div className={this.getFlowColor(flow)}>{flow}</div>
             <div className="unit">
                 m<sup>3</sup>/s
             </div>
@@ -53,50 +54,16 @@ export class MswMeasurement extends Component<MeasurementsProps> {
         </>;
     }
 
-    private getFlowColor(_flow: number, forecast: ApiForecast) {
-        if (this.isInSurfableRange(_flow)) {
-            return "flow_good"
-        }
-
-        try {
-            if (this.forecastShowsTendencyToBecomeGood(_flow, forecast)) {
+    private getFlowColor(_flow: number) {
+        let flowColorEnum = locationsService.getFlowColorEnum(this.location, _flow);
+        switch (flowColorEnum) {
+            case FlowColorEnum.GREEN:
+                return "flow_good";
+            case FlowColorEnum.ORANGE:
                 return "flow_could_become_good";
-            }
-        } catch (e) {
-            // if error -> red
+            case FlowColorEnum.RED:
+                return "flow_bad";
         }
-
-        return "flow_bad";
-    }
-
-    private isInSurfableRange(_flow: number) {
-        return _flow > this.location.minFlow && _flow < this.location.maxFlow;
-    }
-
-    private forecastShowsTendencyToBecomeGood(flow: number, forecast: ApiForecast) {
-        function getMinFlowInLine(min?: Array<ApiLineEntry>) {
-            if (!min || min.length === 0) return Number.POSITIVE_INFINITY;
-            const flows = min
-                .map(entry => entry.flow)
-                .filter(f => f != undefined);
-            return flows.length > 0 ? Math.min(...flows) : Number.POSITIVE_INFINITY;
-        }
-
-        function getMaxFlowInLine(max?: Array<ApiLineEntry>) {
-            if (!max || max.length === 0) return Number.NEGATIVE_INFINITY;
-            const flows = max
-                .map(entry => entry.flow)
-                .filter(f => f != undefined);
-            return flows.length > 0 ? Math.max(...flows) : Number.NEGATIVE_INFINITY;
-        }
-
-        const minFlowInForecast = getMinFlowInLine(forecast.min);
-        const maxFlowInForecast = getMaxFlowInLine(forecast.max);
-
-        return this.isInSurfableRange(minFlowInForecast) ||
-            this.isInSurfableRange(maxFlowInForecast) ||
-            (flow < this.location.minFlow && maxFlowInForecast > this.location.minFlow) ||
-            (flow > this.location.maxFlow && minFlowInForecast < this.location.maxFlow);
     }
 
 
