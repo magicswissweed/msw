@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
 
 @Service
 public class SampleApiService {
@@ -34,15 +33,6 @@ public class SampleApiService {
 
     public ApiSample getCurrentSample(Integer stationId) throws NoDataAvailableException {
         return mapSample(sampleDao.getCurrentSample(stationId));
-    }
-
-    public List<ApiSample> getLast40DaysSamples(Integer stationId) throws IOException, URISyntaxException {
-        return last40DaysSampleFetchService.fetchLast40DaysSamples(stationId)
-                .stream()
-                .map(sample -> new ApiSample()
-                        .timestamp(sample.getTimestamp())
-                        .flow(sample.getFlow()))
-                .toList();
     }
 
     public void searchForNewerSample() {
