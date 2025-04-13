@@ -8,7 +8,7 @@ import {MswLoader} from '../loader/MswLoader';
 import {useUserAuth, wasUserLoggedInBefore} from '../user/UserAuthContext';
 import {locationsService} from "../service/LocationsService";
 import {Col, Form, Row} from "react-bootstrap";
-import {MswSpotMap} from "./spot-map/MswSpotMap";
+import {MswSpotMap} from "./map/spot-map/MswSpotMap";
 
 function isNotEmpty(array: Array<any> | undefined) {
     return array && array.length > 0;

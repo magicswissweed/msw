@@ -4,6 +4,12 @@ $screen-large-min: 1000px;
 $screen-small-max: $screen-medium-min - 1;
 $screen-medium-max: $screen-large-min - 1;
 
+@mixin not-small {
+  @media screen and (min-width: ($screen-small-max + 1)) {
+    @content;
+  }
+}
+
 @mixin small {
   @media screen and (max-width: $screen-small-max) {
     @content;

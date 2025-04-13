@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useRef} from "react";
 import {GoogleMap, useLoadScript} from "@react-google-maps/api";
 import {MarkerClusterer} from "@googlemaps/markerclusterer";
-import {ApiSpotInformation} from "../../../gen/msw-api-ts";
+import {ApiSpotInformation} from "../../../../gen/msw-api-ts";
 import './MswSpotMapPerCategory.scss';
 
-const center = {lat: 47.05, lng: 8.30}; // Luzern / ca. Mitte der Schweiz
+export const mapCenter = {lat: 47.05, lng: 8.30}; // Luzern / ca. Mitte der Schweiz
 
 const getOffsetPosition = (latitude: number, longitude: number, index: number) => {
     const offset = 0.0005 * (index + 1);
@@ -108,7 +108,7 @@ export const MswSpotMapPerCategory = ({spots}: MswSpotMapPropsPerCategory) => {
             <GoogleMap
                 mapContainerStyle={{width: "100%", height: "100%"}}
                 zoom={8}
-                center={center}
+                center={mapCenter}
                 onLoad={handleMapLoad}
             />
         </div>
