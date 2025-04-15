@@ -1,6 +1,6 @@
 import './MswSpotMap.scss';
 import React, {useState} from "react";
-import {ApiSpotInformation, ApiSpotSpotTypeEnum} from "../../gen/msw-api-ts";
+import {ApiSpotInformation, ApiSpotSpotTypeEnum} from "../../../gen/msw-api-ts";
 import {MswSpotMapPerCategory} from "./per-category/MswSpotMapPerCategory";
 import {Col, Form, Row} from "react-bootstrap";
 
