@@ -27,6 +27,9 @@ public class Last40DaysSampleFetchService extends AbstractLineFetchService {
         Map<OffsetDateTime, Double> line;
         // Check for flow measurement
         ArrayList<HydroLine> data = hydroResponse.plot().data();
+        if (data.isEmpty()) {
+            throw new IOException("No data available for flow measurement");
+        }
         if (data.size() < 2) {
             if (!data.get(0).name().equals("Abfluss")) {
                 throw new IOException("Flow measurement not available");
