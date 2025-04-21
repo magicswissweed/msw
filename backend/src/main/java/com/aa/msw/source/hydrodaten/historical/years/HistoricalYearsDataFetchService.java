@@ -18,18 +18,6 @@ public class HistoricalYearsDataFetchService extends AbstractLineFetchService {
         super("https://www.hydrodaten.admin.ch/web/hydro/de/q_annual/", "/2023/plot.json");
     }
 
-    public Set<HistoricalYearsData> fetchHistoricalYearsData(Set<Integer> stationIds) throws URISyntaxException {
-        Set<HistoricalYearsData> historicalYearsData = new HashSet<>();
-        for (int stationId : stationIds) {
-            try {
-                historicalYearsData.add(fetchHistoricalYearsData(stationId));
-            } catch (IOException e) {
-                // ignore: could be that this station just does not have historical data
-            }
-        }
-        return historicalYearsData;
-    }
-
     public HistoricalYearsData fetchHistoricalYearsData(int stationId) throws IOException, URISyntaxException {
         HydroResponse hydroResponse = fetchFromHydro(stationId);
 
@@ -45,5 +33,17 @@ public class HistoricalYearsDataFetchService extends AbstractLineFetchService {
                 mapLine(hydroResponse.plot().data().get(4)),
                 mapLine(hydroResponse.plot().data().get(7))
         );
+    }
+
+    public Set<HistoricalYearsData> fetchHistoricalYearsData(Set<Integer> stationIds) throws URISyntaxException {
+        Set<HistoricalYearsData> historicalYearsData = new HashSet<>();
+        for (int stationId : stationIds) {
+            try {
+                historicalYearsData.add(fetchHistoricalYearsData(stationId));
+            } catch (IOException e) {
+                // ignore: could be that this station just does not have historical data
+            }
+        }
+        return historicalYearsData;
     }
 }
