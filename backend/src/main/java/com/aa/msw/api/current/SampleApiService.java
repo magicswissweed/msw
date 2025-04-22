@@ -3,6 +3,7 @@ package com.aa.msw.api.current;
 import com.aa.msw.api.graph.last40days.Last40daysApiService;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.repository.dao.SampleDao;
+import com.aa.msw.gen.api.ApiFlowSample;
 import com.aa.msw.gen.api.ApiSample;
 import com.aa.msw.model.Sample;
 import com.aa.msw.source.InputDataFetcherService;
@@ -45,14 +46,13 @@ public class SampleApiService {
 
     }
 
-    public List<ApiSample> getLast40DaysSamples(Integer stationId) throws IOException, URISyntaxException {
+    public List<ApiFlowSample> getLast40DaysSamples(Integer stationId) throws IOException, URISyntaxException {
         return last40daysApiService.getLast40Days(stationId).last40DaysSamples()
                 .entrySet()
                 .stream()
-                .map(sample -> new ApiSample()
+                .map(sample -> new ApiFlowSample()
                         .timestamp(sample.getKey())
-                        // TODO: use double for flow?
-                        .flow(sample.getValue().intValue()))
+                        .flow(sample.getValue()))
                 .toList();
     }
 }

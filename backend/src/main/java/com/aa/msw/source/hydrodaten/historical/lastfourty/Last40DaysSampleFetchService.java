@@ -31,10 +31,10 @@ public class Last40DaysSampleFetchService extends AbstractLineFetchService {
             throw new IOException("No data available for flow measurement");
         }
         if (data.size() < 2) {
-            if (!data.get(0).name().equals("Abfluss")) {
+            if (!data.getFirst().name().equals("Abfluss")) {
                 throw new IOException("Flow measurement not available");
             }
-            line = mapLine(data.get(0));
+            line = mapLine(data.getFirst());
 
         } else {
             line = mapLine(data.get(1));

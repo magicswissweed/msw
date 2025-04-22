@@ -1,6 +1,7 @@
 package com.aa.msw.api.current;
 
 import com.aa.msw.database.exceptions.NoDataAvailableException;
+import com.aa.msw.gen.api.ApiFlowSample;
 import com.aa.msw.gen.api.ApiSample;
 import com.aa.msw.gen.api.SampleApi;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class SampleApiController implements SampleApi {
     }
 
     @Override
-    public ResponseEntity<List<ApiSample>> getLast40DaysSamples(Integer stationId) {
+    public ResponseEntity<List<ApiFlowSample>> getLast40DaysSamples(Integer stationId) {
         try {
             return ResponseEntity.ok(sampleApiService.getLast40DaysSamples(stationId));
         } catch (IOException | URISyntaxException e) {

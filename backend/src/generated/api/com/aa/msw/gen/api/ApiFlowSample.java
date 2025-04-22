@@ -17,30 +17,30 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * ApiLineEntry
+ * ApiFlowSample
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-04-22T17:19:05.778666+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
-public class ApiLineEntry {
+public class ApiFlowSample {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime timestamp;
 
   private Double flow;
 
-  public ApiLineEntry() {
+  public ApiFlowSample() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public ApiLineEntry(OffsetDateTime timestamp, Double flow) {
+  public ApiFlowSample(OffsetDateTime timestamp, Double flow) {
     this.timestamp = timestamp;
     this.flow = flow;
   }
 
-  public ApiLineEntry timestamp(OffsetDateTime timestamp) {
+  public ApiFlowSample timestamp(OffsetDateTime timestamp) {
     this.timestamp = timestamp;
     return this;
   }
@@ -60,7 +60,7 @@ public class ApiLineEntry {
     this.timestamp = timestamp;
   }
 
-  public ApiLineEntry flow(Double flow) {
+  public ApiFlowSample flow(Double flow) {
     this.flow = flow;
     return this;
   }
@@ -88,9 +88,9 @@ public class ApiLineEntry {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ApiLineEntry apiLineEntry = (ApiLineEntry) o;
-    return Objects.equals(this.timestamp, apiLineEntry.timestamp) &&
-        Objects.equals(this.flow, apiLineEntry.flow);
+    ApiFlowSample apiFlowSample = (ApiFlowSample) o;
+    return Objects.equals(this.timestamp, apiFlowSample.timestamp) &&
+        Objects.equals(this.flow, apiFlowSample.flow);
   }
 
   @Override
@@ -101,7 +101,7 @@ public class ApiLineEntry {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ApiLineEntry {\n");
+    sb.append("class ApiFlowSample {\n");
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("    flow: ").append(toIndentedString(flow)).append("\n");
     sb.append("}");

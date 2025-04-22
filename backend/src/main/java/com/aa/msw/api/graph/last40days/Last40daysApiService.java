@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 @Service
 public class Last40daysApiService {
 
-    private Last40DaysSampleFetchService last40DaysSampleFetchService;
-    private StationApiService stationApiService;
-    private Last40DaysDao last40DaysDao;
+    private final Last40DaysSampleFetchService last40DaysSampleFetchService;
+    private final StationApiService stationApiService;
+    private final Last40DaysDao last40DaysDao;
 
     // holds the last 40 days data in-memory for faster access - but also in db for fast startup (mostly for dev purposes)
     private Map<Integer, Last40Days> last40DaysSamples = new HashMap<>();
@@ -56,11 +56,7 @@ public class Last40daysApiService {
     }
 
     public Last40Days getLast40Days(Integer stationId) {
-        Last40Days last40Days = last40DaysSamples.get(stationId);
-        if (last40Days == null) {
-            return null;
-        }
-        return last40Days;
+        return last40DaysSamples.get(stationId);
     }
 
     @Scheduled(cron = "0 0 1 * * *") // Runs at 01:00 every day

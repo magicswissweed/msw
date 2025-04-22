@@ -21,8 +21,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class Last40DaysRepository extends AbstractRepository
-        <Last40DaysId, Last40Days, Last_40DaysSamplesTableRecord, com.aa.msw.gen.jooq.tables.pojos.Last_40DaysSamplesTable, Last_40DaysSamplesTableDao
-                >
+        <Last40DaysId, Last40Days, Last_40DaysSamplesTableRecord, com.aa.msw.gen.jooq.tables.pojos.Last_40DaysSamplesTable, Last_40DaysSamplesTableDao>
         implements Last40DaysDao {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
