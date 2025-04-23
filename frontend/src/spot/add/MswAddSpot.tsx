@@ -104,6 +104,7 @@ export const MswAddSpot = () => {
             maxFlow,
             setMaxFlow,
             isSubmitButtonDisabled,
+            setIsSubmitButtonDisabled,
             isEditMode)}
     </>;
 }

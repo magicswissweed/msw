@@ -117,6 +117,7 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({location}) => {
             maxFlow,
             setMaxFlow,
             isSubmitButtonDisabled,
+            setIsSubmitButtonDisabled,
             isEditMode)}
     </>;
 }
