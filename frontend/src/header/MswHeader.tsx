@@ -24,7 +24,7 @@ export const MswHeader = () => {
         </>
     } else {
         loginOrLogout = <>
-            <Button variant='msw-outline me-2' size='sm' onClick={() => setShowLoginModal(true)}>Login</Button>
+            <Button variant='msw-outline me-2' size='sm' onClick={() => setShowLoginModal(true)}>Log In</Button>
             <Button variant='msw-outline' size='sm' onClick={() => setShowSignupModal(true)}>Sign Up</Button>
 
             <MswLoginModal isOpen={showLoginModal}
