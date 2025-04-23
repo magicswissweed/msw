@@ -106,6 +106,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
             payload={[
                 {type: "line", value: LINE_NAME_MEASURED, color: "green"},
             ]}
+            wrapperStyle={{textTransform: 'uppercase'}}
         />;
     }
 }
