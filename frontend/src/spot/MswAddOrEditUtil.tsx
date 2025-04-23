@@ -8,11 +8,12 @@ import './MswAddOrEditUtil.scss';
 
 export function MswAddOrEditSpotModal(showModal: boolean | undefined, handleCancelModal: (() => void) | undefined, formRef: React.MutableRefObject<HTMLFormElement | null>, handleSaveAndCloseModal: (e: {
     preventDefault: any
-}) => void, spotName: string, setSpotName: (value: (((prevState: string) => string) | string)) => void, type: ApiSpotSpotTypeEnum, setType: (value: (((prevState: (ApiSpotSpotTypeEnum)) => (ApiSpotSpotTypeEnum)) | ApiSpotSpotTypeEnum)) => void, setStationId: (value: (((prevState: (number | undefined)) => (number | undefined)) | number | undefined)) => void, setStationSelectionError: (value: (((prevState: string) => string) | string)) => void, stations: ApiStation[], stationId: number | undefined, stationSelectionError: string, minFlow: number | undefined, setMinFlow: (value: (((prevState: (number | undefined)) => (number | undefined)) | number | undefined)) => void, maxFlow: number | undefined, setMaxFlow: (value: (((prevState: (number | undefined)) => (number | undefined)) | number | undefined)) => void, isSubmitButtonDisabled: boolean | undefined, modalTitle: React.JSX.Element) {
+}) => void, spotName: string, setSpotName: (value: (((prevState: string) => string) | string)) => void, type: ApiSpotSpotTypeEnum, setType: (value: (((prevState: (ApiSpotSpotTypeEnum)) => (ApiSpotSpotTypeEnum)) | ApiSpotSpotTypeEnum)) => void, setStationId: (value: (((prevState: (number | undefined)) => (number | undefined)) | number | undefined)) => void, setStationSelectionError: (value: (((prevState: string) => string) | string)) => void, stations: ApiStation[], stationId: number | undefined, stationSelectionError: string, minFlow: number | undefined, setMinFlow: (value: (((prevState: (number | undefined)) => (number | undefined)) | number | undefined)) => void, maxFlow: number | undefined, setMaxFlow: (value: (((prevState: (number | undefined)) => (number | undefined)) | number | undefined)) => void, isSubmitButtonDisabled: boolean | undefined, isEditMode: boolean) {
     return <>
         <Modal dialogClassName="add-or-edit-modal" show={showModal} onHide={handleCancelModal} scrollable={true}>
             <Modal.Header closeButton>
-                <Modal.Title>{modalTitle}</Modal.Title>
+
+                <Modal.Title>{isEditMode ? "Edit private Spot" : "Add new private Spot"}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className="form modal-body-container">
@@ -117,9 +118,9 @@ export function MswAddOrEditSpotModal(showModal: boolean | undefined, handleCanc
                 <Button variant="outline-dark" onClick={handleCancelModal}>
                     Cancel
                 </Button>
-                <Button disabled={isSubmitButtonDisabled} variant="primary" type="submit"
+                <Button disabled={isSubmitButtonDisabled} variant="msw" type="submit"
                         onClick={() => formRef.current && formRef.current.requestSubmit()}>
-                    Save Changes
+                    {isEditMode ? "Save Changes" : "Add Spot"}
                 </Button>
             </Modal.Footer>
         </Modal>
