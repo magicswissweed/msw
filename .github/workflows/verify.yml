@@ -22,6 +22,8 @@ env:
   GAR_REPOSITORY_BACKEND: ${{ vars.GAR_REPOSITORY_BACKEND }}
   GAR_REPOSITORY_FRONTEND: ${{ vars.GAR_REPOSITORY_FRONTEND }}
 
+  GRADLE_OPTS: -Xmx1024m
+
 jobs:
   verify:
     runs-on: ubuntu-latest
