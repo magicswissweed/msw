@@ -6,6 +6,7 @@ import com.aa.msw.model.Last40Days;
 import com.aa.msw.model.Station;
 import com.aa.msw.source.hydrodaten.historical.lastfourty.Last40DaysSampleFetchService;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Profile("!test")
 @Service
-public class Last40daysApiService {
+public class Last40daysApiServiceImpl implements Last40DaysApiService {
 
     private final Last40DaysSampleFetchService last40DaysSampleFetchService;
     private final StationApiService stationApiService;
@@ -28,7 +30,7 @@ public class Last40daysApiService {
     // holds the last 40 days data in-memory for faster access - but also in DB for fast startup (mostly for dev purposes)
     private Map<Integer, Last40Days> last40DaysSamples = new HashMap<>();
 
-    public Last40daysApiService(Last40DaysSampleFetchService last40DaysSampleFetchService, StationApiService stationApiService, Last40DaysDao last40DaysDao) {
+    public Last40daysApiServiceImpl(Last40DaysSampleFetchService last40DaysSampleFetchService, StationApiService stationApiService, Last40DaysDao last40DaysDao) {
         this.last40DaysSampleFetchService = last40DaysSampleFetchService;
         this.stationApiService = stationApiService;
         this.last40DaysDao = last40DaysDao;
@@ -37,6 +39,7 @@ public class Last40daysApiService {
     // Runs once at every start up
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
+    @Override
     public Map<Integer, Last40Days> getLast40Days() {
         // check for samples in memory
         if (!last40DaysSamples.isEmpty()) {
@@ -58,12 +61,14 @@ public class Last40daysApiService {
                 .collect(Collectors.toMap(Last40Days::stationId, h -> h));
     }
 
+    @Override
     public Last40Days getLast40Days(Integer stationId) {
         return last40DaysSamples.get(stationId);
     }
 
     @Scheduled(cron = "0 0 1 * * *") // Runs at 01:00 every day
     @Transactional
+    @Override
     public void fetchLast40DaysAndSaveToDb() {
         Set<Last40Days> fetchedLast40DaysSamples = fetchLast40Days();
         if (!fetchedLast40DaysSamples.isEmpty()) {

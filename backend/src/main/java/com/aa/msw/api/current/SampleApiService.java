@@ -1,6 +1,6 @@
 package com.aa.msw.api.current;
 
-import com.aa.msw.api.graph.last40days.Last40daysApiService;
+import com.aa.msw.api.graph.last40days.Last40DaysApiService;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.repository.dao.SampleDao;
 import com.aa.msw.gen.api.ApiFlowSample;
@@ -18,9 +18,9 @@ public class SampleApiService {
 
     private final SampleDao sampleDao;
     private final InputDataFetcherService inputDataFetcherService;
-    private final Last40daysApiService last40daysApiService;
+    private final Last40DaysApiService last40daysApiService;
 
-    SampleApiService(final SampleDao sampleDao, InputDataFetcherService inputDataFetcherService, Last40daysApiService last40daysApiService) {
+    SampleApiService(final SampleDao sampleDao, InputDataFetcherService inputDataFetcherService, Last40DaysApiService last40daysApiService) {
         this.sampleDao = sampleDao;
         this.inputDataFetcherService = inputDataFetcherService;
         this.last40daysApiService = last40daysApiService;
