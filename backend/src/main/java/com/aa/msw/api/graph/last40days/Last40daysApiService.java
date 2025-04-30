@@ -25,7 +25,7 @@ public class Last40daysApiService {
     private final StationApiService stationApiService;
     private final Last40DaysDao last40DaysDao;
 
-    // holds the last 40 days data in-memory for faster access - but also in db for fast startup (mostly for dev purposes)
+    // holds the last 40 days data in-memory for faster access - but also in DB for fast startup (mostly for dev purposes)
     private Map<Integer, Last40Days> last40DaysSamples = new HashMap<>();
 
     public Last40daysApiService(Last40DaysSampleFetchService last40DaysSampleFetchService, StationApiService stationApiService, Last40DaysDao last40DaysDao) {
@@ -38,11 +38,14 @@ public class Last40daysApiService {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public Map<Integer, Last40Days> getLast40Days() {
+        // check for samples in memory
         if (!last40DaysSamples.isEmpty()) {
             return last40DaysSamples;
         }
+        // if memory is empty, get samples from DB
         Set<Last40Days> last40DaysFromDb = last40DaysDao.getAllLast40Days();
         if (last40DaysFromDb.isEmpty()) {
+            // if DB is empty, fetch samples from BAFU
             fetchLast40DaysAndSaveToDb();
         } else {
             last40DaysSamples = setToMap(last40DaysFromDb);

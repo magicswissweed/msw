@@ -69,7 +69,16 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
         </>
     }
 
+    function roundToOneDecimal(value: unknown): number {
+        // @ts-ignore
+        return Math.round(value * 10) / 10;
+    }
+
     let normalizedGraphData: NormalizedDataItem[] = normalizeGraphDataLine(state.samples, DATA_KEY_MEASURED);
+    normalizedGraphData = normalizedGraphData.map(item => ({
+        ...item,
+        [DATA_KEY_MEASURED]: roundToOneDecimal(item[DATA_KEY_MEASURED])
+    }));
 
     const ticks: number[] = getTicks();
 
