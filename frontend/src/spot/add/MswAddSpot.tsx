@@ -82,7 +82,7 @@ export const MswAddSpot = () => {
         }
     }
 
-    let modalTitle = <>Add new private Spot</>;
+    let isEditMode = false;
     return <>
         <Button variant='msw-outline me-2' size='sm' onClick={() => handleShowAddSpotModal()}>Add Spot</Button>
         {MswAddOrEditSpotModal(
@@ -104,6 +104,7 @@ export const MswAddSpot = () => {
             maxFlow,
             setMaxFlow,
             isSubmitButtonDisabled,
-            modalTitle)}
+            setIsSubmitButtonDisabled,
+            isEditMode)}
     </>;
 }

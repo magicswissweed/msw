@@ -282,10 +282,20 @@ components:
           format: double
         flow:
           type: integer
+    ApiFlowSample:
+      type: object
+      required: [ timestamp, flow ]
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        flow:
+          type: number
+          format: double
     ApiLast40DaysSamples:
       type: array
       items:
-        $ref: '#/components/schemas/ApiSample'
+        $ref: '#/components/schemas/ApiFlowSample'
     ApiForecast:
       type: object
       required: [ timestamp, measuredData, median, twentyFivePercentile, seventyFivePercentile, max, min ]

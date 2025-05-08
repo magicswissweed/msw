@@ -5,6 +5,7 @@
  */
 package com.aa.msw.gen.api;
 
+import com.aa.msw.gen.api.ApiFlowSample;
 import com.aa.msw.gen.api.ApiSample;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-02-13T09:30:38.823222Z[Atlantic/Canary]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-04-22T17:19:05.778666+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
 @Tag(name = "sample", description = "the sample API")
 public interface SampleApi {
@@ -92,7 +93,7 @@ public interface SampleApi {
         tags = { "sample" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Returns the Samples from the last 40 Days for the station.", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ApiSample.class)))
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ApiFlowSample.class)))
             })
         }
     )
@@ -102,13 +103,13 @@ public interface SampleApi {
         produces = { "application/json" }
     )
     
-    default ResponseEntity<List<ApiSample>> getLast40DaysSamples(
+    default ResponseEntity<List<ApiFlowSample>> getLast40DaysSamples(
         @Parameter(name = "stationId", description = "The id of the station to get the sample from.", required = true, in = ParameterIn.PATH) @PathVariable("stationId") Integer stationId
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"temperature\" : 0.8008281904610115, \"flow\" : 6, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"temperature\" : 0.8008281904610115, \"flow\" : 6, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ]";
+                    String exampleString = "[ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

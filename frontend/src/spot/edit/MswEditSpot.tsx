@@ -93,7 +93,7 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({location}) => {
         }
     }
 
-    let modalTitle = <>Edit private Spot</>;
+    let isEditMode = true;
     return <>
         <div className="icon" onClick={() => handleShowEditSpotModal()}>
             <img alt="Edit this private spot." title="Edit this private spot." src={edit_icon}/>
@@ -117,6 +117,7 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({location}) => {
             maxFlow,
             setMaxFlow,
             isSubmitButtonDisabled,
-            modalTitle)}
+            setIsSubmitButtonDisabled,
+            isEditMode)}
     </>;
 }
