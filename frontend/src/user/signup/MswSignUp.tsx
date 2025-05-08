@@ -51,7 +51,7 @@ const MswSignup = (props: MswSignUpProps) => {
         <>
             <Modal show={showSignupModal} onHide={props.closeModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Sign up</Modal.Title>
+                    <Modal.Title>Sign Up</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="form">

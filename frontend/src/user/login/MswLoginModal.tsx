@@ -69,7 +69,7 @@ export const MswLoginModal = (props: MswLoginModalProps) => {
         <>
             <Modal show={showLoginModal} onHide={props.closeModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Login</Modal.Title>
+                    <Modal.Title>Log In</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="form">
@@ -115,7 +115,7 @@ export const MswLoginModal = (props: MswLoginModalProps) => {
                     </Button>
                     <Button variant="msw"
                             onClick={() => formRef.current && formRef.current.requestSubmit()}>
-                        Login
+                        Log In
                     </Button>
                 </Modal.Footer>
             </Modal>
