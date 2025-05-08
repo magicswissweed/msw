@@ -9,10 +9,10 @@
 <details>
     <summary>Ponteshare</summary>
 
-1. Copy full SHA of <a href="https://github.com/AaronOderStudi/msw/commits/master/">last relevant commit</a>
-2. <a href="https://github.com/AaronOderStudi/msw/actions/workflows/deploy.yml">`Run workflow`</a> and provide SHA as
-   argument
-3. Wait a few minutes for the <a href="https://magicswissweed.ponteshare.ch">result</a> to show
+1. On Github, copy full SHA of <a href="https://github.com/AaronOderStudi/msw/commits/master/">last relevant commit</a>
+2. Find action <a href="https://github.com/AaronOderStudi/msw/actions/workflows/deploy.yml">Deploy via SSH</a>, click
+   `Run workflow`, and provide SHA as argument
+3. Wait a few minutes for the <a href="https://magicswissweed.ch">result</a> to show
 
 </details>
 
