@@ -3,6 +3,7 @@ package com.aa.msw.integrationtest;
 import com.aa.msw.helper.PublicSpotListConfiguration;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
+import org.flywaydb.core.Flyway;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
@@ -35,7 +36,9 @@ public abstract class IntegrationTest {
     }
 
     @BeforeAll
-    public void initializePublicSpots() {
+    public void initializePublicSpots(@Autowired Flyway flyway) {
+        flyway.clean();
+        flyway.migrate();
         publicSpotListConfiguration.persistPublicSpots();
     }
 
