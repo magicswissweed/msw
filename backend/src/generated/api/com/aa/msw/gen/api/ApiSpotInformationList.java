@@ -22,14 +22,11 @@ import jakarta.annotation.Generated;
  * ApiSpotInformationList
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-04-22T17:19:05.778666+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-10T18:13:30.110862+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 public class ApiSpotInformationList {
 
   @Valid
-  private List<ApiSpotInformation> riverSurfSpots = new ArrayList<>();
-
-  @Valid
-  private List<ApiSpotInformation> bungeeSurfSpots = new ArrayList<>();
+  private List<ApiSpotInformation> spots = new ArrayList<>();
 
   public ApiSpotInformationList() {
     super();
@@ -38,65 +35,36 @@ public class ApiSpotInformationList {
   /**
    * Constructor with only required parameters
    */
-  public ApiSpotInformationList(List<ApiSpotInformation> riverSurfSpots, List<ApiSpotInformation> bungeeSurfSpots) {
-    this.riverSurfSpots = riverSurfSpots;
-    this.bungeeSurfSpots = bungeeSurfSpots;
+  public ApiSpotInformationList(List<ApiSpotInformation> spots) {
+    this.spots = spots;
   }
 
-  public ApiSpotInformationList riverSurfSpots(List<ApiSpotInformation> riverSurfSpots) {
-    this.riverSurfSpots = riverSurfSpots;
+  public ApiSpotInformationList spots(List<ApiSpotInformation> spots) {
+    this.spots = spots;
     return this;
   }
 
-  public ApiSpotInformationList addRiverSurfSpotsItem(ApiSpotInformation riverSurfSpotsItem) {
-    if (this.riverSurfSpots == null) {
-      this.riverSurfSpots = new ArrayList<>();
+  public ApiSpotInformationList addSpotsItem(ApiSpotInformation spotsItem) {
+    if (this.spots == null) {
+      this.spots = new ArrayList<>();
     }
-    this.riverSurfSpots.add(riverSurfSpotsItem);
+    this.spots.add(spotsItem);
     return this;
   }
 
   /**
-   * Get riverSurfSpots
-   * @return riverSurfSpots
+   * Get spots
+   * @return spots
   */
   @NotNull @Valid 
-  @Schema(name = "riverSurfSpots", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("riverSurfSpots")
-  public List<ApiSpotInformation> getRiverSurfSpots() {
-    return riverSurfSpots;
+  @Schema(name = "spots", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("spots")
+  public List<ApiSpotInformation> getSpots() {
+    return spots;
   }
 
-  public void setRiverSurfSpots(List<ApiSpotInformation> riverSurfSpots) {
-    this.riverSurfSpots = riverSurfSpots;
-  }
-
-  public ApiSpotInformationList bungeeSurfSpots(List<ApiSpotInformation> bungeeSurfSpots) {
-    this.bungeeSurfSpots = bungeeSurfSpots;
-    return this;
-  }
-
-  public ApiSpotInformationList addBungeeSurfSpotsItem(ApiSpotInformation bungeeSurfSpotsItem) {
-    if (this.bungeeSurfSpots == null) {
-      this.bungeeSurfSpots = new ArrayList<>();
-    }
-    this.bungeeSurfSpots.add(bungeeSurfSpotsItem);
-    return this;
-  }
-
-  /**
-   * Get bungeeSurfSpots
-   * @return bungeeSurfSpots
-  */
-  @NotNull @Valid 
-  @Schema(name = "bungeeSurfSpots", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("bungeeSurfSpots")
-  public List<ApiSpotInformation> getBungeeSurfSpots() {
-    return bungeeSurfSpots;
-  }
-
-  public void setBungeeSurfSpots(List<ApiSpotInformation> bungeeSurfSpots) {
-    this.bungeeSurfSpots = bungeeSurfSpots;
+  public void setSpots(List<ApiSpotInformation> spots) {
+    this.spots = spots;
   }
 
   @Override
@@ -108,21 +76,19 @@ public class ApiSpotInformationList {
       return false;
     }
     ApiSpotInformationList apiSpotInformationList = (ApiSpotInformationList) o;
-    return Objects.equals(this.riverSurfSpots, apiSpotInformationList.riverSurfSpots) &&
-        Objects.equals(this.bungeeSurfSpots, apiSpotInformationList.bungeeSurfSpots);
+    return Objects.equals(this.spots, apiSpotInformationList.spots);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(riverSurfSpots, bungeeSurfSpots);
+    return Objects.hash(spots);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ApiSpotInformationList {\n");
-    sb.append("    riverSurfSpots: ").append(toIndentedString(riverSurfSpots)).append("\n");
-    sb.append("    bungeeSurfSpots: ").append(toIndentedString(bungeeSurfSpots)).append("\n");
+    sb.append("    spots: ").append(toIndentedString(spots)).append("\n");
     sb.append("}");
     return sb.toString();
   }

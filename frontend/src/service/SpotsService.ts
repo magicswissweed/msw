@@ -1,4 +1,4 @@
-import {ApiSpotInformation, ApiSpotInformationList, ApiSpotSpotTypeEnum, SpotsApi} from "../gen/msw-api-ts";
+import {ApiSpotInformation, SpotsApi} from "../gen/msw-api-ts";
 import {AxiosResponse} from "axios";
 import {authConfiguration} from "../api/config/AuthConfiguration";
 
@@ -30,12 +30,9 @@ class SpotsService {
         this.subscribers = this.subscribers.filter((sub) => sub !== callback);
     }
 
-    private writeSpotsToState = (res: AxiosResponse<ApiSpotInformationList, any>) => {
-        if (res && res.data && res.data.riverSurfSpots && res.data.bungeeSurfSpots) {
-            res.data.riverSurfSpots.forEach(l => l.spotType = ApiSpotSpotTypeEnum.RiverSurf);
-            res.data.bungeeSurfSpots.forEach(l => l.spotType = ApiSpotSpotTypeEnum.BungeeSurf);
-            let allSpots = res.data.bungeeSurfSpots.concat(res.data.riverSurfSpots);
-            this.setSpots(allSpots);
+    private writeSpotsToState = (res: AxiosResponse<ApiSpotInformation[], any>) => {
+        if (res && res.data && res.data) {
+            this.setSpots(res.data);
         }
     };
 

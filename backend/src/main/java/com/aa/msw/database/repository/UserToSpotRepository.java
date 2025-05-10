@@ -116,9 +116,7 @@ public class UserToSpotRepository extends AbstractRepository<UserToSpotId, UserT
     @Override
     @Transactional
     public void addAllPublicSpotsToUser() {
-        List<Spot> publicSpots = new ArrayList<>();
-        publicSpots.addAll(spotDao.getPublicBungeeSurfSpots());
-        publicSpots.addAll(spotDao.getPublicRiverSurfSpots());
+        List<Spot> publicSpots = new ArrayList<>(spotDao.getPublicSpots());
 
         List<Spot> mappedSpotIds = getUserSpotsOrdered().stream().map(UserSpot::spot).toList();
 

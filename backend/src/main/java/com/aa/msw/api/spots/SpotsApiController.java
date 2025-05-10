@@ -37,7 +37,7 @@ public class SpotsApiController implements SpotsApi {
     }
 
     @Override
-    public ResponseEntity<ApiSpotInformationList> getAllSpots() {
+    public ResponseEntity<List<ApiSpotInformation>> getAllSpots() {
         try {
             return ResponseEntity.ok(spotsApiService.getAllSpots());
         } catch (NoDataAvailableException e) {
@@ -48,7 +48,7 @@ public class SpotsApiController implements SpotsApi {
     }
 
     @Override
-    public ResponseEntity<ApiSpotInformationList> getPublicSpots() {
+    public ResponseEntity<List<ApiSpotInformation>> getPublicSpots() {
         try {
             return ResponseEntity.ok(spotsApiService.getPublicSpots());
         } catch (NoDataAvailableException e) {

@@ -15,9 +15,11 @@ import com.aa.msw.database.repository.dao.SpotDao;
 import com.aa.msw.database.repository.dao.UserToSpotDao;
 import com.aa.msw.gen.api.ApiForecast;
 import com.aa.msw.gen.api.ApiSpotInformation;
-import com.aa.msw.gen.api.ApiSpotInformationList;
 import com.aa.msw.gen.api.ApiStation;
-import com.aa.msw.model.*;
+import com.aa.msw.model.Sample;
+import com.aa.msw.model.Spot;
+import com.aa.msw.model.Station;
+import com.aa.msw.model.UserSpot;
 import com.aa.msw.source.InputDataFetcherService;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class SpotsApiService {
@@ -49,32 +52,15 @@ public class SpotsApiService {
         this.stationApiService = stationApiService;
     }
 
-    public ApiSpotInformationList getPublicSpots() throws NoDataAvailableException {
-        List<ApiSpotInformation> riverSurfSpots = getApiSpotInformationList(spotDao.getPublicRiverSurfSpots());
-        List<ApiSpotInformation> bungeeSurfSpots = getApiSpotInformationList(spotDao.getPublicBungeeSurfSpots());
-
-        return new ApiSpotInformationList()
-                .riverSurfSpots(riverSurfSpots)
-                .bungeeSurfSpots(bungeeSurfSpots);
+    public List<ApiSpotInformation> getPublicSpots() throws NoDataAvailableException {
+        return getApiSpotInformationList(spotDao.getPublicSpots());
     }
 
-    public ApiSpotInformationList getAllSpots() throws NoDataAvailableException, NoSuchUserException {
-        List<UserSpot> userSpots = userToSpotDao.getUserSpotsOrdered();
-
-        List<ApiSpotInformation> apiRiverSurfSpots = getApiSpotInformationList(
-                userSpots.stream()
-                        .map(UserSpot::spot)
-                        .filter(spot -> spot.type().equals(SpotTypeEnum.RIVER_SURF))
-                        .toList());
-        List<ApiSpotInformation> apiBungeeSurfSpots = getApiSpotInformationList(
-                userSpots.stream()
-                        .map(UserSpot::spot)
-                        .filter(spot -> spot.type().equals(SpotTypeEnum.BUNGEE_SURF))
-                        .toList());
-
-        return new ApiSpotInformationList()
-                .riverSurfSpots(apiRiverSurfSpots)
-                .bungeeSurfSpots(apiBungeeSurfSpots);
+    public List<ApiSpotInformation> getAllSpots() throws NoDataAvailableException, NoSuchUserException {
+        List<Spot> userSpots = userToSpotDao.getUserSpotsOrdered().stream()
+                .map(UserSpot::spot)
+                .collect(Collectors.toList());
+        return getApiSpotInformationList(userSpots);
     }
 
     private List<ApiSpotInformation> getApiSpotInformationList(List<Spot> spots) throws NoDataAvailableException {
@@ -100,6 +86,7 @@ public class SpotsApiService {
                                 .minFlow(spot.minFlow())
                                 .maxFlow(spot.maxFlow())
                                 .stationId(spot.stationId())
+                                .spotType(com.aa.msw.gen.api.ApiSpotInformation.SpotTypeEnum.valueOf(spot.type().name()))
                                 .currentSample(sampleApiService.getCurrentSample(spot.stationId()))
                                 .forecast(currentForecast)
                                 .historical(historicalYearsApiService.getApiHistoricalYearsData(spot.stationId()))

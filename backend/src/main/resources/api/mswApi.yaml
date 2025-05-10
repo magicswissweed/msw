@@ -217,17 +217,9 @@ paths:
 components:
   schemas:
     ApiSpotInformationList:
-      type: object
-      required: [ riverSurfSpots, bungeeSurfSpots ]
-      properties:
-        riverSurfSpots:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiSpotInformation'
-        bungeeSurfSpots:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiSpotInformation'
+      type: array
+      items:
+        $ref: '#/components/schemas/ApiSpotInformation'
     ApiSpot:
       type: object
       required: [ id, name, stationId, spotType, isPublic, minFlow, maxFlow, station ]

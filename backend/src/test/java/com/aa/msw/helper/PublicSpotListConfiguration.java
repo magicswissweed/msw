@@ -35,8 +35,8 @@ public class PublicSpotListConfiguration {
 
     @Transactional
     public void persistPublicSpots() {
-        if (spotDao.getPublicRiverSurfSpots().size() != PUBLIC_RIVER_SURF_SPOTS.size() ||
-                spotDao.getPublicBungeeSurfSpots().size() != PUBLIC_BUNGEE_SURF_SPOTS.size()) {
+        if (getPublicSpotsOfType(SpotTypeEnum.RIVER_SURF) != PUBLIC_RIVER_SURF_SPOTS.size() ||
+                getPublicSpotsOfType(SpotTypeEnum.BUNGEE_SURF) != PUBLIC_BUNGEE_SURF_SPOTS.size()) {
             LOG.info("PERSISTING PUBLIC SPOTS");
             persistSpots(PUBLIC_RIVER_SURF_SPOTS);
             persistSpots(PUBLIC_BUNGEE_SURF_SPOTS);
@@ -49,6 +49,13 @@ public class PublicSpotListConfiguration {
                 // If something went wrong, the data will get fetched again in a few minutes and the problem fixes itself.
             }
         }
+    }
+
+    private double getPublicSpotsOfType(SpotTypeEnum spotType) {
+        return spotDao.getPublicSpots().stream()
+                .filter(s -> s.type() == spotType)
+                .toList()
+                .size();
     }
 
     private void persistSpots(Set<Spot> spots) {

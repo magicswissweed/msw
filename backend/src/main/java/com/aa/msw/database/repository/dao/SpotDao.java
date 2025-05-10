@@ -11,7 +11,5 @@ public interface SpotDao extends Dao<SpotId, Spot> {
 
     Set<Integer> getAllStationIds();
 
-    List<Spot> getPublicRiverSurfSpots();
-
-    List<Spot> getPublicBungeeSurfSpots();
+    List<Spot> getPublicSpots();
 }

@@ -95,16 +95,9 @@ public class SpotRepository extends AbstractRepository<SpotId, Spot, SpotTableRe
     }
 
     @Override
-    public List<Spot> getPublicRiverSurfSpots() {
+    public List<Spot> getPublicSpots() {
         return dsl.selectFrom(TABLE)
-                .where(TABLE.TYPE.eq(Spottype.RIVER_SURF).and(TABLE.ISPUBLIC))
-                .fetch(this::mapRecord);
-    }
-
-    @Override
-    public List<Spot> getPublicBungeeSurfSpots() {
-        return dsl.selectFrom(TABLE)
-                .where(TABLE.TYPE.eq(Spottype.BUNGEE_SURF).and(TABLE.ISPUBLIC))
+                .where(TABLE.ISPUBLIC)
                 .fetch(this::mapRecord);
     }
 }

@@ -344,25 +344,6 @@ export type ApiSpotInformationSpotTypeEnum = typeof ApiSpotInformationSpotTypeEn
 /**
  * 
  * @export
- * @interface ApiSpotInformationList
- */
-export interface ApiSpotInformationList {
-    /**
-     * 
-     * @type {Array<ApiSpotInformation>}
-     * @memberof ApiSpotInformationList
-     */
-    'riverSurfSpots': Array<ApiSpotInformation>;
-    /**
-     * 
-     * @type {Array<ApiSpotInformation>}
-     * @memberof ApiSpotInformationList
-     */
-    'bungeeSurfSpots': Array<ApiSpotInformation>;
-}
-/**
- * 
- * @export
  * @interface ApiStation
  */
 export interface ApiStation {
@@ -958,7 +939,7 @@ export const SpotsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllSpots(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiSpotInformationList>> {
+        async getAllSpots(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ApiSpotInformation>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllSpots(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SpotsApi.getAllSpots']?.[localVarOperationServerIndex]?.url;
@@ -970,7 +951,7 @@ export const SpotsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPublicSpots(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiSpotInformationList>> {
+        async getPublicSpots(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ApiSpotInformation>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getPublicSpots(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['SpotsApi.getPublicSpots']?.[localVarOperationServerIndex]?.url;
@@ -1036,7 +1017,7 @@ export const SpotsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllSpots(options?: any): AxiosPromise<ApiSpotInformationList> {
+        getAllSpots(options?: any): AxiosPromise<Array<ApiSpotInformation>> {
             return localVarFp.getAllSpots(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1045,7 +1026,7 @@ export const SpotsApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPublicSpots(options?: any): AxiosPromise<ApiSpotInformationList> {
+        getPublicSpots(options?: any): AxiosPromise<Array<ApiSpotInformation>> {
             return localVarFp.getPublicSpots(options).then((request) => request(axios, basePath));
         },
         /**
