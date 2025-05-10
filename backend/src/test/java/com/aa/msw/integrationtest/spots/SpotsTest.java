@@ -24,8 +24,7 @@ public class SpotsTest extends IntegrationTest {
                 .get(ALL_SPOTS_URL)
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .body("riverSurfSpots", hasSize(0))
-                .body("bungeeSurfSpots", hasSize(5));
+                .body("spots", hasSize(5));
     }
 
     @Test
@@ -57,7 +56,6 @@ public class SpotsTest extends IntegrationTest {
                 .get(ALL_SPOTS_URL)
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .body("riverSurfSpots", hasSize(1))
-                .body("bungeeSurfSpots", hasSize(5));
+                .body("spots", hasSize(6));
     }
 }
