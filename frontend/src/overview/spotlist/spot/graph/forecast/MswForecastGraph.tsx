@@ -28,7 +28,7 @@ const TEMPORARY_DATA_KEY_FLOW = "flow";
 
 export class MswForecastGraph extends Component<MswGraphProps> {
 
-    private readonly location: ApiSpotInformation;
+    private readonly spot: ApiSpotInformation;
     private readonly aspectRatio: number;
     private readonly withLegend: boolean;
     private readonly withYAxis: boolean;
@@ -38,7 +38,7 @@ export class MswForecastGraph extends Component<MswGraphProps> {
 
     constructor(props: MswGraphProps) {
         super(props);
-        this.location = props.location;
+        this.spot = props.spot;
         this.aspectRatio = props.aspectRatio;
         this.withLegend = props.withLegend === true;
         this.withYAxis = props.withYAxis === true;
@@ -48,26 +48,26 @@ export class MswForecastGraph extends Component<MswGraphProps> {
     }
 
     render() {
-        if (!this.location.forecast) {
+        if (!this.spot.forecast) {
             return <>
                 <div>Detailed Forecast not possible at the moment...</div>
             </>
         }
 
-        let normalizedGraphData: NormalizedDataItem[] = this.normalizeGraphData(this.location.forecast!);
+        let normalizedGraphData: NormalizedDataItem[] = this.normalizeGraphData(this.spot.forecast!);
 
         const ticks = this.getTicks(normalizedGraphData);
 
         return <>
             <ResponsiveContainer className="graph" width="100%" aspect={this.aspectRatio}>
                 <ComposedChart data={normalizedGraphData}>
-                    {getReferenceArea(this.location)}
+                    {getReferenceArea(this.spot)}
                     {getCurrentTimeReferenceLine()}
-                    <ReferenceDot x={new Date(this.location.forecast!.timestamp!).getTime()}
-                                  y={this.location.forecast.median!
-                                      .filter((v) => new Date(v.timestamp!).getMonth() === new Date(this.location.forecast!.timestamp!).getMonth())
-                                      .filter((v) => new Date(v.timestamp!).getDay() === new Date(this.location.forecast!.timestamp!).getDay())
-                                      .filter((v) => new Date(v.timestamp!).getHours() === new Date(this.location.forecast!.timestamp!).getHours())[0]
+                    <ReferenceDot x={new Date(this.spot.forecast!.timestamp!).getTime()}
+                                  y={this.spot.forecast.median!
+                                      .filter((v) => new Date(v.timestamp!).getMonth() === new Date(this.spot.forecast!.timestamp!).getMonth())
+                                      .filter((v) => new Date(v.timestamp!).getDay() === new Date(this.spot.forecast!.timestamp!).getDay())
+                                      .filter((v) => new Date(v.timestamp!).getHours() === new Date(this.spot.forecast!.timestamp!).getHours())[0]
                                       .flow
                                   }
                                   stroke="gold"
@@ -95,7 +95,7 @@ export class MswForecastGraph extends Component<MswGraphProps> {
                     {getCartesianGrid()}
                     {getXAxis(ticks, this.withXAxis, v => new Date(v).toLocaleString('de-CH', {weekday: 'short'}))}
 
-                    {this.withMinMaxReferenceLines && getMinMaxReferenceLines(this.location)}
+                    {this.withMinMaxReferenceLines && getMinMaxReferenceLines(this.spot)}
                     {this.withTooltip && getTooltip()}
                     {this.withYAxis && <YAxis/>}
                     {this.withLegend && this.getLegend()}

@@ -30,7 +30,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     // @ts-ignore
     const {token} = useUserAuth();
 
-    let location: ApiSpotInformation;
+    let spot: ApiSpotInformation;
     let aspectRatio: number;
     let withLegend: boolean;
     let withXAxis: boolean;
@@ -38,7 +38,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     let withMinMaxReferenceLines: boolean;
     let withTooltip: boolean;
 
-    location = props.location;
+    spot = props.spot;
     aspectRatio = props.aspectRatio;
     withLegend = props.withLegend === true;
     withXAxis = props.withXAxis === true;
@@ -55,7 +55,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
 
     async function fetchLast40DaysSamples() {
         let config = await authConfiguration(token);
-        new SampleApi(config).getLast40DaysSamples(location.stationId!)
+        new SampleApi(config).getLast40DaysSamples(spot.stationId!)
             .then((res: AxiosResponse<ApiSample[], any>) => {
                 if (res && res.data) {
                     setState({samples: res.data});
@@ -85,13 +85,13 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     return <>
         <ResponsiveContainer className="graph" width="100%" aspect={aspectRatio}>
             <ComposedChart data={normalizedGraphData}>
-                {getReferenceArea(location)}
+                {getReferenceArea(spot)}
                 {getCurrentTimeReferenceLine()}
                 {getMeasuredLine()}
                 {getCartesianGrid()}
                 {getXAxis(ticks, withXAxis, v => new Date(v).getDate() + "." + (new Date(v).getMonth() + 1) + ".")}
 
-                {withMinMaxReferenceLines && getMinMaxReferenceLines(location)}
+                {withMinMaxReferenceLines && getMinMaxReferenceLines(spot)}
                 {withTooltip && getTooltip()}
                 {withYAxis && <YAxis/>}
                 {withLegend && getLegend()}

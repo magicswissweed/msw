@@ -2,7 +2,7 @@ import {ApiSpotInformation, ApiSpotInformationList, ApiSpotSpotTypeEnum, SpotsAp
 import {AxiosResponse} from "axios";
 import {authConfiguration} from "../api/config/AuthConfiguration";
 
-type SubscriberCallback = (locations: Array<ApiSpotInformation>) => void;
+type SubscriberCallback = (spots: Array<ApiSpotInformation>) => void;
 
 class SpotsService {
     private spots: Array<ApiSpotInformation> = [];

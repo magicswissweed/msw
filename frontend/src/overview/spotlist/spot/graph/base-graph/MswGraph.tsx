@@ -9,7 +9,7 @@ export const LINE_NAME_MEASURED = "measured";
 export let LINE_NAME_MEDIAN = "median";
 
 export interface MswGraphProps {
-    location: ApiSpotInformation,
+    spot: ApiSpotInformation,
     aspectRatio: number,
     withLegend?: boolean | undefined,
     withYAxis?: boolean | undefined
@@ -20,13 +20,13 @@ export interface MswGraphProps {
 
 export type NormalizedDataItem = { datetime: Date, [lineName: string]: unknown; };
 
-export function getMinMaxReferenceLines(location: ApiSpotInformation) {
+export function getMinMaxReferenceLines(spot: ApiSpotInformation) {
     return <>
-        <ReferenceLine y={location.minFlow}>
-            <Label value={location.minFlow} position="insideRight"/>
+        <ReferenceLine y={spot.minFlow}>
+            <Label value={spot.minFlow} position="insideRight"/>
         </ReferenceLine>
-        <ReferenceLine y={location.maxFlow}>
-            <Label value={location.maxFlow} position="insideRight"/>
+        <ReferenceLine y={spot.maxFlow}>
+            <Label value={spot.maxFlow} position="insideRight"/>
         </ReferenceLine>
     </>;
 }
@@ -73,9 +73,9 @@ export function normalizeGraphDataLine(line: ApiSample[] | ApiLineEntry[], name:
     return normalizedData;
 }
 
-export function getReferenceArea(location: ApiSpotInformation) {
-    return <ReferenceArea y1={location.minFlow}
-                          y2={location.maxFlow}
+export function getReferenceArea(spot: ApiSpotInformation) {
+    return <ReferenceArea y1={spot.minFlow}
+                          y2={spot.maxFlow}
                           ifOverflow="extendDomain"
                           fill="green"/>;
 }

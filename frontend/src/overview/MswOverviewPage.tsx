@@ -14,11 +14,10 @@ function isNotEmpty(array: Array<any> | undefined) {
     return array && array.length > 0;
 }
 
-export const GraphTypeEnum = {
-    Forecast: 'FORECAST',
-    Historical: 'HISTORICAL'
-} as const;
-export type GraphTypeEnum = typeof GraphTypeEnum[keyof typeof GraphTypeEnum];
+export enum GraphTypeEnum {
+    Forecast = 'FORECAST',
+    Historical = 'HISTORICAL'
+}
 
 export const MswOverviewPage = () => {
     const [spots, setSpots] = useState<Array<ApiSpotInformation>>([]);
@@ -28,10 +27,10 @@ export const MswOverviewPage = () => {
     const {user, token} = useUserAuth();
 
     useEffect(() => {
-        const updateLocations = (newSpots: ApiSpotInformation[]) => setSpots(newSpots);
-        spotsService.subscribe(updateLocations);
+        const updateSpots = (newSpots: ApiSpotInformation[]) => setSpots(newSpots);
+        spotsService.subscribe(updateSpots);
 
-        return () => spotsService.unsubscribe(updateLocations);
+        return () => spotsService.unsubscribe(updateSpots);
     }, []);
 
     // initial loading
@@ -64,9 +63,9 @@ export const MswOverviewPage = () => {
         return <>
             <div className="surfspots">
                 {isNotEmpty(riverSurfSpots) &&
-                    <SpotList title="Riversurf" locations={riverSurfSpots} showGraphOfType={showGraphOfType}/>}
+                    <SpotList title="Riversurf" spots={riverSurfSpots} showGraphOfType={showGraphOfType}/>}
                 {isNotEmpty(bungeeSurfSpots) &&
-                    <SpotList title="Bungeesurf" locations={bungeeSurfSpots} showGraphOfType={showGraphOfType}/>}
+                    <SpotList title="Bungeesurf" spots={bungeeSurfSpots} showGraphOfType={showGraphOfType}/>}
             </div>
             <Form>
                 <Row className="align-items-center">
@@ -88,7 +87,7 @@ export const MswOverviewPage = () => {
                     <Col className="text-start">Historical</Col>
                 </Row>
             </Form>
-            <MswSpotMap riverSurfLocations={riverSurfSpots} bungeeSurfLocations={bungeeSurfSpots}/>
+            <MswSpotMap riverSurfSpots={riverSurfSpots} bungeeSurfSpots={bungeeSurfSpots}/>
         </>;
     }
 }

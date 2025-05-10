@@ -26,7 +26,7 @@ export let LINE_NAME_CURRENT_YEAR = "Current year";
 
 export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
 
-    private readonly location: ApiSpotInformation;
+    private readonly spot: ApiSpotInformation;
     private readonly aspectRatio: number;
     private readonly withLegend: boolean;
     private readonly withYAxis: boolean;
@@ -36,7 +36,7 @@ export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
 
     constructor(props: MswGraphProps) {
         super(props);
-        this.location = props.location;
+        this.spot = props.spot;
         this.aspectRatio = props.aspectRatio;
         this.withLegend = props.withLegend === true;
         this.withYAxis = props.withYAxis === true;
@@ -46,18 +46,18 @@ export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
     }
 
     render() {
-        if (!this.location.historical) {
+        if (!this.spot.historical) {
             return <>
                 <div>Detailed Graph not possible at the moment...</div>
             </>
         }
 
-        let normalizedGraphData: NormalizedDataItem[] = this.normalizeGraphData(this.location.historical!);
+        let normalizedGraphData: NormalizedDataItem[] = this.normalizeGraphData(this.spot.historical!);
 
         return <>
             <ResponsiveContainer className="graph" width="100%" aspect={this.aspectRatio}>
                 <ComposedChart data={normalizedGraphData}>
-                    {getReferenceArea(this.location)}
+                    {getReferenceArea(this.spot)}
                     {getCurrentTimeReferenceLine()}
 
                     <Area
@@ -100,9 +100,9 @@ export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
                         tick={{dx: 20}}
                     />
 
-                    {this.withMinMaxReferenceLines && getMinMaxReferenceLines(this.location)}
+                    {this.withMinMaxReferenceLines && getMinMaxReferenceLines(this.spot)}
                     {this.withTooltip && this.getHistoricalTooltip()}
-                    {this.withYAxis && <YAxis domain={[0, this.location.maxFlow!]}/>}
+                    {this.withYAxis && <YAxis domain={[0, this.spot.maxFlow!]}/>}
                     {this.withLegend && this.getLegend()}
                 </ComposedChart>
             </ResponsiveContainer>
@@ -195,7 +195,7 @@ export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
         normalizedData = normalizedData.map((d) => ({
             ...d,
             currentYearRounded:
-                d[DATA_KEY_CURRENT_YEAR] != undefined
+                d[DATA_KEY_CURRENT_YEAR] !== undefined
                     ? Math.round(d[DATA_KEY_CURRENT_YEAR] as number)
                     : undefined
         }));

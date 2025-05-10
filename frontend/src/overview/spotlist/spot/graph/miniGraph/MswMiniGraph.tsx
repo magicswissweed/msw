@@ -7,7 +7,7 @@ import {GraphTypeEnum} from "../../../../MswOverviewPage";
 import {MswHistoricalYearsGraph} from "../historical/MswHistoricalYearsGraph";
 
 interface MswMiniForecastProps {
-    location: ApiSpotInformation,
+    spot: ApiSpotInformation,
     showGraphOfType: GraphTypeEnum
 }
 
@@ -15,13 +15,13 @@ export const MswMiniGraph = (props: MswMiniForecastProps) => {
 
     let content;
     if (props.showGraphOfType === GraphTypeEnum.Forecast) {
-        if (props.location.forecast) {
-            content = <MswForecastGraph location={props.location} aspectRatio={3}/>;
+        if (props.spot.forecast) {
+            content = <MswForecastGraph spot={props.spot} aspectRatio={3}/>;
         } else {
-            content = <MswLastMeasurementsGraph location={props.location} aspectRatio={3}/>
+            content = <MswLastMeasurementsGraph spot={props.spot} aspectRatio={3}/>
         }
     } else {
-        content = <MswHistoricalYearsGraph location={props.location} aspectRatio={3}/>
+        content = <MswHistoricalYearsGraph spot={props.spot} aspectRatio={3}/>
     }
 
 

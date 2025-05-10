@@ -19,10 +19,10 @@ import {MswAddOrEditSpotModal} from "../MswAddOrEditUtil";
 
 // specify the properties (inputs) for the MswEditSpot component
 interface MswEditSpotProps {
-    location: ApiSpotInformation;
+    spot: ApiSpotInformation;
 }
 
-export const MswEditSpot: React.FC<MswEditSpotProps> = ({location}) => {
+export const MswEditSpot: React.FC<MswEditSpotProps> = ({spot}) => {
     // define modal states
     const [showEditSpotModal, setShowEditSpotModal] = useState(false);
     const handleShowEditSpotModal = () => setShowEditSpotModal(true);
@@ -33,12 +33,12 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({location}) => {
     }
     const handleCancelEditSpotModal = () => setShowEditSpotModal(false);
 
-    // define form states and use the current location data as initial values
-    const [spotName, setSpotName] = useState(location.name || "");
-    const [type, setType] = useState<ApiSpotSpotTypeEnum>(location.spotType || ApiSpotSpotTypeEnum.RiverSurf);
-    const [stationId, setStationId] = useState<number | undefined>(location.stationId);
-    const [minFlow, setMinFlow] = useState<number | undefined>(location.minFlow);
-    const [maxFlow, setMaxFlow] = useState<number | undefined>(location.maxFlow);
+    // define form states and use the current spot data as initial values
+    const [spotName, setSpotName] = useState(spot.name || "");
+    const [type, setType] = useState<ApiSpotSpotTypeEnum>(spot.spotType || ApiSpotSpotTypeEnum.RiverSurf);
+    const [stationId, setStationId] = useState<number | undefined>(spot.stationId);
+    const [minFlow, setMinFlow] = useState<number | undefined>(spot.minFlow);
+    const [maxFlow, setMaxFlow] = useState<number | undefined>(spot.maxFlow);
     const [stations, setStations] = useState<ApiStation[]>([])
     const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
     const [stationSelectionError, setStationSelectionError] = useState('');
@@ -67,7 +67,7 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({location}) => {
 
         // create new spot object with the updated values
         const apiSpot: ApiSpot = {
-            id: location.id,
+            id: spot.id,
             name: spotName,
             stationId: stationId!,
             spotType: type,
@@ -81,7 +81,7 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({location}) => {
         const editPrivateSpotRequest: EditPrivateSpotRequest = {
             spot: apiSpot
         };
-        let response: AxiosResponse<void, any> = await new SpotsApi(config).editPrivateSpot(location.id, editPrivateSpotRequest)
+        let response: AxiosResponse<void, any> = await new SpotsApi(config).editPrivateSpot(spot.id, editPrivateSpotRequest)
         if (response.status === 200) {
             await spotsService.fetchData(token, true).then(() => {
                 handleCancelEditSpotModal();

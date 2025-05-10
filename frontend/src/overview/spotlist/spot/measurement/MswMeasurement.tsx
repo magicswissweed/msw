@@ -4,28 +4,28 @@ import {ApiSpotInformation} from '../../../../gen/msw-api-ts';
 import {FlowColorEnum, getFlowColorEnum} from "../../../../service/SpotsHelper";
 
 interface MeasurementsProps {
-    location: ApiSpotInformation
+    spot: ApiSpotInformation
 }
 
 export class MswMeasurement extends Component<MeasurementsProps> {
 
-    private readonly location: ApiSpotInformation;
+    private readonly spot: ApiSpotInformation;
 
     constructor(props: MeasurementsProps) {
         super(props);
-        this.location = props.location;
+        this.spot = props.spot;
     }
 
     render() {
         return <>
             <div className="measurements"
-                 title={'Measured at: ' + this.convertTimeStampToDisplayableString(this.location.currentSample!.timestamp!)}
+                 title={'Measured at: ' + this.convertTimeStampToDisplayableString(this.spot.currentSample!.timestamp!)}
                  tabIndex={0}>
                 <div className="measurement_row meas flow">
                     {this.getFlow()}
                 </div>
 
-                {this.location.currentSample!.temperature &&
+                {this.spot.currentSample!.temperature &&
                     <div className="measurement_row meas temp">
                         {this.getTemp()}
                     </div>
@@ -35,7 +35,7 @@ export class MswMeasurement extends Component<MeasurementsProps> {
     }
 
     private getFlow() {
-        let flow: number = this.location.currentSample!.flow;
+        let flow: number = this.spot.currentSample!.flow;
         return <>
             <div className={this.getFlowColor(flow)}>{flow}</div>
             <div className="unit">
@@ -43,7 +43,7 @@ export class MswMeasurement extends Component<MeasurementsProps> {
             </div>
 
             {/* Not yet possible, because we don't get the minFlowForDanger from the backend atm */}
-            {/*{this.location.currentSample.flow > this.location.minFlowForDanger && (*/}
+            {/*{this.spot.currentSample.flow > this.spot.minFlowForDanger && (*/}
             {/*  <div*/}
             {/*    className="danger"*/}
             {/*    title="Moderate flood danger, be careful!"*/}
@@ -55,7 +55,7 @@ export class MswMeasurement extends Component<MeasurementsProps> {
     }
 
     private getFlowColor(flow: number) {
-        let flowColorEnum = getFlowColorEnum(this.location, flow);
+        let flowColorEnum = getFlowColorEnum(this.spot, flow);
         switch (flowColorEnum) {
             case FlowColorEnum.GREEN:
                 return "flow_good";
@@ -68,7 +68,7 @@ export class MswMeasurement extends Component<MeasurementsProps> {
 
 
     private getTemp() {
-        let temp: number = this.location.currentSample!.temperature ?? 0;
+        let temp: number = this.spot.currentSample!.temperature ?? 0;
         return <>
             <div>{temp}</div>
             <div className="unit">°C</div>

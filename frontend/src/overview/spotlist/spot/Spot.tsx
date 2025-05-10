@@ -30,7 +30,7 @@ export const Spot = (props: SpotProps) => {
 
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
-    const handleDeleteSpotAndCloseModal = (location: ApiSpotInformation) => deleteSpot(location).then(handleCancelConfirmationModal);
+    const handleDeleteSpotAndCloseModal = (spot: ApiSpotInformation) => deleteSpot(spot).then(handleCancelConfirmationModal);
     const handleCancelConfirmationModal = () => setShowConfirmationModal(false);
     const handleShowConfirmationModal = () => setShowConfirmationModal(true);
 
@@ -50,8 +50,8 @@ export const Spot = (props: SpotProps) => {
         </div>
     </>;
 
-    function getSpotSummaryContent(location: ApiSpotInformation) {
-        let link = "https://www.hydrodaten.admin.ch/de/seen-und-fluesse/stationen-und-daten/" + location.stationId;
+    function getSpotSummaryContent(spot: ApiSpotInformation) {
+        let link = "https://www.hydrodaten.admin.ch/de/seen-und-fluesse/stationen-und-daten/" + spot.stationId;
 
         return <>
             <div className='icons-container'>
@@ -63,10 +63,10 @@ export const Spot = (props: SpotProps) => {
             </div>
             <div className="spotContainer">
                 <div className="spot-title">
-                    {location.name}
+                    {spot.name}
                 </div>
-                <MswMeasurement location={location}/>
-                <MswMiniGraph location={location} showGraphOfType={props.showGraphOfType}/>
+                <MswMeasurement spot={spot}/>
+                <MswMiniGraph spot={spot} showGraphOfType={props.showGraphOfType}/>
             </div>
             <div className="icons-container">
                 <div className="icon">
@@ -75,7 +75,7 @@ export const Spot = (props: SpotProps) => {
                     </a>
                 </div>
                 {user &&
-                    <MswEditSpot location={location}/>
+                    <MswEditSpot spot={spot}/>
                 }
                 {user &&
                     <div className="icon" onClick={() => handleShowConfirmationModal()}>
@@ -93,7 +93,7 @@ export const Spot = (props: SpotProps) => {
                         <Button variant="outline-dark" onClick={handleCancelConfirmationModal}>
                             Cancel
                         </Button>
-                        <Button variant="danger" onClick={() => handleDeleteSpotAndCloseModal(location)}>
+                        <Button variant="danger" onClick={() => handleDeleteSpotAndCloseModal(spot)}>
                             Delete Spot
                         </Button>
                     </Modal.Footer>
@@ -105,14 +105,14 @@ export const Spot = (props: SpotProps) => {
         </>
     }
 
-    function getCollapsibleContent(location: ApiSpotInformation,
+    function getCollapsibleContent(spot: ApiSpotInformation,
                                    withLegend: boolean = true,
                                    withXAxis: boolean = true,
                                    withYAxis: boolean = true,
                                    withMinMaxReferenceLines: boolean = true,
                                    withTooltip: boolean = true) {
         let forecastContent = <>
-            <MswForecastGraph location={location}
+            <MswForecastGraph spot={spot}
                               aspectRatio={2}
                               withLegend={withLegend}
                               withXAxis={withXAxis}
@@ -124,7 +124,7 @@ export const Spot = (props: SpotProps) => {
         let lastMeasurementsContent = <>
             <div className="last40days-container">
                 <p>Forecast unavailable - showing last 40 days</p>
-                <MswLastMeasurementsGraph location={location}
+                <MswLastMeasurementsGraph spot={spot}
                                           aspectRatio={2}
                                           withLegend={withLegend}
                                           withXAxis={withXAxis}
@@ -135,7 +135,7 @@ export const Spot = (props: SpotProps) => {
         </>;
 
         let historicalYearsContent = <>
-            <MswHistoricalYearsGraph location={location}
+            <MswHistoricalYearsGraph spot={spot}
                                      aspectRatio={2}
                                      withLegend={withLegend}
                                      withXAxis={withXAxis}
@@ -147,16 +147,16 @@ export const Spot = (props: SpotProps) => {
         return <>
             <div className="collapsibleContent">
                 {props.showGraphOfType === GraphTypeEnum.Forecast ?
-                    (location.forecast ? forecastContent : lastMeasurementsContent) :
+                    (spot.forecast ? forecastContent : lastMeasurementsContent) :
                     historicalYearsContent}
             </div>
         </>;
     }
 
-    async function deleteSpot(location: ApiSpotInformation) {
+    async function deleteSpot(spot: ApiSpotInformation) {
         let config = await authConfiguration(token);
-        new SpotsApi(config).deletePrivateSpot(location.id!); // no await to not be blocking
-        spotsService.deleteSpot(location.id!);
+        new SpotsApi(config).deletePrivateSpot(spot.id!); // no await to not be blocking
+        spotsService.deleteSpot(spot.id!);
     }
 
 }

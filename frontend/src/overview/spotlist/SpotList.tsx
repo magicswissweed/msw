@@ -9,25 +9,25 @@ import {GraphTypeEnum} from "../MswOverviewPage";
 
 interface SpotListProps {
     title: string,
-    locations: Array<ApiSpotInformation>,
+    spots: Array<ApiSpotInformation>,
     showGraphOfType: GraphTypeEnum
 }
 
 export const SpotList = (props: SpotListProps) => {
-    const [spots, setSpots] = useState<Array<ApiSpotInformation>>(props.locations);
+    const [spots, setSpots] = useState<Array<ApiSpotInformation>>(props.spots);
 
     // @ts-ignore
     const {user, token} = useUserAuth();
 
     useEffect(() => {
-        setSpots(props.locations);
-    }, [props.locations]);
+        setSpots(props.spots);
+    }, [props.spots]);
 
 
-    async function saveSpotsOrdering(locations: Array<ApiSpotInformation>) {
+    async function saveSpotsOrdering(spots: Array<ApiSpotInformation>) {
         let config = await authConfiguration(token);
         await new SpotsApi(config).orderSpots(
-            locations
+            spots
                 .filter(loc => loc.id)
                 .map(loc => loc.id!));
     }

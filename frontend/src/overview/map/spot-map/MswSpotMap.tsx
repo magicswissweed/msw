@@ -5,8 +5,8 @@ import {MswSpotMapPerCategory} from "./per-category/MswSpotMapPerCategory";
 import {Col, Form, Row} from "react-bootstrap";
 
 interface MswSpotMapProps {
-    riverSurfLocations: Array<ApiSpotInformation>,
-    bungeeSurfLocations: Array<ApiSpotInformation>
+    riverSurfSpots: Array<ApiSpotInformation>,
+    bungeeSurfSpots: Array<ApiSpotInformation>
 }
 
 export const MswSpotMap: React.FC<MswSpotMapProps> = (props: MswSpotMapProps) => {
@@ -14,8 +14,8 @@ export const MswSpotMap: React.FC<MswSpotMapProps> = (props: MswSpotMapProps) =>
 
     return <>
         <div className='map-including-switch-container'>
-            <MswSpotMapPerCategory spots={showSpotCategory == ApiSpotSpotTypeEnum.RiverSurf ?
-                props.riverSurfLocations : props.bungeeSurfLocations}/>
+            <MswSpotMapPerCategory spots={showSpotCategory === ApiSpotSpotTypeEnum.RiverSurf ?
+                props.riverSurfSpots : props.bungeeSurfSpots}/>
 
             <Form>
                 <Row className="align-items-center">
