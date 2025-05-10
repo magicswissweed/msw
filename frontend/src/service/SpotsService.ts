@@ -9,20 +9,16 @@ class SpotsService {
     private spots: Array<SpotModel> = [];
     private subscribers: Array<SubscriberCallback> = [];
 
-    async fetchData(token: any, showAllSpots: boolean) {
-        if (showAllSpots) {
-            let config = await authConfiguration(token);
-            // First load the most relevant info (fast)
-            // -> then load additional infos (less important) -> shown to user as soon as it's loaded.
-            new SpotsApi(config).getAllSpots()
-                .then(this.writeSpotsToState)
-                .then(() =>
-                    new HistoricalApi(config).getHistoricalData()
-                        .then(this.addHistoricalDataToState.bind(this))
-                )
-        } else {
-            new SpotsApi().getPublicSpots().then(this.writeSpotsToState);
-        }
+    async fetchData(token: any) {
+        let config = await authConfiguration(token);
+        // First load the most relevant info (fast)
+        // -> then load additional infos (less important) -> shown to user as soon as it's loaded.
+        new SpotsApi(config).getSpots()
+            .then(this.writeSpotsToState)
+            .then(() =>
+                new HistoricalApi(config).getHistoricalData()
+                    .then(this.addHistoricalDataToState.bind(this))
+            )
     }
 
     deleteSpot(id: string): void {

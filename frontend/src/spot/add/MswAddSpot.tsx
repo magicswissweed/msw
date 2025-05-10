@@ -76,7 +76,7 @@ export const MswAddSpot = () => {
         };
         let response: AxiosResponse<void, any> = await new SpotsApi(config).addPrivateSpot({spot: apiSpot, position: 0})
         if (response.status === 200) {
-            spotsService.fetchData(token, true).then(handleCancelAddSpotModal);
+            spotsService.fetchData(token).then(handleCancelAddSpotModal);
         } else {
             alert("Sorry, it looks like we can't add that spot. Maybe the flow is not measured at this station?");
         }

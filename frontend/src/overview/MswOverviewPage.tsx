@@ -36,17 +36,13 @@ export const MswOverviewPage = () => {
     // initial loading
     useEffect(() => {
         if (!wasUserLoggedInBefore()) {
-            spotsService.fetchData(token, false);
+            spotsService.fetchData(token);
         }
     }, []);
 
     // load on user change
     useEffect(() => {
-        if (!wasUserLoggedInBefore()) {
-            spotsService.fetchData(token, false);
-        } else if (user) {
-            spotsService.fetchData(token, true);
-        }
+        spotsService.fetchData(token);
     }, [user])
 
     return <>

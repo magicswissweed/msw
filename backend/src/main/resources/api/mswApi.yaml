@@ -87,25 +87,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiHistoricalYearsList'
-  /api/v1/spots/public:
+  /api/v1/spots:
     get:
       summary: Get SpotInformation-List including Current Sample and Forecast for non-logged-in user.
-      operationId: getPublicSpots
-      tags:
-        - spots
-      responses:
-        '200':
-          description: Returns a List with Data for the Spots.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiSpotInformationList'
-  /api/v1/spots/all:
-    get:
-      summary: Get Public and Private SpotInformation-List including Current Sample and Forecast for logged in user.
-      security:
-        - bearerAuth: [ ]
-      operationId: getAllSpots
+      operationId: getSpots
       tags:
         - spots
       responses:

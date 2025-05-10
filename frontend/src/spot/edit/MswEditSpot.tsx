@@ -83,7 +83,7 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({spot}) => {
         };
         let response: AxiosResponse<void, any> = await new SpotsApi(config).editPrivateSpot(spot.id, editPrivateSpotRequest)
         if (response.status === 200) {
-            await spotsService.fetchData(token, true).then(() => {
+            await spotsService.fetchData(token).then(() => {
                 handleCancelEditSpotModal();
                 window.location.reload();   // TODO: find better solution to bring data to charts
             });

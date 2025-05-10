@@ -1,5 +1,6 @@
 package com.aa.msw.api.spots;
 
+import com.aa.msw.auth.threadlocal.UserContext;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.exceptions.NoSampleAvailableException;
 import com.aa.msw.database.exceptions.NoSuchUserException;
@@ -37,22 +38,17 @@ public class SpotsApiController implements SpotsApi {
     }
 
     @Override
-    public ResponseEntity<List<ApiSpotInformation>> getAllSpots() {
+    public ResponseEntity<List<ApiSpotInformation>> getSpots() {
         try {
-            return ResponseEntity.ok(spotsApiService.getAllSpots());
+            if (UserContext.getCurrentUser() == null) {
+                return ResponseEntity.ok(spotsApiService.getPublicSpots());
+            } else {
+                return ResponseEntity.ok(spotsApiService.getAllSpots());
+            }
         } catch (NoDataAvailableException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (NoSuchUserException e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-    }
-
-    @Override
-    public ResponseEntity<List<ApiSpotInformation>> getPublicSpots() {
-        try {
-            return ResponseEntity.ok(spotsApiService.getPublicSpots());
-        } catch (NoDataAvailableException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

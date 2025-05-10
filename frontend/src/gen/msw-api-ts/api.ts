@@ -903,42 +903,12 @@ export const SpotsApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @summary Get Public and Private SpotInformation-List including Current Sample and Forecast for logged in user.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllSpots: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/spots/all`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary Get SpotInformation-List including Current Sample and Forecast for non-logged-in user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPublicSpots: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/spots/public`;
+        getSpots: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/spots`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1049,26 +1019,14 @@ export const SpotsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Public and Private SpotInformation-List including Current Sample and Forecast for logged in user.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getAllSpots(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ApiSpotInformation>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllSpots(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SpotsApi.getAllSpots']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
          * @summary Get SpotInformation-List including Current Sample and Forecast for non-logged-in user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPublicSpots(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ApiSpotInformation>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getPublicSpots(options);
+        async getSpots(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ApiSpotInformation>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSpots(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SpotsApi.getPublicSpots']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['SpotsApi.getSpots']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1127,21 +1085,12 @@ export const SpotsApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
-         * @summary Get Public and Private SpotInformation-List including Current Sample and Forecast for logged in user.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAllSpots(options?: any): AxiosPromise<Array<ApiSpotInformation>> {
-            return localVarFp.getAllSpots(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary Get SpotInformation-List including Current Sample and Forecast for non-logged-in user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPublicSpots(options?: any): AxiosPromise<Array<ApiSpotInformation>> {
-            return localVarFp.getPublicSpots(options).then((request) => request(axios, basePath));
+        getSpots(options?: any): AxiosPromise<Array<ApiSpotInformation>> {
+            return localVarFp.getSpots(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1202,24 +1151,13 @@ export class SpotsApi extends BaseAPI {
 
     /**
      * 
-     * @summary Get Public and Private SpotInformation-List including Current Sample and Forecast for logged in user.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SpotsApi
-     */
-    public getAllSpots(options?: RawAxiosRequestConfig) {
-        return SpotsApiFp(this.configuration).getAllSpots(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
      * @summary Get SpotInformation-List including Current Sample and Forecast for non-logged-in user.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SpotsApi
      */
-    public getPublicSpots(options?: RawAxiosRequestConfig) {
-        return SpotsApiFp(this.configuration).getPublicSpots(options).then((request) => request(this.axios, this.basePath));
+    public getSpots(options?: RawAxiosRequestConfig) {
+        return SpotsApiFp(this.configuration).getSpots(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
