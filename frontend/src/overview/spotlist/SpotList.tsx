@@ -6,15 +6,16 @@ import {authConfiguration} from '../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../user/UserAuthContext';
 import {Spot} from "./spot/Spot";
 import {GraphTypeEnum} from "../MswOverviewPage";
+import {SpotModel} from "../../model/SpotModel";
 
 interface SpotListProps {
     title: string,
-    spots: Array<ApiSpotInformation>,
+    spots: Array<SpotModel>,
     showGraphOfType: GraphTypeEnum
 }
 
 export const SpotList = (props: SpotListProps) => {
-    const [spots, setSpots] = useState<Array<ApiSpotInformation>>(props.spots);
+    const [spots, setSpots] = useState<Array<SpotModel>>(props.spots);
 
     // @ts-ignore
     const {user, token} = useUserAuth();
@@ -55,7 +56,7 @@ export const SpotList = (props: SpotListProps) => {
                 <Droppable droppableId="locations-wrapper">
                     {(droppableProvided: any) => (
                         <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
-                            {spots.map((spot: ApiSpotInformation, index: number) => (
+                            {spots.map((spot: SpotModel, index: number) => (
                                 <Draggable key={spot.id} draggableId={spot.id!} index={index}>
                                     {(draggableProvided: any) => (
                                         <div className="draggable-container"

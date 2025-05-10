@@ -1,0 +1,10 @@
+###
+# @name Get HistoricalYears
+#
+GET {{base-path}}/historicalYears
+Authorization: Bearer {{auth_token}}
+
+###
+# @name Get HistoricalYears without being logged in
+#
+GET {{base-path}}/historicalYears

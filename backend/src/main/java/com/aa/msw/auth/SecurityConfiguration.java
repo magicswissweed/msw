@@ -34,7 +34,8 @@ public class SecurityConfiguration {
     RequestMatcher[] getMatchersForRequestsNotToBeAuthenticated() {
         return new AntPathRequestMatcher[]{
                 new AntPathRequestMatcher("/api/v1/spots/public", HttpMethod.GET.toString()),
-                new AntPathRequestMatcher("/api/v1/stations", HttpMethod.GET.toString())
+                new AntPathRequestMatcher("/api/v1/stations", HttpMethod.GET.toString()),
+                new AntPathRequestMatcher("/api/v1/historicalYears", HttpMethod.GET.toString()),
         };
     }
 }

@@ -1,7 +1,7 @@
 import '../base-graph/MswGraph.scss'
 import {Area, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis} from 'recharts';
 import React, {Component} from 'react';
-import {ApiHistoricalYears, ApiLineEntry, ApiSpotInformation} from '../../../../../gen/msw-api-ts';
+import {ApiHistoricalYears, ApiLineEntry} from '../../../../../gen/msw-api-ts';
 import {
     DATA_KEY_MEDIAN,
     getCartesianGrid,
@@ -13,6 +13,7 @@ import {
     NormalizedDataItem,
     normalizeGraphDataLine
 } from "../base-graph/MswGraph";
+import {SpotModel} from "../../../../../model/SpotModel";
 
 const DATA_KEY_25_PERCENTILE = "twentyFivePercentile";
 const DATA_KEY_75_PERCENTILE = "seventyFivePercentile";
@@ -26,7 +27,7 @@ export let LINE_NAME_CURRENT_YEAR = "Current year";
 
 export class MswHistoricalYearsGraph extends Component<MswGraphProps> {
 
-    private readonly spot: ApiSpotInformation;
+    private readonly spot: SpotModel;
     private readonly aspectRatio: number;
     private readonly withLegend: boolean;
     private readonly withYAxis: boolean;

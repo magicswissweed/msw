@@ -3,12 +3,12 @@ import React, {useEffect, useState} from "react";
 import {MswHeader} from '../header/MswHeader';
 import {MswFooter} from '../footer/MswFooter';
 import {SpotList} from './spotlist/SpotList'
-import {ApiSpotInformation} from '../gen/msw-api-ts';
 import {MswLoader} from '../loader/MswLoader';
 import {useUserAuth, wasUserLoggedInBefore} from '../user/UserAuthContext';
 import {spotsService} from "../service/SpotsService";
 import {Col, Form, Row} from "react-bootstrap";
 import {MswSpotMap} from "./map/spot-map/MswSpotMap";
+import {SpotModel} from "../model/SpotModel";
 
 function isNotEmpty(array: Array<any> | undefined) {
     return array && array.length > 0;
@@ -20,14 +20,14 @@ export enum GraphTypeEnum {
 }
 
 export const MswOverviewPage = () => {
-    const [spots, setSpots] = useState<Array<ApiSpotInformation>>([]);
+    const [spots, setSpots] = useState<Array<SpotModel>>([]);
     const [showGraphOfType, setShowGraphOfType] = useState<GraphTypeEnum>(GraphTypeEnum.Forecast);
 
     // @ts-ignore
     const {user, token} = useUserAuth();
 
     useEffect(() => {
-        const updateSpots = (newSpots: ApiSpotInformation[]) => setSpots(newSpots);
+        const updateSpots = (newSpots: SpotModel[]) => setSpots(newSpots);
         spotsService.subscribe(updateSpots);
 
         return () => spotsService.unsubscribe(updateSpots);

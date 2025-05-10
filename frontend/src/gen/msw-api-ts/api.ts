@@ -326,12 +326,6 @@ export interface ApiSpotInformation {
      * @memberof ApiSpotInformation
      */
     'forecast': ApiForecast;
-    /**
-     * 
-     * @type {ApiHistoricalYears}
-     * @memberof ApiSpotInformation
-     */
-    'historical': ApiHistoricalYears;
 }
 
 export const ApiSpotInformationSpotTypeEnum = {
@@ -384,6 +378,25 @@ export interface EditPrivateSpotRequest {
      * @memberof EditPrivateSpotRequest
      */
     'spot': ApiSpot;
+}
+/**
+ * 
+ * @export
+ * @interface StationToApiHistoricalYears
+ */
+export interface StationToApiHistoricalYears {
+    /**
+     * 
+     * @type {number}
+     * @memberof StationToApiHistoricalYears
+     */
+    'station': number;
+    /**
+     * 
+     * @type {ApiHistoricalYears}
+     * @memberof StationToApiHistoricalYears
+     */
+    'historical': ApiHistoricalYears;
 }
 
 /**
@@ -489,6 +502,107 @@ export class ForecastApi extends BaseAPI {
      */
     public getForecast(stationId: number, options?: RawAxiosRequestConfig) {
         return ForecastApiFp(this.configuration).getForecast(stationId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * HistoricalApi - axios parameter creator
+ * @export
+ */
+export const HistoricalApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get historical data for all spots of user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getHistoricalData: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/historicalYears`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * HistoricalApi - functional programming interface
+ * @export
+ */
+export const HistoricalApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = HistoricalApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get historical data for all spots of user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getHistoricalData(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<StationToApiHistoricalYears>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getHistoricalData(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['HistoricalApi.getHistoricalData']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * HistoricalApi - factory interface
+ * @export
+ */
+export const HistoricalApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = HistoricalApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get historical data for all spots of user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getHistoricalData(options?: any): AxiosPromise<Array<StationToApiHistoricalYears>> {
+            return localVarFp.getHistoricalData(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * HistoricalApi - object-oriented interface
+ * @export
+ * @class HistoricalApi
+ * @extends {BaseAPI}
+ */
+export class HistoricalApi extends BaseAPI {
+    /**
+     * 
+     * @summary Get historical data for all spots of user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HistoricalApi
+     */
+    public getHistoricalData(options?: RawAxiosRequestConfig) {
+        return HistoricalApiFp(this.configuration).getHistoricalData(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -1,13 +1,13 @@
 import './MswMiniGraph.scss'
 import React from 'react';
-import {ApiSpotInformation} from '../../../../../gen/msw-api-ts';
 import {MswForecastGraph} from '../forecast/MswForecastGraph';
 import {MswLastMeasurementsGraph} from '../historical/MswLastMeasurementsGraph';
 import {GraphTypeEnum} from "../../../../MswOverviewPage";
 import {MswHistoricalYearsGraph} from "../historical/MswHistoricalYearsGraph";
+import {SpotModel} from "../../../../../model/SpotModel";
 
 interface MswMiniForecastProps {
-    spot: ApiSpotInformation,
+    spot: SpotModel,
     showGraphOfType: GraphTypeEnum
 }
 

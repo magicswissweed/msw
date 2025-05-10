@@ -2,7 +2,6 @@ package com.aa.msw.api.spots;
 
 import com.aa.msw.api.current.SampleApiService;
 import com.aa.msw.api.graph.forecast.ForecastApiService;
-import com.aa.msw.api.graph.historical.HistoricalYearsApiService;
 import com.aa.msw.api.station.StationApiService;
 import com.aa.msw.auth.threadlocal.UserContext;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
@@ -38,17 +37,15 @@ public class SpotsApiService {
     private final SpotDao spotDao;
     private final UserToSpotDao userToSpotDao;
     private final InputDataFetcherService inputDataFetcherService;
-    private final HistoricalYearsApiService historicalYearsApiService;
     private final StationApiService stationApiService;
 
-    public SpotsApiService(SampleApiService sampleApiService, ForecastApiService forecastApiService, SampleDao sampleDao, SpotDao spotDao, UserToSpotDao userToSpotDao, InputDataFetcherService inputDataFetcherService, HistoricalYearsApiService historicalYearsApiService, StationApiService stationApiService) {
+    public SpotsApiService(SampleApiService sampleApiService, ForecastApiService forecastApiService, SampleDao sampleDao, SpotDao spotDao, UserToSpotDao userToSpotDao, InputDataFetcherService inputDataFetcherService, StationApiService stationApiService) {
         this.sampleApiService = sampleApiService;
         this.forecastApiService = forecastApiService;
         this.sampleDao = sampleDao;
         this.spotDao = spotDao;
         this.userToSpotDao = userToSpotDao;
         this.inputDataFetcherService = inputDataFetcherService;
-        this.historicalYearsApiService = historicalYearsApiService;
         this.stationApiService = stationApiService;
     }
 
@@ -89,7 +86,6 @@ public class SpotsApiService {
                                 .spotType(com.aa.msw.gen.api.ApiSpotInformation.SpotTypeEnum.valueOf(spot.type().name()))
                                 .currentSample(sampleApiService.getCurrentSample(spot.stationId()))
                                 .forecast(currentForecast)
-                                .historical(historicalYearsApiService.getApiHistoricalYearsData(spot.stationId()))
                                 .station(apiStation)
                 );
             } catch (NoSuchElementException e) {

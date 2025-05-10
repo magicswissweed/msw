@@ -1,6 +1,7 @@
 import {ApiLineEntry, ApiSample, ApiSpotInformation} from "../../../../../gen/msw-api-ts";
 import React from "react";
 import {CartesianGrid, Label, Line, ReferenceArea, ReferenceLine, Tooltip, XAxis} from 'recharts';
+import {SpotModel} from "../../../../../model/SpotModel";
 
 export const DATA_KEY_MEDIAN = "median";
 export const DATA_KEY_MEASURED = "measured";
@@ -9,7 +10,7 @@ export const LINE_NAME_MEASURED = "measured";
 export let LINE_NAME_MEDIAN = "median";
 
 export interface MswGraphProps {
-    spot: ApiSpotInformation,
+    spot: SpotModel,
     aspectRatio: number,
     withLegend?: boolean | undefined,
     withYAxis?: boolean | undefined

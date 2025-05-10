@@ -17,9 +17,10 @@ import {MswHistoricalYearsGraph} from "./graph/historical/MswHistoricalYearsGrap
 import {MswForecastGraph} from "./graph/forecast/MswForecastGraph";
 import {MswLastMeasurementsGraph} from "./graph/historical/MswLastMeasurementsGraph";
 import {GraphTypeEnum} from "../../MswOverviewPage";
+import {SpotModel} from "../../../model/SpotModel";
 
 interface SpotProps {
-    spot: ApiSpotInformation,
+    spot: SpotModel,
     dragHandleProps: any,
     showGraphOfType: GraphTypeEnum
 }
@@ -50,7 +51,7 @@ export const Spot = (props: SpotProps) => {
         </div>
     </>;
 
-    function getSpotSummaryContent(spot: ApiSpotInformation) {
+    function getSpotSummaryContent(spot: SpotModel) {
         let link = "https://www.hydrodaten.admin.ch/de/seen-und-fluesse/stationen-und-daten/" + spot.stationId;
 
         return <>
@@ -105,7 +106,7 @@ export const Spot = (props: SpotProps) => {
         </>
     }
 
-    function getCollapsibleContent(spot: ApiSpotInformation,
+    function getCollapsibleContent(spot: SpotModel,
                                    withLegend: boolean = true,
                                    withXAxis: boolean = true,
                                    withYAxis: boolean = true,

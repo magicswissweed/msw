@@ -72,6 +72,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiForecast'
+  /api/v1/historicalYears:
+    get:
+      summary: Get historical data for all spots of user.
+      security:
+        - bearerAuth: [ ]
+      operationId: getHistoricalData
+      tags:
+        - historical
+      responses:
+        '200':
+          description: Returns historical data for all spots of user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiHistoricalYearsList'
   /api/v1/spots/public:
     get:
       summary: Get SpotInformation-List including Current Sample and Forecast for non-logged-in user.
@@ -254,8 +269,6 @@ components:
               $ref: '#/components/schemas/ApiSample'
             forecast:
               $ref: '#/components/schemas/ApiForecast'
-            historical:
-              $ref: '#/components/schemas/ApiHistoricalYears'
     SpotOrderList:
       type: array
       required: [ type, format ]
@@ -319,6 +332,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ApiLineEntry'
+    ApiHistoricalYearsList:
+      type: array
+      items:
+        $ref: '#/components/schemas/StationToApiHistoricalYears'
+    StationToApiHistoricalYears:
+      type: object
+      required: [ station, historical ]
+      properties:
+        station:
+          type: integer
+        historical:
+          $ref: '#/components/schemas/ApiHistoricalYears'
     ApiHistoricalYears:
       type: object
       required: [ median, twentyFivePercentile, seventyFivePercentile, max, min, currentYear ]

@@ -1,7 +1,9 @@
 package com.aa.msw.api.graph.historical;
 
-import com.aa.msw.gen.api.ApiHistoricalYears;
+import com.aa.msw.gen.api.StationToApiHistoricalYears;
+
+import java.util.List;
 
 public interface HistoricalYearsApiService {
-    ApiHistoricalYears getApiHistoricalYearsData(Integer stationId);
+    List<StationToApiHistoricalYears> getAllApiHistoricalYearsData();
 }
