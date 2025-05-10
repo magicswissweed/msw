@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 public class SpotsTest extends IntegrationTest {
     public static final String API_PREFIX = "/api/v1";
-    public static final String ALL_SPOTS_URL = API_PREFIX + "/spots/all";
+    public static final String ALL_SPOTS_URL = API_PREFIX + "/spots";
     public static final String SPOT_URL = API_PREFIX + "/spot";
 
     @Test
