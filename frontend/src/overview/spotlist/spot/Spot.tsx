@@ -1,6 +1,6 @@
 import './Spot.scss'
 import React, {useState} from 'react';
-import {ApiSpotInformation, EditPrivateSpotRequest, SpotsApi} from '../../../gen/msw-api-ts';
+import {ApiSpotInformation, SpotsApi} from '../../../gen/msw-api-ts';
 import {MswEditSpot} from "../../../spot/edit/MswEditSpot";
 import {MswMeasurement} from './measurement/MswMeasurement';
 import {MswMiniGraph} from './graph/miniGraph/MswMiniGraph';
@@ -12,14 +12,14 @@ import {authConfiguration} from '../../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../../user/UserAuthContext';
 import Modal from 'react-bootstrap/Modal';
 import {Button} from "react-bootstrap";
-import {locationsService} from "../../../service/LocationsService";
+import {spotsService} from "../../../service/SpotsService";
 import {MswHistoricalYearsGraph} from "./graph/historical/MswHistoricalYearsGraph";
 import {MswForecastGraph} from "./graph/forecast/MswForecastGraph";
 import {MswLastMeasurementsGraph} from "./graph/historical/MswLastMeasurementsGraph";
 import {GraphTypeEnum} from "../../MswOverviewPage";
 
 interface SpotProps {
-    location: ApiSpotInformation,
+    spot: ApiSpotInformation,
     dragHandleProps: any,
     showGraphOfType: GraphTypeEnum
 }
@@ -36,17 +36,17 @@ export const Spot = (props: SpotProps) => {
 
 
     return <>
-        <details key={props.location.name} className="spot spot-desktop">
+        <details key={props.spot.name} className="spot spot-desktop">
             <summary className="spotname">
-                {getSpotSummaryContent(props.location)}
+                {getSpotSummaryContent(props.spot)}
             </summary>
-            {getCollapsibleContent(props.location)}
+            {getCollapsibleContent(props.spot)}
         </details>
         <div className="spot spot-mobile">
             <div className={"spot-overview"}>
-                {getSpotSummaryContent(props.location)}
+                {getSpotSummaryContent(props.spot)}
             </div>
-            {getCollapsibleContent(props.location, false, true, true, true, true)}
+            {getCollapsibleContent(props.spot, false, true, true, true, true)}
         </div>
     </>;
 
@@ -156,7 +156,7 @@ export const Spot = (props: SpotProps) => {
     async function deleteSpot(location: ApiSpotInformation) {
         let config = await authConfiguration(token);
         new SpotsApi(config).deletePrivateSpot(location.id!); // no await to not be blocking
-        locationsService.deleteLocation(location.id!);
+        spotsService.deleteSpot(location.id!);
     }
 
 }

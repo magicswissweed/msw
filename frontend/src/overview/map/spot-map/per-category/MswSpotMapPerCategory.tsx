@@ -3,7 +3,7 @@ import {GoogleMap, useLoadScript} from "@react-google-maps/api";
 import {MarkerClusterer} from "@googlemaps/markerclusterer";
 import {ApiSpotInformation} from "../../../../gen/msw-api-ts";
 import './MswSpotMapPerCategory.scss';
-import {locationsService} from "../../../../service/LocationsService";
+import {getFlowColorEnum} from "../../../../service/SpotsHelper";
 
 export const mapCenter = {lat: 47.05, lng: 8.30}; // Luzern / ca. Mitte der Schweiz
 
@@ -60,7 +60,7 @@ export const MswSpotMapPerCategory = ({spots}: MswSpotMapPropsPerCategory) => {
     const createMarkers = (spots: ApiSpotInformation[]) => {
         return spots.map((spot, index) => {
             const position = getOffsetPosition(spot.station.latitude, spot.station.longitude, index);
-            const flowColorEnum = locationsService.getFlowColorEnum(spot, spot.currentSample.flow)
+            const flowColorEnum = getFlowColorEnum(spot, spot.currentSample.flow)
 
             const marker = new google.maps.Marker({
                 position,

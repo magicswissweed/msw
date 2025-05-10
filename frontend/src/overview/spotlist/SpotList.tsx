@@ -14,13 +14,13 @@ interface SpotListProps {
 }
 
 export const SpotList = (props: SpotListProps) => {
-    const [locations, setLocations] = useState<Array<ApiSpotInformation>>(props.locations);
+    const [spots, setSpots] = useState<Array<ApiSpotInformation>>(props.locations);
 
     // @ts-ignore
     const {user, token} = useUserAuth();
 
     useEffect(() => {
-        setLocations(props.locations);
+        setSpots(props.locations);
     }, [props.locations]);
 
 
@@ -35,17 +35,17 @@ export const SpotList = (props: SpotListProps) => {
     useEffect(() => {
         if (user) {
             // no await, because we don't want the frontend to be blocked
-            saveSpotsOrdering(locations);
+            saveSpotsOrdering(spots);
         }
-    }, [locations])
+    }, [spots])
 
     const handleDrop = async (result: any) => {
         if (!result.destination) return;
-        const reorderedItems = Array.from(locations);
+        const reorderedItems = Array.from(spots);
         const [removed] = reorderedItems.splice(result.source.index, 1);
         reorderedItems.splice(result.destination.index, 0, removed);
 
-        setLocations(reorderedItems);
+        setSpots(reorderedItems);
     };
 
     return <>
@@ -55,12 +55,12 @@ export const SpotList = (props: SpotListProps) => {
                 <Droppable droppableId="locations-wrapper">
                     {(droppableProvided: any) => (
                         <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
-                            {locations.map((location: ApiSpotInformation, index: number) => (
-                                <Draggable key={location.id} draggableId={location.id!} index={index}>
+                            {spots.map((spot: ApiSpotInformation, index: number) => (
+                                <Draggable key={spot.id} draggableId={spot.id!} index={index}>
                                     {(draggableProvided: any) => (
                                         <div className="draggable-container"
                                              ref={draggableProvided.innerRef} {...draggableProvided.draggableProps}>
-                                            <Spot location={location}
+                                            <Spot spot={spot}
                                                   dragHandleProps={draggableProvided.dragHandleProps}
                                                   showGraphOfType={props.showGraphOfType}/>
                                         </div>

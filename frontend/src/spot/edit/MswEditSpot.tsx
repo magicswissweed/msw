@@ -13,7 +13,7 @@ import {
 import {useUserAuth} from '../../user/UserAuthContext';
 import {AxiosResponse} from "axios";
 import {authConfiguration} from "../../api/config/AuthConfiguration";
-import {locationsService} from "../../service/LocationsService";
+import {spotsService} from "../../service/SpotsService";
 import edit_icon from "../../assets/edit.svg";
 import {MswAddOrEditSpotModal} from "../MswAddOrEditUtil";
 
@@ -83,7 +83,7 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({location}) => {
         };
         let response: AxiosResponse<void, any> = await new SpotsApi(config).editPrivateSpot(location.id, editPrivateSpotRequest)
         if (response.status === 200) {
-            await locationsService.fetchData(token, true).then(() => {
+            await spotsService.fetchData(token, true).then(() => {
                 handleCancelEditSpotModal();
                 window.location.reload();   // TODO: find better solution to bring data to charts
             });

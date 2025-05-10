@@ -7,7 +7,7 @@ import {useUserAuth} from '../../user/UserAuthContext';
 import {AxiosResponse} from "axios";
 import {v4 as uuid} from 'uuid';
 import {authConfiguration} from "../../api/config/AuthConfiguration";
-import {locationsService} from "../../service/LocationsService";
+import {spotsService} from "../../service/SpotsService";
 import {MswAddOrEditSpotModal} from "../MswAddOrEditUtil";
 
 export const MswAddSpot = () => {
@@ -76,7 +76,7 @@ export const MswAddSpot = () => {
         };
         let response: AxiosResponse<void, any> = await new SpotsApi(config).addPrivateSpot({spot: apiSpot, position: 0})
         if (response.status === 200) {
-            locationsService.fetchData(token, true).then(handleCancelAddSpotModal);
+            spotsService.fetchData(token, true).then(handleCancelAddSpotModal);
         } else {
             alert("Sorry, it looks like we can't add that spot. Maybe the flow is not measured at this station?");
         }

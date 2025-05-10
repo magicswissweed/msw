@@ -6,7 +6,7 @@ import {SpotList} from './spotlist/SpotList'
 import {ApiSpotInformation} from '../gen/msw-api-ts';
 import {MswLoader} from '../loader/MswLoader';
 import {useUserAuth, wasUserLoggedInBefore} from '../user/UserAuthContext';
-import {locationsService} from "../service/LocationsService";
+import {spotsService} from "../service/SpotsService";
 import {Col, Form, Row} from "react-bootstrap";
 import {MswSpotMap} from "./map/spot-map/MswSpotMap";
 
@@ -21,52 +21,52 @@ export const GraphTypeEnum = {
 export type GraphTypeEnum = typeof GraphTypeEnum[keyof typeof GraphTypeEnum];
 
 export const MswOverviewPage = () => {
-    const [locations, setLocations] = useState<Array<ApiSpotInformation>>([]);
+    const [spots, setSpots] = useState<Array<ApiSpotInformation>>([]);
     const [showGraphOfType, setShowGraphOfType] = useState<GraphTypeEnum>(GraphTypeEnum.Forecast);
 
     // @ts-ignore
     const {user, token} = useUserAuth();
 
     useEffect(() => {
-        const updateLocations = (newLocations: ApiSpotInformation[]) => setLocations(newLocations);
-        locationsService.subscribe(updateLocations);
+        const updateLocations = (newSpots: ApiSpotInformation[]) => setSpots(newSpots);
+        spotsService.subscribe(updateLocations);
 
-        return () => locationsService.unsubscribe(updateLocations);
+        return () => spotsService.unsubscribe(updateLocations);
     }, []);
 
     // initial loading
     useEffect(() => {
         if (!wasUserLoggedInBefore()) {
-            locationsService.fetchData(token, false);
+            spotsService.fetchData(token, false);
         }
     }, []);
 
     // load on user change
     useEffect(() => {
         if (!wasUserLoggedInBefore()) {
-            locationsService.fetchData(token, false);
+            spotsService.fetchData(token, false);
         } else if (user) {
-            locationsService.fetchData(token, true);
+            spotsService.fetchData(token, true);
         }
     }, [user])
 
     return <>
         <div className="App">
             <MswHeader/>
-            {locations.length > 0 ? getContent() : <MswLoader/>}
+            {spots.length > 0 ? getContent() : <MswLoader/>}
             <MswFooter/>
         </div>
     </>;
 
     function getContent() {
-        let riverSurfLocations = locations.filter(l => l.spotType === "RIVER_SURF");
-        let bungeeSurfLocations = locations.filter(l => l.spotType === "BUNGEE_SURF");
+        let riverSurfSpots = spots.filter(l => l.spotType === "RIVER_SURF");
+        let bungeeSurfSpots = spots.filter(l => l.spotType === "BUNGEE_SURF");
         return <>
             <div className="surfspots">
-                {isNotEmpty(riverSurfLocations) &&
-                    <SpotList title="Riversurf" locations={riverSurfLocations} showGraphOfType={showGraphOfType}/>}
-                {isNotEmpty(bungeeSurfLocations) &&
-                    <SpotList title="Bungeesurf" locations={bungeeSurfLocations} showGraphOfType={showGraphOfType}/>}
+                {isNotEmpty(riverSurfSpots) &&
+                    <SpotList title="Riversurf" locations={riverSurfSpots} showGraphOfType={showGraphOfType}/>}
+                {isNotEmpty(bungeeSurfSpots) &&
+                    <SpotList title="Bungeesurf" locations={bungeeSurfSpots} showGraphOfType={showGraphOfType}/>}
             </div>
             <Form>
                 <Row className="align-items-center">
@@ -88,7 +88,7 @@ export const MswOverviewPage = () => {
                     <Col className="text-start">Historical</Col>
                 </Row>
             </Form>
-            <MswSpotMap riverSurfLocations={riverSurfLocations} bungeeSurfLocations={bungeeSurfLocations}/>
+            <MswSpotMap riverSurfLocations={riverSurfSpots} bungeeSurfLocations={bungeeSurfSpots}/>
         </>;
     }
 }

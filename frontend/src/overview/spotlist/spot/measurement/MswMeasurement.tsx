@@ -1,7 +1,7 @@
 import './MswMeasurement.scss'
 import {Component} from 'react';
 import {ApiSpotInformation} from '../../../../gen/msw-api-ts';
-import {FlowColorEnum, locationsService} from "../../../../service/LocationsService";
+import {FlowColorEnum, getFlowColorEnum} from "../../../../service/SpotsHelper";
 
 interface MeasurementsProps {
     location: ApiSpotInformation
@@ -54,8 +54,8 @@ export class MswMeasurement extends Component<MeasurementsProps> {
         </>;
     }
 
-    private getFlowColor(_flow: number) {
-        let flowColorEnum = locationsService.getFlowColorEnum(this.location, _flow);
+    private getFlowColor(flow: number) {
+        let flowColorEnum = getFlowColorEnum(this.location, flow);
         switch (flowColorEnum) {
             case FlowColorEnum.GREEN:
                 return "flow_good";
