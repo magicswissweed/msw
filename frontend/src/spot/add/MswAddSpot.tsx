@@ -2,13 +2,14 @@ import './MswAddSpot.scss';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import React, {useEffect, useRef, useState} from "react";
 import {Button} from 'react-bootstrap';
-import {ApiSpot, ApiSpotSpotTypeEnum, ApiStation, SpotsApi, StationApi} from '../../gen/msw-api-ts';
+import {ApiSpot, ApiSpotSpotTypeEnum, ApiStation, SpotsApi} from '../../gen/msw-api-ts';
 import {useUserAuth} from '../../user/UserAuthContext';
 import {AxiosResponse} from "axios";
 import {v4 as uuid} from 'uuid';
 import {authConfiguration} from "../../api/config/AuthConfiguration";
 import {spotsService} from "../../service/SpotsService";
 import {MswAddOrEditSpotModal} from "../MswAddOrEditUtil";
+import {stationsService} from "../../service/StationsService";
 
 export const MswAddSpot = () => {
 
@@ -45,7 +46,7 @@ export const MswAddSpot = () => {
     const [stationSelectionError, setStationSelectionError] = useState('');
 
     useEffect(() => {
-        new StationApi().getStations().then((response) => setStations(response.data));
+        setStations(stationsService.getStations());
     }, []);
 
 

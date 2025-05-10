@@ -7,8 +7,7 @@ import {
     ApiSpotSpotTypeEnum,
     ApiStation,
     EditPrivateSpotRequest,
-    SpotsApi,
-    StationApi
+    SpotsApi
 } from '../../gen/msw-api-ts';
 import {useUserAuth} from '../../user/UserAuthContext';
 import {AxiosResponse} from "axios";
@@ -16,6 +15,7 @@ import {authConfiguration} from "../../api/config/AuthConfiguration";
 import {spotsService} from "../../service/SpotsService";
 import edit_icon from "../../assets/edit.svg";
 import {MswAddOrEditSpotModal} from "../MswAddOrEditUtil";
+import {stationsService} from "../../service/StationsService";
 
 // specify the properties (inputs) for the MswEditSpot component
 interface MswEditSpotProps {
@@ -43,9 +43,8 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({spot}) => {
     const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
     const [stationSelectionError, setStationSelectionError] = useState('');
 
-    // initial loading of stations (needed for Typeahead)
     useEffect(() => {
-        new StationApi().getStations().then((response) => setStations(response.data));
+        setStations(stationsService.getStations());
     }, []);
 
     // @ts-ignore

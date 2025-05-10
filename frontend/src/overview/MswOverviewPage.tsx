@@ -9,6 +9,7 @@ import {spotsService} from "../service/SpotsService";
 import {Col, Form, Row} from "react-bootstrap";
 import {MswSpotMap} from "./map/spot-map/MswSpotMap";
 import {SpotModel} from "../model/SpotModel";
+import {stationsService} from "../service/StationsService";
 
 function isNotEmpty(array: Array<any> | undefined) {
     return array && array.length > 0;
@@ -31,6 +32,11 @@ export const MswOverviewPage = () => {
         spotsService.subscribe(updateSpots);
 
         return () => spotsService.unsubscribe(updateSpots);
+    }, []);
+
+    // initial loading
+    useEffect(() => {
+        stationsService.fetchData();
     }, []);
 
     // initial loading
