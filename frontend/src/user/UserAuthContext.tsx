@@ -1,4 +1,4 @@
-import {createContext, useContext, useEffect, useMemo, useState} from "react";
+import {createContext, useContext, useEffect, useState} from "react";
 import {
     createUserWithEmailAndPassword,
     GoogleAuthProvider,
@@ -28,28 +28,25 @@ export function UserAuthContextProvider({children}) {
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(null);
 
-    const contextValue = useMemo(() => ({
-        user, token, logIn, signUp, logOut, sendForgotPasswordEmail, googleSignIn
-    }), [user, token]);
-
     useEffect(() => {
-        const unsubscribe = firebaseAuth.onIdTokenChanged(async (currentUser) => {
-            setUser(currentUser);
-            if (currentUser) {
+        const unsubscribe = firebaseAuth.onAuthStateChanged((currentuser) => {
+            if (currentuser) {
                 setCookie(userWasLoggedInCookieName, userWasLoggedInCookieValue);
-                const token = await currentUser.getIdToken(/* forceRefresh = */ false);
-                setToken(token);
-            } else {
-                setToken(null);
+                currentuser.getIdToken(false).then((token) => {
+                    setToken(token);
+                })
             }
+            setUser(currentuser);
         });
 
-        return () => unsubscribe();
+        return () => {
+            unsubscribe();
+        };
     }, []);
 
     return (
         <userAuthContext.Provider
-            value={contextValue}
+            value={{user, token, logIn, signUp, logOut, sendForgotPasswordEmail, googleSignIn}}
         >
             {children}
         </userAuthContext.Provider>
