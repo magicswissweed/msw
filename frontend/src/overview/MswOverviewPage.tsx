@@ -4,7 +4,7 @@ import {MswHeader} from '../header/MswHeader';
 import {MswFooter} from '../footer/MswFooter';
 import {SpotList} from './spotlist/SpotList'
 import {MswLoader} from '../loader/MswLoader';
-import {useUserAuth, wasUserLoggedInBefore} from '../user/UserAuthContext';
+import {useUserAuth} from '../user/UserAuthContext';
 import {spotsService} from "../service/SpotsService";
 import {Col, Form, Row} from "react-bootstrap";
 import {MswSpotMap} from "./map/spot-map/MswSpotMap";
@@ -28,6 +28,16 @@ export const MswOverviewPage = () => {
     const {user, token} = useUserAuth();
 
     useEffect(() => {
+        // Wait until Firebase has resolved the auth state (user is either null or non-null)
+        const authResolved = user !== undefined;
+
+        // Only fetch once when auth state is known
+        if (authResolved) {
+            spotsService.fetchData(token);
+        }
+    }, [user, token]);
+
+    useEffect(() => {
         const updateSpots = (newSpots: SpotModel[]) => setSpots(newSpots);
         spotsService.subscribe(updateSpots);
 
@@ -38,18 +48,6 @@ export const MswOverviewPage = () => {
     useEffect(() => {
         stationsService.fetchData();
     }, []);
-
-    // initial loading
-    useEffect(() => {
-        if (!wasUserLoggedInBefore()) {
-            spotsService.fetchData(token);
-        }
-    }, []);
-
-    // load on user change
-    useEffect(() => {
-        spotsService.fetchData(token);
-    }, [user])
 
     return <>
         <div className="App">

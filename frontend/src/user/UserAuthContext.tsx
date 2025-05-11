@@ -25,7 +25,8 @@ const userWasLoggedInCookieValue = "true";
 
 // @ts-ignore
 export function UserAuthContextProvider({children}) {
-    const [user, setUser] = useState<User | null>(null);
+    // null if not logged in, undefined if not yet known
+    const [user, setUser] = useState<User | null | undefined>(undefined);
     const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
