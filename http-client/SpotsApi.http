@@ -1,12 +1,12 @@
 ###
 # @name Get Public Spots
 #
-GET {{base-path}}/spots/public
+GET {{base-path}}/spots
 
 ###
 # @name Get All Spots
 #
-GET {{base-path}}/spots/all
+GET {{base-path}}/spots
 Authorization: Bearer {{auth_token}}
 
 ###
