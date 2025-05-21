@@ -9,4 +9,4 @@ VALUES ('f0a29af1-4e12-4431-974c-f2e39e42ff51', 'BUNGEE_SURF', 2091, 'Basel', 85
 INSERT INTO public.spot_table (id, type, stationid, name, minflow, maxflow, ispublic)
 VALUES ('134463b8-1c0d-43d6-be3f-8693d283a418', 'BUNGEE_SURF', 2135, 'Bern', 80, 360, true);
 INSERT INTO public.spot_table (id, type, stationid, name, minflow, maxflow, ispublic)
-VALUES ('134463b8-1c0d-43d6-be3f-8693d283a419', 'RIVER_SURF', 2018, 'Your own Surfspot', 200, 400, true);
+VALUES ('134463b8-1c0d-43d6-be3f-8693d283a419', 'RIVER_SURF', 2018, 'Your own surf spot', 200, 400, true);
