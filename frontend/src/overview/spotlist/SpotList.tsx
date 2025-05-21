@@ -7,6 +7,8 @@ import {useUserAuth} from '../../user/UserAuthContext';
 import {Spot} from "./spot/Spot";
 import {GraphTypeEnum} from "../MswOverviewPage";
 import {SpotModel} from "../../model/SpotModel";
+import curved_arrow from '../../assets/curved_arrow.svg';
+import {useAuthModal} from '../../user/AuthModalContext';
 
 interface SpotListProps {
     title: string,
@@ -16,6 +18,7 @@ interface SpotListProps {
 
 export const SpotList = (props: SpotListProps) => {
     const [spots, setSpots] = useState<Array<SpotModel>>(props.spots);
+    const {setShowSignupModal} = useAuthModal();
 
     // @ts-ignore
     const {user, token} = useUserAuth();
@@ -68,6 +71,16 @@ export const SpotList = (props: SpotListProps) => {
                                     )}
                                 </Draggable>
                             ))}
+                            {!user && props.title === "Riversurf" &&
+                                <div className="draggable-container">
+                                    <div className="guest-message">
+                                        <div className="curved-arrow">
+                                            <img src={curved_arrow} alt="" />
+                                        </div>
+                                        <h3>Wanna add your own surf spots? <span id='blue'>Simply <span onClick={() => setShowSignupModal(true)} style={{cursor: 'pointer', textDecoration: 'underline'}}>sign up</span></span></h3>
+                                    </div>
+                                </div>
+                            }
                             {droppableProvided.placeholder}
                         </div>
                     )}

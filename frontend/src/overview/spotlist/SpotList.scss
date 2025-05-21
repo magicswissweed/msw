@@ -38,3 +38,39 @@
 .item.dragging {
   opacity: 0.6;
 }
+
+
+.guest-message {
+  text-align: left;
+  padding: 2rem 2rem 2rem 7rem;
+  // background-color: #f8f9fa;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+
+  h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 0;
+    color: #000;
+  }
+
+  #blue {
+    color: $msw-blue;
+  }
+
+  .curved-arrow {
+    position: absolute;
+    left: 1.5rem;
+    top: 20%;
+    transform: translateY(-50%);
+    
+    img {
+      width: 5.5rem;
+      height: 5.5rem;
+      transform: rotate(-55deg);
+    }
+  }
+}
