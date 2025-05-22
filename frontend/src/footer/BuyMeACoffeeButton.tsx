@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const BuyMeACoffeeButton = () => {
+    const [isHovered, setIsHovered] = useState(false);
+
     useEffect(() => {
         const script = document.createElement('script');
         script.setAttribute('data-name', 'BMC-Widget');
@@ -34,6 +36,8 @@ export const BuyMeACoffeeButton = () => {
             className="bmc-button" 
             target="_blank" 
             href="https://www.buymeacoffee.com/magicswissweed"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -41,22 +45,15 @@ export const BuyMeACoffeeButton = () => {
                 padding: '0 12px',
                 backgroundColor: '#FFDD00',
                 color: '#000000',
-                border: 'none',
+                border: '1px solid',
+                borderColor: isHovered ? '#000000' : '#FFDD00',
                 borderRadius: '5px',
-                // fontSize: '14px',
                 textDecoration: 'none',
-                cursor: 'pointer'            
-              }}
+                cursor: 'pointer',
+                transition: 'all 0.2s ease-in-out'
+            }}
         >
-            <img 
-                src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" 
-                alt="Buy me a coffee"
-                style={{
-                    height: '20px',
-                    width: '20px',
-                    marginRight: '8px'
-                }}
-            />
+            <span style={{ marginRight: '8px', fontSize: '20px' }}>☕️</span>
             <span>Buy us a coffee</span>
         </a>
     );
