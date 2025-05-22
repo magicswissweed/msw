@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom/client';
 import {UserAuthContextProvider} from './user/UserAuthContext';
 import {MswOverviewPage} from './overview/MswOverviewPage';
 import {ErrorNotFound} from "./error/404";
+import {AuthModalProvider} from './user/AuthModalContext';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement,
@@ -13,13 +14,14 @@ const root = ReactDOM.createRoot(
 
 root.render(
     <UserAuthContextProvider>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Navigate replace to="/spots"/>}/>
-                <Route path="/spots" element={<MswOverviewPage/>}/>
-
-                <Route path="*" element={<ErrorNotFound/>}/>
-            </Routes>
-        </BrowserRouter>
+        <AuthModalProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Navigate replace to="/spots"/>}/>
+                    <Route path="/spots" element={<MswOverviewPage/>}/>
+                    <Route path="*" element={<ErrorNotFound/>}/>
+                </Routes>
+            </BrowserRouter>
+        </AuthModalProvider>
     </UserAuthContextProvider>,
 );

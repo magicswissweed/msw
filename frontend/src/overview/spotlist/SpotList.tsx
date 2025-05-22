@@ -1,5 +1,5 @@
 import './SpotList.scss';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {ApiSpotInformation, SpotsApi} from '../../gen/msw-api-ts';
 import {authConfiguration} from '../../api/config/AuthConfiguration';
@@ -7,6 +7,8 @@ import {useUserAuth} from '../../user/UserAuthContext';
 import {Spot} from "./spot/Spot";
 import {GraphTypeEnum} from "../MswOverviewPage";
 import {SpotModel} from "../../model/SpotModel";
+import curved_arrow from '../../assets/curved_arrow.svg';
+import {useAuthModal} from '../../user/AuthModalContext';
 
 interface SpotListProps {
     title: string,
@@ -16,6 +18,7 @@ interface SpotListProps {
 
 export const SpotList = (props: SpotListProps) => {
     const [spots, setSpots] = useState<Array<SpotModel>>(props.spots);
+    const {setShowSignupModal} = useAuthModal();
 
     // @ts-ignore
     const {user, token} = useUserAuth();
@@ -25,20 +28,20 @@ export const SpotList = (props: SpotListProps) => {
     }, [props.spots]);
 
 
-    async function saveSpotsOrdering(spots: Array<ApiSpotInformation>) {
+    const saveSpotsOrdering = useCallback(async (spots: Array<ApiSpotInformation>) => {
         let config = await authConfiguration(token);
         await new SpotsApi(config).orderSpots(
             spots
                 .filter(loc => loc.id)
                 .map(loc => loc.id!));
-    }
+    }, [token]);
 
     useEffect(() => {
         if (user) {
             // no await, because we don't want the frontend to be blocked
             saveSpotsOrdering(spots);
         }
-    }, [spots])
+    }, [spots, user, saveSpotsOrdering])
 
     const handleDrop = async (result: any) => {
         if (!result.destination) return;
@@ -68,6 +71,16 @@ export const SpotList = (props: SpotListProps) => {
                                     )}
                                 </Draggable>
                             ))}
+                            {!user && props.title === "Riversurf" &&
+                                <div className="draggable-container">
+                                    <div className="guest-message">
+                                        <div className="curved-arrow">
+                                            <img src={curved_arrow} alt="" />
+                                        </div>
+                                        <h3><span id='black'>Wanna add your own surf spots?</span> Simply <span onClick={() => setShowSignupModal(true)} style={{cursor: 'pointer', textDecoration: 'underline'}}>sign up</span></h3>
+                                    </div>
+                                </div>
+                            }
                             {droppableProvided.placeholder}
                         </div>
                     )}
