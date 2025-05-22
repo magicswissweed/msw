@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './MswFooter.scss';
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import { BuyMeACoffeeButton } from './BuyMeACoffeeButton';
 
 export const MswFooter = () => {
     const [showAboutModal, setShowAboutModal] = useState(false);
@@ -43,7 +44,7 @@ export const MswFooter = () => {
                         version.
                     </p>
                     <p>
-                        Thanks to Aaron‘s programming skills, these dreams actually took shape in what you have before
+                        Thanks to Aaron's programming skills, these dreams actually took shape in what you have before
                         you.
                     </p>
                     <p>
@@ -53,16 +54,10 @@ export const MswFooter = () => {
                 </Modal.Body>
                 <Modal.Footer style={{justifyContent: "center"}}>
                     <div style={{display: "flex", gap: "1rem"}}>
-                        <a href="https://www.buymeacoffee.com/magicswissweed" target="_blank" rel="noopener noreferrer">
-                            <img
-                                src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
-                                alt="Buy Me A Coffee"
-                                style={{height: "38px"}}
-                            />
-                        </a>
+                        <BuyMeACoffeeButton />
                         <Button variant="msw"
                                 style={{width: "135px"}}
-                                onClick={() => window.location.href = "mailto:magicswissweed@gmail.com?subject=Feedback"}>
+                                onClick={() => window.location.href = "https://github.com/magicswissweed/msw/issues"}>
                             Feedback
                         </Button>
                     </div>
