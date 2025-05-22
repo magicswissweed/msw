@@ -43,10 +43,6 @@
 .guest-message {
   text-align: left;
   padding: 2rem 2rem 2rem 7rem;
-  // background-color: #f8f9fa;
-  border-radius: 8px;
-  width: 100%;
-  box-sizing: border-box;
   position: relative;
 
   h3 {
@@ -54,11 +50,10 @@
     font-size: 1.8rem;
     font-weight: 600;
     margin-bottom: 0;
-    color: #000;
   }
-
-  #blue {
-    color: $msw-blue;
+  
+  #black {
+    color: #000;
   }
 
   .curved-arrow {

@@ -77,7 +77,7 @@ export const SpotList = (props: SpotListProps) => {
                                         <div className="curved-arrow">
                                             <img src={curved_arrow} alt="" />
                                         </div>
-                                        <h3>Wanna add your own surf spots? <span id='blue'>Simply <span onClick={() => setShowSignupModal(true)} style={{cursor: 'pointer', textDecoration: 'underline'}}>sign up</span></span></h3>
+                                        <h3><span id='black'>Wanna add your own surf spots?</span> Simply <span onClick={() => setShowSignupModal(true)} style={{cursor: 'pointer', textDecoration: 'underline'}}>sign up</span></h3>
                                     </div>
                                 </div>
                             }
