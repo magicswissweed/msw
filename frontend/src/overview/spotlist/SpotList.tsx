@@ -1,5 +1,5 @@
 import './SpotList.scss';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {ApiSpotInformation, SpotsApi} from '../../gen/msw-api-ts';
 import {authConfiguration} from '../../api/config/AuthConfiguration';
@@ -28,20 +28,20 @@ export const SpotList = (props: SpotListProps) => {
     }, [props.spots]);
 
 
-    async function saveSpotsOrdering(spots: Array<ApiSpotInformation>) {
+    const saveSpotsOrdering = useCallback(async (spots: Array<ApiSpotInformation>) => {
         let config = await authConfiguration(token);
         await new SpotsApi(config).orderSpots(
             spots
                 .filter(loc => loc.id)
                 .map(loc => loc.id!));
-    }
+    }, [token]);
 
     useEffect(() => {
         if (user) {
             // no await, because we don't want the frontend to be blocked
             saveSpotsOrdering(spots);
         }
-    }, [spots])
+    }, [spots, user, saveSpotsOrdering])
 
     const handleDrop = async (result: any) => {
         if (!result.destination) return;
