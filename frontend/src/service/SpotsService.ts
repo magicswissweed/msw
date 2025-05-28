@@ -67,7 +67,7 @@ class SpotsService {
         }
     };
 
-    private addCurrentSampleToForecastLines(forecast: ApiForecast, currentSample: ApiSample) {
+    private addCurrentSampleToForecastLines(forecast: ApiForecast | undefined, currentSample: ApiSample) {
         if (forecast) {
             forecast.measuredData.push({timestamp: currentSample.timestamp, flow: currentSample.flow})
         }

@@ -150,6 +150,7 @@ export const Spot = (props: SpotProps) => {
                 return spot.forecast ? forecastContent : lastMeasurementsContent
             } else {
                 return <>
+                    {/*TODO: use Loader*/}
                     <div className="collapsibleContent">
                         Loading...
                     </div>

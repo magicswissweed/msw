@@ -15,10 +15,14 @@ export const MswMiniGraph = (props: MswMiniForecastProps) => {
 
     let content;
     if (props.showGraphOfType === GraphTypeEnum.Forecast) {
-        if (props.spot.forecast) {
-            content = <MswForecastGraph spot={props.spot} aspectRatio={3}/>;
+        if (props.spot.forecastLoaded) {
+            if (props.spot.forecast) {
+                content = <MswForecastGraph spot={props.spot} aspectRatio={3}/>;
+            } else {
+                content = <MswLastMeasurementsGraph spot={props.spot} aspectRatio={3}/>
+            }
         } else {
-            content = <MswLastMeasurementsGraph spot={props.spot} aspectRatio={3}/>
+            content = <p>Loading...</p> // TODO: use loader
         }
     } else {
         content = <MswHistoricalYearsGraph spot={props.spot} aspectRatio={3}/>

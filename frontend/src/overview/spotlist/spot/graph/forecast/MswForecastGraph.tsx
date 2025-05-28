@@ -49,6 +49,12 @@ export class MswForecastGraph extends Component<MswGraphProps> {
     }
 
     render() {
+        if (!this.spot.forecastLoaded) {
+            return <>
+                <div>Loading...</div>
+                // TODO: use loader
+            </>
+        }
         if (!this.spot.forecast) {
             return <>
                 <div>Detailed Forecast not possible at the moment...</div>
