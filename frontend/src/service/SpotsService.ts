@@ -47,11 +47,18 @@ class SpotsService {
                     s.maxFlow,
                     s.station,
                     s.currentSample,
-                    s.forecast,
+                    this.addCurrentSampleToForecastLines(s),
                     undefined))
             this.setSpots(spots);
         }
     };
+
+    private addCurrentSampleToForecastLines(s: ApiSpotInformation) {
+        if (s.forecast) {
+            s.forecast.measuredData.push({timestamp: s.currentSample.timestamp, flow: s.currentSample.flow})
+        }
+        return s.forecast;
+    }
 
     private addHistoricalDataToState(res: AxiosResponse<StationToApiHistoricalYears[], any>) {
         if (res && res.data) {
