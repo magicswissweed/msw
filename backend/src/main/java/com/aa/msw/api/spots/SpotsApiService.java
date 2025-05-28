@@ -1,7 +1,6 @@
 package com.aa.msw.api.spots;
 
 import com.aa.msw.api.current.SampleApiService;
-import com.aa.msw.api.graph.forecast.ForecastApiService;
 import com.aa.msw.api.station.StationApiService;
 import com.aa.msw.auth.threadlocal.UserContext;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
@@ -12,7 +11,6 @@ import com.aa.msw.database.helpers.id.SpotId;
 import com.aa.msw.database.repository.dao.SampleDao;
 import com.aa.msw.database.repository.dao.SpotDao;
 import com.aa.msw.database.repository.dao.UserToSpotDao;
-import com.aa.msw.gen.api.ApiForecast;
 import com.aa.msw.gen.api.ApiSpotInformation;
 import com.aa.msw.gen.api.ApiStation;
 import com.aa.msw.model.Sample;
@@ -27,21 +25,20 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class SpotsApiService {
     private final SampleApiService sampleApiService;
-    private final ForecastApiService forecastApiService;
     private final SampleDao sampleDao;
     private final SpotDao spotDao;
     private final UserToSpotDao userToSpotDao;
     private final InputDataFetcherService inputDataFetcherService;
     private final StationApiService stationApiService;
 
-    public SpotsApiService(SampleApiService sampleApiService, ForecastApiService forecastApiService, SampleDao sampleDao, SpotDao spotDao, UserToSpotDao userToSpotDao, InputDataFetcherService inputDataFetcherService, StationApiService stationApiService) {
+    public SpotsApiService(SampleApiService sampleApiService, SampleDao sampleDao, SpotDao spotDao, UserToSpotDao userToSpotDao, InputDataFetcherService inputDataFetcherService, StationApiService stationApiService) {
         this.sampleApiService = sampleApiService;
-        this.forecastApiService = forecastApiService;
         this.sampleDao = sampleDao;
         this.spotDao = spotDao;
         this.userToSpotDao = userToSpotDao;
@@ -49,10 +46,12 @@ public class SpotsApiService {
         this.stationApiService = stationApiService;
     }
 
+    // TODO: make private and use getSpots()
     public List<ApiSpotInformation> getPublicSpots() throws NoDataAvailableException {
         return getApiSpotInformationList(spotDao.getPublicSpots());
     }
 
+    // TODO: make private and use getSpots()
     public List<ApiSpotInformation> getAllSpots() throws NoDataAvailableException, NoSuchUserException {
         List<Spot> userSpots = userToSpotDao.getUserSpotsOrdered().stream()
                 .map(UserSpot::spot)
@@ -60,17 +59,28 @@ public class SpotsApiService {
         return getApiSpotInformationList(userSpots);
     }
 
+    public Set<Integer> getStationsForUser() {
+        return getSpots()
+                .stream()
+                .map(i -> i.getStation().getId())
+                .collect(Collectors.toSet());
+    }
+
+    private List<ApiSpotInformation> getSpots() {
+        try {
+            if (UserContext.getCurrentUser() == null) {
+                return getPublicSpots();
+            } else {
+                return getAllSpots();
+            }
+        } catch (Exception e) {
+            return List.of();
+        }
+    }
+
     private List<ApiSpotInformation> getApiSpotInformationList(List<Spot> spots) throws NoDataAvailableException {
         List<ApiSpotInformation> spotInformationList = new ArrayList<>();
         for (Spot spot : spots) {
-            ApiForecast currentForecast = null;
-            try {
-                currentForecast = forecastApiService.getCurrentForecast(spot.stationId());
-            } catch (NoDataAvailableException e) {
-                // NOP: This can happen if there is no forecast available for the station
-                // (unfortunately not every station has a forecast)
-            }
-
             try {
                 Station station = stationApiService.getStation(spot.stationId());
                 ApiStation apiStation = new ApiStation(station.stationId(), station.label(), station.latitude(), station.longitude());
@@ -85,7 +95,6 @@ public class SpotsApiService {
                                 .stationId(spot.stationId())
                                 .spotType(com.aa.msw.gen.api.ApiSpotInformation.SpotTypeEnum.valueOf(spot.type().name()))
                                 .currentSample(sampleApiService.getCurrentSample(spot.stationId()))
-                                .forecast(currentForecast)
                                 .station(apiStation)
                 );
             } catch (NoSuchElementException e) {

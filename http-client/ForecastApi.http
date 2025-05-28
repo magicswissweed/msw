@@ -3,3 +3,14 @@
 #
 GET {{base-path}}/forecast/{{stationId}}
 Authorization: Bearer {{auth_token}}
+
+###
+# @name Get all Forecasts
+#
+GET {{base-path}}/forecasts
+Authorization: Bearer {{auth_token}}
+
+###
+# @name Get public Forecasts
+#
+GET {{base-path}}/forecasts

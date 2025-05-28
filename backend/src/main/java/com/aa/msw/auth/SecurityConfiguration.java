@@ -36,7 +36,9 @@ public class SecurityConfiguration {
                 new AntPathRequestMatcher("/api/v1/spots/public", HttpMethod.GET.toString()),
                 new AntPathRequestMatcher("/api/v1/stations", HttpMethod.GET.toString()),
                 new AntPathRequestMatcher("/api/v1/historicalYears", HttpMethod.GET.toString()),
+                new AntPathRequestMatcher("/api/v1/forecasts", HttpMethod.GET.toString()),
                 new AntPathRequestMatcher("/api/v1/spots", HttpMethod.GET.toString()),
+                new AntPathRequestMatcher("/api/v1/sample/last40Days/*", HttpMethod.GET.toString()),
         };
     }
 }

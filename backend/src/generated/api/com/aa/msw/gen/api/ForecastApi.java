@@ -6,6 +6,7 @@
 package com.aa.msw.gen.api;
 
 import com.aa.msw.gen.api.ApiForecast;
+import com.aa.msw.gen.api.StationToApiForecasts;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,7 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-10T21:20:42.670481+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-28T16:36:56.112527+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
 @Tag(name = "forecast", description = "the forecast API")
 public interface ForecastApi {
@@ -70,6 +71,44 @@ public interface ForecastApi {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"seventyFivePercentile\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"twentyFivePercentile\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"min\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"median\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"max\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"measuredData\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * GET /api/v1/forecasts : Get All Forecasts for user
+     *
+     * @return Returns forecasts for all spots of user (status code 200)
+     */
+    @Operation(
+        operationId = "getForecasts",
+        summary = "Get All Forecasts for user",
+        tags = { "forecast" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Returns forecasts for all spots of user", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = StationToApiForecasts.class)))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/api/v1/forecasts",
+        produces = { "application/json" }
+    )
+    
+    default ResponseEntity<List<StationToApiForecasts>> getForecasts(
+        
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ { \"station\" : 0, \"forecast\" : { \"seventyFivePercentile\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"twentyFivePercentile\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"min\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"median\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"max\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"measuredData\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } }, { \"station\" : 0, \"forecast\" : { \"seventyFivePercentile\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"twentyFivePercentile\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"min\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"median\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"max\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"measuredData\" : [ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ], \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

@@ -1,4 +1,13 @@
-import {ApiSpotInformation, HistoricalApi, SpotsApi, StationToApiHistoricalYears} from "../gen/msw-api-ts";
+import {
+    ApiForecast,
+    ApiSample,
+    ApiSpotInformation,
+    ForecastApi,
+    HistoricalApi,
+    SpotsApi,
+    StationToApiForecasts,
+    StationToApiHistoricalYears
+} from "../gen/msw-api-ts";
 import {AxiosResponse} from "axios";
 import {authConfiguration} from "../api/config/AuthConfiguration";
 import {SpotModel} from "../model/SpotModel";
@@ -15,6 +24,10 @@ class SpotsService {
         // -> then load additional infos (less important) -> shown to user as soon as it's loaded.
         new SpotsApi(config).getSpots()
             .then(this.writeSpotsToState)
+            .then(() =>
+                new ForecastApi(config).getForecasts()
+                    .then(this.addForecastsToState.bind(this))
+            )
             .then(() =>
                 new HistoricalApi(config).getHistoricalData()
                     .then(this.addHistoricalDataToState.bind(this))
@@ -47,17 +60,47 @@ class SpotsService {
                     s.maxFlow,
                     s.station,
                     s.currentSample,
-                    this.addCurrentSampleToForecastLines(s),
+                    false,
+                    undefined,
                     undefined))
             this.setSpots(spots);
         }
     };
 
-    private addCurrentSampleToForecastLines(s: ApiSpotInformation) {
-        if (s.forecast) {
-            s.forecast.measuredData.push({timestamp: s.currentSample.timestamp, flow: s.currentSample.flow})
+    private addCurrentSampleToForecastLines(forecast: ApiForecast, currentSample: ApiSample) {
+        if (forecast) {
+            forecast.measuredData.push({timestamp: currentSample.timestamp, flow: currentSample.flow})
         }
-        return s.forecast;
+        return forecast;
+    }
+
+    private addForecastsToState(res: AxiosResponse<StationToApiForecasts[], any>) {
+        if (res && res.data) {
+            const updatedSpots = this.spots.map(s => {
+                const filteredListByStationId = res.data.filter(i => i.station === s.stationId);
+                const newForecast = this.addCurrentSampleToForecastLines(
+                    filteredListByStationId[0]?.forecast,
+                    s.currentSample
+                );
+                // create new SpotModel so that react can see that something changed (updating a field is not enough)
+                return new SpotModel(
+                    s.id,
+                    s.name,
+                    s.stationId,
+                    s.spotType,
+                    s.isPublic,
+                    s.minFlow,
+                    s.maxFlow,
+                    s.station,
+                    s.currentSample,
+                    true,
+                    newForecast,
+                    s.historical
+                );
+            });
+
+            this.setSpots(updatedSpots);
+        }
     }
 
     private addHistoricalDataToState(res: AxiosResponse<StationToApiHistoricalYears[], any>) {

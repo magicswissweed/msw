@@ -1,15 +1,15 @@
 import './MswMeasurement.scss'
 import {Component} from 'react';
-import {ApiSpotInformation} from '../../../../gen/msw-api-ts';
 import {FlowColorEnum, getFlowColorEnum} from "../../../../service/SpotsHelper";
+import {SpotModel} from "../../../../model/SpotModel";
 
 interface MeasurementsProps {
-    spot: ApiSpotInformation
+    spot: SpotModel
 }
 
 export class MswMeasurement extends Component<MeasurementsProps> {
 
-    private readonly spot: ApiSpotInformation;
+    private readonly spot: SpotModel;
 
     constructor(props: MeasurementsProps) {
         super(props);

@@ -1,7 +1,7 @@
 import '../base-graph/MswGraph.scss'
 import {Area, ComposedChart, Legend, Line, ReferenceDot, ResponsiveContainer, YAxis} from 'recharts';
 import React, {Component} from 'react';
-import {ApiForecast, ApiLineEntry, ApiSpotInformation} from '../../../../../gen/msw-api-ts';
+import {ApiForecast, ApiLineEntry} from '../../../../../gen/msw-api-ts';
 import {
     DATA_KEY_MEASURED,
     DATA_KEY_MEDIAN,
@@ -18,6 +18,7 @@ import {
     NormalizedDataItem,
     normalizeGraphDataLine
 } from "../base-graph/MswGraph";
+import {SpotModel} from "../../../../../model/SpotModel";
 
 const DATA_KEY_25_PERCENTILE = "twentyFivePercentile";
 const DATA_KEY_75_PERCENTILE = "seventyFivePercentile";
@@ -28,7 +29,7 @@ const TEMPORARY_DATA_KEY_FLOW = "flow";
 
 export class MswForecastGraph extends Component<MswGraphProps> {
 
-    private readonly spot: ApiSpotInformation;
+    private readonly spot: SpotModel;
     private readonly aspectRatio: number;
     private readonly withLegend: boolean;
     private readonly withYAxis: boolean;

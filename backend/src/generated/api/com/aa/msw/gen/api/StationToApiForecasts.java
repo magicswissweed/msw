@@ -2,7 +2,7 @@ package com.aa.msw.gen.api;
 
 import java.net.URI;
 import java.util.Objects;
-import com.aa.msw.gen.api.ApiHistoricalYears;
+import com.aa.msw.gen.api.ApiForecast;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import org.openapitools.jackson.nullable.JsonNullable;
@@ -16,29 +16,29 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * StationToApiHistoricalYears
+ * StationToApiForecasts
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-28T16:36:56.112527+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
-public class StationToApiHistoricalYears {
+public class StationToApiForecasts {
 
   private Integer station;
 
-  private ApiHistoricalYears historical;
+  private ApiForecast forecast;
 
-  public StationToApiHistoricalYears() {
+  public StationToApiForecasts() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public StationToApiHistoricalYears(Integer station, ApiHistoricalYears historical) {
+  public StationToApiForecasts(Integer station, ApiForecast forecast) {
     this.station = station;
-    this.historical = historical;
+    this.forecast = forecast;
   }
 
-  public StationToApiHistoricalYears station(Integer station) {
+  public StationToApiForecasts station(Integer station) {
     this.station = station;
     return this;
   }
@@ -58,24 +58,24 @@ public class StationToApiHistoricalYears {
     this.station = station;
   }
 
-  public StationToApiHistoricalYears historical(ApiHistoricalYears historical) {
-    this.historical = historical;
+  public StationToApiForecasts forecast(ApiForecast forecast) {
+    this.forecast = forecast;
     return this;
   }
 
   /**
-   * Get historical
-   * @return historical
+   * Get forecast
+   * @return forecast
   */
   @NotNull @Valid 
-  @Schema(name = "historical", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("historical")
-  public ApiHistoricalYears getHistorical() {
-    return historical;
+  @Schema(name = "forecast", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("forecast")
+  public ApiForecast getForecast() {
+    return forecast;
   }
 
-  public void setHistorical(ApiHistoricalYears historical) {
-    this.historical = historical;
+  public void setForecast(ApiForecast forecast) {
+    this.forecast = forecast;
   }
 
   @Override
@@ -86,22 +86,22 @@ public class StationToApiHistoricalYears {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    StationToApiHistoricalYears stationToApiHistoricalYears = (StationToApiHistoricalYears) o;
-    return Objects.equals(this.station, stationToApiHistoricalYears.station) &&
-        Objects.equals(this.historical, stationToApiHistoricalYears.historical);
+    StationToApiForecasts stationToApiForecasts = (StationToApiForecasts) o;
+    return Objects.equals(this.station, stationToApiForecasts.station) &&
+        Objects.equals(this.forecast, stationToApiForecasts.forecast);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(station, historical);
+    return Objects.hash(station, forecast);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class StationToApiHistoricalYears {\n");
+    sb.append("class StationToApiForecasts {\n");
     sb.append("    station: ").append(toIndentedString(station)).append("\n");
-    sb.append("    historical: ").append(toIndentedString(historical)).append("\n");
+    sb.append("    forecast: ").append(toIndentedString(forecast)).append("\n");
     sb.append("}");
     return sb.toString();
   }

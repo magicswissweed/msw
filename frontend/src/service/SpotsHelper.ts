@@ -1,11 +1,12 @@
 import {ApiLineEntry, ApiSpotInformation} from "../gen/msw-api-ts";
+import {SpotModel} from "../model/SpotModel";
 
 
 export enum FlowColorEnum {
     GREEN = "green", ORANGE = "orange", RED = "red"
 }
 
-export function getFlowColorEnum(spot: ApiSpotInformation, _flow: number): FlowColorEnum {
+export function getFlowColorEnum(spot: SpotModel, _flow: number): FlowColorEnum {
     if (isInSurfableRange(spot, _flow)) {
         return FlowColorEnum.GREEN;
     }
@@ -21,7 +22,7 @@ export function getFlowColorEnum(spot: ApiSpotInformation, _flow: number): FlowC
     return FlowColorEnum.RED;
 }
 
-export function forecastShowsTendencyToBecomeGood(spot: ApiSpotInformation, flow: number) {
+export function forecastShowsTendencyToBecomeGood(spot: SpotModel, flow: number) {
     function getMinFlowInLine(min?: Array<ApiLineEntry>) {
         if (!min || min.length === 0) return Number.POSITIVE_INFINITY;
         const flows = min
@@ -38,13 +39,17 @@ export function forecastShowsTendencyToBecomeGood(spot: ApiSpotInformation, flow
         return flows.length > 0 ? Math.max(...flows) : Number.NEGATIVE_INFINITY;
     }
 
-    const minFlowInForecast = getMinFlowInLine(spot.forecast.min);
-    const maxFlowInForecast = getMaxFlowInLine(spot.forecast.max);
+    if (spot.forecast) {
+        const minFlowInForecast = getMinFlowInLine(spot.forecast.min);
+        const maxFlowInForecast = getMaxFlowInLine(spot.forecast.max);
 
-    return isInSurfableRange(spot, minFlowInForecast) ||
-        isInSurfableRange(spot, maxFlowInForecast) ||
-        (flow < spot.minFlow && maxFlowInForecast > spot.minFlow) ||
-        (flow > spot.maxFlow && minFlowInForecast < spot.maxFlow);
+        return isInSurfableRange(spot, minFlowInForecast) ||
+            isInSurfableRange(spot, maxFlowInForecast) ||
+            (flow < spot.minFlow && maxFlowInForecast > spot.minFlow) ||
+            (flow > spot.maxFlow && minFlowInForecast < spot.maxFlow);
+    } else {
+        return false;
+    }
 }
 
 export function isInSurfableRange(spots: ApiSpotInformation, _flow: number) {

@@ -72,6 +72,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiForecast'
+  /api/v1/forecasts:
+    get:
+      summary: Get All Forecasts for user
+      security:
+        - bearerAuth: [ ]
+      operationId: getForecasts
+      tags:
+        - forecast
+      responses:
+        '200':
+          description: Returns forecasts for all spots of user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiForecastsList'
   /api/v1/historicalYears:
     get:
       summary: Get historical data for all spots of user.
@@ -248,12 +263,10 @@ components:
       allOf:
         - $ref: '#/components/schemas/ApiSpot'
         - type: object
-          required: [ currentSample, forecast, historical ]
+          required: [ currentSample ]
           properties:
             currentSample:
               $ref: '#/components/schemas/ApiSample'
-            forecast:
-              $ref: '#/components/schemas/ApiForecast'
     SpotOrderList:
       type: array
       required: [ type, format ]
@@ -317,6 +330,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ApiLineEntry'
+    ApiForecastsList:
+      type: array
+      items:
+        $ref: '#/components/schemas/StationToApiForecasts'
+    StationToApiForecasts:
+      type: object
+      required: [ station, forecast ]
+      properties:
+        station:
+          type: integer
+        forecast:
+          $ref: '#/components/schemas/ApiForecast'
     ApiHistoricalYearsList:
       type: array
       items:

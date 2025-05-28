@@ -16,7 +16,8 @@ export class SpotModel {
     maxFlow: number;
     station: ApiStation;
     currentSample: ApiSample;
-    forecast: ApiForecast;
+    forecastLoaded: boolean;
+    forecast: ApiForecast | undefined;
     historical: ApiHistoricalYears | undefined;
 
     constructor(
@@ -29,7 +30,8 @@ export class SpotModel {
         maxFlow: number,
         station: ApiStation,
         currentSample: ApiSample,
-        forecast: ApiForecast,
+        forecastLoaded: boolean,
+        forecast: ApiForecast | undefined,
         historical: ApiHistoricalYears | undefined) {
         this.id = id;
         this.name = name;
@@ -40,6 +42,7 @@ export class SpotModel {
         this.maxFlow = maxFlow;
         this.station = station;
         this.currentSample = currentSample;
+        this.forecastLoaded = forecastLoaded;
         this.forecast = forecast;
         this.historical = historical;
     }

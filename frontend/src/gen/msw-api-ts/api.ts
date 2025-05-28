@@ -320,12 +320,6 @@ export interface ApiSpotInformation {
      * @memberof ApiSpotInformation
      */
     'currentSample': ApiSample;
-    /**
-     * 
-     * @type {ApiForecast}
-     * @memberof ApiSpotInformation
-     */
-    'forecast': ApiForecast;
 }
 
 export const ApiSpotInformationSpotTypeEnum = {
@@ -378,6 +372,25 @@ export interface EditPrivateSpotRequest {
      * @memberof EditPrivateSpotRequest
      */
     'spot': ApiSpot;
+}
+/**
+ * 
+ * @export
+ * @interface StationToApiForecasts
+ */
+export interface StationToApiForecasts {
+    /**
+     * 
+     * @type {number}
+     * @memberof StationToApiForecasts
+     */
+    'station': number;
+    /**
+     * 
+     * @type {ApiForecast}
+     * @memberof StationToApiForecasts
+     */
+    'forecast': ApiForecast;
 }
 /**
  * 
@@ -439,6 +452,36 @@ export const ForecastApiAxiosParamCreator = function (configuration?: Configurat
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Get All Forecasts for user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getForecasts: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/forecasts`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -462,6 +505,18 @@ export const ForecastApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['ForecastApi.getForecast']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 
+         * @summary Get All Forecasts for user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getForecasts(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<StationToApiForecasts>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getForecasts(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ForecastApi.getForecasts']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -481,6 +536,15 @@ export const ForecastApiFactory = function (configuration?: Configuration, baseP
          */
         getForecast(stationId: number, options?: any): AxiosPromise<ApiForecast> {
             return localVarFp.getForecast(stationId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get All Forecasts for user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getForecasts(options?: any): AxiosPromise<Array<StationToApiForecasts>> {
+            return localVarFp.getForecasts(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -502,6 +566,17 @@ export class ForecastApi extends BaseAPI {
      */
     public getForecast(stationId: number, options?: RawAxiosRequestConfig) {
         return ForecastApiFp(this.configuration).getForecast(stationId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get All Forecasts for user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ForecastApi
+     */
+    public getForecasts(options?: RawAxiosRequestConfig) {
+        return ForecastApiFp(this.configuration).getForecasts(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

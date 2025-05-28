@@ -145,13 +145,23 @@ export const Spot = (props: SpotProps) => {
                                      withTooltip={withTooltip}/>
         </>;
 
-        return <>
-            <div className="collapsibleContent">
-                {props.showGraphOfType === GraphTypeEnum.Forecast ?
-                    (spot.forecast ? forecastContent : lastMeasurementsContent) :
-                    historicalYearsContent}
-            </div>
-        </>;
+        if (props.showGraphOfType === GraphTypeEnum.Forecast) {
+            if (spot.forecastLoaded) {
+                return spot.forecast ? forecastContent : lastMeasurementsContent
+            } else {
+                return <>
+                    <div className="collapsibleContent">
+                        Loading...
+                    </div>
+                </>;
+            }
+        } else {
+            return <>
+                <div className="collapsibleContent">
+                    {historicalYearsContent}
+                </div>
+            </>;
+        }
     }
 
     async function deleteSpot(spot: ApiSpotInformation) {

@@ -1,12 +1,13 @@
 import './MswSpotMap.scss';
 import React, {useState} from "react";
-import {ApiSpotInformation, ApiSpotSpotTypeEnum} from "../../../gen/msw-api-ts";
+import {ApiSpotSpotTypeEnum} from "../../../gen/msw-api-ts";
 import {MswSpotMapPerCategory} from "./per-category/MswSpotMapPerCategory";
 import {Col, Form, Row} from "react-bootstrap";
+import {SpotModel} from "../../../model/SpotModel";
 
 interface MswSpotMapProps {
-    riverSurfSpots: Array<ApiSpotInformation>,
-    bungeeSurfSpots: Array<ApiSpotInformation>
+    riverSurfSpots: Array<SpotModel>,
+    bungeeSurfSpots: Array<SpotModel>
 }
 
 export const MswSpotMap: React.FC<MswSpotMapProps> = (props: MswSpotMapProps) => {
