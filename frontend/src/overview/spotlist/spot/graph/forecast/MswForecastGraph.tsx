@@ -70,15 +70,20 @@ export class MswForecastGraph extends Component<MswGraphProps> {
                 <ComposedChart data={normalizedGraphData}>
                     {getReferenceArea(this.spot)}
                     {getCurrentTimeReferenceLine()}
-                    <ReferenceDot x={new Date(this.spot.forecast!.timestamp!).getTime()}
-                                  y={this.spot.forecast.median!
-                                      .filter((v) => new Date(v.timestamp!).getMonth() === new Date(this.spot.forecast!.timestamp!).getMonth())
-                                      .filter((v) => new Date(v.timestamp!).getDay() === new Date(this.spot.forecast!.timestamp!).getDay())
-                                      .filter((v) => new Date(v.timestamp!).getHours() === new Date(this.spot.forecast!.timestamp!).getHours())[0]
-                                      .flow
-                                  }
-                                  stroke="gold"
-                                  r={6}
+                    <ReferenceDot x={new Date(this.spot.currentSample!.timestamp!).getTime()}
+                                  y={this.spot.currentSample!.flow}
+                                  r={4}
+                        // shape = cross
+                                  shape={({cx, cy}) => (
+                                      <g>
+                                          <line x1={cx - 4} y1={cy - 4} x2={cx + 4} y2={cy + 4}
+                                                stroke="blue"
+                                                strokeWidth={1.5}/>
+                                          <line x1={cx - 4} y1={cy + 4} x2={cx + 4} y2={cy - 4}
+                                                stroke="blue"
+                                                strokeWidth={1.5}/>
+                                      </g>
+                                  )}
                     />
 
                     <Area
