@@ -19,8 +19,6 @@ import com.aa.msw.model.UserSpot;
 import com.aa.msw.source.InputDataFetcherService;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -67,7 +65,6 @@ public class SpotsApiService {
     public void addPrivateSpot(Spot spot, int position) throws NoSampleAvailableException {
         fetchSamplesAndPersistIfExists(spot.stationId());
         userToSpotDao.addPrivateSpot(spot, position);
-        fetchDataForAllStations();
     }
 
     public void editSpot(Spot updatedSpot) throws NoSampleAvailableException {
@@ -147,22 +144,10 @@ public class SpotsApiService {
     private void editPrivateSpot(Spot updatedSpot) throws NoSampleAvailableException {
         fetchSamplesAndPersistIfExists(updatedSpot.stationId());
         userToSpotDao.updatePrivateSpot(updatedSpot);
-        fetchDataForAllStations();
     }
 
     private void fetchSamplesAndPersistIfExists(Integer stationId) throws NoSampleAvailableException {
         List<Sample> samples = inputDataFetcherService.fetchForStationId(stationId);
         sampleDao.persistSamplesIfNotExist(samples);
-    }
-
-    private void fetchDataForAllStations() {
-        // TODO: refactor: only fetch new data if necessary (if the station is new and there is no data for it)
-        inputDataFetcherService.updateStationIds();
-        try {
-            inputDataFetcherService.fetchDataAndWriteToDb();
-        } catch (IOException | URISyntaxException e) {
-            // NOP. Should never happen.
-            // If something went wrong, the data will get fetched again in a few minutes and the problem fixes itself.
-        }
     }
 }

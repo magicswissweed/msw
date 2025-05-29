@@ -65,9 +65,12 @@ public class SampleFetchService extends AbstractFetchService {
         List<ExistenzSample> existenzSamples = fetchData(fetchUrl).payload();
         List<Sample> samples = new ArrayList<>();
         for (Integer stationId : stationIds) {
-            samples.add(extractSampleForStationId(existenzSamples, stationId));
+            try {
+                samples.add(extractSampleForStationId(existenzSamples, stationId));
+            } catch (IncorrectDataReceivedException e) {
+                // ignore -> dont fetch sample
+            }
         }
-
         return samples;
     }
 
