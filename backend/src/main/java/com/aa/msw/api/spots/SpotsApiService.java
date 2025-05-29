@@ -5,7 +5,6 @@ import com.aa.msw.api.station.StationApiService;
 import com.aa.msw.auth.threadlocal.UserContext;
 import com.aa.msw.database.exceptions.NoDataAvailableException;
 import com.aa.msw.database.exceptions.NoSampleAvailableException;
-import com.aa.msw.database.exceptions.NoSuchUserException;
 import com.aa.msw.database.helpers.UserToSpot;
 import com.aa.msw.database.helpers.id.SpotId;
 import com.aa.msw.database.repository.dao.SampleDao;
@@ -46,27 +45,14 @@ public class SpotsApiService {
         this.stationApiService = stationApiService;
     }
 
-    // TODO: make private and use getSpots()
-    public List<ApiSpotInformation> getPublicSpots() throws NoDataAvailableException {
-        return getApiSpotInformationList(spotDao.getPublicSpots());
-    }
-
-    // TODO: make private and use getSpots()
-    public List<ApiSpotInformation> getAllSpots() throws NoDataAvailableException, NoSuchUserException {
-        List<Spot> userSpots = userToSpotDao.getUserSpotsOrdered().stream()
-                .map(UserSpot::spot)
-                .collect(Collectors.toList());
-        return getApiSpotInformationList(userSpots);
-    }
-
-    public Set<Integer> getStationsForUser() {
+    public Set<Integer> getStations() {
         return getSpots()
                 .stream()
                 .map(i -> i.getStation().getId())
                 .collect(Collectors.toSet());
     }
 
-    private List<ApiSpotInformation> getSpots() {
+    public List<ApiSpotInformation> getSpots() {
         try {
             if (UserContext.getCurrentUser() == null) {
                 return getPublicSpots();
@@ -76,6 +62,55 @@ public class SpotsApiService {
         } catch (Exception e) {
             return List.of();
         }
+    }
+
+    public void addPrivateSpot(Spot spot, int position) throws NoSampleAvailableException {
+        fetchSamplesAndPersistIfExists(spot.stationId());
+        userToSpotDao.addPrivateSpot(spot, position);
+        fetchDataForAllStations();
+    }
+
+    public void editSpot(Spot updatedSpot) throws NoSampleAvailableException {
+        if (spotDao.isPublicSpot(updatedSpot.spotId())) {
+            Spot newPrivateSpot = new Spot(
+                    new SpotId(), // needs new ID - not the same as the old spot
+                    updatedSpot.isPublic(),
+                    updatedSpot.type(),
+                    updatedSpot.name(),
+                    updatedSpot.stationId(),
+                    updatedSpot.minFlow(),
+                    updatedSpot.maxFlow()
+            );
+            UserToSpot oldUserToPublicSpotMapping = userToSpotDao.get(UserContext.getCurrentUser().userId(), updatedSpot.spotId());
+            deleteMapping(oldUserToPublicSpotMapping);
+            addPrivateSpot(newPrivateSpot, oldUserToPublicSpotMapping.position());
+        } else {
+            editPrivateSpot(updatedSpot);
+        }
+    }
+
+
+    public void deletePrivateSpot(SpotId spotId) {
+        userToSpotDao.deletePrivateSpot(spotId);
+    }
+
+    public void orderSpots(List<SpotId> orderedSpotIds) {
+        int position = 0;
+        for (SpotId spotId : orderedSpotIds) {
+            userToSpotDao.setPosition(spotId, position);
+            position++;
+        }
+    }
+
+    private List<ApiSpotInformation> getPublicSpots() throws NoDataAvailableException {
+        return getApiSpotInformationList(spotDao.getPublicSpots());
+    }
+
+    private List<ApiSpotInformation> getAllSpots() throws NoDataAvailableException {
+        List<Spot> userSpots = userToSpotDao.getUserSpotsOrdered().stream()
+                .map(UserSpot::spot)
+                .collect(Collectors.toList());
+        return getApiSpotInformationList(userSpots);
     }
 
     private List<ApiSpotInformation> getApiSpotInformationList(List<Spot> spots) throws NoDataAvailableException {
@@ -105,31 +140,6 @@ public class SpotsApiService {
         return spotInformationList;
     }
 
-    public void addPrivateSpot(Spot spot, int position) throws NoSampleAvailableException {
-        fetchSamplesAndPersistIfExists(spot.stationId());
-        userToSpotDao.addPrivateSpot(spot, position);
-        fetchDataForAllStations();
-    }
-
-    public void editSpot(Spot updatedSpot) throws NoSampleAvailableException {
-        if (spotDao.isPublicSpot(updatedSpot.spotId())) {
-            Spot newPrivateSpot = new Spot(
-                    new SpotId(), // needs new ID - not the same as the old spot
-                    updatedSpot.isPublic(),
-                    updatedSpot.type(),
-                    updatedSpot.name(),
-                    updatedSpot.stationId(),
-                    updatedSpot.minFlow(),
-                    updatedSpot.maxFlow()
-            );
-            UserToSpot oldUserToPublicSpotMapping = userToSpotDao.get(UserContext.getCurrentUser().userId(), updatedSpot.spotId());
-            deleteMapping(oldUserToPublicSpotMapping);
-            addPrivateSpot(newPrivateSpot, oldUserToPublicSpotMapping.position());
-        } else {
-            editPrivateSpot(updatedSpot);
-        }
-    }
-
     private void deleteMapping(UserToSpot oldUserToPublicSpotMapping) {
         userToSpotDao.delete(oldUserToPublicSpotMapping);
     }
@@ -153,18 +163,6 @@ public class SpotsApiService {
         } catch (IOException | URISyntaxException e) {
             // NOP. Should never happen.
             // If something went wrong, the data will get fetched again in a few minutes and the problem fixes itself.
-        }
-    }
-
-    public void deletePrivateSpot(SpotId spotId) {
-        userToSpotDao.deletePrivateSpot(spotId);
-    }
-
-    public void orderSpots(List<SpotId> orderedSpotIds) {
-        int position = 0;
-        for (SpotId spotId : orderedSpotIds) {
-            userToSpotDao.setPosition(spotId, position);
-            position++;
         }
     }
 }

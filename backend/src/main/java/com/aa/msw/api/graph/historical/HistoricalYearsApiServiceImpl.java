@@ -41,7 +41,7 @@ public class HistoricalYearsApiServiceImpl extends AbstractGraphLineApiService i
     @Override
     public List<StationToApiHistoricalYears> getAllApiHistoricalYearsData() {
         List<StationToApiHistoricalYears> apiHistoricalYearsList = new ArrayList<>();
-        for (Integer station : spotsApiService.getStationsForUser()) {
+        for (Integer station : spotsApiService.getStations()) {
             apiHistoricalYearsList.add(new StationToApiHistoricalYears(station, getApiHistoricalYearsData(station)));
         }
         return apiHistoricalYearsList;

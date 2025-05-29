@@ -44,7 +44,7 @@ public class ForecastApiServiceImpl extends AbstractGraphLineApiService implemen
     @Override
     public List<StationToApiForecasts> getAllForecasts() {
         List<StationToApiForecasts> apiForecastsList = new ArrayList<>();
-        for (Integer station : spotsApiService.getStationsForUser()) {
+        for (Integer station : spotsApiService.getStations()) {
 
             try {
                 apiForecastsList.add(new StationToApiForecasts(station, getCurrentForecast(station)));
