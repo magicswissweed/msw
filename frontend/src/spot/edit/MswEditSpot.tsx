@@ -84,7 +84,6 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({spot}) => {
         if (response.status === 200) {
             await spotsService.fetchData(token).then(() => {
                 handleCancelEditSpotModal();
-                window.location.reload();   // TODO: find better solution to bring data to charts
             });
         } else {
             // TODO: filter all spots where flow is not measured
