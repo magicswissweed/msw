@@ -46,6 +46,10 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     withMinMaxReferenceLines = props.withMinMaxReferenceLines === true;
     withTooltip = props.withTooltip === true;
 
+    // TODO: this is likely being executed twice per Component (componentents are mounted twice in react dev mode)
+    //  also it is executed twice (so 4 times in total) because we have the big graph and the mini graph as seperate components.
+    //  To fix this: fetch last40DaysGraphData once on startup for all spots that don't have a forecast and add to SpotModel.
+    //  Also: replace ApiSpotInformation with SpotModel
     // eslint-disable-next-line
     // needed (also the empty array), because otherwise the backend would get polled endlessly
     // eslint-disable-next-line
