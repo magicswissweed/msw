@@ -19,6 +19,7 @@ import {
     normalizeGraphDataLine
 } from "../base-graph/MswGraph";
 import {SpotModel} from "../../../../../model/SpotModel";
+import {MswLoader} from "../../../../../loader/MswLoader";
 
 const DATA_KEY_25_PERCENTILE = "twentyFivePercentile";
 const DATA_KEY_75_PERCENTILE = "seventyFivePercentile";
@@ -50,10 +51,7 @@ export class MswForecastGraph extends Component<MswGraphProps> {
 
     render() {
         if (!this.spot.forecastLoaded) {
-            return <>
-                <div>Loading...</div>
-                // TODO: use loader
-            </>
+            return <MswLoader/>
         }
         if (!this.spot.forecast) {
             return <>

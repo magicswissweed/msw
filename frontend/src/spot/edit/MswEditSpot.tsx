@@ -27,7 +27,6 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({spot}) => {
     const [showEditSpotModal, setShowEditSpotModal] = useState(false);
     const handleShowEditSpotModal = () => setShowEditSpotModal(true);
     const handleEditSpotAndCloseModal = (e: { preventDefault: any; }) => {
-        // TODO: this prevents page reload (needed for min/maxFlow changes to show) -> remove?
         e.preventDefault();
         editSpot().then(() => setIsSubmitButtonDisabled(false));
     }
@@ -86,7 +85,6 @@ export const MswEditSpot: React.FC<MswEditSpotProps> = ({spot}) => {
                 handleCancelEditSpotModal();
             });
         } else {
-            // TODO: filter all spots where flow is not measured
             alert("Sorry, it looks like we can't update that spot. Maybe the flow is not measured at this station?");
         }
     }

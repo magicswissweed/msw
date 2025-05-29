@@ -18,6 +18,7 @@ import {MswForecastGraph} from "./graph/forecast/MswForecastGraph";
 import {MswLastMeasurementsGraph} from "./graph/historical/MswLastMeasurementsGraph";
 import {GraphTypeEnum} from "../../MswOverviewPage";
 import {SpotModel} from "../../../model/SpotModel";
+import {MswLoader} from "../../../loader/MswLoader";
 
 interface SpotProps {
     spot: SpotModel,
@@ -124,7 +125,7 @@ export const Spot = (props: SpotProps) => {
 
         let lastMeasurementsContent = <>
             <div className="last40days-container">
-                <p>Forecast unavailable - showing last 40 days</p>
+                <p>Forecast unavailable - displaying last 40 days</p>
                 <MswLastMeasurementsGraph spot={spot}
                                           aspectRatio={2}
                                           withLegend={withLegend}
@@ -150,9 +151,8 @@ export const Spot = (props: SpotProps) => {
                 return spot.forecast ? forecastContent : lastMeasurementsContent
             } else {
                 return <>
-                    {/*TODO: use Loader*/}
                     <div className="collapsibleContent">
-                        Loading...
+                        <MswLoader/>
                     </div>
                 </>;
             }

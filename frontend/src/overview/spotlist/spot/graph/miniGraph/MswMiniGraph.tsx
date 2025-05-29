@@ -5,6 +5,7 @@ import {MswLastMeasurementsGraph} from '../historical/MswLastMeasurementsGraph';
 import {GraphTypeEnum} from "../../../../MswOverviewPage";
 import {MswHistoricalYearsGraph} from "../historical/MswHistoricalYearsGraph";
 import {SpotModel} from "../../../../../model/SpotModel";
+import {MswLoader} from "../../../../../loader/MswLoader";
 
 interface MswMiniForecastProps {
     spot: SpotModel,
@@ -22,7 +23,7 @@ export const MswMiniGraph = (props: MswMiniForecastProps) => {
                 content = <MswLastMeasurementsGraph spot={props.spot} aspectRatio={3}/>
             }
         } else {
-            content = <p>Loading...</p> // TODO: use loader
+            content = <MswLoader/>
         }
     } else {
         content = <MswHistoricalYearsGraph spot={props.spot} aspectRatio={3}/>
