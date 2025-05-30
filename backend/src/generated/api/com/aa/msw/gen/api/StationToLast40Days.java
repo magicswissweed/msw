@@ -2,9 +2,12 @@ package com.aa.msw.gen.api;
 
 import java.net.URI;
 import java.util.Objects;
-import com.aa.msw.gen.api.ApiForecast;
+import com.aa.msw.gen.api.ApiFlowSample;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.openapitools.jackson.nullable.JsonNullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -16,29 +19,30 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * StationToApiForecasts
+ * StationToLast40Days
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-30T21:04:15.247420+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
-public class StationToApiForecasts {
+public class StationToLast40Days {
 
   private Integer station;
 
-  private ApiForecast forecast;
+  @Valid
+  private List<@Valid ApiFlowSample> last40Days = new ArrayList<>();
 
-  public StationToApiForecasts() {
+  public StationToLast40Days() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public StationToApiForecasts(Integer station, ApiForecast forecast) {
+  public StationToLast40Days(Integer station, List<@Valid ApiFlowSample> last40Days) {
     this.station = station;
-    this.forecast = forecast;
+    this.last40Days = last40Days;
   }
 
-  public StationToApiForecasts station(Integer station) {
+  public StationToLast40Days station(Integer station) {
     this.station = station;
     return this;
   }
@@ -58,24 +62,32 @@ public class StationToApiForecasts {
     this.station = station;
   }
 
-  public StationToApiForecasts forecast(ApiForecast forecast) {
-    this.forecast = forecast;
+  public StationToLast40Days last40Days(List<@Valid ApiFlowSample> last40Days) {
+    this.last40Days = last40Days;
+    return this;
+  }
+
+  public StationToLast40Days addLast40DaysItem(ApiFlowSample last40DaysItem) {
+    if (this.last40Days == null) {
+      this.last40Days = new ArrayList<>();
+    }
+    this.last40Days.add(last40DaysItem);
     return this;
   }
 
   /**
-   * Get forecast
-   * @return forecast
+   * Get last40Days
+   * @return last40Days
   */
   @NotNull @Valid 
-  @Schema(name = "forecast", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("forecast")
-  public ApiForecast getForecast() {
-    return forecast;
+  @Schema(name = "last40Days", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("last40Days")
+  public List<@Valid ApiFlowSample> getLast40Days() {
+    return last40Days;
   }
 
-  public void setForecast(ApiForecast forecast) {
-    this.forecast = forecast;
+  public void setLast40Days(List<@Valid ApiFlowSample> last40Days) {
+    this.last40Days = last40Days;
   }
 
   @Override
@@ -86,22 +98,22 @@ public class StationToApiForecasts {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    StationToApiForecasts stationToApiForecasts = (StationToApiForecasts) o;
-    return Objects.equals(this.station, stationToApiForecasts.station) &&
-        Objects.equals(this.forecast, stationToApiForecasts.forecast);
+    StationToLast40Days stationToLast40Days = (StationToLast40Days) o;
+    return Objects.equals(this.station, stationToLast40Days.station) &&
+        Objects.equals(this.last40Days, stationToLast40Days.last40Days);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(station, forecast);
+    return Objects.hash(station, last40Days);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class StationToApiForecasts {\n");
+    sb.append("class StationToLast40Days {\n");
     sb.append("    station: ").append(toIndentedString(station)).append("\n");
-    sb.append("    forecast: ").append(toIndentedString(forecast)).append("\n");
+    sb.append("    last40Days: ").append(toIndentedString(last40Days)).append("\n");
     sb.append("}");
     return sb.toString();
   }

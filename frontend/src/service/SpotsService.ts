@@ -4,9 +4,11 @@ import {
     ApiSpotInformation,
     ForecastApi,
     HistoricalApi,
+    SampleApi,
     SpotsApi,
     StationToApiForecasts,
-    StationToApiHistoricalYears
+    StationToApiHistoricalYears,
+    StationToLast40Days
 } from "../gen/msw-api-ts";
 import {AxiosResponse} from "axios";
 import {authConfiguration} from "../api/config/AuthConfiguration";
@@ -20,6 +22,7 @@ class SpotsService {
 
     async fetchData(token: any) {
         let config = await authConfiguration(token);
+        // Defined here is the order in which our api-calls are executed.
         // First load the most relevant info (fast)
         // -> then load additional infos (less important) -> shown to user as soon as it's loaded.
         new SpotsApi(config).getSpots()
@@ -28,6 +31,13 @@ class SpotsService {
                 new ForecastApi(config).getForecasts()
                     .then(this.addForecastsToState.bind(this))
             )
+            .then(() => {
+                let stationsWithoutForecast = this.spots
+                    .filter(s => !s.forecast)
+                    .map(s => s.stationId)
+                new SampleApi().getLast40DaysSamples(stationsWithoutForecast)
+                    .then(this.addLast40DaysToState.bind(this))
+            })
             .then(() =>
                 new HistoricalApi(config).getHistoricalData()
                     .then(this.addHistoricalDataToState.bind(this))
@@ -62,6 +72,8 @@ class SpotsService {
                     s.currentSample,
                     false,
                     undefined,
+                    false,
+                    undefined,
                     undefined))
             this.setSpots(spots);
         }
@@ -72,6 +84,33 @@ class SpotsService {
             forecast.measuredData.push({timestamp: currentSample.timestamp, flow: currentSample.flow})
         }
         return forecast;
+    }
+
+    private addLast40DaysToState(res: AxiosResponse<StationToLast40Days[], any>) {
+        if (res && res.data) {
+            const updatedSpots = this.spots.map(s => {
+                const filteredListByStationId = res.data.filter(i => i.station === s.stationId);
+                const newLast40Days = filteredListByStationId[0]?.last40Days
+                // create new SpotModel so that react can see that something changed (updating a field is not enough)
+                return new SpotModel(
+                    s.id,
+                    s.name,
+                    s.stationId,
+                    s.spotType,
+                    s.isPublic,
+                    s.minFlow,
+                    s.maxFlow,
+                    s.station,
+                    s.currentSample,
+                    s.forecastLoaded,
+                    s.forecast,
+                    true,
+                    newLast40Days,
+                    s.historical
+                );
+            });
+            this.setSpots(updatedSpots);
+        }
     }
 
     private addForecastsToState(res: AxiosResponse<StationToApiForecasts[], any>) {
@@ -95,6 +134,8 @@ class SpotsService {
                     s.currentSample,
                     true,
                     newForecast,
+                    s.last40DaysLoaded,
+                    s.last40Days,
                     s.historical
                 );
             });

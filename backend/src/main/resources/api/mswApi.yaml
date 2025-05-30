@@ -28,18 +28,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiSample'
-  /api/v1/sample/last40Days/{stationId}:
+  /api/v1/sample/last40Days/{stationIds}:
     get:
       summary: Get Samples from last 40 Days for this station.
       security:
         - bearerAuth: [ ]
       operationId: getLast40DaysSamples
       parameters:
-        - name: stationId
-          description: The id of the station to get the sample from.
+        - name: stationIds
+          description: The ids of the stations to get the sample from.
           in: path
           schema:
-            type: integer
+            type: array
+            items:
+              type: integer
           required: true
       tags:
         - sample
@@ -49,7 +51,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiLast40DaysSamples'
+                $ref: '#/components/schemas/ApiLast40DaysList'
   /api/v1/forecast/{stationId}:
     get:
       summary: Get Forecast for specific Station
@@ -342,6 +344,18 @@ components:
           type: integer
         forecast:
           $ref: '#/components/schemas/ApiForecast'
+    ApiLast40DaysList:
+      type: array
+      items:
+        $ref: '#/components/schemas/StationToLast40Days'
+    StationToLast40Days:
+      type: object
+      required: [ station, last40Days ]
+      properties:
+        station:
+          type: integer
+        last40Days:
+          $ref: '#/components/schemas/ApiLast40DaysSamples'
     ApiHistoricalYearsList:
       type: array
       items:

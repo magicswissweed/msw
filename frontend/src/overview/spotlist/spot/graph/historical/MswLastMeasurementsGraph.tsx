@@ -1,10 +1,6 @@
 import '../base-graph/MswGraph.scss'
 import {ComposedChart, Legend, ResponsiveContainer, YAxis} from 'recharts';
-import {useEffect, useState} from 'react';
-import {ApiSample, ApiSpotInformation, SampleApi} from '../../../../../gen/msw-api-ts';
-import {authConfiguration} from '../../../../../api/config/AuthConfiguration';
-import {AxiosResponse} from 'axios';
-import {useUserAuth} from '../../../../../user/UserAuthContext';
+import {ApiSpotInformation} from '../../../../../gen/msw-api-ts';
 import {
     DATA_KEY_MEASURED,
     getCartesianGrid,
@@ -19,17 +15,9 @@ import {
     NormalizedDataItem,
     normalizeGraphDataLine
 } from "../base-graph/MswGraph";
-
-interface MswLastMeasurementsState {
-    samples: ApiSample[]
-}
+import {MswLoader} from "../../../../../loader/MswLoader";
 
 export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
-    const [state, setState] = useState<MswLastMeasurementsState>({samples: []});
-
-    // @ts-ignore
-    const {token} = useUserAuth();
-
     let spot: ApiSpotInformation;
     let aspectRatio: number;
     let withLegend: boolean;
@@ -46,39 +34,21 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     withMinMaxReferenceLines = props.withMinMaxReferenceLines === true;
     withTooltip = props.withTooltip === true;
 
-    // TODO: this is likely being executed twice per Component (componentents are mounted twice in react dev mode)
-    //  also it is executed twice (so 4 times in total) because we have the big graph and the mini graph as seperate components.
-    //  To fix this: fetch last40DaysGraphData once on startup for all spots that don't have a forecast and add to SpotModel.
-    //  Also: replace ApiSpotInformation with SpotModel
-    // eslint-disable-next-line
-    // needed (also the empty array), because otherwise the backend would get polled endlessly
-    // eslint-disable-next-line
-    useEffect(() => {
-        fetchLast40DaysSamples()
-    }, []);
-
-    async function fetchLast40DaysSamples() {
-        let config = await authConfiguration(token);
-        new SampleApi(config).getLast40DaysSamples(spot.stationId!)
-            .then((res: AxiosResponse<ApiSample[], any>) => {
-                if (res && res.data) {
-                    setState({samples: res.data});
-                }
-            });
+    if (props.spot.last40DaysLoaded) {
+        if (props.spot.last40Days === undefined || props.spot.last40Days.length === 0) {
+            return <div>Detailed Graph not possible at the moment...</div>
+        }
+    } else {
+        return <MswLoader/>
     }
 
-    if (state.samples.length === 0) {
-        return <>
-            <div>Detailed Graph not possible at the moment...</div>
-        </>
-    }
 
     function roundToOneDecimal(value: unknown): number {
         // @ts-ignore
         return Math.round(value * 10) / 10;
     }
 
-    let normalizedGraphData: NormalizedDataItem[] = normalizeGraphDataLine(state.samples, DATA_KEY_MEASURED);
+    let normalizedGraphData: NormalizedDataItem[] = normalizeGraphDataLine(props.spot.last40Days, DATA_KEY_MEASURED);
     normalizedGraphData = normalizedGraphData.map(item => ({
         ...item,
         [DATA_KEY_MEASURED]: roundToOneDecimal(item[DATA_KEY_MEASURED])

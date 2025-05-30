@@ -5,8 +5,8 @@
  */
 package com.aa.msw.gen.api;
 
-import com.aa.msw.gen.api.ApiFlowSample;
 import com.aa.msw.gen.api.ApiSample;
+import com.aa.msw.gen.api.StationToLast40Days;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-28T16:36:56.112527+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-05-30T21:04:15.247420+02:00[Europe/Zurich]", comments = "Generator version: 7.5.0")
 @Validated
 @Tag(name = "sample", description = "the sample API")
 public interface SampleApi {
@@ -82,9 +82,9 @@ public interface SampleApi {
 
 
     /**
-     * GET /api/v1/sample/last40Days/{stationId} : Get Samples from last 40 Days for this station.
+     * GET /api/v1/sample/last40Days/{stationIds} : Get Samples from last 40 Days for this station.
      *
-     * @param stationId The id of the station to get the sample from. (required)
+     * @param stationIds The ids of the stations to get the sample from. (required)
      * @return Returns the Samples from the last 40 Days for the station. (status code 200)
      */
     @Operation(
@@ -93,23 +93,23 @@ public interface SampleApi {
         tags = { "sample" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Returns the Samples from the last 40 Days for the station.", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ApiFlowSample.class)))
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = StationToLast40Days.class)))
             })
         }
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/api/v1/sample/last40Days/{stationId}",
+        value = "/api/v1/sample/last40Days/{stationIds}",
         produces = { "application/json" }
     )
     
-    default ResponseEntity<List<ApiFlowSample>> getLast40DaysSamples(
-        @Parameter(name = "stationId", description = "The id of the station to get the sample from.", required = true, in = ParameterIn.PATH) @PathVariable("stationId") Integer stationId
+    default ResponseEntity<List<StationToLast40Days>> getLast40DaysSamples(
+        @Parameter(name = "stationIds", description = "The ids of the stations to get the sample from.", required = true, in = ParameterIn.PATH) @PathVariable("stationIds") List<Integer> stationIds
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 0.8008281904610115, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ]";
+                    String exampleString = "[ { \"station\" : 0, \"last40Days\" : [ { \"flow\" : 6.027456183070403, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 6.027456183070403, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ] }, { \"station\" : 0, \"last40Days\" : [ { \"flow\" : 6.027456183070403, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" }, { \"flow\" : 6.027456183070403, \"timestamp\" : \"2000-01-23T04:56:07.000+00:00\" } ] } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

@@ -1,4 +1,5 @@
 import {
+    ApiFlowSample,
     ApiForecast,
     ApiHistoricalYears,
     ApiSample,
@@ -18,6 +19,8 @@ export class SpotModel {
     currentSample: ApiSample;
     forecastLoaded: boolean;
     forecast: ApiForecast | undefined;
+    last40DaysLoaded: boolean;
+    last40Days: Array<ApiFlowSample> | undefined;
     historical: ApiHistoricalYears | undefined;
 
     constructor(
@@ -32,6 +35,8 @@ export class SpotModel {
         currentSample: ApiSample,
         forecastLoaded: boolean,
         forecast: ApiForecast | undefined,
+        last40DaysLoaded: boolean,
+        last40Days: Array<ApiFlowSample> | undefined,
         historical: ApiHistoricalYears | undefined) {
         this.id = id;
         this.name = name;
@@ -43,6 +48,8 @@ export class SpotModel {
         this.station = station;
         this.currentSample = currentSample;
         this.forecastLoaded = forecastLoaded;
+        this.last40DaysLoaded = last40DaysLoaded;
+        this.last40Days = last40Days;
         this.forecast = forecast;
         this.historical = historical;
     }

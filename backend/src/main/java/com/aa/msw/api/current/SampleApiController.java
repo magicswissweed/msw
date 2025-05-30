@@ -1,16 +1,15 @@
 package com.aa.msw.api.current;
 
 import com.aa.msw.database.exceptions.NoDataAvailableException;
-import com.aa.msw.gen.api.ApiFlowSample;
 import com.aa.msw.gen.api.ApiSample;
 import com.aa.msw.gen.api.SampleApi;
+import com.aa.msw.gen.api.StationToLast40Days;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class SampleApiController implements SampleApi {
@@ -33,11 +32,21 @@ public class SampleApiController implements SampleApi {
     }
 
     @Override
-    public ResponseEntity<List<ApiFlowSample>> getLast40DaysSamples(Integer stationId) {
-        try {
-            return ResponseEntity.ok(sampleApiService.getLast40DaysSamples(stationId));
-        } catch (IOException | URISyntaxException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<List<StationToLast40Days>> getLast40DaysSamples(List<Integer> stationIds) {
+        return ResponseEntity.ok(
+                stationIds.stream()
+                        .map(stationId -> {
+                            try {
+                                return new StationToLast40Days(
+                                        stationId,
+                                        sampleApiService.getLast40DaysSamples(stationId)
+                                );
+                            } catch (Exception e) {
+                                return null;
+                            }
+                        })
+                        .filter(Objects::nonNull)
+                        .toList()
+        );
     }
 }
