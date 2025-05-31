@@ -37,18 +37,13 @@ export const Spot = (props: SpotProps) => {
 
 
     return <>
-        <details key={props.spot.name} className="spot spot-desktop">
+        <details key={props.spot.name} className="spot">
             <summary className="spotname">
                 {getSpotSummaryContent(props.spot)}
             </summary>
             {getCollapsibleContent(props.spot)}
         </details>
-        <div className="spot spot-mobile">
-            <div className={"spot-overview"}>
-                {getSpotSummaryContent(props.spot)}
-            </div>
-            {getCollapsibleContent(props.spot, false, true, true, true, true)}
-        </div>
+        
     </>;
 
     function getSpotSummaryContent(spot: SpotModel) {
