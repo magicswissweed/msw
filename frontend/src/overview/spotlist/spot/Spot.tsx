@@ -3,7 +3,6 @@ import React, {useState} from 'react';
 import {ApiSpotInformation, SpotsApi} from '../../../gen/msw-api-ts';
 import {MswEditSpot} from "../../../spot/edit/MswEditSpot";
 import {MswMeasurement} from './measurement/MswMeasurement';
-import {MswMiniGraph} from './graph/miniGraph/MswMiniGraph';
 import arrow_down_icon from '../../../assets/arrow_down.svg';
 import delete_icon from '../../../assets/trash.svg';
 import link_icon from '../../../assets/link.svg';
@@ -38,18 +37,13 @@ export const Spot = (props: SpotProps) => {
 
 
     return <>
-        <details key={props.spot.name} className="spot spot-desktop">
+        <details key={props.spot.name} className="spot">
             <summary className="spotname">
                 {getSpotSummaryContent(props.spot)}
             </summary>
             {getCollapsibleContent(props.spot)}
         </details>
-        <div className="spot spot-mobile">
-            <div className={"spot-overview"}>
-                {getSpotSummaryContent(props.spot)}
-            </div>
-            {getCollapsibleContent(props.spot, false, true, true, true, true)}
-        </div>
+        
     </>;
 
     function getSpotSummaryContent(spot: SpotModel) {
@@ -68,7 +62,6 @@ export const Spot = (props: SpotProps) => {
                     {spot.name}
                 </div>
                 <MswMeasurement spot={spot}/>
-                <MswMiniGraph spot={spot} showGraphOfType={props.showGraphOfType}/>
             </div>
             <div className="icons-container">
                 <div className="icon">

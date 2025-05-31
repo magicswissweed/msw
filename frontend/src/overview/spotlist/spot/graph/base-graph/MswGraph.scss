@@ -1,3 +1,5 @@
+@import "../../../../../ReactiveMixins";
+
 .graph {
   font-weight: normal;
   font-size: 15px;
@@ -18,4 +20,10 @@
 
 .tooltip_value {
   margin: 5px;
+}
+
+.recharts-default-legend {
+  @include small() {
+    display: none !important;
+  }
 }

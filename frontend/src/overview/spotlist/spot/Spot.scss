@@ -20,25 +20,6 @@ $icons-container-width: 40px;
   display: flex;
 }
 
-.spot-desktop {
-  @include small {
-    display: none;
-  }
-}
-
-.spot-mobile {
-  .forecastContainer {
-    display: none;
-  }
-
-  @include small() {
-    display: flex;
-  }
-
-  display: none;
-  flex-direction: column;
-}
-
 .icons-container {
   display: flex;
   align-content: center;
@@ -49,7 +30,6 @@ $icons-container-width: 40px;
 .icon {
   flex: 1;
   align-content: center;
-
   margin: 5px 0;
 
   img {
@@ -71,10 +51,6 @@ details[open] summary div.collapsible-icon {
   img {
     cursor: pointer;
   }
-
-  @include small {
-    display: none
-  }
 }
 
 summary::-webkit-details-marker {
@@ -91,18 +67,13 @@ summary::-webkit-details-marker {
   width: 100%;
 }
 
-.spot-title > a {
-  flex: 1;
-  text-overflow: ellipsis;
-  color: #000000;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-size: 85%;
+.spot-title {
+  word-break: break-word;
+  width: 40%;
 }
 
-.spot-title {
-  flex: 1;
-  word-break: break-word;
+.measurements {
+  width: 60%;
 }
 
 .spotname a:hover {
@@ -110,10 +81,6 @@ summary::-webkit-details-marker {
 }
 
 details.spot[open] summary.spotname {
-  .forecastContainer {
-    display: none;
-  }
-
   .measurements {
     flex-direction: row;
   }
@@ -129,8 +96,20 @@ details.spot[open] summary.spotname {
   margin: 20px 0;
 
   @include small() {
-    flex-direction: column;
-    row-gap: 20px;
+    margin: 10px 0;
+    font-size: 110%;
+    justify-content: space-between;
+    
+    .spot-title {
+      flex: 1;
+      width: auto;
+      min-width: 0;
+    }
+    
+    .measurements {
+      width: auto;
+      flex: 0 0 auto;
+    }
   }
 }
 
