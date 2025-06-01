@@ -18,7 +18,7 @@ interface MswSpotMapPropsPerCategory {
 
 export const MswSpotMapPerCategory = ({spots}: MswSpotMapPropsPerCategory) => {
     const {isLoaded, loadError} = useLoadScript({
-        googleMapsApiKey: "AIzaSyAV9qwG3DRMjulZiuVyZxcD9pcTAZVih5c",
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
     });
 
     const mapRef = useRef<google.maps.Map | null>(null);
