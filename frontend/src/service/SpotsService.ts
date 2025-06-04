@@ -35,8 +35,10 @@ class SpotsService {
                 let stationsWithoutForecast = this.spots
                     .filter(s => !s.forecast)
                     .map(s => s.stationId)
+                if(stationsWithoutForecast.length > 0) {
                 new SampleApi().getLast40DaysSamples(stationsWithoutForecast)
                     .then(this.addLast40DaysToState.bind(this))
+                }
             })
             .then(() =>
                 new HistoricalApi(config).getHistoricalData()

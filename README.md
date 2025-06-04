@@ -24,6 +24,12 @@
     - username: develop
     - password: develop
 
+    Or psql (type `exit` to exit.):
+
+    ```bash
+    PGPASSWORD=develop psql -d msw -U develop -h localhost
+    ```
+
    and run the following commands to populate the database:
 
     ```sql
