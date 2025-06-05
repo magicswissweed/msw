@@ -48,7 +48,7 @@ export const Spot = (props: SpotProps) => {
             <div className={"spot-overview"}>
                 {getSpotSummaryContent(props.spot)}
             </div>
-            {getCollapsibleContent(props.spot, false, true, true, true, true)}
+            {getCollapsibleContent(props.spot, false)}
         </div>
     </>;
 
@@ -107,43 +107,26 @@ export const Spot = (props: SpotProps) => {
         </>
     }
 
-    function getCollapsibleContent(spot: SpotModel,
-                                   withLegend: boolean = true,
-                                   withXAxis: boolean = true,
-                                   withYAxis: boolean = true,
-                                   withMinMaxReferenceLines: boolean = true,
-                                   withTooltip: boolean = true) {
+    function getCollapsibleContent(spot: SpotModel, showLegend: boolean=true) {
         let forecastContent = <>
             <MswForecastGraph spot={spot}
-                              aspectRatio={2}
-                              withLegend={withLegend}
-                              withXAxis={withXAxis}
-                              withYAxis={withYAxis}
-                              withMinMaxReferenceLines={withMinMaxReferenceLines}
-                              withTooltip={withTooltip}/>
+                              showLegend={showLegend}
+                              />
         </>;
 
         let lastMeasurementsContent = <>
             <div className="last40days-container">
-                <p>Forecast unavailable - displaying last 40 days</p>
-                <MswLastMeasurementsGraph spot={spot}
-                                          aspectRatio={2}
-                                          withLegend={withLegend}
-                                          withXAxis={withXAxis}
-                                          withYAxis={withYAxis}
-                                          withMinMaxReferenceLines={withMinMaxReferenceLines}
-                                          withTooltip={withTooltip}/>
+                <p>Forecast unavailable - showing last 40 days</p>
+                <MswLastMeasurementsGraph spot={spot} 
+                                          showLegend={showLegend}
+                                          />
             </div>
         </>;
 
         let historicalYearsContent = <>
             <MswHistoricalYearsGraph spot={spot}
-                                     aspectRatio={2}
-                                     withLegend={withLegend}
-                                     withXAxis={withXAxis}
-                                     withYAxis={withYAxis}
-                                     withMinMaxReferenceLines={withMinMaxReferenceLines}
-                                     withTooltip={withTooltip}/>
+                                    showLegend={showLegend}
+                                     />
         </>;
 
         if (props.showGraphOfType === GraphTypeEnum.Forecast) {

@@ -1,95 +1,126 @@
 import '../base-graph/MswGraph.scss'
-import {ComposedChart, Legend, ResponsiveContainer, YAxis} from 'recharts';
-import {ApiSpotInformation} from '../../../../../gen/msw-api-ts';
 import {
-    DATA_KEY_MEASURED,
-    getCartesianGrid,
-    getCurrentTimeReferenceLine,
-    getMeasuredLine,
-    getMinMaxReferenceLines,
-    getReferenceArea,
-    getTooltip,
-    getXAxis,
-    LINE_NAME_MEASURED,
     MswGraphProps,
-    NormalizedDataItem,
-    normalizeGraphDataLine
+    getTimestamps,
+    createTrace,
+    plotColors,
+    getCommonPlotlyLayout,
+    commonPlotlyConfig,
+    ONE_WEEK,
+    toSwissTime
 } from "../base-graph/MswGraph";
 import {MswLoader} from "../../../../../loader/MswLoader";
+import Plot from 'react-plotly.js';
 
-export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
-    let spot: ApiSpotInformation;
-    let aspectRatio: number;
-    let withLegend: boolean;
-    let withXAxis: boolean;
-    let withYAxis: boolean;
-    let withMinMaxReferenceLines: boolean;
-    let withTooltip: boolean;
-
-    spot = props.spot;
-    aspectRatio = props.aspectRatio;
-    withLegend = props.withLegend === true;
-    withXAxis = props.withXAxis === true;
-    withYAxis = props.withYAxis === true;
-    withMinMaxReferenceLines = props.withMinMaxReferenceLines === true;
-    withTooltip = props.withTooltip === true;
-
-    if (props.spot.last40DaysLoaded) {
-        if (props.spot.last40Days === undefined || props.spot.last40Days.length === 0) {
+export const MswLastMeasurementsGraph = ({
+    spot,
+    isMini = false,
+    aspectRatio = 2,
+    showLegend = true
+}: MswGraphProps) => {
+    if (spot.last40DaysLoaded) {
+        if (!spot.last40Days || spot.last40Days.length === 0) {
             return <div>Detailed Graph not possible at the moment...</div>
         }
     } else {
         return <MswLoader/>
     }
 
+    // Get data for plotting
+    const { last40Days } = spot ?? {};
+    const { minFlow, maxFlow } = spot ?? {};
 
-    function roundToOneDecimal(value: unknown): number {
-        // @ts-ignore
-        return Math.round(value * 10) / 10;
-    }
+    // Process data
+    const processedData = {
+        measured: (() => {
+            if (!last40Days?.length) return [];
 
-    let normalizedGraphData: NormalizedDataItem[] = normalizeGraphDataLine(props.spot.last40Days, DATA_KEY_MEASURED);
-    normalizedGraphData = normalizedGraphData.map(item => ({
-        ...item,
-        [DATA_KEY_MEASURED]: roundToOneDecimal(item[DATA_KEY_MEASURED])
-    }));
+            const hourlyAverages = last40Days.reduce<Record<string, { sum: number, count: number }>>((acc, sample) => {
+                // Convert timestamp to Swiss time (UTC+2)
+                const swissDate = toSwissTime(sample.timestamp);
+                const hourKey = swissDate.toISOString().slice(0, 13); // Get YYYY-MM-DDTHH
+                
+                if (!acc[hourKey]) {
+                    acc[hourKey] = { sum: 0, count: 0 };
+                } 
+                acc[hourKey].sum += sample.flow;
+                acc[hourKey].count++;
+                
+                return acc;
+            }, {});
+            
+            // Calculate hourly averages and maintain chronological order
+            return Object.entries(hourlyAverages)
+                .sort(([a], [b]) => a.localeCompare(b))
+                .map(([hourKey, { sum, count }]) => ({
+                    timestamp: hourKey + ':00:00.000Z', // Store in UTC
+                    flow: Math.round((sum / count) * 10) / 10 // Round to 1 decimal
+                }));
+        })(),
+        max: [] // Empty array for max values since we don't have them for historical data
+    };
 
-    const ticks: number[] = getTicks();
+    // Get timestamps for x-axis grid and labels
+    const allTimestamps = Array.from(new Set([
+        ...getTimestamps(processedData.measured),
+    ])).sort();
 
-    return <>
-        <ResponsiveContainer className="graph" width="100%" aspect={aspectRatio}>
-            <ComposedChart data={normalizedGraphData}>
-                {getReferenceArea(spot)}
-                {getCurrentTimeReferenceLine()}
-                {getMeasuredLine()}
-                {getCartesianGrid()}
-                {getXAxis(ticks, withXAxis, v => new Date(v).getDate() + "." + (new Date(v).getMonth() + 1) + ".")}
-
-                {withMinMaxReferenceLines && getMinMaxReferenceLines(spot)}
-                {withTooltip && getTooltip()}
-                {withYAxis && <YAxis/>}
-                {withLegend && getLegend()}
-            </ComposedChart>
-        </ResponsiveContainer>
-    </>
-
-    function getTicks() {
-        const nrOfTicks = 6;
-        const nrOfDays = 50;
-        const oneDayInMs = 24 * 60 * 60 * 1000;
-
-        return Array.from(
-            {length: nrOfTicks},
-            (_, i) => Date.now() - oneDayInMs * i * (nrOfDays / nrOfTicks)
+    // Calculate weekly ticks for x-axis
+    const now = new Date();
+    const sixWeeksAgo = new Date(now.getTime() - (6 * ONE_WEEK));
+    const weeklyTicks = [];
+    const weeklyLabels = [];
+    
+    for (let date = new Date(now); date >= sixWeeksAgo; date = new Date(date.getTime() - ONE_WEEK)) {
+        const swissDate = toSwissTime(date);
+        weeklyTicks.push(swissDate.toISOString());
+        weeklyLabels.push(
+            `${swissDate.getDate().toString().padStart(2, '0')}.${(swissDate.getMonth() + 1).toString().padStart(2, '0')}`
         );
     }
 
-    function getLegend() {
-        return <Legend
-            payload={[
-                {type: "line", value: LINE_NAME_MEASURED, color: "green"},
+    // Get common layout and extend it with last measurements specific settings
+    const layout = {
+        ...getCommonPlotlyLayout({ 
+            isMini, 
+            allTimestamps, 
+            minFlow, 
+            maxFlow, 
+            processedData, 
+            showCurrentTimeLine: false,
+            aspectRatio,
+            showLegend
+        }),
+        xaxis: {
+            ...getCommonPlotlyLayout({ isMini }).xaxis,
+            tickvals: weeklyTicks as any[],
+            ticktext: weeklyLabels,
+            range: allTimestamps.length ? [allTimestamps[0], allTimestamps[allTimestamps.length - 1]] : undefined
+
+        }
+    };
+
+    return (
+        <Plot
+            data={[
+                createTrace(processedData.measured, {
+                    name: 'Measured',
+                    color: plotColors.measured,
+                    lineWidth: isMini || !showLegend ? 1 : 2,
+                    showLegend: !isMini && showLegend,
+                    skipHover: isMini
+                })
             ]}
-            wrapperStyle={{textTransform: 'uppercase'}}
-        />;
-    }
-}
+            layout={layout}
+            style={{ 
+                width: '100%',
+                aspectRatio: `${aspectRatio}`
+            }}
+            useResizeHandler={true}
+            config={{
+                ...commonPlotlyConfig,
+                staticPlot: isMini
+            }}
+        />
+    );
+};
