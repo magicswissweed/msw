@@ -86,9 +86,7 @@ export const MswLastMeasurementsGraph = ({
             allTimestamps, 
             minFlow, 
             maxFlow, 
-            processedData, 
             showCurrentTimeLine: false,
-            aspectRatio,
             showLegend
         }),
         xaxis: {

@@ -135,7 +135,6 @@ export function getCommonPlotlyLayout({
     allTimestamps = [],
     minFlow,
     maxFlow,
-    showMidnightLines = false,
     showCurrentTimeLine = true,
     showLegend = true,
 }: {
@@ -143,10 +142,7 @@ export function getCommonPlotlyLayout({
     allTimestamps?: string[];
     minFlow?: number;
     maxFlow?: number;
-    processedData?: { measured: ApiFlowSample[], max: ApiFlowSample[] };
-    showMidnightLines?: boolean;
     showCurrentTimeLine?: boolean;
-    aspectRatio?: number;
     showLegend?: boolean;
 }): Partial<Layout> {
     const baseLayout: Partial<Layout> = {
@@ -167,8 +163,7 @@ export function getCommonPlotlyLayout({
             ticktext: []
         },
         yaxis: {
-            title: { text: '' },
-            fixedrange: true,
+            // fixedrange: true,
             showticklabels: !isMini,
             gridcolor: isMini ? 'transparent' : 'rgba(211, 211, 211, 0.5)',
             ticklabelposition: 'inside' as const
@@ -191,7 +186,7 @@ export function getCommonPlotlyLayout({
             l: 30,
             r: 30,
             t: 0,
-            b: showLegend ? 0 : 30 // provide space for x-axis labels
+            b: showLegend ? 0 : 30 // provide space for x-axis labels without legend
           },
         shapes: [
             // Vertical line showing current time
@@ -219,25 +214,7 @@ export function getCommonPlotlyLayout({
                 line: { width: 0 },
                 layer: 'below' as const
             }] : []),
-            // Vertical lines at midnight (darker than noon grid)
-            ...(showMidnightLines && allTimestamps.length > 0 ? 
-                allTimestamps
-                    .filter(timestamp => new Date(timestamp).getHours() === 0)
-                    .map(timestamp => ({
-                        type: 'line' as const,
-                        x0: timestamp,
-                        x1: timestamp,
-                        y0: 0,
-                        y1: 1,
-                        yref: 'paper' as const,
-                        line: {
-                            color: 'rgba(169, 169, 169, 0.8)',  // Dark gray for midnight lines
-                            width: 1
-                        },
-                        layer: 'below' as const
-                    }))
-                : []
-            )
+            
         ],
         hoverlabel: isMini ? undefined : {
             bgcolor: 'white',

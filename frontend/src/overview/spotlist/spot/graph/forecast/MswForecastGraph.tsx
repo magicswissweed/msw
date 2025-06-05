@@ -68,10 +68,6 @@ export const MswForecastGraph = ({
             allTimestamps, 
             minFlow, 
             maxFlow, 
-            processedData, 
-            showMidnightLines: true,
-            aspectRatio,
-            showLegend,
         }),
         xaxis: {
             ...getCommonPlotlyLayout({ isMini }).xaxis,
@@ -85,7 +81,29 @@ export const MswForecastGraph = ({
                     return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}`;
                   }),
             range: allTimestamps.length ? [allTimestamps[0], allTimestamps[allTimestamps.length - 1]] : undefined
-              }
+              },
+        shapes: [
+            ...(getCommonPlotlyLayout({ isMini, minFlow, maxFlow, allTimestamps }).shapes || []),
+            // Vertical lines at midnight (darker than noon grid)
+            ...(allTimestamps.length > 0 ? 
+              allTimestamps
+                  .filter(timestamp => new Date(timestamp).getHours() === 0)
+                  .map(timestamp => ({
+                      type: 'line' as const,
+                      x0: timestamp,
+                      x1: timestamp,
+                      y0: 0,
+                      y1: 1,
+                      yref: 'paper' as const,
+                      line: {
+                          color: 'rgba(169, 169, 169, 0.8)',  // Dark gray for midnight lines
+                          width: 1
+                      },
+                      layer: 'below' as const
+                  }))
+              : []
+          ),
+          ]
     };
 
 
@@ -126,14 +144,14 @@ export const MswForecastGraph = ({
                 createTrace(processedData.median, {
                     name: 'Median',
                     color: plotColors.median,
-                    lineWidth: isMini ? 1 : 2,
+                    lineWidth: isMini || !showLegend ? 1 : 2,
                     showLegend: !isMini && showLegend,
                     skipHover: isMini
                 }),
                 createTrace(processedData.measured, {
                     name: 'Measured',
                     color: plotColors.measured,
-                    lineWidth: isMini ? 1 : 2,
+                    lineWidth: isMini || !showLegend ? 1 : 2,
                     showLegend: !isMini && showLegend,
                     skipHover: isMini
                 })
@@ -141,7 +159,7 @@ export const MswForecastGraph = ({
             layout={layout}
             style={{ 
                 width: '100%',
-                aspectRatio: `${aspectRatio}`
+                aspectRatio: aspectRatio
             }}
             useResizeHandler={true}
             config={{
