@@ -68,6 +68,7 @@ export const MswForecastGraph = ({
             allTimestamps, 
             minFlow, 
             maxFlow, 
+            showLegend,
         }),
         xaxis: {
             ...getCommonPlotlyLayout({ isMini }).xaxis,
@@ -110,6 +111,7 @@ export const MswForecastGraph = ({
     return (
         <Plot
             data={[
+                // TODO: combine two trace calls in function for areas
                 // Bottom layer: Min-max range
                 createTrace(processedData.max, { 
                     color: 'transparent',

@@ -112,7 +112,7 @@ export const MswLastMeasurementsGraph = ({
             layout={layout}
             style={{ 
                 width: '100%',
-                aspectRatio: `${aspectRatio}`
+                aspectRatio: aspectRatio
             }}
             useResizeHandler={true}
             config={{

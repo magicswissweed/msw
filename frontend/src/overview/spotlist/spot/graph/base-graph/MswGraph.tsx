@@ -2,12 +2,6 @@ import {ApiFlowSample} from "../../../../../gen/msw-api-ts";
 import {SpotModel} from "../../../../../model/SpotModel";
 import {Layout, Config } from 'plotly.js';
 
-export const DATA_KEY_MEDIAN = "median";
-export let LINE_NAME_MEDIAN = "median";
-
-export const DATA_KEY_MEASURED = "measured";
-export const LINE_NAME_MEASURED = "measured";
-
 export interface MswGraphProps {
     spot: SpotModel,
     isMini?: boolean | undefined;
@@ -146,6 +140,7 @@ export function getCommonPlotlyLayout({
     showLegend?: boolean;
 }): Partial<Layout> {
     const baseLayout: Partial<Layout> = {
+        // TODO: clean up unused properties
         // autosize: true,
         paper_bgcolor: 'transparent',
         plot_bgcolor: 'transparent',

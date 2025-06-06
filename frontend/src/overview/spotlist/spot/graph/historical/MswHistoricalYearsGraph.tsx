@@ -84,7 +84,7 @@ export const MswHistoricalYearsGraph = ({
             t: 0,
             b: 0
         } : {
-            l: showLegend ? 30 : 60,
+            l: showLegend ? 30 : 51,
             r: 30,
             t: 0,
             b: showLegend ? 0 : 30 // provide space for x-axis labels
