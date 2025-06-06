@@ -90,18 +90,17 @@ export const MswLastMeasurementsGraph = ({
             showLegend
         }),
         xaxis: {
-            ...getCommonPlotlyLayout({ isMini }).xaxis,
+            ...getCommonPlotlyLayout({ isMini, allTimestamps }).xaxis,
             tickvals: weeklyTicks as any[],
             ticktext: weeklyLabels,
-            range: allTimestamps.length ? [allTimestamps[0], allTimestamps[allTimestamps.length - 1]] : undefined
-
         }
     };
 
     return (
         <Plot
             data={[
-                createTrace(processedData.measured, {
+                createTrace({
+                    data: processedData.measured,
                     name: 'Measured',
                     color: plotColors.measured,
                     lineWidth: isMini || !showLegend ? 1 : 2,

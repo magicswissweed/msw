@@ -50,15 +50,37 @@ export function getFlows(data: ApiFlowSample[]): number[] {
     return data.map(item => item.flow);
 }
 
+// Calculate maximum Y value from data series with padding
+export function calculateMaxY(data: ApiFlowSample[][], currentSample?: ApiFlowSample | null, paddingPercent: number = 10): number {
+  const getMaxValue = (data: ApiFlowSample[]) => data.length > 0 ? Math.max(...data.map(d => d.flow)) : 0;
+  
+  const maxY = Math.max(
+      ...data.map(series => getMaxValue(series)),
+      currentSample?.flow || 0
+  );
+  
+  return maxY * (1 + paddingPercent/100); // Add padding percentage
+}
+
 // Create a trace for Plotly with common defaults
-export function createTrace(data: ApiFlowSample[], options: {
-    name?: string,
-    color?: string,
-    fill?: 'none' | 'tozeroy' | 'tozerox' | 'tonexty' | 'tonextx' | 'toself' | 'tonext',
-    fillcolor?: string,
-    showLegend?: boolean,
-    skipHover?: boolean,
-    lineWidth?: number
+export function createTrace({
+    data,
+    name,
+    color,
+    fill,
+    fillcolor,
+    showLegend = true,
+    skipHover = false,
+    lineWidth = 1
+}: {
+    data: ApiFlowSample[];
+    name?: string;
+    color?: string;
+    fill?: 'none' | 'tozeroy' | 'tozerox' | 'tonexty' | 'tonextx' | 'toself' | 'tonext';
+    fillcolor?: string;
+    showLegend?: boolean;
+    skipHover?: boolean;
+    lineWidth?: number;
 }) {
     return {
         x: getTimestamps(data),
@@ -66,35 +88,51 @@ export function createTrace(data: ApiFlowSample[], options: {
         type: 'scatter' as const,
         mode: 'lines' as const,
         line: { 
-            width: options.lineWidth ?? (options.fill ? 0 : 1),
+            width: lineWidth ?? (fill ? 0 : 1),
             shape: 'spline' as const,
-            color: options.color
+            color
         },
-        fill: options.fill,
-        name: options.name,
-        showlegend: options.showLegend ?? true,
-        hoverinfo: options.skipHover ? 'skip' as const : 'all' as const,
-        hovertemplate: options.skipHover ? undefined : '%{x|%d.%m.%Y %H:%M}<br>Flow: %{y:.1f}<extra></extra>',
-        fillcolor: options.fillcolor ?? (options.fill ? options.color : undefined)
+        fill,
+        name,
+        showlegend: showLegend,
+        hoverinfo: skipHover ? 'skip' as const : 'all' as const,
+        hovertemplate: skipHover ? undefined : '%{x|%d.%m.%Y %H:%M}<br>Flow: %{y:.1f}<extra></extra>',
+        fillcolor: fillcolor ?? (fill ? color : undefined)
     };
 }
 
-// Calculate maximum Y value from data series with padding
-export function calculateMaxY(data: ApiFlowSample[][], currentSample?: ApiFlowSample | null, paddingPercent: number = 10): number {
-    const getMaxValue = (data: ApiFlowSample[]) => data.length > 0 ? Math.max(...data.map(d => d.flow)) : 0;
-    
-    const maxY = Math.max(
-        ...data.map(series => getMaxValue(series)),
-        currentSample?.flow || 0
-    );
-    
-    return maxY * (1 + paddingPercent/100); // Add padding percentage
-}
-
-// Helper function to check if a timestamp is the start of a month
-export function isStartOfMonth(timestamp: string): boolean {
-    const date = new Date(timestamp);
-    return date.getUTCDate() === 1 && date.getUTCHours() === 0;
+export function createAreaTrace({
+    upperData,
+    lowerData,
+    name,
+    fillcolor,
+    showLegend = true,
+    isMini = false
+}: {
+    upperData: ApiFlowSample[];
+    lowerData: ApiFlowSample[];
+    name?: string;
+    fillcolor?: string;
+    showLegend?: boolean;
+    isMini?: boolean;
+}) {
+    return [
+        createTrace({ 
+            data: upperData,
+            color: 'transparent',
+            showLegend: false,
+            skipHover: true
+        }),
+        createTrace({
+            data: lowerData,
+            name,
+            color: 'transparent',
+            fill: 'tonexty',
+            fillcolor,
+            skipHover: true,
+            showLegend: !isMini && showLegend
+        })
+    ];
 }
 
 // Common time constants
@@ -107,11 +145,6 @@ export const ONE_WEEK = 7 * ONE_DAY;
 export function toSwissTime(utcDate: Date | string): Date {
     const date = new Date(utcDate);
     return new Date(date.getTime() + SWISS_TIMEZONE_OFFSET);
-}
-
-export function toUTC(swissDate: Date | string): Date {
-    const date = new Date(swissDate);
-    return new Date(date.getTime() - SWISS_TIMEZONE_OFFSET);
 }
 
 // Common Plotly config
@@ -145,20 +178,12 @@ export function getCommonPlotlyLayout({
         paper_bgcolor: 'transparent',
         plot_bgcolor: 'transparent',
         xaxis: {
-            // tickformat: '%d.%m',
-            // type: 'date' as const,
-            // fixedrange: true,
-            dtick: 12 * ONE_HOUR,  // Show grid every 12 hours
             showgrid: true,
             gridcolor: 'rgba(211, 211, 211, 0.5)',  // Light gray for noon grid
-            gridwidth: 1,
-            tickmode: 'array' as const,
             showticklabels: !isMini,
-            tickvals: [],
-            ticktext: []
+            range: allTimestamps.length ? [allTimestamps[0], allTimestamps[allTimestamps.length - 1]] : undefined,
         },
         yaxis: {
-            // fixedrange: true,
             showticklabels: !isMini,
             gridcolor: isMini ? 'transparent' : 'rgba(211, 211, 211, 0.5)',
             ticklabelposition: 'inside' as const

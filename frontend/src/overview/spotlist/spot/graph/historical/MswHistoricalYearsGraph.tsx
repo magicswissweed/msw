@@ -7,7 +7,8 @@ import {
     calculateMaxY,
     defaultGraphProps,
     getCommonPlotlyLayout,
-    commonPlotlyConfig
+    commonPlotlyConfig,
+    createAreaTrace
 } from "../base-graph/MswGraph";
 import Plot from 'react-plotly.js';
 
@@ -27,6 +28,7 @@ export const MswHistoricalYearsGraph = ({
     const { minFlow, maxFlow } = spot ?? {};
     const { currentYear, median, twentyFivePercentile, seventyFivePercentile, max, min } = spot.historical!;
 
+    // no data processing needed for this graph
     const processedData = {
         measured: currentYear,
         median: median,
@@ -43,9 +45,6 @@ export const MswHistoricalYearsGraph = ({
 
     // Calculate y-axis maximum with 10% padding
     const maxY = calculateMaxY([processedData.measured || [], processedData.max || []], undefined, 0);
-
-    // Add some days of padding to the x-axis depending on screen size (!showLegend -> mobile)
-    const dataPadding = showLegend ? 7 * 24 * 60 * 60 * 1000 : 0;
 
     const layout = {
         ...getCommonPlotlyLayout({ 
@@ -67,27 +66,12 @@ export const MswHistoricalYearsGraph = ({
             }),
             // Format labels as month abbreviations
             ticktext: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            // range needs 7 days of padding to show Jan label
-            range: allTimestamps.length ? [
-                new Date(new Date(allTimestamps[0]).getTime() - dataPadding).toISOString(),
-                new Date(new Date(allTimestamps[allTimestamps.length - 1]).getTime() + dataPadding).toISOString()
-            ] : undefined,
+
         },
         yaxis: {
             ...getCommonPlotlyLayout({ isMini }).yaxis,
+            // Force graph to show x-axis
             range: [0, maxY],
-            ticklabelposition: (showLegend ? 'inside' : 'outside') as ('inside' | 'outside'),
-        },
-        margin: isMini ? {
-            l: 0,
-            r: 0,
-            t: 0,
-            b: 0
-        } : {
-            l: showLegend ? 30 : 51,
-            r: 30,
-            t: 0,
-            b: showLegend ? 0 : 30 // provide space for x-axis labels
         },
         shapes: [
           ...(getCommonPlotlyLayout({ isMini, minFlow, maxFlow, allTimestamps }).shapes || []),
@@ -117,43 +101,38 @@ export const MswHistoricalYearsGraph = ({
     return (
         <Plot
             data={[
-                // Bottom layer: Min-max range
-                createTrace(processedData.max, { 
-                    color: 'transparent',
-                    showLegend: false,
-                    skipHover: true
-                }),
-                createTrace(processedData.min, {
-                    name: 'Min-Max',
-                    color: 'transparent',
-                    fill: 'tonexty',
-                    fillcolor: plotColors.minMaxRange.fill,
-                    skipHover: true,
-                    showLegend: !isMini && showLegend
-                }),
+                              // Bottom layer: Min-max range
+
+              ...createAreaTrace({
+                upperData: processedData.max,
+                lowerData: processedData.min, 
+                name: 'Min-Max',
+                fillcolor: plotColors.minMaxRange.fill,
+                showLegend: !isMini && showLegend,
+                isMini: isMini
+              }),
+                    
                 // Middle layer: 25-75 percentile range
-                createTrace(processedData.p75, {
-                    color: 'transparent',
-                    showLegend: false,
-                    skipHover: true
-                }),
-                createTrace(processedData.p25, {
+                ...createAreaTrace({
+                    upperData: processedData.p75,
+                    lowerData: processedData.p25,
                     name: '25-75%',
-                    color: 'transparent',
-                    fill: 'tonexty',
                     fillcolor: plotColors.percentileRange.fill,
-                    skipHover: true,
-                    showLegend: !isMini && showLegend
-                }),
+                    showLegend: !isMini && showLegend,
+                    isMini: isMini
+                }), 
+                
                 // Top layers: Forecast median and measured data
-                createTrace(processedData.median, {
+                createTrace({
+                    data: processedData.median,
                     name: 'Median',
                     color: plotColors.median,
                     lineWidth: isMini || !showLegend ? 1 : 2,
                     showLegend: !isMini && showLegend,
                     skipHover: isMini
                 }),
-                createTrace(processedData.measured, {
+                createTrace({
+                    data: processedData.measured,
                     name: 'Measured',
                     color: plotColors.measured,
                     lineWidth: isMini || !showLegend ? 1 : 2,

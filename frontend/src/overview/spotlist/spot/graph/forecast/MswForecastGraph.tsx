@@ -9,7 +9,8 @@ import {
     plotColors,
     getCommonPlotlyLayout,
     commonPlotlyConfig,
-    defaultGraphProps
+    defaultGraphProps,
+    createAreaTrace
 } from "../base-graph/MswGraph";
 import {MswLoader} from "../../../../../loader/MswLoader";
 
@@ -71,7 +72,7 @@ export const MswForecastGraph = ({
             showLegend,
         }),
         xaxis: {
-            ...getCommonPlotlyLayout({ isMini }).xaxis,
+            ...getCommonPlotlyLayout({ isMini, allTimestamps }).xaxis, 
             // Only show labels at noon
             tickvals: allTimestamps.filter(timestamp => new Date(timestamp).getHours() === 12),
             // Format labels as DD.MM
@@ -81,7 +82,6 @@ export const MswForecastGraph = ({
                     const date = new Date(timestamp);
                     return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}`;
                   }),
-            range: allTimestamps.length ? [allTimestamps[0], allTimestamps[allTimestamps.length - 1]] : undefined
               },
         shapes: [
             ...(getCommonPlotlyLayout({ isMini, minFlow, maxFlow, allTimestamps }).shapes || []),
@@ -111,46 +111,38 @@ export const MswForecastGraph = ({
     return (
         <Plot
             data={[
-                // TODO: combine two trace calls in function for areas
-                // Bottom layer: Min-max range
-                createTrace(processedData.max, { 
-                    color: 'transparent',
-                    showLegend: false,
-                    skipHover: true
-                }),
-                createTrace(processedData.min, {
-                    name: 'Min-Max',
-                    color: 'transparent',
-                    fill: 'tonexty',
-                    fillcolor: plotColors.minMaxRange.fill,
-                    skipHover: true,
-                    showLegend: !isMini && showLegend
-                }),
+              // Bottom layer: Min-max range
+              ...createAreaTrace({
+                upperData: processedData.max,
+                lowerData: processedData.min, 
+                name: 'Min-Max',
+                fillcolor: plotColors.minMaxRange.fill,
+                showLegend: !isMini && showLegend,
+                isMini: isMini
+              }),
+                
         
                 // Middle layer: 25-75 percentile range
-                createTrace(processedData.p75, {
-                    color: 'transparent',
-                    showLegend: false,
-                    skipHover: true
-                }),
-                createTrace(processedData.p25, {
+                ...createAreaTrace({
+                    upperData: processedData.p75,
+                    lowerData: processedData.p25, 
                     name: '25-75%',
-                    color: 'transparent',
-                    fill: 'tonexty',
                     fillcolor: plotColors.percentileRange.fill,
-                    skipHover: true,
-                    showLegend: !isMini && showLegend
+                    showLegend: !isMini && showLegend,
+                    isMini: isMini
                 }),
         
                 // Top layers: Forecast median and measured data
-                createTrace(processedData.median, {
+                createTrace({
+                    data: processedData.median,
                     name: 'Median',
                     color: plotColors.median,
                     lineWidth: isMini || !showLegend ? 1 : 2,
                     showLegend: !isMini && showLegend,
-                    skipHover: isMini
+                    skipHover: isMini,
                 }),
-                createTrace(processedData.measured, {
+                createTrace({
+                    data: processedData.measured,
                     name: 'Measured',
                     color: plotColors.measured,
                     lineWidth: isMini || !showLegend ? 1 : 2,
