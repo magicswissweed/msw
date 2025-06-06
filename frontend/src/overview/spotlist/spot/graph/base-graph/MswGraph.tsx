@@ -51,12 +51,11 @@ export function getFlows(data: ApiFlowSample[]): number[] {
 }
 
 // Calculate maximum Y value from data series with padding
-export function calculateMaxY(data: ApiFlowSample[][], currentSample?: ApiFlowSample | null, paddingPercent: number = 10): number {
+export function calculateMaxY(data: ApiFlowSample[][], paddingPercent: number = 10): number {
   const getMaxValue = (data: ApiFlowSample[]) => data.length > 0 ? Math.max(...data.map(d => d.flow)) : 0;
   
   const maxY = Math.max(
-      ...data.map(series => getMaxValue(series)),
-      currentSample?.flow || 0
+      ...data.map(series => getMaxValue(series))
   );
   
   return maxY * (1 + paddingPercent/100); // Add padding percentage

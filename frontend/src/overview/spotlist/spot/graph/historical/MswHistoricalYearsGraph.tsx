@@ -44,7 +44,7 @@ export const MswHistoricalYearsGraph = ({
     ])).sort();
 
     // Calculate y-axis maximum with 10% padding
-    const maxY = calculateMaxY([processedData.measured || [], processedData.max || []], undefined, 0);
+    const maxY = calculateMaxY([processedData.measured || [], processedData.max || []], 10);
 
     const layout = {
         ...getCommonPlotlyLayout({ 
@@ -70,7 +70,7 @@ export const MswHistoricalYearsGraph = ({
         },
         yaxis: {
             ...getCommonPlotlyLayout({ isMini }).yaxis,
-            // Force graph to show x-axis
+            // Force graph to show x-axis by setting explicit range from zero
             range: [0, maxY],
         },
         shapes: [
@@ -101,16 +101,15 @@ export const MswHistoricalYearsGraph = ({
     return (
         <Plot
             data={[
-                              // Bottom layer: Min-max range
-
-              ...createAreaTrace({
-                upperData: processedData.max,
-                lowerData: processedData.min, 
-                name: 'Min-Max',
-                fillcolor: plotColors.minMaxRange.fill,
-                showLegend: !isMini && showLegend,
-                isMini: isMini
-              }),
+                // Bottom layer: Min-max range
+                ...createAreaTrace({
+                  upperData: processedData.max,
+                  lowerData: processedData.min, 
+                  name: 'Min-Max',
+                  fillcolor: plotColors.minMaxRange.fill,
+                  showLegend: !isMini && showLegend,
+                  isMini: isMini
+                }),
                     
                 // Middle layer: 25-75 percentile range
                 ...createAreaTrace({
@@ -122,7 +121,7 @@ export const MswHistoricalYearsGraph = ({
                     isMini: isMini
                 }), 
                 
-                // Top layers: Forecast median and measured data
+                // Top layers: Historical median and measured data
                 createTrace({
                     data: processedData.median,
                     name: 'Median',
