@@ -25,11 +25,9 @@ export class MswMeasurement extends Component<MeasurementsProps> {
                     {this.getFlow()}
                 </div>
 
-                {this.spot.currentSample!.temperature &&
-                    <div className="measurement_row meas temp">
-                        {this.getTemp()}
-                    </div>
-                }
+                <div className="measurement_row meas temp">
+                    {this.getTemp()}
+                </div>
             </div>
         </>;
     }
@@ -66,9 +64,15 @@ export class MswMeasurement extends Component<MeasurementsProps> {
         }
     }
 
-
     private getTemp() {
-        let temp: number = this.spot.currentSample!.temperature ?? 0;
+        if (!this.spot.currentSample!.temperature) {
+            return <>
+                <div style={{ visibility: 'hidden' }}>15.5</div>
+                <div className="unit" style={{ visibility: 'hidden' }}>°C</div>
+            </>;
+        }
+        
+        let temp: number = this.spot.currentSample!.temperature;
         return <>
             <div>{temp}</div>
             <div className="unit">°C</div>
