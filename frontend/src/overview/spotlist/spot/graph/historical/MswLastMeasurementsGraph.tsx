@@ -21,37 +21,6 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
         return <MswLoader/>
     }
 
-    // Process data
-    const processedData = {
-        measured: (() => {
-            if (!props.spot.last40Days?.length) return [];
-
-            const hourlyAverages = props.spot.last40Days.reduce<Record<string, {
-                sum: number,
-                count: number
-            }>>((acc, sample) => {
-                const hourKey = sample.timestamp.slice(0, 13); // Get YYYY-MM-DDTHH
-
-                if (!acc[hourKey]) {
-                    acc[hourKey] = {sum: 0, count: 0};
-                }
-                acc[hourKey].sum += sample.flow;
-                acc[hourKey].count++;
-
-                return acc;
-            }, {});
-
-            // Calculate hourly averages and maintain chronological order
-            return Object.entries(hourlyAverages)
-                .sort(([a], [b]) => a.localeCompare(b))
-                .map(([hourKey, {sum, count}]) => ({
-                    timestamp: hourKey + ':00:00.000Z', // Store in UTC
-                    flow: Math.round((sum / count) * 10) / 10 // Round to 1 decimal
-                }));
-        })(),
-        max: [] // Empty array for max values since we don't have them for historical data
-    };
-
     // Calculate weekly ticks for x-axis
     const now = new Date();
     const sixWeeksAgo = new Date(now.getTime() - (6 * ONE_WEEK));
@@ -69,12 +38,12 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     const layout = {
         ...getCommonPlotlyLayout(
             props.isMini,
-            getTimestamps(processedData.measured),
+            getTimestamps(props.spot.last40Days),
             props.spot.minFlow,
             props.spot.maxFlow,
             false),
         xaxis: {
-            ...getCommonPlotlyLayout(props.isMini, getTimestamps(processedData.measured)).xaxis,
+            ...getCommonPlotlyLayout(props.isMini, getTimestamps(props.spot.last40Days)).xaxis,
             tickvals: weeklyTicks as any[],
             ticktext: weeklyLabels,
         }
@@ -84,7 +53,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
         <Plot
             data={[
                 createTrace(
-                    processedData.measured,
+                    props.spot.last40Days,
                     props.isMini,
                     plotColors.measured,
                     'Measured')
