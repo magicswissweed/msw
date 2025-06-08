@@ -98,24 +98,21 @@ export const MswForecastGraph = (props: MswGraphProps) => {
         <Plot
             data={[
                 // Bottom layer: Min-max range
-                ...createAreaTrace({
-                    upperData: processedData.max,
-                    lowerData: processedData.min,
-                    name: 'Min-Max',
-                    fillcolor: plotColors.minMaxRange.fill,
-                    showLegend: !props.isMini,
-                    isMini: props.isMini
-                }),
+                ...createAreaTrace(
+                    processedData.max,
+                    processedData.min,
+                    'Min-Max',
+                    plotColors.minMaxRange.fill,
+                    props.isMini),
 
                 // Middle layer: 25-75 percentile range
-                ...createAreaTrace({
-                    upperData: processedData.p75,
-                    lowerData: processedData.p25,
-                    name: '25-75%',
-                    fillcolor: plotColors.percentileRange.fill,
-                    showLegend: !props.isMini,
-                    isMini: props.isMini
-                }),
+                ...createAreaTrace(
+                    processedData.p75,
+                    processedData.p25,
+                    '25-75%',
+                    plotColors.percentileRange.fill,
+                    props.isMini
+                ),
 
                 // Top layers: Forecast median and measured data
                 createTrace(

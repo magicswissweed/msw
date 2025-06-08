@@ -81,20 +81,12 @@ export function createTrace(
     };
 }
 
-export function createAreaTrace({
-                                    upperData,
-                                    lowerData,
-                                    name,
-                                    fillcolor,
-                                    isMini = false
-                                }: {
-    upperData: ApiFlowSample[];
-    lowerData: ApiFlowSample[];
-    name?: string;
-    fillcolor?: string;
-    showLegend?: boolean;
-    isMini?: boolean;
-}) {
+export function createAreaTrace(
+    upperData: ApiFlowSample[],
+    lowerData: ApiFlowSample[],
+    name: string,
+    fillcolor: string,
+    isMini: boolean) {
     return [
         {
             ...createTrace(upperData, isMini, 'transparent'),
