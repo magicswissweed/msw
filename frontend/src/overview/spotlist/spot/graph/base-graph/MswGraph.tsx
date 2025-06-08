@@ -67,21 +67,17 @@ export function createTrace(
     data: ApiFlowSample[],
     isMini: boolean,
     color?: string,
-    name?: string,
-    fill?: 'none' | 'tozeroy' | 'tozerox' | 'tonexty' | 'tonextx' | 'toself' | 'tonext',
-    fillcolor?: string) {
+    name?: string) {
     return {
         x: getTimestamps(data),
         y: getFlows(data),
         type: 'scatter' as const,
         mode: 'lines' as const,
         line: {width: 1, shape: 'spline' as const, color},
-        fill,
         name,
         showlegend: !isMini,
         hoverinfo: isMini ? 'skip' as const : 'all' as const,
         hovertemplate: isMini ? undefined : '%{x|%d.%m.%Y %H:%M}<br>Flow: %{y:.1f}<extra></extra>',
-        fillcolor: fillcolor ?? (fill ? color : undefined)
     };
 }
 
@@ -104,7 +100,12 @@ export function createAreaTrace({
             ...createTrace(upperData, isMini, 'transparent'),
             showlegend: false
         },
-        createTrace(lowerData, isMini, 'transparent', name, 'tonexty', fillcolor)
+        {
+            ...createTrace(lowerData, isMini, 'transparent', name),
+            fill: 'tonexty',
+            fillcolor: fillcolor,
+        }
+
     ];
 }
 
