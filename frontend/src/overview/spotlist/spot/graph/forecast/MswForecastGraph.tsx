@@ -28,7 +28,7 @@ export const MswForecastGraph = (props: MswGraphProps) => {
     const {measuredData, median, twentyFivePercentile, seventyFivePercentile, max, min} = props.spot.forecast;
 
     // Get timestamps for x-axis grid and labels
-    const allTimestamps = Array.from([...getTimestamps(measuredData), ...getTimestamps(median)]).sort();
+    const allTimestamps = getTimestamps([...measuredData, ...median]);
 
     // Update all series with current measurement if available
     const updateWithCurrentSample = (series: ApiLineEntry[]) => {
@@ -107,7 +107,6 @@ export const MswForecastGraph = (props: MswGraphProps) => {
                     isMini: props.isMini
                 }),
 
-
                 // Middle layer: 25-75 percentile range
                 ...createAreaTrace({
                     upperData: processedData.p75,
@@ -119,18 +118,18 @@ export const MswForecastGraph = (props: MswGraphProps) => {
                 }),
 
                 // Top layers: Forecast median and measured data
-                createTrace({
-                    data: processedData.median,
-                    name: 'Median',
-                    color: plotColors.median,
-                    isMini: props.isMini
-                }),
-                createTrace({
-                    data: processedData.measured,
-                    name: 'Measured',
-                    color: plotColors.measured,
-                    isMini: props.isMini
-                })
+                createTrace(
+                    processedData.median,
+                    props.isMini,
+                    plotColors.median,
+                    'Median',
+                ),
+                createTrace(
+                    processedData.measured,
+                    props.isMini,
+                    plotColors.measured,
+                    'Measured',
+                )
             ]}
             layout={layout}
             style={{

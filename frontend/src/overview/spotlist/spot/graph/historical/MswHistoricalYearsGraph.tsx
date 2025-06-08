@@ -31,7 +31,7 @@ export const MswHistoricalYearsGraph = (props: MswGraphProps) => {
     };
 
     // Get timestamps for x-axis grid and labels
-    const allTimestamps = Array.from([...getTimestamps(processedData.median)]).sort();
+    const allTimestamps = getTimestamps(processedData.median);
 
     // Calculate y-axis maximum with 10% padding
     const maxY = calculateMaxY(processedData.measured || [], processedData.max || [], 10);
@@ -106,18 +106,17 @@ export const MswHistoricalYearsGraph = (props: MswGraphProps) => {
                 }),
 
                 // Top layers: Historical median and measured data
-                createTrace({
-                    data: processedData.median,
-                    name: 'Median',
-                    color: plotColors.median,
-                    isMini: props.isMini
-                }),
-                createTrace({
-                    data: processedData.measured,
-                    name: 'Measured',
-                    color: plotColors.measured,
-                    isMini: props.isMini
-                })
+                createTrace(
+                    processedData.median,
+                    props.isMini,
+                    plotColors.median,
+                    'Median',
+                ),
+                createTrace(
+                    processedData.measured,
+                    props.isMini,
+                    'Measured',
+                    plotColors.measured,)
             ]}
             layout={layout}
             style={{

@@ -40,7 +40,8 @@ export function convertToUTC(timestamp: Date): string {
 
 // Extract timestamps and flows from a data series
 export function getTimestamps(data: ApiFlowSample[]): string[] {
-    return data.map(item => convertToUTC(new Date(item.timestamp)));
+    return data.map(item => convertToUTC(new Date(item.timestamp)))
+        .sort()
 }
 
 function getFlows(data: ApiFlowSample[]): number[] {
@@ -62,21 +63,13 @@ export function calculateMaxY(measured: ApiFlowSample[], max: ApiFlowSample[], p
 }
 
 // Create a trace for Plotly with common defaults
-export function createTrace({
-                                data,
-                                name,
-                                color,
-                                fill,
-                                fillcolor,
-                                isMini,
-                            }: {
-    data: ApiFlowSample[];
-    name?: string;
-    color?: string;
-    fill?: 'none' | 'tozeroy' | 'tozerox' | 'tonexty' | 'tonextx' | 'toself' | 'tonext';
-    fillcolor?: string;
-    isMini: boolean;
-}) {
+export function createTrace(
+    data: ApiFlowSample[],
+    isMini: boolean,
+    color?: string,
+    name?: string,
+    fill?: 'none' | 'tozeroy' | 'tozerox' | 'tonexty' | 'tonextx' | 'toself' | 'tonext',
+    fillcolor?: string) {
     return {
         x: getTimestamps(data),
         y: getFlows(data),
@@ -108,17 +101,10 @@ export function createAreaTrace({
 }) {
     return [
         {
-            ...createTrace({data: upperData, color: 'transparent', isMini: isMini}),
+            ...createTrace(upperData, isMini, 'transparent'),
             showlegend: false
         },
-        createTrace({
-            data: lowerData,
-            name,
-            color: 'transparent',
-            fill: 'tonexty',
-            fillcolor,
-            isMini: isMini
-        })
+        createTrace(lowerData, isMini, 'transparent', name, 'tonexty', fillcolor)
     ];
 }
 

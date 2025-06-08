@@ -73,12 +73,12 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     const layout = {
         ...getCommonPlotlyLayout(
             props.isMini,
-            Array.from([...getTimestamps(processedData.measured),]).sort(),
+            getTimestamps(processedData.measured),
             props.spot.minFlow,
             props.spot.maxFlow,
             false),
         xaxis: {
-            ...getCommonPlotlyLayout(props.isMini, Array.from([...getTimestamps(processedData.measured)]).sort()).xaxis,
+            ...getCommonPlotlyLayout(props.isMini, getTimestamps(processedData.measured)).xaxis,
             tickvals: weeklyTicks as any[],
             ticktext: weeklyLabels,
         }
@@ -87,12 +87,11 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     return (
         <Plot
             data={[
-                createTrace({
-                    data: processedData.measured,
-                    name: 'Measured',
-                    color: plotColors.measured,
-                    isMini: props.isMini
-                })
+                createTrace(
+                    processedData.measured,
+                    props.isMini,
+                    plotColors.measured,
+                    'Measured')
             ]}
             layout={layout}
             style={{width: '100%', aspectRatio: getAspectRatio(props.isMini)}}
