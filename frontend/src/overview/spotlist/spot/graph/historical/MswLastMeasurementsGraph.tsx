@@ -40,11 +40,10 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
             props.isMini,
             getTimestamps(props.spot.last40Days),
             props.spot.minFlow,
-            props.spot.maxFlow,
-            false),
+            props.spot.maxFlow),
         xaxis: {
             ...getCommonPlotlyLayout(props.isMini, getTimestamps(props.spot.last40Days)).xaxis,
-            tickvals: weeklyTicks as any[],
+            tickvals: weeklyTicks,
             ticktext: weeklyLabels,
         }
     };
@@ -52,11 +51,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     return (
         <Plot
             data={[
-                createTrace(
-                    props.spot.last40Days,
-                    props.isMini,
-                    plotColors.measured,
-                    'Measured')
+                createTrace(props.spot.last40Days, props.isMini, plotColors.measured, 'Measured')
             ]}
             layout={layout}
             style={{width: '100%', aspectRatio: getAspectRatio(props.isMini)}}
