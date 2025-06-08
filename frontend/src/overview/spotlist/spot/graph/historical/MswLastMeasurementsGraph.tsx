@@ -95,9 +95,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
                     data: processedData.measured,
                     name: 'Measured',
                     color: plotColors.measured,
-                    lineWidth: props.isMini ? 1 : 2,
-                    showLegend: !props.isMini,
-                    skipHover: props.isMini
+                    isMini: props.isMini
                 })
             ]}
             layout={layout}

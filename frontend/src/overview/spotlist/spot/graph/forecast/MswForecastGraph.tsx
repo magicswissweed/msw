@@ -128,17 +128,13 @@ export const MswForecastGraph = (props: MswGraphProps) => {
                     data: processedData.median,
                     name: 'Median',
                     color: plotColors.median,
-                    lineWidth: props.isMini ? 1 : 2,
-                    showLegend: !props.isMini,
-                    skipHover: props.isMini,
+                    isMini: props.isMini
                 }),
                 createTrace({
                     data: processedData.measured,
                     name: 'Measured',
                     color: plotColors.measured,
-                    lineWidth: props.isMini ? 1 : 2,
-                    showLegend: !props.isMini,
-                    skipHover: props.isMini
+                    isMini: props.isMini
                 })
             ]}
             layout={layout}

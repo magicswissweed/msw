@@ -68,34 +68,26 @@ export function createTrace({
                                 color,
                                 fill,
                                 fillcolor,
-                                showLegend = true,
-                                skipHover = false,
-                                lineWidth = 1
+                                isMini,
                             }: {
     data: ApiFlowSample[];
     name?: string;
     color?: string;
     fill?: 'none' | 'tozeroy' | 'tozerox' | 'tonexty' | 'tonextx' | 'toself' | 'tonext';
     fillcolor?: string;
-    showLegend?: boolean;
-    skipHover?: boolean;
-    lineWidth?: number;
+    isMini: boolean;
 }) {
     return {
         x: getTimestamps(data),
         y: getFlows(data),
         type: 'scatter' as const,
         mode: 'lines' as const,
-        line: {
-            width: lineWidth ?? (fill ? 0 : 1),
-            shape: 'spline' as const,
-            color
-        },
+        line: {width: 1, shape: 'spline' as const, color},
         fill,
         name,
-        showlegend: showLegend,
-        hoverinfo: skipHover ? 'skip' as const : 'all' as const,
-        hovertemplate: skipHover ? undefined : '%{x|%d.%m.%Y %H:%M}<br>Flow: %{y:.1f}<extra></extra>',
+        showlegend: !isMini,
+        hoverinfo: isMini ? 'skip' as const : 'all' as const,
+        hovertemplate: isMini ? undefined : '%{x|%d.%m.%Y %H:%M}<br>Flow: %{y:.1f}<extra></extra>',
         fillcolor: fillcolor ?? (fill ? color : undefined)
     };
 }
@@ -105,7 +97,6 @@ export function createAreaTrace({
                                     lowerData,
                                     name,
                                     fillcolor,
-                                    showLegend = true,
                                     isMini = false
                                 }: {
     upperData: ApiFlowSample[];
@@ -116,20 +107,17 @@ export function createAreaTrace({
     isMini?: boolean;
 }) {
     return [
-        createTrace({
-            data: upperData,
-            color: 'transparent',
-            showLegend: false,
-            skipHover: true
-        }),
+        {
+            ...createTrace({data: upperData, color: 'transparent', isMini: isMini}),
+            showlegend: false
+        },
         createTrace({
             data: lowerData,
             name,
             color: 'transparent',
             fill: 'tonexty',
             fillcolor,
-            skipHover: true,
-            showLegend: !isMini && showLegend
+            isMini: isMini
         })
     ];
 }
