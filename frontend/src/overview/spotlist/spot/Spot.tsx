@@ -107,26 +107,21 @@ export const Spot = (props: SpotProps) => {
         </>
     }
 
-    function getCollapsibleContent(spot: SpotModel, showLegend: boolean=true) {
+    function getCollapsibleContent(spot: SpotModel, showLegend: boolean = true) {
         let forecastContent = <>
-            <MswForecastGraph spot={spot}
-                              showLegend={showLegend}
-                              />
+            <MswForecastGraph spot={spot} showLegend={showLegend}/>
         </>;
 
         let lastMeasurementsContent = <>
             <div className="last40days-container">
                 <p>Forecast unavailable - showing last 40 days</p>
-                <MswLastMeasurementsGraph spot={spot} 
-                                          showLegend={showLegend}
-                                          />
+                <MswLastMeasurementsGraph spot={spot} showLegend={showLegend}/>
             </div>
         </>;
 
         let historicalYearsContent = <>
-            <MswHistoricalYearsGraph spot={spot}
-                                    showLegend={showLegend}
-                                     />
+            <MswHistoricalYearsGraph spot={spot} showLegend={showLegend}
+            />
         </>;
 
         if (props.showGraphOfType === GraphTypeEnum.Forecast) {

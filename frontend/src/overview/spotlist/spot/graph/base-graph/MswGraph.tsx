@@ -1,6 +1,6 @@
 import {ApiFlowSample} from "../../../../../gen/msw-api-ts";
 import {SpotModel} from "../../../../../model/SpotModel";
-import {Layout, Config } from 'plotly.js';
+import {Config, Layout} from 'plotly.js';
 
 export interface MswGraphProps {
     spot: SpotModel,
@@ -16,62 +16,62 @@ export const defaultGraphProps = {
     aspectRatio: 2,
 } as const;
 
+// Common time constants
+const SWISS_TIMEZONE_OFFSET = 2 * 60 * 60 * 1000; // UTC+2 in milliseconds
+const ONE_HOUR = 60 * 60 * 1000;
+const ONE_DAY = 24 * ONE_HOUR;
+export const ONE_WEEK = 7 * ONE_DAY;
+
 // Color configuration for the plots
+const green = 'rgb(15, 125, 72)';
+const blue = 'rgb(59, 96, 232)';
+const darkBlue = 'rgba(30, 144, 150, 0.7)';
+const lightBlue = 'rgba(117, 212, 217, 0.7)';
+const transparentGreen = 'rgba(7, 169, 37, 0.5)';
 export const plotColors = {
-    measured: 'rgb(15, 125, 72)',      // Green for actual measurements
-    median: 'rgb(59, 96, 232)',        // Blue for median forecast
-    percentileRange: {
-        line: 'gray',
-        fill: 'rgba(30, 144, 150, 0.7)'  // Darker blue for 25-75 percentile range
-    },
-    minMaxRange: {
-        line: 'gray',
-        fill: 'rgba(117, 212, 217, 0.7)' // Lighter blue for min-max range
-    },
-    currentTime: {
-        line: 'gray'
-    },
-    acceptableRange: {
-        fill: 'rgba(7, 169, 37, 0.5)'    // Transparent green for acceptable range
-    }
+    measured: green,
+    median: blue,
+    percentileRange: {line: 'gray', fill: darkBlue},
+    minMaxRange: {line: 'gray', fill: lightBlue},
+    currentTime: {line: 'gray'},
+    acceptableRange: {fill: transparentGreen}
 };
 
 // Convert local timestamp to UTC format for consistency
-export function convertToUTC(timestamp: string): string {
-    return new Date(timestamp).toISOString();
+export function convertToUTC(timestamp: Date): string {
+    return timestamp.toISOString();
 }
 
 // Extract timestamps and flows from a data series
 export function getTimestamps(data: ApiFlowSample[]): string[] {
-    return data.map(item => convertToUTC(item.timestamp));
+    return data.map(item => convertToUTC(new Date(item.timestamp)));
 }
 
-export function getFlows(data: ApiFlowSample[]): number[] {
+function getFlows(data: ApiFlowSample[]): number[] {
     return data.map(item => item.flow);
 }
 
 // Calculate maximum Y value from data series with padding
-export function calculateMaxY(data: ApiFlowSample[][], paddingPercent: number = 10): number {
-  const getMaxValue = (data: ApiFlowSample[]) => data.length > 0 ? Math.max(...data.map(d => d.flow)) : 0;
-  
-  const maxY = Math.max(
-      ...data.map(series => getMaxValue(series))
-  );
-  
-  return maxY * (1 + paddingPercent/100); // Add padding percentage
+export function calculateMaxY(measured: ApiFlowSample[], max: ApiFlowSample[], paddingPercent: number = 10): number {
+    const maxY = Math.max(
+        Math.max(...measured.map(m => m.flow)),
+        Math.max(...max.map(m => m.flow))
+    )
+
+    return maxY * (1 + paddingPercent / 100); // Add padding percentage
 }
 
 // Create a trace for Plotly with common defaults
 export function createTrace({
-    data,
-    name,
-    color,
-    fill,
-    fillcolor,
-    showLegend = true,
-    skipHover = false,
-    lineWidth = 1
-}: {
+                                data,
+                                name,
+                                color,
+                                fill,
+                                fillcolor,
+                                showLegend = true,
+                                skipHover = false,
+                                lineWidth = 1
+                            }: {
     data: ApiFlowSample[];
     name?: string;
     color?: string;
@@ -86,7 +86,7 @@ export function createTrace({
         y: getFlows(data),
         type: 'scatter' as const,
         mode: 'lines' as const,
-        line: { 
+        line: {
             width: lineWidth ?? (fill ? 0 : 1),
             shape: 'spline' as const,
             color
@@ -101,13 +101,13 @@ export function createTrace({
 }
 
 export function createAreaTrace({
-    upperData,
-    lowerData,
-    name,
-    fillcolor,
-    showLegend = true,
-    isMini = false
-}: {
+                                    upperData,
+                                    lowerData,
+                                    name,
+                                    fillcolor,
+                                    showLegend = true,
+                                    isMini = false
+                                }: {
     upperData: ApiFlowSample[];
     lowerData: ApiFlowSample[];
     name?: string;
@@ -116,7 +116,7 @@ export function createAreaTrace({
     isMini?: boolean;
 }) {
     return [
-        createTrace({ 
+        createTrace({
             data: upperData,
             color: 'transparent',
             showLegend: false,
@@ -134,16 +134,9 @@ export function createAreaTrace({
     ];
 }
 
-// Common time constants
-export const SWISS_TIMEZONE_OFFSET = 2 * 60 * 60 * 1000; // UTC+2 in milliseconds
-export const ONE_HOUR = 60 * 60 * 1000;
-export const ONE_DAY = 24 * ONE_HOUR;
-export const ONE_WEEK = 7 * ONE_DAY;
-
 // Convert between UTC and Swiss time
-export function toSwissTime(utcDate: Date | string): Date {
-    const date = new Date(utcDate);
-    return new Date(date.getTime() + SWISS_TIMEZONE_OFFSET);
+export function toSwissTime(utcDate: Date): Date {
+    return new Date(utcDate.getTime() + SWISS_TIMEZONE_OFFSET);
 }
 
 // Common Plotly config
@@ -157,13 +150,13 @@ export const commonPlotlyConfig: Partial<Config> = {
 
 // Common Plotly layout configuration
 export function getCommonPlotlyLayout({
-    isMini = false,
-    allTimestamps = [],
-    minFlow,
-    maxFlow,
-    showCurrentTimeLine = true,
-    showLegend = true,
-}: {
+                                          isMini = false,
+                                          allTimestamps = [],
+                                          minFlow,
+                                          maxFlow,
+                                          showCurrentTimeLine = true,
+                                          showLegend = true,
+                                      }: {
     isMini?: boolean;
     allTimestamps?: string[];
     minFlow?: number;
@@ -171,20 +164,21 @@ export function getCommonPlotlyLayout({
     showCurrentTimeLine?: boolean;
     showLegend?: boolean;
 }): Partial<Layout> {
-    const baseLayout: Partial<Layout> = {
+    const lightGray = 'rgba(211, 211, 211, 0.5)';
+    return {
         // TODO: clean up unused properties
         // autosize: true,
         paper_bgcolor: 'transparent',
         plot_bgcolor: 'transparent',
         xaxis: {
             showgrid: true,
-            gridcolor: 'rgba(211, 211, 211, 0.5)',  // Light gray for noon grid
+            gridcolor: lightGray,
             showticklabels: !isMini,
             range: allTimestamps.length ? [allTimestamps[0], allTimestamps[allTimestamps.length - 1]] : undefined,
         },
         yaxis: {
             showticklabels: !isMini,
-            gridcolor: isMini ? 'transparent' : 'rgba(211, 211, 211, 0.5)',
+            gridcolor: isMini ? 'transparent' : lightGray,
             ticklabelposition: 'inside' as const
         },
         legend: !isMini && showLegend ? {
@@ -196,23 +190,15 @@ export function getCommonPlotlyLayout({
             itemclick: false,
             itemdoubleclick: false
         } : undefined,
-        margin: isMini ? {
-            l: 5,
-            r: 5,
-            t: 5,
-            b: 5
-        } : {
-            l: 30,
-            r: 30,
-            t: 0,
-            b: showLegend ? 0 : 30 // provide space for x-axis labels without legend
-          },
+        margin: isMini ?
+            {l: 5, r: 5, t: 5, b: 5} :
+            {l: 30, r: 30, t: 0, b: showLegend ? 0 : 30}, // provide space for x-axis labels without legend
         shapes: [
             // Vertical line showing current time
             ...(showCurrentTimeLine ? [{
                 type: 'line' as const,
-                x0: new Date().toISOString(),
-                x1: new Date().toISOString(),
+                x0: convertToUTC(new Date()),
+                x1: convertToUTC(new Date()),
                 y0: 0,
                 y1: 1,
                 yref: 'paper' as const,
@@ -230,19 +216,13 @@ export function getCommonPlotlyLayout({
                 y0: minFlow,
                 y1: maxFlow,
                 fillcolor: plotColors.acceptableRange.fill,
-                line: { width: 0 },
+                line: {width: 0},
                 layer: 'below' as const
             }] : []),
-            
+
         ],
-        hoverlabel: isMini ? undefined : {
-            bgcolor: 'white',
-            bordercolor: 'gray',
-            font: { size: 13 }
-        },
+        hoverlabel: isMini ? undefined : {bgcolor: 'white', bordercolor: 'gray', font: {size: 13}},
         hovermode: isMini ? false : 'closest' as const,
         dragmode: false as const
     };
-
-    return baseLayout;
 }
