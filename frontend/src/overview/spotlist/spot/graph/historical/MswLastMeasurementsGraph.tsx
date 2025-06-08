@@ -3,6 +3,7 @@ import {
     commonPlotlyConfig,
     convertToUTC,
     createTrace,
+    getAspectRatio,
     getCommonPlotlyLayout,
     getTimestamps,
     MswGraphProps,
@@ -13,14 +14,9 @@ import {
 import {MswLoader} from "../../../../../loader/MswLoader";
 import Plot from 'react-plotly.js';
 
-export const MswLastMeasurementsGraph = ({
-                                             spot,
-                                             isMini = false,
-                                             aspectRatio = 2,
-                                             showLegend = true
-                                         }: MswGraphProps) => {
-    if (spot.last40DaysLoaded) {
-        if (!spot.last40Days || spot.last40Days.length === 0) {
+export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
+    if (props.spot.last40DaysLoaded) {
+        if (!props.spot.last40Days || props.spot.last40Days.length === 0) {
             return <div>Detailed Graph not possible at the moment...</div>
         }
     } else {
@@ -30,9 +26,9 @@ export const MswLastMeasurementsGraph = ({
     // Process data
     const processedData = {
         measured: (() => {
-            if (!spot.last40Days?.length) return [];
+            if (!props.spot.last40Days?.length) return [];
 
-            const hourlyAverages = spot.last40Days.reduce<Record<string, {
+            const hourlyAverages = props.spot.last40Days.reduce<Record<string, {
                 sum: number,
                 count: number
             }>>((acc, sample) => {
@@ -76,16 +72,15 @@ export const MswLastMeasurementsGraph = ({
     // Get common layout and extend it with last measurements specific settings
     const layout = {
         ...getCommonPlotlyLayout({
-            isMini,
+            isMini: props.isMini,
             allTimestamps: Array.from([...getTimestamps(processedData.measured),]).sort(),
-            minFlow: spot.minFlow,
-            maxFlow: spot.maxFlow,
+            minFlow: props.spot.minFlow,
+            maxFlow: props.spot.maxFlow,
             showCurrentTimeLine: false,
-            showLegend
         }),
         xaxis: {
             ...getCommonPlotlyLayout({
-                isMini,
+                isMini: props.isMini,
                 allTimestamps: Array.from([...getTimestamps(processedData.measured)]).sort()
             }).xaxis,
             tickvals: weeklyTicks as any[],
@@ -100,15 +95,15 @@ export const MswLastMeasurementsGraph = ({
                     data: processedData.measured,
                     name: 'Measured',
                     color: plotColors.measured,
-                    lineWidth: isMini || !showLegend ? 1 : 2,
-                    showLegend: !isMini && showLegend,
-                    skipHover: isMini
+                    lineWidth: props.isMini ? 1 : 2,
+                    showLegend: !props.isMini,
+                    skipHover: props.isMini
                 })
             ]}
             layout={layout}
-            style={{width: '100%', aspectRatio: aspectRatio}}
+            style={{width: '100%', aspectRatio: getAspectRatio(props.isMini)}}
             useResizeHandler={true}
-            config={{...commonPlotlyConfig, staticPlot: isMini}}
+            config={{...commonPlotlyConfig, staticPlot: props.isMini}}
         />
     );
 };

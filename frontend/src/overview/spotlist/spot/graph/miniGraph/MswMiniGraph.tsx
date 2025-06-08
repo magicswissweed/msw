@@ -9,29 +9,25 @@ import {MswLoader} from "../../../../../loader/MswLoader";
 
 interface MswMiniForecastProps {
     spot: SpotModel,
-    showGraphOfType: GraphTypeEnum,
-    aspectRatioMini?: number
+    showGraphOfType: GraphTypeEnum
 }
 
-export const MswMiniGraph = ({
-    spot,
-    showGraphOfType,
-    aspectRatioMini = 3
-}: MswMiniForecastProps) => {
+export const MswMiniGraph = (props: MswMiniForecastProps) => {
 
     let content;
-    if (showGraphOfType === GraphTypeEnum.Forecast) {
-        if (spot.forecastLoaded) {
-            if (spot.forecast) {
-                content = <MswForecastGraph spot={spot} isMini={true} aspectRatio={aspectRatioMini}/>;
+    if (props.showGraphOfType === GraphTypeEnum.Forecast) {
+        if (props.spot.forecastLoaded) {
+            if (props.spot.forecast) {
+                content =
+                    <MswForecastGraph spot={props.spot} isMini={true}/>;
             } else {
-                content = <MswLastMeasurementsGraph spot={spot} isMini={true} aspectRatio={aspectRatioMini}/>
+                content = <MswLastMeasurementsGraph spot={props.spot} isMini={true}/>
             }
         } else {
             content = <MswLoader/>
         }
     } else {
-        content = <MswHistoricalYearsGraph spot={spot} isMini={true} aspectRatio={aspectRatioMini}/>
+        content = <MswHistoricalYearsGraph spot={props.spot} isMini={true}/>
     }
 
 

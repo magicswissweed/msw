@@ -2,19 +2,15 @@ import {ApiFlowSample} from "../../../../../gen/msw-api-ts";
 import {SpotModel} from "../../../../../model/SpotModel";
 import {Config, Layout} from 'plotly.js';
 
-export interface MswGraphProps {
-    spot: SpotModel,
-    isMini?: boolean | undefined;
-    showLegend?: boolean;
-    aspectRatio?: number;
-}
+export class MswGraphProps {
+    spot: SpotModel;
+    isMini: boolean;
 
-// Default values for graph props
-export const defaultGraphProps = {
-    isMini: false,
-    showLegend: true,
-    aspectRatio: 2,
-} as const;
+    constructor(spot: SpotModel, isMini = false) {
+        this.spot = spot;
+        this.isMini = isMini;
+    }
+}
 
 // Common time constants
 const SWISS_TIMEZONE_OFFSET = 2 * 60 * 60 * 1000; // UTC+2 in milliseconds
@@ -49,6 +45,10 @@ export function getTimestamps(data: ApiFlowSample[]): string[] {
 
 function getFlows(data: ApiFlowSample[]): number[] {
     return data.map(item => item.flow);
+}
+
+export function getAspectRatio(isMini: boolean): number {
+    return isMini ? 3 : 2;
 }
 
 // Calculate maximum Y value from data series with padding

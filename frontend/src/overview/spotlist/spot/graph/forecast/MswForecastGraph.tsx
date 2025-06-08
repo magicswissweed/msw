@@ -6,7 +6,7 @@ import {
     convertToUTC,
     createAreaTrace,
     createTrace,
-    defaultGraphProps,
+    getAspectRatio,
     getCommonPlotlyLayout,
     getTimestamps,
     MswGraphProps,
@@ -14,23 +14,18 @@ import {
 } from "../base-graph/MswGraph";
 import {MswLoader} from "../../../../../loader/MswLoader";
 
-export const MswForecastGraph = ({
-                                     spot,
-                                     isMini = defaultGraphProps.isMini,
-                                     showLegend = defaultGraphProps.showLegend,
-                                     aspectRatio = defaultGraphProps.aspectRatio,
-                                 }: MswGraphProps) => {
-    if (!spot.forecastLoaded) {
+export const MswForecastGraph = (props: MswGraphProps) => {
+    if (!props.spot.forecastLoaded) {
         return <MswLoader/>;
     }
-    if (!spot.forecast) {
+    if (!props.spot.forecast) {
         return <div>Detailed Forecast not possible at the moment...</div>;
     }
 
     // Get data for plotting
-    const {currentSample} = spot ?? {};
-    const {minFlow, maxFlow} = spot ?? {};
-    const {measuredData, median, twentyFivePercentile, seventyFivePercentile, max, min} = spot.forecast;
+    const {currentSample} = props.spot ?? {};
+    const {minFlow, maxFlow} = props.spot ?? {};
+    const {measuredData, median, twentyFivePercentile, seventyFivePercentile, max, min} = props.spot.forecast;
 
     // Get timestamps for x-axis grid and labels
     const allTimestamps = Array.from([...getTimestamps(measuredData), ...getTimestamps(median)]).sort();
@@ -62,14 +57,13 @@ export const MswForecastGraph = ({
     // Get common layout and extend it with forecast-specific settings
     const layout = {
         ...getCommonPlotlyLayout({
-            isMini,
+            isMini: props.isMini,
             allTimestamps,
             minFlow,
             maxFlow,
-            showLegend,
         }),
         xaxis: {
-            ...getCommonPlotlyLayout({isMini, allTimestamps}).xaxis,
+            ...getCommonPlotlyLayout({isMini: props.isMini, allTimestamps}).xaxis,
             // Only show labels at noon
             tickvals: allTimestamps.filter(timestamp => new Date(timestamp).getHours() === 12),
             // Format labels as DD.MM
@@ -81,7 +75,7 @@ export const MswForecastGraph = ({
                 }),
         },
         shapes: [
-            ...(getCommonPlotlyLayout({isMini, minFlow, maxFlow, allTimestamps}).shapes || []),
+            ...(getCommonPlotlyLayout({isMini: props.isMini, minFlow, maxFlow, allTimestamps}).shapes || []),
             // Vertical lines at midnight (darker than noon grid)
             ...(allTimestamps.length > 0 ?
                     allTimestamps
@@ -114,8 +108,8 @@ export const MswForecastGraph = ({
                     lowerData: processedData.min,
                     name: 'Min-Max',
                     fillcolor: plotColors.minMaxRange.fill,
-                    showLegend: !isMini && showLegend,
-                    isMini: isMini
+                    showLegend: !props.isMini,
+                    isMini: props.isMini
                 }),
 
 
@@ -125,8 +119,8 @@ export const MswForecastGraph = ({
                     lowerData: processedData.p25,
                     name: '25-75%',
                     fillcolor: plotColors.percentileRange.fill,
-                    showLegend: !isMini && showLegend,
-                    isMini: isMini
+                    showLegend: !props.isMini,
+                    isMini: props.isMini
                 }),
 
                 // Top layers: Forecast median and measured data
@@ -134,28 +128,28 @@ export const MswForecastGraph = ({
                     data: processedData.median,
                     name: 'Median',
                     color: plotColors.median,
-                    lineWidth: isMini || !showLegend ? 1 : 2,
-                    showLegend: !isMini && showLegend,
-                    skipHover: isMini,
+                    lineWidth: props.isMini ? 1 : 2,
+                    showLegend: !props.isMini,
+                    skipHover: props.isMini,
                 }),
                 createTrace({
                     data: processedData.measured,
                     name: 'Measured',
                     color: plotColors.measured,
-                    lineWidth: isMini || !showLegend ? 1 : 2,
-                    showLegend: !isMini && showLegend,
-                    skipHover: isMini
+                    lineWidth: props.isMini ? 1 : 2,
+                    showLegend: !props.isMini,
+                    skipHover: props.isMini
                 })
             ]}
             layout={layout}
             style={{
                 width: '100%',
-                aspectRatio: aspectRatio
+                aspectRatio: getAspectRatio(props.isMini)
             }}
             useResizeHandler={true}
             config={{
                 ...commonPlotlyConfig,
-                staticPlot: isMini
+                staticPlot: props.isMini
             }}
         />
     );

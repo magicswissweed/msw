@@ -5,7 +5,7 @@ import {
     convertToUTC,
     createAreaTrace,
     createTrace,
-    defaultGraphProps,
+    getAspectRatio,
     getCommonPlotlyLayout,
     getTimestamps,
     MswGraphProps,
@@ -13,13 +13,8 @@ import {
 } from "../base-graph/MswGraph";
 import Plot from 'react-plotly.js';
 
-export const MswHistoricalYearsGraph = ({
-                                            spot,
-                                            isMini = defaultGraphProps.isMini,
-                                            showLegend = defaultGraphProps.showLegend,
-                                            aspectRatio = defaultGraphProps.aspectRatio,
-                                        }: MswGraphProps) => {
-    if (!spot.historical) {
+export const MswHistoricalYearsGraph = (props: MswGraphProps) => {
+    if (!props.spot.historical) {
         return (
             <div>Detailed Graph not possible at the moment...</div>
         );
@@ -27,12 +22,12 @@ export const MswHistoricalYearsGraph = ({
 
     // no data processing needed for this graph
     const processedData = {
-        measured: spot.historical.currentYear,
-        median: spot.historical.median,
-        min: spot.historical.min,
-        max: spot.historical.max,
-        p25: spot.historical.twentyFivePercentile,
-        p75: spot.historical.seventyFivePercentile
+        measured: props.spot.historical.currentYear,
+        median: props.spot.historical.median,
+        min: props.spot.historical.min,
+        max: props.spot.historical.max,
+        p25: props.spot.historical.twentyFivePercentile,
+        p75: props.spot.historical.seventyFivePercentile
     };
 
     // Get timestamps for x-axis grid and labels
@@ -43,14 +38,13 @@ export const MswHistoricalYearsGraph = ({
 
     const layout = {
         ...getCommonPlotlyLayout({
-            isMini,
+            isMini: props.isMini,
             allTimestamps,
-            minFlow: spot.minFlow,
-            maxFlow: spot.maxFlow,
-            showLegend,
+            minFlow: props.spot.minFlow,
+            maxFlow: props.spot.maxFlow,
         }),
         xaxis: {
-            ...getCommonPlotlyLayout({isMini}).xaxis,
+            ...getCommonPlotlyLayout({isMini: props.isMini}).xaxis,
             // Show month labels in the middle of each month
             tickvals: Array.from({length: 12}, (_, i) => {
                 const date = new Date();
@@ -64,15 +58,15 @@ export const MswHistoricalYearsGraph = ({
 
         },
         yaxis: {
-            ...getCommonPlotlyLayout({isMini}).yaxis,
+            ...getCommonPlotlyLayout({isMini: props.isMini}).yaxis,
             // Force graph to show x-axis by setting explicit range from zero
             range: [0, maxY],
         },
         shapes: [
             ...(getCommonPlotlyLayout({
-                isMini,
-                minFlow: spot.minFlow,
-                maxFlow: spot.maxFlow,
+                isMini: props.isMini,
+                minFlow: props.spot.minFlow,
+                maxFlow: props.spot.maxFlow,
                 allTimestamps
             }).shapes || []),
             // Vertical lines at month boundaries (1st of each month)
@@ -107,8 +101,8 @@ export const MswHistoricalYearsGraph = ({
                     lowerData: processedData.min,
                     name: 'Min-Max',
                     fillcolor: plotColors.minMaxRange.fill,
-                    showLegend: !isMini && showLegend,
-                    isMini: isMini
+                    showLegend: !props.isMini,
+                    isMini: props.isMini
                 }),
 
                 // Middle layer: 25-75 percentile range
@@ -117,8 +111,8 @@ export const MswHistoricalYearsGraph = ({
                     lowerData: processedData.p25,
                     name: '25-75%',
                     fillcolor: plotColors.percentileRange.fill,
-                    showLegend: !isMini && showLegend,
-                    isMini: isMini
+                    showLegend: !props.isMini,
+                    isMini: props.isMini
                 }),
 
                 // Top layers: Historical median and measured data
@@ -126,23 +120,26 @@ export const MswHistoricalYearsGraph = ({
                     data: processedData.median,
                     name: 'Median',
                     color: plotColors.median,
-                    lineWidth: isMini || !showLegend ? 1 : 2,
-                    showLegend: !isMini && showLegend,
-                    skipHover: isMini
+                    lineWidth: props.isMini ? 1 : 2,
+                    showLegend: !props.isMini,
+                    skipHover: props.isMini
                 }),
                 createTrace({
                     data: processedData.measured,
                     name: 'Measured',
                     color: plotColors.measured,
-                    lineWidth: isMini || !showLegend ? 1 : 2,
-                    showLegend: !isMini && showLegend,
-                    skipHover: isMini
+                    lineWidth: props.isMini ? 1 : 2,
+                    showLegend: !props.isMini,
+                    skipHover: props.isMini
                 })
             ]}
             layout={layout}
-            style={{width: '100%', aspectRatio: aspectRatio}}
+            style={{
+                width: '100%',
+                aspectRatio: getAspectRatio(props.isMini)
+            }}
             useResizeHandler={true}
-            config={{...commonPlotlyConfig, staticPlot: isMini}}
+            config={{...commonPlotlyConfig, staticPlot: props.isMini}}
         />
     );
 };
