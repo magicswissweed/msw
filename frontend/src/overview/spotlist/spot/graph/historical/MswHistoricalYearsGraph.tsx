@@ -37,14 +37,9 @@ export const MswHistoricalYearsGraph = (props: MswGraphProps) => {
     const maxY = calculateMaxY(processedData.measured || [], processedData.max || [], 10);
 
     const layout = {
-        ...getCommonPlotlyLayout({
-            isMini: props.isMini,
-            allTimestamps,
-            minFlow: props.spot.minFlow,
-            maxFlow: props.spot.maxFlow,
-        }),
+        ...getCommonPlotlyLayout(props.isMini, allTimestamps, props.spot.minFlow, props.spot.maxFlow),
         xaxis: {
-            ...getCommonPlotlyLayout({isMini: props.isMini}).xaxis,
+            ...getCommonPlotlyLayout(props.isMini).xaxis,
             // Show month labels in the middle of each month
             tickvals: Array.from({length: 12}, (_, i) => {
                 const date = new Date();
@@ -58,17 +53,12 @@ export const MswHistoricalYearsGraph = (props: MswGraphProps) => {
 
         },
         yaxis: {
-            ...getCommonPlotlyLayout({isMini: props.isMini}).yaxis,
+            ...getCommonPlotlyLayout(props.isMini).yaxis,
             // Force graph to show x-axis by setting explicit range from zero
             range: [0, maxY],
         },
         shapes: [
-            ...(getCommonPlotlyLayout({
-                isMini: props.isMini,
-                minFlow: props.spot.minFlow,
-                maxFlow: props.spot.maxFlow,
-                allTimestamps
-            }).shapes || []),
+            ...(getCommonPlotlyLayout(props.isMini, allTimestamps, props.spot.minFlow, props.spot.maxFlow).shapes || []),
             // Vertical lines at month boundaries (1st of each month)
             ...Array.from({length: 11}, (_, i) => {
                 const date = new Date();

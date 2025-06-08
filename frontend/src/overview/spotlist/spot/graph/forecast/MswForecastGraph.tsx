@@ -56,14 +56,9 @@ export const MswForecastGraph = (props: MswGraphProps) => {
 
     // Get common layout and extend it with forecast-specific settings
     const layout = {
-        ...getCommonPlotlyLayout({
-            isMini: props.isMini,
-            allTimestamps,
-            minFlow,
-            maxFlow,
-        }),
+        ...getCommonPlotlyLayout(props.isMini, allTimestamps, minFlow, maxFlow),
         xaxis: {
-            ...getCommonPlotlyLayout({isMini: props.isMini, allTimestamps}).xaxis,
+            ...getCommonPlotlyLayout(props.isMini, allTimestamps).xaxis,
             // Only show labels at noon
             tickvals: allTimestamps.filter(timestamp => new Date(timestamp).getHours() === 12),
             // Format labels as DD.MM
@@ -75,7 +70,7 @@ export const MswForecastGraph = (props: MswGraphProps) => {
                 }),
         },
         shapes: [
-            ...(getCommonPlotlyLayout({isMini: props.isMini, minFlow, maxFlow, allTimestamps}).shapes || []),
+            ...(getCommonPlotlyLayout(props.isMini, allTimestamps, minFlow, maxFlow).shapes || []),
             // Vertical lines at midnight (darker than noon grid)
             ...(allTimestamps.length > 0 ?
                     allTimestamps

@@ -71,18 +71,14 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
 
     // Get common layout and extend it with last measurements specific settings
     const layout = {
-        ...getCommonPlotlyLayout({
-            isMini: props.isMini,
-            allTimestamps: Array.from([...getTimestamps(processedData.measured),]).sort(),
-            minFlow: props.spot.minFlow,
-            maxFlow: props.spot.maxFlow,
-            showCurrentTimeLine: false,
-        }),
+        ...getCommonPlotlyLayout(
+            props.isMini,
+            Array.from([...getTimestamps(processedData.measured),]).sort(),
+            props.spot.minFlow,
+            props.spot.maxFlow,
+            false),
         xaxis: {
-            ...getCommonPlotlyLayout({
-                isMini: props.isMini,
-                allTimestamps: Array.from([...getTimestamps(processedData.measured)]).sort()
-            }).xaxis,
+            ...getCommonPlotlyLayout(props.isMini, Array.from([...getTimestamps(processedData.measured)]).sort()).xaxis,
             tickvals: weeklyTicks as any[],
             ticktext: weeklyLabels,
         }

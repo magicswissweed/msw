@@ -137,21 +137,12 @@ export const commonPlotlyConfig: Partial<Config> = {
 };
 
 // Common Plotly layout configuration
-export function getCommonPlotlyLayout({
-                                          isMini = false,
-                                          allTimestamps = [],
-                                          minFlow,
-                                          maxFlow,
-                                          showCurrentTimeLine = true,
-                                          showLegend = true,
-                                      }: {
-    isMini?: boolean;
-    allTimestamps?: string[];
-    minFlow?: number;
-    maxFlow?: number;
-    showCurrentTimeLine?: boolean;
-    showLegend?: boolean;
-}): Partial<Layout> {
+export function getCommonPlotlyLayout(
+    isMini: boolean,
+    allTimestamps: string[] = [],
+    minFlow?: number,
+    maxFlow?: number,
+    showCurrentTimeLine = true): Partial<Layout> {
     const lightGray = 'rgba(211, 211, 211, 0.5)';
     return {
         // TODO: clean up unused properties
@@ -169,7 +160,7 @@ export function getCommonPlotlyLayout({
             gridcolor: isMini ? 'transparent' : lightGray,
             ticklabelposition: 'inside' as const
         },
-        legend: !isMini && showLegend ? {
+        legend: !isMini ? {
             orientation: 'h',
             y: -0.1,
             yanchor: 'top',
@@ -180,7 +171,7 @@ export function getCommonPlotlyLayout({
         } : undefined,
         margin: isMini ?
             {l: 5, r: 5, t: 5, b: 5} :
-            {l: 30, r: 30, t: 0, b: showLegend ? 0 : 30}, // provide space for x-axis labels without legend
+            {l: 30, r: 30, t: 0, b: 0}, // provide space for x-axis labels without legend
         shapes: [
             // Vertical line showing current time
             ...(showCurrentTimeLine ? [{
