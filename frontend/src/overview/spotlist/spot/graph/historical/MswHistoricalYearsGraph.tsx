@@ -45,7 +45,7 @@ export const MswHistoricalYearsGraph = (props: MswGraphProps) => {
                 date.setMonth(i);
                 date.setDate(15); // Middle of month
                 date.setHours(12, 0, 0, 0);
-                return date.toTimeString();
+                return date.getTime();
             }),
             // Format labels as month abbreviations
             ticktext: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -64,7 +64,7 @@ export const MswHistoricalYearsGraph = (props: MswGraphProps) => {
                 date.setMonth(i + 1);
                 date.setDate(1);
                 date.setHours(0, 0, 0, 0);
-                return date.toTimeString();
+                return date.getTime();
             }).map(timestamp => ({
                 type: 'line' as const,
                 x0: timestamp,

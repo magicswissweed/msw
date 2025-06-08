@@ -7,8 +7,7 @@ import {
     getTimestamps,
     MswGraphProps,
     ONE_WEEK,
-    plotColors,
-    toSwissTime
+    plotColors
 } from "../base-graph/MswGraph";
 import {MswLoader} from "../../../../../loader/MswLoader";
 import Plot from 'react-plotly.js';
@@ -31,8 +30,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
                 sum: number,
                 count: number
             }>>((acc, sample) => {
-                const swissDate = toSwissTime(new Date(sample.timestamp));
-                const hourKey = swissDate.toTimeString().slice(0, 13); // Get YYYY-MM-DDTHH
+                const hourKey = sample.timestamp.slice(0, 13); // Get YYYY-MM-DDTHH
 
                 if (!acc[hourKey]) {
                     acc[hourKey] = {sum: 0, count: 0};
@@ -61,10 +59,9 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
     const weeklyLabels = [];
 
     for (let date = new Date(now); date >= sixWeeksAgo; date = new Date(date.getTime() - ONE_WEEK)) {
-        const swissDate = toSwissTime(date);
-        weeklyTicks.push(swissDate.toTimeString());
+        weeklyTicks.push(date.getTime());
         weeklyLabels.push(
-            `${swissDate.getDate().toString().padStart(2, '0')}.${(swissDate.getMonth() + 1).toString().padStart(2, '0')}`
+            `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}`
         );
     }
 

@@ -13,7 +13,6 @@ export class MswGraphProps {
 }
 
 // Common time constants
-const SWISS_TIMEZONE_OFFSET = 2 * 60 * 60 * 1000; // UTC+2 in milliseconds
 const ONE_HOUR = 60 * 60 * 1000;
 const ONE_DAY = 24 * ONE_HOUR;
 export const ONE_WEEK = 7 * ONE_DAY;
@@ -94,11 +93,6 @@ export function createAreaTrace(
     ];
 }
 
-// Convert between UTC and Swiss time
-export function toSwissTime(utcDate: Date): Date {
-    return new Date(utcDate.getTime() + SWISS_TIMEZONE_OFFSET);
-}
-
 // Common Plotly config
 export const commonPlotlyConfig: Partial<Config> = {
     responsive: true,
@@ -148,8 +142,8 @@ export function getCommonPlotlyLayout(
             // Vertical line showing current time
             ...(showCurrentTimeLine ? [{
                 type: 'line' as const,
-                x0: new Date().toTimeString(),
-                x1: new Date().toTimeString(),
+                x0: new Date().getTime(),
+                x1: new Date().getTime(),
                 y0: 0,
                 y1: 1,
                 yref: 'paper' as const,
