@@ -1,12 +1,7 @@
 @import "../../../ReactiveMixins";
 @import "../../../index";
 
-.details-title {
-  color: $msw-blue;
-}
-
-$icons-container-width: 40px;
-
+// Base spot styles
 .spot {
   display: flex;
   flex-direction: column;
@@ -14,132 +9,138 @@ $icons-container-width: 40px;
   color: #000000;
   background-color: #ececec;
   border-radius: 20px;
-}
 
-.spot-overview {
-  display: flex;
-}
+  // Responsive variants
+  &.spot-desktop {
+    @include small {
+      display: none;
+    }
+  }
 
-.spot-desktop {
-  @include small {
+  &.spot-mobile {
     display: none;
+    flex-direction: column;
+
+    @include small() {
+      display: flex;
+    }
+
+    .forecastContainer {
+      display: none;
+    }
   }
 }
 
-.spot-mobile {
-  .forecastContainer {
-    display: none;
-  }
-
-  @include small() {
-    display: flex;
-  }
-
-  display: none;
-  flex-direction: column;
-}
-
-.icons-container {
-  display: flex;
-  align-content: center;
-  flex-direction: column;
-  width: $icons-container-width;
-}
-
-.icon {
-  flex: 1;
-  align-content: center;
-
-  margin: 5px 0;
-
-  img {
-    width: 60%;
-  }
-}
-
-details > summary div.collapsible-icon {
-  transition: all 1s;
-  align-self: center;
-  width: 100%;
-}
-
-details[open] summary div.collapsible-icon {
-  transform: rotate(180deg);
-}
-
-.collapsible-icon {
-  img {
-    cursor: pointer;
-  }
-
-  @include small {
-    display: none
-  }
-}
-
-summary::-webkit-details-marker {
-  display: none;
-}
-
-.collapsibleContent {
-  display: flex;
-  margin: 20px 10px;
-}
-
+// Summary section
 .spotname {
   display: flex;
   width: 100%;
-}
+  justify-content: space-between;
+  align-items: center;
 
-.spot-title > a {
-  flex: 1;
-  text-overflow: ellipsis;
-  color: #000000;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-size: 85%;
-}
-
-.spot-title {
-  flex: 1;
-  word-break: break-word;
-}
-
-.spotname a:hover {
-  text-decoration: underline;
-}
-
-details.spot[open] summary.spotname {
-  .forecastContainer {
+  // Hide default marker
+  &::-webkit-details-marker {
     display: none;
   }
 
-  .measurements {
-    flex-direction: row;
-  }
-}
-
-.spotContainer {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 130%;
-  font-weight: bold;
-  margin: 20px 0;
-
-  @include small() {
+  // Icons containers
+  .icons-container {
+    display: flex;
+    align-content: center;
     flex-direction: column;
-    row-gap: 20px;
+    width: 40px;
+    flex-shrink: 0;
+
+    .icon {
+      flex: 1;
+      align-content: center;
+      margin: 5px 0;
+
+      @include small() {
+        margin: 2.5px 0;
+      }
+
+      img {
+        width: 60%;
+      }
+
+      &.arrow-icon img {
+        width: 40%;
+      }
+
+      &.collapsible-icon {
+        img {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  // Main content container
+  .spotContainer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 130%;
+    font-weight: bold;
+    margin: 20px 0;
+
+    @include small() {
+      flex-direction: column;
+      row-gap: 10px;
+    }
+
+    .spot-title {
+      flex: 1;
+      word-break: break-word;
+
+      a {
+        flex: 1;
+        text-overflow: ellipsis;
+        color: #000000;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-size: 85%;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 }
 
-.arrow-icon {
-  img {
-    width: 40%;
+// Collapsible content
+.collapsibleContent {
+  display: flex;
+  margin: 20px 10px;
+
+  .last40days-container {
+    width: 100%;
   }
 }
 
-.last40days-container {
+// Open state behaviors
+details.spot[open] {
+  summary.spotname {
+    .forecastContainer {
+      display: none;
+    }
+
+    .measurements {
+      flex-direction: row;
+    }
+
+    div.collapsible-icon {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+// Animation
+details > summary div.collapsible-icon {
+  transition: all 1s;
+  align-self: center;
   width: 100%;
 }

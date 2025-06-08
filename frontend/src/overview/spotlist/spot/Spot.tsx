@@ -44,12 +44,14 @@ export const Spot = (props: SpotProps) => {
             </summary>
             {getCollapsibleContent(props.spot)}
         </details>
-        <div className="spot spot-mobile">
-            <div className={"spot-overview"}>
+        <details key={`${props.spot.name}-mobile`} className="spot spot-mobile">
+            <summary className="spotname">
                 {getSpotSummaryContent(props.spot)}
-            </div>
-            {getCollapsibleContent(props.spot, false, true, true, true, true)}
-        </div>
+            </summary>
+            {getCollapsibleContent(props.spot, {
+                withLegend: false
+            })}
+        </details>
     </>;
 
     function getSpotSummaryContent(spot: SpotModel) {
@@ -107,12 +109,16 @@ export const Spot = (props: SpotProps) => {
         </>
     }
 
-    function getCollapsibleContent(spot: SpotModel,
-                                   withLegend: boolean = true,
-                                   withXAxis: boolean = true,
-                                   withYAxis: boolean = true,
-                                   withMinMaxReferenceLines: boolean = true,
-                                   withTooltip: boolean = true) {
+    function getCollapsibleContent(
+        spot: SpotModel,
+        {
+            withLegend = true,
+            withXAxis = true,
+            withYAxis = true,
+            withMinMaxReferenceLines = true,
+            withTooltip = true
+        } = {}
+    ) {
         let forecastContent = <>
             <MswForecastGraph spot={spot}
                               aspectRatio={2}
