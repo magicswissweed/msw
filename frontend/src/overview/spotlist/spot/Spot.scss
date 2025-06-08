@@ -54,7 +54,11 @@
     .icon {
       flex: 1;
       align-content: center;
-      margin: 2.5px 0;
+      margin: 5px 0;
+
+      @include small() {
+        margin: 2.5px 0;
+      }
 
       img {
         width: 60%;
