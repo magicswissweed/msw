@@ -38,18 +38,12 @@ export const Spot = (props: SpotProps) => {
 
 
     return <>
-        <details key={props.spot.name} className="spot spot-desktop">
+        <details key={props.spot.name} className="spot">
             <summary className="spotname">
                 {getSpotSummaryContent(props.spot)}
             </summary>
             {getCollapsibleContent(props.spot)}
         </details>
-        <div className="spot spot-mobile">
-            <div className={"spot-overview"}>
-                {getSpotSummaryContent(props.spot)}
-            </div>
-            {getCollapsibleContent(props.spot, true)}
-        </div>
     </>;
 
     function getSpotSummaryContent(spot: SpotModel) {
@@ -107,20 +101,20 @@ export const Spot = (props: SpotProps) => {
         </>
     }
 
-    function getCollapsibleContent(spot: SpotModel, isMini: boolean = false) {
+    function getCollapsibleContent(spot: SpotModel) {
         let forecastContent = <>
-            <MswForecastGraph spot={spot} isMini={isMini}/>
+            <MswForecastGraph spot={spot} isMini={false}/>
         </>;
 
         let lastMeasurementsContent = <>
             <div className="last40days-container">
                 <p>Forecast unavailable - showing last 40 days</p>
-                <MswLastMeasurementsGraph spot={spot} isMini={isMini}/>
+                <MswLastMeasurementsGraph spot={spot} isMini={false}/>
             </div>
         </>;
 
         let historicalYearsContent = <>
-            <MswHistoricalYearsGraph spot={spot} isMini={isMini}/>
+            <MswHistoricalYearsGraph spot={spot} isMini={false}/>
         </>;
 
         if (props.showGraphOfType === GraphTypeEnum.Forecast) {
