@@ -1,7 +1,6 @@
 import '../base-graph/MswGraph.scss'
 import {
     commonPlotlyConfig,
-    convertToUTC,
     createTrace,
     getAspectRatio,
     getCommonPlotlyLayout,
@@ -33,7 +32,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
                 count: number
             }>>((acc, sample) => {
                 const swissDate = toSwissTime(new Date(sample.timestamp));
-                const hourKey = convertToUTC(swissDate).slice(0, 13); // Get YYYY-MM-DDTHH
+                const hourKey = swissDate.toTimeString().slice(0, 13); // Get YYYY-MM-DDTHH
 
                 if (!acc[hourKey]) {
                     acc[hourKey] = {sum: 0, count: 0};
@@ -63,7 +62,7 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
 
     for (let date = new Date(now); date >= sixWeeksAgo; date = new Date(date.getTime() - ONE_WEEK)) {
         const swissDate = toSwissTime(date);
-        weeklyTicks.push(convertToUTC(swissDate));
+        weeklyTicks.push(swissDate.toTimeString());
         weeklyLabels.push(
             `${swissDate.getDate().toString().padStart(2, '0')}.${(swissDate.getMonth() + 1).toString().padStart(2, '0')}`
         );

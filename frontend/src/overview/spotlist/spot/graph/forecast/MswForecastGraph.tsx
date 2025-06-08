@@ -3,7 +3,6 @@ import Plot from 'react-plotly.js';
 import {ApiLineEntry} from '../../../../../gen/msw-api-ts';
 import {
     commonPlotlyConfig,
-    convertToUTC,
     createAreaTrace,
     createTrace,
     getAspectRatio,
@@ -34,17 +33,17 @@ export const MswForecastGraph = (props: MswGraphProps) => {
     const updateWithCurrentSample = (series: ApiLineEntry[]) => {
         if (!currentSample) return series;
 
-        const currentUTC = convertToUTC(new Date(currentSample.timestamp));
+        const currentTime = currentSample.timestamp;
         return [
-            {timestamp: currentUTC, flow: currentSample.flow},
-            ...series.filter(item => convertToUTC(new Date(item.timestamp)) > currentUTC)
+            {timestamp: currentTime, flow: currentSample.flow},
+            ...series.filter(item => item.timestamp > currentTime)
         ];
     };
 
     // Process all data series
     const processedData = {
         measured: currentSample
-            ? [...measuredData, {timestamp: convertToUTC(new Date(currentSample.timestamp)), flow: currentSample.flow}]
+            ? [...measuredData, {timestamp: currentSample.timestamp, flow: currentSample.flow}]
             : measuredData,
         median: updateWithCurrentSample(median),
         min: updateWithCurrentSample(min),

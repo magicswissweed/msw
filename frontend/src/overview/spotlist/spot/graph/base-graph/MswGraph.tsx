@@ -33,15 +33,9 @@ export const plotColors = {
     acceptableRange: {fill: transparentGreen}
 };
 
-// Convert local timestamp to UTC format for consistency
-export function convertToUTC(timestamp: Date): string {
-    return timestamp.toISOString();
-}
-
 // Extract timestamps and flows from a data series
 export function getTimestamps(data: ApiFlowSample[]): string[] {
-    return data.map(item => convertToUTC(new Date(item.timestamp)))
-        .sort()
+    return data.map(item => item.timestamp).sort()
 }
 
 function getFlows(data: ApiFlowSample[]): number[] {
@@ -97,7 +91,6 @@ export function createAreaTrace(
             fill: 'tonexty',
             fillcolor: fillcolor,
         }
-
     ];
 }
 
@@ -155,8 +148,8 @@ export function getCommonPlotlyLayout(
             // Vertical line showing current time
             ...(showCurrentTimeLine ? [{
                 type: 'line' as const,
-                x0: convertToUTC(new Date()),
-                x1: convertToUTC(new Date()),
+                x0: new Date().toTimeString(),
+                x1: new Date().toTimeString(),
                 y0: 0,
                 y1: 1,
                 yref: 'paper' as const,
