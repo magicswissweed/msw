@@ -131,11 +131,7 @@ public class SpotsApiService {
                                     .station(apiStation)
                     );
                 } catch (NoDataAvailableException e) {
-                    // ignore for the moment. We did not fetch a sample for this station
-                    // this catch leads to users adding a spot but not seeing them in the frontend (e.g. 0185)
-                    // But this is better than the old solution, where no spots were shown if one station was weird
-                    // FIXME: To fix this for good: Make sure to fetch samples for all the stations
-                    //  -> if unable to fetch sample: get rid of station
+                    // should never happen, but if it does, we just don't return this one spot
                 }
 
             } catch (NoSuchElementException e) {
