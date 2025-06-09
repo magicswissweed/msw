@@ -99,36 +99,45 @@ public class SpotsApiService {
         }
     }
 
-    private List<ApiSpotInformation> getPublicSpots() throws NoDataAvailableException {
+    private List<ApiSpotInformation> getPublicSpots() {
         return getApiSpotInformationList(spotDao.getPublicSpots());
     }
 
-    private List<ApiSpotInformation> getAllSpots() throws NoDataAvailableException {
+    private List<ApiSpotInformation> getAllSpots() {
         List<Spot> userSpots = userToSpotDao.getUserSpotsOrdered().stream()
                 .map(UserSpot::spot)
                 .collect(Collectors.toList());
         return getApiSpotInformationList(userSpots);
     }
 
-    private List<ApiSpotInformation> getApiSpotInformationList(List<Spot> spots) throws NoDataAvailableException {
+    private List<ApiSpotInformation> getApiSpotInformationList(List<Spot> spots) {
         List<ApiSpotInformation> spotInformationList = new ArrayList<>();
         for (Spot spot : spots) {
             try {
                 Station station = stationApiService.getStation(spot.stationId());
                 ApiStation apiStation = new ApiStation(station.stationId(), station.label(), station.latitude(), station.longitude());
 
-                spotInformationList.add(
-                        new ApiSpotInformation()
-                                .id(spot.spotId().getId())
-                                .name(spot.name())
-                                .isPublic(spot.isPublic())
-                                .minFlow(spot.minFlow())
-                                .maxFlow(spot.maxFlow())
-                                .stationId(spot.stationId())
-                                .spotType(com.aa.msw.gen.api.ApiSpotInformation.SpotTypeEnum.valueOf(spot.type().name()))
-                                .currentSample(sampleApiService.getCurrentSample(spot.stationId()))
-                                .station(apiStation)
-                );
+                try {
+                    spotInformationList.add(
+                            new ApiSpotInformation()
+                                    .id(spot.spotId().getId())
+                                    .name(spot.name())
+                                    .isPublic(spot.isPublic())
+                                    .minFlow(spot.minFlow())
+                                    .maxFlow(spot.maxFlow())
+                                    .stationId(spot.stationId())
+                                    .spotType(com.aa.msw.gen.api.ApiSpotInformation.SpotTypeEnum.valueOf(spot.type().name()))
+                                    .currentSample(sampleApiService.getCurrentSample(spot.stationId()))
+                                    .station(apiStation)
+                    );
+                } catch (NoDataAvailableException e) {
+                    // ignore for the moment. We did not fetch a sample for this station
+                    // this catch leads to users adding a spot but not seeing them in the frontend (e.g. 0185)
+                    // But this is better than the old solution, where no spots were shown if one station was weird
+                    // FIXME: To fix this for good: Make sure to fetch samples for all the stations
+                    //  -> if unable to fetch sample: get rid of station
+                }
+
             } catch (NoSuchElementException e) {
                 // ignore for the moment and do not add this ApiSpotInformation to the list
                 break;
