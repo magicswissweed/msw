@@ -33,8 +33,12 @@ export function UserAuthContextProvider({children}) {
         const unsubscribe = firebaseAuth.onAuthStateChanged((currentuser) => {
             if (currentuser) {
                 setCookie(userWasLoggedInCookieName, userWasLoggedInCookieValue);
-                currentuser.getIdToken(false).then((token) => {
-                    setToken(token);
+                currentuser.getIdToken(false).then(async (token) => {
+                    authConfiguration(token).then((config) => {
+                        new UserApi(config).registerUser().then(() => { // Maybe register, maybe downsync, maybe nothing
+                            setToken(token) // token is set after making sure that the user is created in the backend
+                        });
+                    });
                 })
             }
             setUser(currentuser);

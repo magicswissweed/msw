@@ -1,7 +1,7 @@
 import './SpotList.scss';
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState} from 'react';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
-import {ApiSpotInformation, SpotsApi} from '../../gen/msw-api-ts';
+import {SpotsApi} from '../../gen/msw-api-ts';
 import {authConfiguration} from '../../api/config/AuthConfiguration';
 import {useUserAuth} from '../../user/UserAuthContext';
 import {Spot} from "./spot/Spot";
@@ -27,21 +27,16 @@ export const SpotList = (props: SpotListProps) => {
         setSpots(props.spots);
     }, [props.spots]);
 
-
-    const saveSpotsOrdering = useCallback(async (spots: Array<ApiSpotInformation>) => {
-        let config = await authConfiguration(token);
-        await new SpotsApi(config).orderSpots(
-            spots
-                .filter(loc => loc.id)
-                .map(loc => loc.id!));
-    }, [token]);
-
     useEffect(() => {
         if (user) {
-            // no await, because we don't want the frontend to be blocked
-            saveSpotsOrdering(spots);
+            authConfiguration(token).then((config) => {
+                new SpotsApi(config).orderSpots( // no await, because we don't want the frontend to be blocked
+                    spots
+                        .filter(loc => loc.id)
+                        .map(loc => loc.id!));
+            });
         }
-    }, [spots, user, saveSpotsOrdering])
+    }, [token])
 
     const handleDrop = async (result: any) => {
         if (!result.destination) return;
@@ -75,9 +70,16 @@ export const SpotList = (props: SpotListProps) => {
                                 <div className="draggable-container">
                                     <div className="guest-message">
                                         <div className="curved-arrow">
-                                            <img src={curved_arrow} alt="" />
+                                            <img src={curved_arrow} alt=""/>
                                         </div>
-                                        <h3><span id='black'>Wanna add your own surf spots?</span> Simply <span onClick={() => setShowSignupModal(true)} style={{cursor: 'pointer', textDecoration: 'underline'}}>sign up</span></h3>
+                                        <h3>
+                                            <span id='black'>Wanna add your own surf spots?</span>
+                                            Simply
+                                            <span onClick={() => setShowSignupModal(true)}
+                                                  style={{cursor: 'pointer', textDecoration: 'underline'}}>
+                                                sign up
+                                            </span>
+                                        </h3>
                                     </div>
                                 </div>
                             }
