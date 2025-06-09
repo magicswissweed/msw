@@ -1,6 +1,5 @@
 import '../base-graph/MswGraph.scss'
 import {ComposedChart, Legend, ResponsiveContainer, YAxis} from 'recharts';
-import {ApiSpotInformation} from '../../../../../gen/msw-api-ts';
 import {
     DATA_KEY_MEASURED,
     getCartesianGrid,
@@ -16,9 +15,10 @@ import {
     normalizeGraphDataLine
 } from "../base-graph/MswGraph";
 import {MswLoader} from "../../../../../loader/MswLoader";
+import {SpotModel} from "../../../../../model/SpotModel";
 
 export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
-    let spot: ApiSpotInformation;
+    let spot: SpotModel;
     let aspectRatio: number;
     let withLegend: boolean;
     let withXAxis: boolean;

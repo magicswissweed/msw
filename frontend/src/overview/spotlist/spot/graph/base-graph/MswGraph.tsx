@@ -1,4 +1,4 @@
-import {ApiFlowSample, ApiLineEntry, ApiSpotInformation} from "../../../../../gen/msw-api-ts";
+import {ApiFlowSample, ApiLineEntry} from "../../../../../gen/msw-api-ts";
 import React from "react";
 import {CartesianGrid, Label, Line, ReferenceArea, ReferenceLine, Tooltip, XAxis} from 'recharts';
 import {SpotModel} from "../../../../../model/SpotModel";
@@ -21,7 +21,7 @@ export interface MswGraphProps {
 
 export type NormalizedDataItem = { datetime: Date, [lineName: string]: unknown; };
 
-export function getMinMaxReferenceLines(spot: ApiSpotInformation) {
+export function getMinMaxReferenceLines(spot: SpotModel) {
     return <>
         <ReferenceLine y={spot.minFlow}>
             <Label value={spot.minFlow} position="insideRight"/>
@@ -74,7 +74,7 @@ export function normalizeGraphDataLine(line: ApiFlowSample[] | ApiLineEntry[], n
     return normalizedData;
 }
 
-export function getReferenceArea(spot: ApiSpotInformation) {
+export function getReferenceArea(spot: SpotModel) {
     return <ReferenceArea y1={spot.minFlow}
                           y2={spot.maxFlow}
                           ifOverflow="extendDomain"
