@@ -33,11 +33,13 @@ export function UserAuthContextProvider({children}) {
                     authConfiguration(token).then((config) => {
                         new UserApi(config).registerUser().then(() => { // Maybe register, maybe downsync, maybe nothing
                             setToken(token) // token is set after making sure that the user is created in the backend
+                            setUser(currentuser);
                         });
                     });
                 })
+            } else {
+                setUser(currentuser);
             }
-            setUser(currentuser);
         });
 
         return () => {

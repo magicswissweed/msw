@@ -1,5 +1,5 @@
 import './SpotList.scss';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {SpotsApi} from '../../gen/msw-api-ts';
 import {authConfiguration} from '../../api/config/AuthConfiguration';
@@ -27,16 +27,21 @@ export const SpotList = (props: SpotListProps) => {
         setSpots(props.spots);
     }, [props.spots]);
 
+    // FIXME: is the effect only dependent on the token for the initial order? If so: move to backend for more clarity
+    const saveSpotsOrdering = useCallback(async (spots: Array<SpotModel>) => {
+        let config = await authConfiguration(token);
+        await new SpotsApi(config).orderSpots(
+            spots
+                .filter(loc => loc.id)
+                .map(loc => loc.id!));
+    }, [token]);
+
     useEffect(() => {
         if (user) {
-            authConfiguration(token).then((config) => {
-                new SpotsApi(config).orderSpots( // no await, because we don't want the frontend to be blocked
-                    spots
-                        .filter(loc => loc.id)
-                        .map(loc => loc.id!));
-            });
+            // no await, because we don't want the frontend to be blocked
+            saveSpotsOrdering(spots);
         }
-    }, [token])
+    }, [spots])
 
     const handleDrop = async (result: any) => {
         if (!result.destination) return;
