@@ -107,7 +107,9 @@ export function getCommonPlotlyLayout(
     isMini: boolean,
     allTimestamps: string[] = [],
     minFlow?: number,
-    maxFlow?: number): Partial<Layout> {
+    maxFlow?: number,
+    showCurrentTimeLine: boolean = true
+): Partial<Layout> {
     const lightGray = 'rgba(211, 211, 211, 0.5)';
     return {
         // TODO: clean up unused properties
@@ -139,19 +141,23 @@ export function getCommonPlotlyLayout(
             {l: 30, r: 30, t: 0, b: 0}, // provide space for x-axis labels without legend
         shapes: [
             // Vertical line showing current time
-            {
-                type: 'line' as const,
-                x0: new Date().getTime(),
-                x1: new Date().getTime(),
-                y0: 0,
-                y1: 1,
-                yref: 'paper' as const,
-                line: {
-                    color: plotColors.currentTime.line,
-                    width: 2,
-                    dash: 'dash' as const
-                }
-            },
+            ...(
+                showCurrentTimeLine
+                    ? [{
+                        type: 'line' as const,
+                        x0: new Date().getTime(),
+                        x1: new Date().getTime(),
+                        y0: 0,
+                        y1: 1,
+                        yref: 'paper' as const,
+                        line: {
+                            color: plotColors.currentTime.line,
+                            width: 2,
+                            dash: 'dash' as const
+                        }
+                    }]
+                    : []
+            ),
             // Horizontal band for acceptable flow range
             ...(minFlow !== undefined && maxFlow !== undefined && allTimestamps.length > 0 ? [{
                 type: 'rect' as const,
@@ -163,7 +169,6 @@ export function getCommonPlotlyLayout(
                 line: {width: 0},
                 layer: 'below' as const
             }] : []),
-
         ],
         hoverlabel: isMini ? undefined : {bgcolor: 'white', bordercolor: 'gray', font: {size: 13}},
         hovermode: isMini ? false : 'closest' as const,

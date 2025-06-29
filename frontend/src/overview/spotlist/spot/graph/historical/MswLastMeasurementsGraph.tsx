@@ -40,7 +40,9 @@ export const MswLastMeasurementsGraph = (props: MswGraphProps) => {
             props.isMini,
             getTimestamps(props.spot.last40Days),
             props.spot.minFlow,
-            props.spot.maxFlow),
+            props.spot.maxFlow,
+            false // do not show current time line
+        ),
         xaxis: {
             ...getCommonPlotlyLayout(props.isMini, getTimestamps(props.spot.last40Days)).xaxis,
             tickvals: weeklyTicks,
