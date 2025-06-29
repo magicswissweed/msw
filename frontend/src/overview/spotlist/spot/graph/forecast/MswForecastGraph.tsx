@@ -60,12 +60,13 @@ export const MswForecastGraph = (props: MswGraphProps) => {
             ...getCommonPlotlyLayout(props.isMini, allTimestamps).xaxis,
             // Only show labels at noon
             tickvals: allTimestamps.filter(timestamp => new Date(timestamp).getHours() === 12),
-            // Format labels as DD.MM
+            // Format labels as weekday names
             ticktext: allTimestamps
                 .filter(timestamp => new Date(timestamp).getHours() === 12)
                 .map(timestamp => {
                     const date = new Date(timestamp);
-                    return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+                    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                    return weekdays[date.getDay()];
                 }),
         },
         shapes: [
